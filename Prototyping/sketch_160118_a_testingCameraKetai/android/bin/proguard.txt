@@ -1,0 +1,6 @@
+# view res/layout/main.xml #generated:1
+-keep class .sketch_160118_a_testingCameraKetai { <init>(...); }
+
+# view AndroidManifest.xml #generated:1
+-keep class processing.test.sketch_160118_a_testingcameraketai.MainActivity { <init>(...); }
+
