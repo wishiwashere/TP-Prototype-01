@@ -12,9 +12,10 @@ import ketai.ui.*;
 KetaiCamera ketaiCamera;
 
 void setup() {
+  size(1280, 720);
   orientation(LANDSCAPE);
   imageMode(CORNER);
-  ketaiCamera = new KetaiCamera(this, width, height, 24);
+  ketaiCamera = new KetaiCamera(this, 1280, 720, 24);
   ketaiCamera.start();
 }
 
@@ -25,6 +26,7 @@ void draw() {
 void onCameraPreviewEvent()
 {
   ketaiCamera.read();
+  println("reading_in_new_image");
 }
 
 void mousePressed()
