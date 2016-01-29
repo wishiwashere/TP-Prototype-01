@@ -9,13 +9,19 @@ import ketai.net.wifidirect.*;
 import ketai.sensors.*;
 import ketai.ui.*;
 
+int appWidth, appHeight;
+
 KetaiCamera ketaiCamera;
 
 void setup() {
-  size(1280, 720);
+  size(displayWidth, displayHeight);
+  println("The width of the device is: " + displayWidth + "; The height of the device is: " + displayHeight);
+  
+  appWidth = displayWidth;
+  appHeight = displayHeight;
+  
   orientation(LANDSCAPE);
-  imageMode(CORNER);
-  ketaiCamera = new KetaiCamera(this, 1280, 720, 24);
+  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
   ketaiCamera.start();
 }
 
@@ -26,7 +32,7 @@ void draw() {
 void onCameraPreviewEvent()
 {
   ketaiCamera.read();
-  println("reading_in_new_image");
+  println("The width of the image is: " + ketaiCamera.width + "; The height of the image is: " + ketaiCamera.height);
 }
 
 void mousePressed()
