@@ -84,7 +84,6 @@ public void setup() {
   // Printing out the number of availabe cameras
   println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
   
-  /*
   // Check if the device has more than one camera i.e. does it have a front
   // and a rear facing camera?
   if(ketaiCamera.getNumberOfCameras() > 1)
@@ -103,13 +102,14 @@ public void setup() {
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
   
-  */
   
   // Starting the ketaiCamera i.e. beginning to capture frames in.
   ketaiCamera.start();
 }
 
 public void draw() {    
+  background(0);
+  
   // Placing the current frame from the ketaiCamera onto the sketch at position
   // 0, 0 i.e. in the top left corner of the sketch.
   image(ketaiCamera, 0, 0);

@@ -1,13 +1,42 @@
-import ketai.camera.*;
-import ketai.cv.facedetector.*;
-import ketai.data.*;
-import ketai.net.*;
-import ketai.net.bluetooth.*;
-import ketai.net.nfc.*;
-import ketai.net.nfc.record.*;
-import ketai.net.wifidirect.*;
-import ketai.sensors.*;
-import ketai.ui.*;
+package processing.test.sketch_160118_a_testingcameraketai;
+
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import ketai.camera.*; 
+import ketai.cv.facedetector.*; 
+import ketai.data.*; 
+import ketai.net.*; 
+import ketai.net.bluetooth.*; 
+import ketai.net.nfc.*; 
+import ketai.net.nfc.record.*; 
+import ketai.net.wifidirect.*; 
+import ketai.sensors.*; 
+import ketai.ui.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class sketch_160118_a_testingCameraKetai extends PApplet {
+
+
+
+
+
+
+
+
+
+
+
 
 // Creating two global variables to store the width and height of the device in
 // so that they can be passed into the constructor of the ketaiCamera object.
@@ -28,10 +57,10 @@ KetaiCamera ketaiCamera;
 // 0, regardless of whether it is a front or back camera
 int camNum;
 
-void setup() {
+public void setup() {
   // Setting the width and height of the sketch to be relative to the width and 
   // height of the device it is being viewed on.
-  size(displayWidth, displayHeight);
+  
   println("The width of the device is: " + displayWidth + "; The height of the device is: " + displayHeight);
   
   // Initialising the values of the appWidth/appHeight variables so that they now
@@ -55,6 +84,7 @@ void setup() {
   // Printing out the number of availabe cameras
   println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
   
+  /*
   // Check if the device has more than one camera i.e. does it have a front
   // and a rear facing camera?
   if(ketaiCamera.getNumberOfCameras() > 1)
@@ -73,14 +103,13 @@ void setup() {
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
   
+  */
   
   // Starting the ketaiCamera i.e. beginning to capture frames in.
   ketaiCamera.start();
 }
 
-void draw() {    
-  background(0);
-  
+public void draw() {    
   // Placing the current frame from the ketaiCamera onto the sketch at position
   // 0, 0 i.e. in the top left corner of the sketch.
   image(ketaiCamera, 0, 0);
@@ -88,7 +117,7 @@ void draw() {
 
 // ketaiCamera event which is automatically called everytime a new frame becomes
 // available from the ketaiCamera.
-void onCameraPreviewEvent()
+public void onCameraPreviewEvent()
 {
   // Reading in a new frame from the ketaiCamera.
   ketaiCamera.read();
@@ -98,7 +127,7 @@ void onCameraPreviewEvent()
   println("The width of the image is: " + ketaiCamera.width + "; The height of the image is: " + ketaiCamera.height);
 }
 
-void mousePressed()
+public void mousePressed()
 {
   // If the camera is already running stop it, or if it is stopped start running it again
   // i.e. effecting its ability to capture new frames.
@@ -119,5 +148,15 @@ void mousePressed()
   {
     // Starting the ketaiCamera again so that it will start reading in new frames again
     ketaiCamera.start();
+  }
+}
+  public void settings() {  size(displayWidth, displayHeight); }
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "sketch_160118_a_testingCameraKetai" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
   }
 }
