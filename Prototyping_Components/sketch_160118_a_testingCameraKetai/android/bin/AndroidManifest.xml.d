@@ -1,2 +1,2 @@
-C:\Users\pigot\AppData\Local\Temp\android7804407070499631314sketch\bin\AndroidManifest.xml : \
-C:\Users\pigot\AppData\Local\Temp\android7804407070499631314sketch\AndroidManifest.xml \
+C:\Users\pigot\AppData\Local\Temp\android7396380063007152040sketch\bin\AndroidManifest.xml : \
+C:\Users\pigot\AppData\Local\Temp\android7396380063007152040sketch\AndroidManifest.xml \

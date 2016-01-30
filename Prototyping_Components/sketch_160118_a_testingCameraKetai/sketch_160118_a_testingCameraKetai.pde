@@ -149,11 +149,10 @@ void mousePressed()
       // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
       camNum = camNum == 0 ? 1 : 0;
       ketaiCamera.setCameraID(camNum);
-      
-      // Rotating the ketaiCamera image by 90 radians (as long as it is still less than
-      // 360, otherwise resetting it to 0.
-      orientationZ = orientationZ < 360 ? orientationZ + 90 : 0;
     }
+    // Rotating the ketaiCamera image by 90 radians (as long as it is still less than
+    // 360, otherwise resetting it to 0.
+    orientationZ = orientationZ < 360 ? orientationZ + 90 : 0;
   }
   else
   {    
