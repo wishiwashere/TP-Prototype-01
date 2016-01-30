@@ -1,5 +1,9 @@
 #Last build type
+<<<<<<< HEAD
 #Sat, 30 Jan 2016 00:37:55 +0000
+=======
+#Sat, 30 Jan 2016 14:38:09 +0000
+>>>>>>> master
 
 build.last.target=release
 
