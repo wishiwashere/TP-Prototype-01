@@ -21,6 +21,8 @@ int appWidth, appHeight;
 // display and eventually alter the live stream images.
 KetaiCamera ketaiCamera;
 
+KetaiSensor ketaiSensor;
+
 // Creating a global variable to store the number of the camera we want to view
 // at any given time. The front facing camera (on a device with more than one camera)
 // will be at index 1, and the rear camera will be at index 0. On a device with only
@@ -44,6 +46,10 @@ void setup() {
   // Locking the applications orientation to landscape, because currently the images
   // coming in from the camera don't seem to be responding to changes in orientation
   //orientation(LANDSCAPE);
+  
+  ketaiSensor = new KetaiSensor(this);
+  ketaiSensor.start();
+  ketaiSensor.enableOrientation();
   
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
@@ -76,6 +82,8 @@ void setup() {
   
   // Starting the ketaiCamera i.e. beginning to capture frames in.
   ketaiCamera.start();
+  
+  //println("ORIENTATION OF CAMERA IS NOW " + ketaiCamera.getOrientation());
 }
 
 void draw() {    
@@ -95,7 +103,7 @@ void onCameraPreviewEvent()
   
   // Printing out the size of this image (for testing purposes, to see if the image
   // is responding to the change in orientation - currently it is not).
-  println("The width of the image is: " + ketaiCamera.width + "; The height of the image is: " + ketaiCamera.height);
+  //println("The width of the image is: " + ketaiCamera.width + "; The height of the image is: " + ketaiCamera.height);
 }
 
 void mousePressed()
@@ -120,4 +128,8 @@ void mousePressed()
     // Starting the ketaiCamera again so that it will start reading in new frames again
     ketaiCamera.start();
   }
+}
+
+void onOrientationEvent(float x, float y, float z) {
+  println("------------------------------------ x = " + x + "; y = " + y + "; z = " + z + ";");
 }
