@@ -153,6 +153,9 @@ void mousePressed()
     // Stopping the ketaiCamera so that no new frames will be read in
     ketaiCamera.stop();
     
+    //Saving photo from the camera with a name of ourApp
+    ketaiCamera.savePhoto("ourApp.jpg");
+    
     // Checking if the device has more than one camera. If it does we want to toggle between them
     if(ketaiCamera.getNumberOfCameras() > 1)
     {
@@ -174,7 +177,12 @@ void mousePressed()
     ketaiCamera.start();
   }
 }
-
+/*
 void onOrientationEvent(float x, float y, float z) {
   //println("------------------------------------ x = " + x + "; y = " + y + "; z = " + z + ";");
 }
+
+void onSavePhotoEvent(String ourApp)
+{
+  ketaiCamera.addToMediaLibrary(ourApp);
+}*/
