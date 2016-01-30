@@ -42,6 +42,27 @@ void setup() {
   // width/height of the device, with a frame rate of 24.
   ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
   
+  // Printing out the list of available cameras i.e. front/rear facing
+  println(ketaiCamera.list());
+  
+  // Printing out the number of availabe cameras
+  println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
+  
+  // Check if the device has more than one camera i.e. does it have a front
+  // and a rear facing camera?
+  if(ketaiCamera.getNumberOfCameras() > 1)
+  {
+    // If there is more than one camera, then default to the front camera
+    // (which as far as I can tell tends to be at index 1)
+    ketaiCamera.setCameraID(1);
+  }
+  else
+  {
+    // If there is only one camera, then default to the rear camera
+    // (which as far as I can tell tends to be at index 0)
+    ketaiCamera.setCameraID(0);
+  }
+  
   // Starting the ketaiCamera i.e. beginning to capture frames in.
   ketaiCamera.start();
 }
@@ -61,7 +82,7 @@ void onCameraPreviewEvent()
   
   // Printing out the size of this image (for testing purposes, to see if the image
   // is responding to the change in orientation - currently it is not).
-  println("The width of the image is: " + ketaiCamera.width + "; The height of the image is: " + ketaiCamera.height);
+  //println("The width of the image is: " + ketaiCamera.width + "; The height of the image is: " + ketaiCamera.height);
 }
 
 void mousePressed()
