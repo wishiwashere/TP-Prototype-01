@@ -65,6 +65,11 @@ int orientationZ = 0;
 // 0, regardless of whether it is a front or back camera
 int camNum;
 
+// Creating a variable to store a value of 1 or -1, to decide whether and image should be
+// flipped i.e. when using the front facing camera, the x scale should always be -1 to 
+// avoid things being in reverse
+int cameraScale = -1;
+
 public void setup() {
   // Setting the width and height of the sketch to be relative to the width and 
   // height of the device it is being viewed on.
@@ -139,6 +144,11 @@ public void draw() {
   pushMatrix();
   translate(displayWidth/2, displayHeight/2);
   
+  // Flipping the image so that it better represents the camera it is using i.e.
+  // on front facing cameras, the image will be flipped horizontally, so that things
+  // don't appear in reverse.
+  scale(cameraScale, 1);
+  
   // Rotating the matrix (instead of the image, so i don't need to keep
   // working out where the center point would be).
   rotate(radians(orientationZ));
@@ -178,6 +188,10 @@ public void mousePressed()
       // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
       camNum = camNum == 0 ? 1 : 0;
       ketaiCamera.setCameraID(camNum);
+      
+      // Toggling the scale of the camera image between 1 and -1 (depending on if the camera
+      // is front or rear facing (only on devices with more than one camera)
+      cameraScale *= -1;
     }
     // Rotating the ketaiCamera image by 90 radians (as long as it is still less than
     // 360, otherwise resetting it to 0.

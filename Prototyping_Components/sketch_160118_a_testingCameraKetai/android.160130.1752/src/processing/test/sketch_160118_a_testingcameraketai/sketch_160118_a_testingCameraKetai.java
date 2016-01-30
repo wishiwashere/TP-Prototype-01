@@ -1,13 +1,42 @@
-import ketai.camera.*;
-import ketai.cv.facedetector.*;
-import ketai.data.*;
-import ketai.net.*;
-import ketai.net.bluetooth.*;
-import ketai.net.nfc.*;
-import ketai.net.nfc.record.*;
-import ketai.net.wifidirect.*;
-import ketai.sensors.*;
-import ketai.ui.*;
+package processing.test.sketch_160118_a_testingcameraketai;
+
+import processing.core.*; 
+import processing.data.*; 
+import processing.event.*; 
+import processing.opengl.*; 
+
+import ketai.camera.*; 
+import ketai.cv.facedetector.*; 
+import ketai.data.*; 
+import ketai.net.*; 
+import ketai.net.bluetooth.*; 
+import ketai.net.nfc.*; 
+import ketai.net.nfc.record.*; 
+import ketai.net.wifidirect.*; 
+import ketai.sensors.*; 
+import ketai.ui.*; 
+
+import java.util.HashMap; 
+import java.util.ArrayList; 
+import java.io.File; 
+import java.io.BufferedReader; 
+import java.io.PrintWriter; 
+import java.io.InputStream; 
+import java.io.OutputStream; 
+import java.io.IOException; 
+
+public class sketch_160118_a_testingCameraKetai extends PApplet {
+
+
+
+
+
+
+
+
+
+
+
 
 // Creating two global variables to store the width and height of the device in
 // so that they can be passed into the constructor of the ketaiCamera object.
@@ -36,15 +65,10 @@ int orientationZ = 0;
 // 0, regardless of whether it is a front or back camera
 int camNum;
 
-// Creating a variable to store a value of 1 or -1, to decide whether and image should be
-// flipped i.e. when using the front facing camera, the x scale should always be -1 to 
-// avoid things being in reverse
-int cameraScale = -1;
-
-void setup() {
+public void setup() {
   // Setting the width and height of the sketch to be relative to the width and 
   // height of the device it is being viewed on.
-  size(displayWidth, displayHeight);
+  
   println("The width of the device is: " + displayWidth + "; The height of the device is: " + displayHeight);
   
   // Initialising the values of the appWidth/appHeight variables so that they now
@@ -108,17 +132,12 @@ void setup() {
   // println("ORIENTATION OF CAMERA IS NOW " + ketaiCamera.getOrientation());
 }
 
-void draw() {    
+public void draw() {    
   background(0);
   
   // Storing the current state of the matrix
   pushMatrix();
   translate(displayWidth/2, displayHeight/2);
-  
-  // Flipping the image so that it better represents the camera it is using i.e.
-  // on front facing cameras, the image will be flipped horizontally, so that things
-  // don't appear in reverse.
-  scale(cameraScale, 1);
   
   // Rotating the matrix (instead of the image, so i don't need to keep
   // working out where the center point would be).
@@ -134,7 +153,7 @@ void draw() {
 
 // ketaiCamera event which is automatically called everytime a new frame becomes
 // available from the ketaiCamera.
-void onCameraPreviewEvent()
+public void onCameraPreviewEvent()
 {
   // Reading in a new frame from the ketaiCamera.
   ketaiCamera.read();
@@ -144,7 +163,7 @@ void onCameraPreviewEvent()
   //println("The width of the image is: " + ketaiCamera.width + "; The height of the image is: " + ketaiCamera.height);
 }
 
-void mousePressed()
+public void mousePressed()
 {
   // If the camera is already running stop it, or if it is stopped start running it again
   // i.e. effecting its ability to capture new frames.
@@ -159,10 +178,6 @@ void mousePressed()
       // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
       camNum = camNum == 0 ? 1 : 0;
       ketaiCamera.setCameraID(camNum);
-      
-      // Toggling the scale of the camera image between 1 and -1 (depending on if the camera
-      // is front or rear facing (only on devices with more than one camera)
-      cameraScale *= -1;
     }
     // Rotating the ketaiCamera image by 90 radians (as long as it is still less than
     // 360, otherwise resetting it to 0.
@@ -175,6 +190,16 @@ void mousePressed()
   }
 }
 
-void onOrientationEvent(float x, float y, float z) {
+public void onOrientationEvent(float x, float y, float z) {
   //println("------------------------------------ x = " + x + "; y = " + y + "; z = " + z + ";");
+}
+  public void settings() {  size(displayWidth, displayHeight); }
+  static public void main(String[] passedArgs) {
+    String[] appletArgs = new String[] { "sketch_160118_a_testingCameraKetai" };
+    if (passedArgs != null) {
+      PApplet.main(concat(appletArgs, passedArgs));
+    } else {
+      PApplet.main(appletArgs);
+    }
+  }
 }
