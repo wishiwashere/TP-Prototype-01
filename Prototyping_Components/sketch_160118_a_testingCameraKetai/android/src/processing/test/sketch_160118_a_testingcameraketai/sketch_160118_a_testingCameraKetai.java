@@ -50,6 +50,13 @@ int appWidth, appHeight;
 // display and eventually alter the live stream images.
 KetaiCamera ketaiCamera;
 
+// Creating a global variable to store the number of the camera we want to view
+// at any given time. The front facing camera (on a device with more than one camera)
+// will be at index 1, and the rear camera will be at index 0. On a device with only
+// 1 camera (such as the college Nexus tablets) this camera will always be at index
+// 0, regardless of whether it is a front or back camera
+int camNum;
+
 public void setup() {
   // Setting the width and height of the sketch to be relative to the width and 
   // height of the device it is being viewed on.
@@ -65,17 +72,44 @@ public void setup() {
   
   // Locking the applications orientation to landscape, because currently the images
   // coming in from the camera don't seem to be responding to changes in orientation
-  orientation(LANDSCAPE);
+  //orientation(LANDSCAPE);
   
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
   ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
   
+  // Printing out the list of available cameras i.e. front/rear facing
+  println(ketaiCamera.list());
+  
+  // Printing out the number of availabe cameras
+  println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
+  
+  /*
+  // Check if the device has more than one camera i.e. does it have a front
+  // and a rear facing camera?
+  if(ketaiCamera.getNumberOfCameras() > 1)
+  {
+    // If there is more than one camera, then default to the front camera
+    // (which as far as I can tell tends to be at index 1)
+    camNum = 1;
+  }
+  else
+  {
+    // If there is only one camera, then default to the rear camera
+    // (which as far as I can tell tends to be at index 0)
+    camNum = 0;
+  }
+  
+  // Setting the camera to default to the front camera
+  ketaiCamera.setCameraID(camNum);
+  
+  */
+  
   // Starting the ketaiCamera i.e. beginning to capture frames in.
   ketaiCamera.start();
 }
 
-public void draw() {
+public void draw() {    
   // Placing the current frame from the ketaiCamera onto the sketch at position
   // 0, 0 i.e. in the top left corner of the sketch.
   image(ketaiCamera, 0, 0);
@@ -101,6 +135,14 @@ public void mousePressed()
   {
     // Stopping the ketaiCamera so that no new frames will be read in
     ketaiCamera.stop();
+    
+    // Checking if the device has more than one camera. If it does we want to toggle between them
+    if(ketaiCamera.getNumberOfCameras() > 1)
+    {
+      // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
+      camNum = camNum == 0 ? 1 : 0;
+      ketaiCamera.setCameraID(camNum);
+    }
   }
   else
   {
