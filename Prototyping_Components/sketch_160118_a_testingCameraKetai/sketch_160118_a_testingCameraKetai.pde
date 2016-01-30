@@ -23,6 +23,8 @@ KetaiCamera ketaiCamera;
 
 KetaiSensor ketaiSensor;
 
+int orientationZ = 0;
+
 // Creating a global variable to store the number of the camera we want to view
 // at any given time. The front facing camera (on a device with more than one camera)
 // will be at index 1, and the rear camera will be at index 0. On a device with only
@@ -46,6 +48,8 @@ void setup() {
   // Locking the applications orientation to landscape, because currently the images
   // coming in from the camera don't seem to be responding to changes in orientation
   //orientation(LANDSCAPE);
+  
+  imageMode(CENTER);
   
   ketaiSensor = new KetaiSensor(this);
   ketaiSensor.start();
@@ -89,9 +93,12 @@ void setup() {
 void draw() {    
   background(0);
   
+  pushMatrix();
+  rotate(orientationZ);
   // Placing the current frame from the ketaiCamera onto the sketch at position
   // 0, 0 i.e. in the top left corner of the sketch.
-  image(ketaiCamera, 0, 0);
+  image(ketaiCamera, displayWidth/2, displayHeight/2);
+  popMatrix();
 }
 
 // ketaiCamera event which is automatically called everytime a new frame becomes
@@ -131,5 +138,17 @@ void mousePressed()
 }
 
 void onOrientationEvent(float x, float y, float z) {
-  println("------------------------------------ x = " + x + "; y = " + y + "; z = " + z + ";");
+  //println("------------------------------------ x = " + x + "; y = " + y + "; z = " + z + ";");
+  orientationZ = ceil(z);
+  /*
+  if(z < -45){
+    orientationZ = -90;
+  }else if(z < 0){
+    orientationZ = -45;
+  }else if(z < 45){
+    orientationZ = 0;
+  }else if(z < 90){
+    orientationZ = 90;
+  }
+  */
 }
