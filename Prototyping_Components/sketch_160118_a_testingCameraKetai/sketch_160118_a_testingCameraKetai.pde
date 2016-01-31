@@ -41,6 +41,9 @@ int camNum;
 // avoid things being in reverse
 int cameraScale = -1;
 
+
+String directory;
+
 void setup() {
   // Setting the width and height of the sketch to be relative to the width and 
   // height of the device it is being viewed on.
@@ -106,6 +109,12 @@ void setup() {
   
   // Below is not working, but appears to be a built in method
   // println("ORIENTATION OF CAMERA IS NOW " + ketaiCamera.getOrientation());
+  
+  
+  directory = new String("/storage/sdcard0/DCIM/");
+  ketaiCamera.setSaveDirectory(directory);
+  println("setting photo size");
+  ketaiCamera.setPhotoSize(1280,720);
 }
 
 void draw() {    
@@ -180,9 +189,10 @@ void mousePressed()
 /*
 void onOrientationEvent(float x, float y, float z) {
   //println("------------------------------------ x = " + x + "; y = " + y + "; z = " + z + ";");
-}
-
-void onSavePhotoEvent(String ourApp)
-{
-  ketaiCamera.addToMediaLibrary(ourApp);
 }*/
+
+void onSavePhotoEvent(String filename)
+{
+  //ketaiCamera.addToMediaLibrary(filename);
+  println("i saved!");
+}
