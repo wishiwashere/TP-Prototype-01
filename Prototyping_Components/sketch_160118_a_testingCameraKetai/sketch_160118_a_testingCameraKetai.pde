@@ -111,6 +111,7 @@ void setup() {
 }
 
 void draw() {    
+  // Resetting the background to black between frames
   background(0);
   
   // Storing the current state of the matrix
@@ -145,27 +146,19 @@ void onCameraPreviewEvent()
 
 void mousePressed()
 {
-  // If the camera is already running stop it, or if it is stopped start running it again
-  // i.e. effecting its ability to capture new frames.
+  // If the camera is already running before we try and effect it
   if (ketaiCamera.isStarted())
   {
-    // Stopping the ketaiCamera so that no new frames will be read in
-    ketaiCamera.stop();
-    
     // Checking if the device has more than one camera. If it does we want to toggle between them
     if(ketaiCamera.getNumberOfCameras() > 1)
     {
+      // Stopping the ketaiCamera so that no new frames will be read in
+      ketaiCamera.stop();
+    
       // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
       camNum = camNum == 0 ? 1 : 0;
       ketaiCamera.setCameraID(camNum);
-    }
-  }
-  else
-  {    
-    // Checking if the device has more than one camera. If it does we want to scale the image
-    // so that the front facing camera doesn't show things in reverse
-    if(ketaiCamera.getNumberOfCameras() > 1)
-    {
+      
       // Toggling the scale of the camera image between 1 and -1 (depending on if the camera
       // is front or rear facing (only on devices with more than one camera)
       cameraScale *= -1;
@@ -174,10 +167,10 @@ void mousePressed()
       // in the correct orientation depending on which camera is in use i.e 270degrees for the front
       // facing camera, and 90degrees for the rear facing camera.
       cameraRotation = cameraRotation == 270 ? 90 : 270;
+      
+      // Starting the ketaiCamera again so that it will start reading in new frames again
+      ketaiCamera.start();
     }
-    
-    // Starting the ketaiCamera again so that it will start reading in new frames again
-    ketaiCamera.start();
   }
 }
 
