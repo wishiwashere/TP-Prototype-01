@@ -50,10 +50,6 @@ int appWidth, appHeight;
 // display and eventually alter the live stream images.
 KetaiCamera ketaiCamera;
 
-// Creating a global variable to store the ketaiSensor object, so that I can potentially
-// listen to and access sensor events (such as orientation changes) throughout the sketch
-KetaiSensor ketaiSensor;
-
 // Creating a global variable to store the number of the camera we want to view
 // at any given time. The front facing camera (on a device with more than one camera)
 // will be at index 1, and the rear camera will be at index 0. On a device with only
@@ -66,41 +62,22 @@ int camNum;
 // avoid things being in reverse
 int cameraScale = -1;
 
-// Creating a global variable, which will always be set to either 90 or 270 degrees, to ensure
-// that the live stream images from the camera area always oriented in the right rotation
-int cameraRotation;
+// Creating a global variable, which will always be set to either 90 or -90 degrees, to ensure
+// that the live stream images from the camera area always oriented in the right rotation. 
+// Initialising at -90 degrees, as we will be starting on the front facing camera
+int cameraRotation = -90;
 
-public void setup() {
-  // Setting the width and height of the sketch to be relative to the width and 
-  // height of the device it is being viewed on.
-  
-  println("The width of the device is: " + displayWidth + "; The height of the device is: " + displayHeight);
-  
+public void setup() {  
+  // Initialising the values of the appWidth/appHeight variables so that they now
+  // contain the values of the device's width and height (as explained when they were
   // Locking the applications orientation to portrait, so that the image being read in from the 
   // the camera is maintained, even when the device is rotated
   orientation(PORTRAIT);
   
-  // Initialising the values of the appWidth/appHeight variables so that they now
-  // contain the values of the device's width and height (as explained when they were
   // originally declared, these variables are required in order to make the camera
   // responsive to the device size aswell).
   appWidth = displayWidth;
   appHeight = displayHeight;
-  
-  
-  // Setting imageMode to center, so that the image will now rotate around it's own center
-  // point (currently not working).
-  imageMode(CENTER);
-  
-  // Initialising a new KetaiSensor object, to detect changes in the devices sensors
-  ketaiSensor = new KetaiSensor(this);
-  
-  // Starting teh ketaiSensor so that the sketch begins listenting for sensor events
-  ketaiSensor.start();
-  
-  // Enabling orientation, so that the device will feedback it's current orientation later
-  // on in the onOrientationEvent method.
-  ketaiSensor.enableOrientation();
   
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
@@ -130,11 +107,6 @@ public void setup() {
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
   
-  // Since we will be defaulting to the front facing camera, the image needs to be rotated by
-  // 270degrees to straighten it up. If were were defaulting to the rear camera, we would
-  // need to set this value to 90 by default.
-  cameraRotation = 270;
-  
   // Starting the ketaiCamera i.e. beginning to capture frames in.
   ketaiCamera.start();
 }
@@ -145,23 +117,29 @@ public void draw() {
   
   // Storing the current state of the matrix
   pushMatrix();
-  translate(displayWidth/2, displayHeight/2);
   
-  // Flipping the image so that it better represents the camera it is using i.e.
+  // Moving the matrix to the center of the screen. This way I can draw everything based around
+  // the 0, 0 center point, and let the matrix deal with the positioning
+  translate(appWidth/2, appHeight/2);
+  
+  //Flipping the image so that it better represents the camera it is using i.e.
   // on front facing cameras, the image will be flipped horizontally, so that things
   // don't appear in reverse.
   scale(cameraScale, 1);
   
   // Rotating the matrix (instead of the image, so i don't need to keep
-  // working out where the center point would be). By setting the image to 270degress,
-  // the camera appears in the upright position in front facing camera mode
+  // working out where the center point would be). By setting the image to 90 or -90 degrees,
+  // the camera appears in the upright position in front and rear facing camera views
   rotate(radians(cameraRotation));
+  
+  // Using imageMode CENTER, so that the image can be positioned based on it's center point,
+  // to allow for the rotations I want to carry out above
+  imageMode(CENTER);
   
   // Placing the current frame from the ketaiCamera onto the sketch at position
   // 0, 0 i.e. in the top left corner of the sketch.
   image(ketaiCamera, 0, 0);
   
-  // Restoring the previous state of the matrix
   popMatrix();
 }
 
@@ -181,32 +159,24 @@ public void mousePressed()
     // Checking if the device has more than one camera. If it does we want to toggle between them
     if(ketaiCamera.getNumberOfCameras() > 1)
     {
-      // Stopping the ketaiCamera so that no new frames will be read in
-      ketaiCamera.stop();
-    
       // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
       camNum = camNum == 0 ? 1 : 0;
-      ketaiCamera.setCameraID(camNum);
+      
+      // Toggle the image rotation value between a plus and a minus i.e. -90 and 90
+      cameraRotation *= -1;
       
       // Toggling the scale of the camera image between 1 and -1 (depending on if the camera
       // is front or rear facing (only on devices with more than one camera)
       cameraScale *= -1;
       
-      // Toggling the cameraRotation value to either 270 or 90, so that the camera view will appear
-      // in the correct orientation depending on which camera is in use i.e 270degrees for the front
-      // facing camera, and 90degrees for the rear facing camera.
-      cameraRotation = cameraRotation == 270 ? 90 : 270;
-      
-      // Starting the ketaiCamera again so that it will start reading in new frames again
+      // Stopping the ketaiCamera so that no new frames will be read in, switching to the camera specified
+      // by the camNum, then restarting the camera
+      ketaiCamera.stop();
+      ketaiCamera.setCameraID(camNum);
       ketaiCamera.start();
     }
   }
 }
-
-public void onOrientationEvent(float x, float y, float z) {
-  //println("------------------------------------ x = " + x + "; y = " + y + "; z = " + z + ";");
-}
-  public void settings() {  size(displayWidth, displayHeight); }
   static public void main(String[] passedArgs) {
     String[] appletArgs = new String[] { "sketch_160118_a_testingCameraKetai" };
     if (passedArgs != null) {
