@@ -66,6 +66,9 @@ int camNum;
 // avoid things being in reverse
 int cameraScale = -1;
 
+// Camera Rotation
+int cameraRotation;
+
 public void setup() {
   // Setting the width and height of the sketch to be relative to the width and 
   // height of the device it is being viewed on.
@@ -126,6 +129,7 @@ public void setup() {
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
   
+  cameraRotation = 270;
   
   // Starting the ketaiCamera i.e. beginning to capture frames in.
   ketaiCamera.start();
@@ -146,7 +150,7 @@ public void draw() {
   // Rotating the matrix (instead of the image, so i don't need to keep
   // working out where the center point would be). By setting the image to 270degress,
   // the camera appears in the upright position.
-  rotate(radians(270));
+  rotate(radians(cameraRotation));
   
   // Placing the current frame from the ketaiCamera onto the sketch at position
   // 0, 0 i.e. in the top left corner of the sketch.
@@ -183,6 +187,8 @@ public void mousePressed()
       // Toggling the scale of the camera image between 1 and -1 (depending on if the camera
       // is front or rear facing (only on devices with more than one camera)
       cameraScale *= -1;
+      
+      cameraRotation = cameraRotation == 270 ? 90 : 270;
     }
   }
   else
