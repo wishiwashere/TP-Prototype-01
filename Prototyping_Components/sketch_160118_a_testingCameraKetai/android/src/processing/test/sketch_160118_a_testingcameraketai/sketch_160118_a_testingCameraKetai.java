@@ -66,7 +66,8 @@ int camNum;
 // avoid things being in reverse
 int cameraScale = -1;
 
-// Camera Rotation
+// Creating a global variable, which will always be set to either 90 or 270 degrees, to ensure
+// that the live stream images from the camera area always oriented in the right rotation
 int cameraRotation;
 
 public void setup() {
@@ -129,6 +130,9 @@ public void setup() {
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
   
+  // Since we will be defaulting to the front facing camera, the image needs to be rotated by
+  // 270degrees to straighten it up. If were were defaulting to the rear camera, we would
+  // need to set this value to 90 by default.
   cameraRotation = 270;
   
   // Starting the ketaiCamera i.e. beginning to capture frames in.
@@ -136,6 +140,7 @@ public void setup() {
 }
 
 public void draw() {    
+  // Resetting the background to black between frames
   background(0);
   
   // Storing the current state of the matrix
@@ -149,7 +154,7 @@ public void draw() {
   
   // Rotating the matrix (instead of the image, so i don't need to keep
   // working out where the center point would be). By setting the image to 270degress,
-  // the camera appears in the upright position.
+  // the camera appears in the upright position in front facing camera mode
   rotate(radians(cameraRotation));
   
   // Placing the current frame from the ketaiCamera onto the sketch at position
@@ -170,16 +175,15 @@ public void onCameraPreviewEvent()
 
 public void mousePressed()
 {
-  // If the camera is already running stop it, or if it is stopped start running it again
-  // i.e. effecting its ability to capture new frames.
+  // If the camera is already running before we try and effect it
   if (ketaiCamera.isStarted())
   {
-    // Stopping the ketaiCamera so that no new frames will be read in
-    ketaiCamera.stop();
-    
     // Checking if the device has more than one camera. If it does we want to toggle between them
     if(ketaiCamera.getNumberOfCameras() > 1)
     {
+      // Stopping the ketaiCamera so that no new frames will be read in
+      ketaiCamera.stop();
+    
       // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
       camNum = camNum == 0 ? 1 : 0;
       ketaiCamera.setCameraID(camNum);
@@ -188,13 +192,14 @@ public void mousePressed()
       // is front or rear facing (only on devices with more than one camera)
       cameraScale *= -1;
       
+      // Toggling the cameraRotation value to either 270 or 90, so that the camera view will appear
+      // in the correct orientation depending on which camera is in use i.e 270degrees for the front
+      // facing camera, and 90degrees for the rear facing camera.
       cameraRotation = cameraRotation == 270 ? 90 : 270;
+      
+      // Starting the ketaiCamera again so that it will start reading in new frames again
+      ketaiCamera.start();
     }
-  }
-  else
-  {    
-    // Starting the ketaiCamera again so that it will start reading in new frames again
-    ketaiCamera.start();
   }
 }
 
