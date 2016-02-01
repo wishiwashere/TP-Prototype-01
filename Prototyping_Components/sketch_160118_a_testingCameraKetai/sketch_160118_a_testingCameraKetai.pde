@@ -25,10 +25,6 @@ KetaiCamera ketaiCamera;
 // listen to and access sensor events (such as orientation changes) throughout the sketch
 KetaiSensor ketaiSensor;
 
-// Creating a variable to store the z orientation of the device, so that hopefully I can
-// get the camera input image to rotate when the device is turned (currently not working).
-int orientationZ = 0;
-
 // Creating a global variable to store the number of the camera we want to view
 // at any given time. The front facing camera (on a device with more than one camera)
 // will be at index 1, and the rear camera will be at index 0. On a device with only
@@ -47,6 +43,10 @@ void setup() {
   size(displayWidth, displayHeight);
   println("The width of the device is: " + displayWidth + "; The height of the device is: " + displayHeight);
   
+  // Locking the applications orientation to portrait, so that the image being read in from the 
+  // the camera is maintained, even when the device is rotated
+  orientation(PORTRAIT);
+  
   // Initialising the values of the appWidth/appHeight variables so that they now
   // contain the values of the device's width and height (as explained when they were
   // originally declared, these variables are required in order to make the camera
@@ -54,9 +54,6 @@ void setup() {
   appWidth = displayWidth;
   appHeight = displayHeight;
   
-  // Locking the applications orientation to landscape, because currently the images
-  // coming in from the camera don't seem to be responding to changes in orientation
-  //orientation(LANDSCAPE);
   
   // Setting imageMode to center, so that the image will now rotate around it's own center
   // point (currently not working).
@@ -103,9 +100,6 @@ void setup() {
   
   // Starting the ketaiCamera i.e. beginning to capture frames in.
   ketaiCamera.start();
-  
-  // Below is not working, but appears to be a built in method
-  // println("ORIENTATION OF CAMERA IS NOW " + ketaiCamera.getOrientation());
 }
 
 void draw() {    
@@ -121,8 +115,9 @@ void draw() {
   scale(cameraScale, 1);
   
   // Rotating the matrix (instead of the image, so i don't need to keep
-  // working out where the center point would be).
-  rotate(radians(orientationZ));
+  // working out where the center point would be). By setting the image to 270degress,
+  // the camera appears in the upright position.
+  rotate(radians(270));
   
   // Placing the current frame from the ketaiCamera onto the sketch at position
   // 0, 0 i.e. in the top left corner of the sketch.
@@ -138,10 +133,6 @@ void onCameraPreviewEvent()
 {
   // Reading in a new frame from the ketaiCamera.
   ketaiCamera.read();
-  
-  // Printing out the size of this image (for testing purposes, to see if the image
-  // is responding to the change in orientation - currently it is not).
-  //println("The width of the image is: " + ketaiCamera.width + "; The height of the image is: " + ketaiCamera.height);
 }
 
 void mousePressed()
@@ -164,9 +155,6 @@ void mousePressed()
       // is front or rear facing (only on devices with more than one camera)
       cameraScale *= -1;
     }
-    // Rotating the ketaiCamera image by 90 radians (as long as it is still less than
-    // 360, otherwise resetting it to 0.
-    orientationZ = orientationZ < 360 ? orientationZ + 90 : 0;
   }
   else
   {    
