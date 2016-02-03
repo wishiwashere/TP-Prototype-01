@@ -66,9 +66,24 @@ protected class Rectangle{
     // on the screen will depend on the matrix's translation, as this will control where 
     // the object is drawn
     rect(0, 0, rectWidth, rectHeight);
-    println("x = " + rectX + "; y = " + rectY);
     
     // Restoring the matrix to it's previous state
     popMatrix();
+  }
+  
+  protected float getX(){
+    return rectX;
+  }
+  
+  protected float getY(){
+    return rectY;
+  }
+  
+  protected float getWidth(){
+    return rectWidth;
+  }
+  
+  protected float getHeight(){
+    return rectHeight;
   }
 }
