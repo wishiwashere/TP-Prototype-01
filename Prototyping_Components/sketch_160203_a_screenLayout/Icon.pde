@@ -23,16 +23,36 @@ public class Icon extends Rectangle{
     // specified in the object's constructor
     iconLinkTo = linkTo;
     
+    // Initialising the iconTitle to be equal to the requested title.
+    // If no title was provided, then an empty string will have been passed
+    // in, so we will temporarily store this and figure out later (in the showIcon
+    // function) whether or not to display the text
     iconTitle = title;
   }
+  
+  // Creating a public showIcon function, which can be called anywhere in the code
+  // to display the icon, and add any text that has been specified
   public void showIcon(){
+    // Calling the show() method (which was inherited from the Rectangle class)
+    // so that this icon will be displayed on screen
     this.show();
         
+    // Checking if the icon has a title that needs to be displayed with it
     if(iconTitle.length() > 1)
     {
+      // Setting the text align to center (on both the x and the y) so that
+      // the text will be drawn from the center point of it's position on
+      // the page
       textAlign(CENTER, CENTER);
+      
+      // Setting the text size to be 50% of the icon's height
       textSize(this.getHeight() * 0.50);
+      
+      // Setting the text color to black
       fill(#000000);
+      
+      // Adding the text to the screen, using the same x and y of the current 
+      // icon
       text(iconTitle, this.getX(), this.getY());
     }
   }
