@@ -1,5 +1,8 @@
-// Declaring an instance of the Screen
+// Declaring instances of the relevant screens
 HomeScreen myHomeScreen;
+FavouritesScreen myFavouritesScreen;
+
+String currentScreen = "HomeScreen";
 
 void setup(){
   // Setting the size of the sketch
@@ -7,10 +10,20 @@ void setup(){
   
   // Creating an myScreen using the Screen constructor
   myHomeScreen = new HomeScreen(#000000);
+  
+  myFavouritesScreen = new FavouritesScreen(#CE04BA);
 }
 
 void draw(){
-  // Calling the show method of the myScreen object (which is 
-  // inherited by the Screen class from the Rectangle class)
+  // Displaying the Home Screen and it's icons
   myHomeScreen.showHomeScreen();
+  
+  // Displaying the Favourites Screen and it's icons
+  //myFavouritesScreen.showFavouritesScreen();
+}
+
+void mousePressed(){
+  if(currentScreen == "HomeScreen"){
+    myHomeScreen.checkIcons();
+  }
 }

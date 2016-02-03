@@ -29,7 +29,7 @@ public class HomeScreen extends Screen{
     searchTravelIcon = new Icon(width/2, 200, 260, 50, 0, #ffffff, "SearchTravelScreen", "Search");
     aboutIcon = new Icon(width/2, 300, 260, 50, 0, #ffffff, "AboutScreen", "About");
     settingsIcon = new Icon(width/2, 400, 260, 50, 0, #ffffff, "SettingsScreen", "Settings");
-    myFavouritesIcon = new Icon(width/2, 500, 260, 50, 0, #ffffff, "myFavouritesScreen", "My Favourites");
+    myFavouritesIcon = new Icon(width/2, 500, 260, 50, 0, #ffffff, "MyFavouritesScreen", "My Favourites");
     
     // Creating the allIcons array to be able to store 5 objects i.e. the 5 icons I created above
     allIcons = new Icon[5];
@@ -52,6 +52,14 @@ public class HomeScreen extends Screen{
     // so that they will appear on the screen
     for(int i = 0; i < allIcons.length; i++){
       allIcons[i].showIcon();
+    }
+  }
+  
+  public void checkIcons(){
+    // Looping through each of the icons on the page, and checking if the mouse was over them
+    // when the click occured
+    for(int i = 0; i < allIcons.length; i++){
+      allIcons[i].checkMouseOver();
     }
   }
 }

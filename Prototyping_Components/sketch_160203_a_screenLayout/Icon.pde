@@ -56,4 +56,13 @@ public class Icon extends Rectangle{
       text(iconTitle, this.getX(), this.getY());
     }
   }
+  
+  public void checkMouseOver(){
+    if((mouseX > (this.getX() - (this.getWidth()/2))) &&
+        (mouseX < (this.getX() + (this.getWidth()/2))) &&
+        (mouseY > (this.getY() - (this.getHeight()/2))) &&
+        (mouseY < (this.getY() + (this.getHeight()/2)))){
+          println(this.iconTitle + " was clicked");
+    }
+  }
 }
