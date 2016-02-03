@@ -12,5 +12,5 @@ void setup(){
 void draw(){
   // Calling the show method of the myScreen object (which is 
   // inherited by the Screen class from the Rectangle class)
-  myHomeScreen.showIcons();
+  myHomeScreen.showHomeScreen();
 }

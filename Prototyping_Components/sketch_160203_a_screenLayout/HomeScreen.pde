@@ -1,4 +1,5 @@
 public class HomeScreen extends Screen{
+  
   // Creating a public constructor for the HomeScreen class, so that
   // instances of it can be created anywhere in the sketch
   private Icon randomTravelIcon;
@@ -19,7 +20,7 @@ public class HomeScreen extends Screen{
     myFavouritesIcon = new Icon(50, 500, 260, 50, #ffffff, "myFavouritesScreen");
   }
   
-  public void showIcons(){
+  public void showHomeScreen(){
     this.show();
     randomTravelIcon.show();
     searchTravelIcon.show();

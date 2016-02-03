@@ -1,4 +1,5 @@
 public class Icon extends Rectangle{
+  
   // Creating a private variable to store the icon's link, so that
   // it can only be accessed within this class
   private String iconLinkTo;
