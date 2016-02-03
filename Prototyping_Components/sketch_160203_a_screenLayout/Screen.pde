@@ -1,37 +1,79 @@
 protected class Screen extends Rectangle{
   
+  // Declaring the allIcons array, which will be used to store the 
+  // icons from each screen. This arry is not created or initialised until
+  // an instance of the Screen class is created. The purpose of declaring
+  // this array within the Screen class, as opposed to in each instance's
+  // own class, is that now we can deal with looping through, and calling
+  // methods on multiple icons of a screen only when their screen is being
+  // shown i.e. when showScreen() is being called
   protected Icon[] allIcons;
-  protected String screenTitle = "";
   
-  // Creating a public constructor for the Screen class, so that
-  // instances of it can be created anywhere in the sketch
+  // Creating and initialising the screenTitle property of the screen to be
+  // equal to an empty string. Each instance of the Screen class can then
+  // use the setScreenTitle() method to specify a custom title, which
+  // will then be used as the header text on that instance of the screen.
+  // If no title is specified, then header text will not be added to the 
+  // screen
+  private String screenTitle = "";
+  
+  // Creating protected constructors for the Screen class, so that they can
+  // only be accessed by classes which extend from this class
+  
   protected Screen(){
+    // Calling this class's super class (Screen) to create a screen using
+    // the default settings
     super();
   }
   
   protected Screen(color col){
-    
-    // Passing all of the parametres from the constructor
-    // class into the super class (Rectangle)
+    // Calling this class's super class (Screen) to create a screen using
+    // the default settings, along with setting the colour as specified
     super(col);
   }
   
+  
+  // Creating a public method so that this screen can be displayed from
+  // within the main sketch
   public void showScreen(){
+    // Calling the show() method (as inherited from the Rectangle class)
+    // to display this screen's background
     this.show();
+    
+    // Checking if this screen has been given a title (i.e. if the contents
+    // of the screenTitle is at least one character long
     if(screenTitle.length() > 0)
     {
+      // Setting the fill color for the text to black
       fill(0);
-      text(screenTitle, width/2, 50);
+      
+      // Adding the screenTitle to the screen, setting the x position to be
+      // centered within the screen, and to be 50px from the top
+      text(screenTitle, this.getWidth()/2, 50);
     }
+    
+    // Checking if this screen has any icons to be displayed
     if(allIcons.length > 0)
     {
+      // Looping through each of the screen's icons
       for(int i = 0; i < allIcons.length; i++){
+        // Calling the showIcon() method (as inherited from the Icon class)
+        // to display the icon on screen
         allIcons[i].showIcon();
+        
+        // Checking if the mouse is currently pressed i.e. if a click has
+        // been detected
         if(mousePressed)
         {
+          // Calling the checkMouseOver() method (as inherited from the Icon
+          // class, to see if the mouse was over this icon when it was clicked
           allIcons[i].checkMouseOver();
         }
       }
     }
+  }
+  
+  protected void setScreenTitle(String title){
+    screenTitle = title;
   }
 }

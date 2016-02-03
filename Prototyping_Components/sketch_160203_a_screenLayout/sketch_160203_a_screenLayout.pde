@@ -1,6 +1,6 @@
-// Declaring instances of the relevant screens, so that they will all be 
-// accessible throughout the main sketch i.e. so they can be displayed
-// when required
+// Declaring instances of the each screen, so that they will all be 
+// accessible throughout the main sketch (i.e. so they can be displayed
+// when requested)
 HomeScreen myHomeScreen;
 CameraLiveViewScreen myCameraLiveViewScreen;
 FavouritesScreen myFavouritesScreen;
@@ -8,13 +8,23 @@ SettingsScreen mySettingsScreen;
 AboutScreen myAboutScreen;
 SearchTravelScreen mySearchTravelScreen;
 
+// Setting the default screen to be the HomeScreen, so that when the app is loaded,
+// this is the first screen that is displayed. Since this global variable is available
+// throughout the sketch (i.e. within all classes as well as the main sketch) we will
+// use this variable to pass in the value of "iconLinkTo" when the icon is clicked on
+// within the checkMouseOver() method of the Icon class. The variable will then be tested
+// against each of the potential screen names (in the main sketch's draw function) to
+// decide which sketch should have the showScreen() method called on it i.e. (which
+// screen should be displayed
 String currentScreen = "HomeScreen";
 
 void setup(){
-  // Setting the size of the sketch
+  // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
   size(360, 640);
   
-  // Creating the screens which will be used in this application
+  // Creating the screens which will be used in this application. Setting a random background
+  // colour for each of these screens so that transitions between them can be more obvious
+  // (for testing purposes only)
   myHomeScreen = new HomeScreen(#000000);
   myCameraLiveViewScreen = new CameraLiveViewScreen();
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
@@ -24,6 +34,7 @@ void setup(){
 }
 
 void draw(){
+  // Using the currentScreen variable to decide which screen to show
   if(currentScreen == "HomeScreen")
   {
     // Displaying the Home Screen and it's icons
