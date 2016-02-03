@@ -25,19 +25,21 @@ void draw(){
   if(currentScreen == "HomeScreen")
   {
     // Displaying the Home Screen and it's icons
-    myHomeScreen.showHomeScreen();
+    myHomeScreen.showScreen();
   }else if(currentScreen == "FavouritesScreen"){  
     // Displaying the Favourites Screen and it's icons
-    myFavouritesScreen.showFavouritesScreen();
+    myFavouritesScreen.showScreen();
   }else if(currentScreen == "SettingsScreen"){
     // Displaying the Favourites Screen and it's icons
-    mySettingsScreen.showSettingsScreen();
+    mySettingsScreen.showScreen();
   }else if(currentScreen == "CameraLiveViewScreen"){
-    // Displaying the Favourites Screen and it's icons
-    myCameraLiveViewScreen.showCameraLiveViewScreen();
+    // Displaying the Camera Live View Screen and it's icons
+    myCameraLiveViewScreen.showScreen();
   }else if(currentScreen == "AboutScreen"){
-    myAboutScreen.showAboutScreen();
+    // Displaying the About Screen and it's icons
+    myAboutScreen.showScreen();
   }else if(currentScreen == "SearchTravelScreen"){
-    mySearchTravelScreen.showSearchTravelScreen();
+    // Displaying the Search Travel Screen and it's icons
+    mySearchTravelScreen.showScreen();
   }
 }
