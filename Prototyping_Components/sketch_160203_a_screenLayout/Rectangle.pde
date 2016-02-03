@@ -14,13 +14,13 @@ protected class Rectangle{
     // If no x, y, or rotation are passed in, defaulting these to 0. If no width
     // and height are passed in, defaulting these to the display size of the
     // device and then passing the rest of the values to the full constructor function
-    this(0, 0, displayWidth, displayHeight, 0, col);
+    this(width/2, height/2, width, height, 0, col);
   }
   
   protected Rectangle(float w, float h, color col){
     // If no x, y or rotation are passed in, defaulting these to 0, and then passing
     // the rest of the values to the full constructor function
-    this(0, 0, w, h, 0, col);
+    this(w/2, h/2, w, h, 0, col);
   }
   
   protected Rectangle(float x, float y, float w, float h, color col){
@@ -65,7 +65,8 @@ protected class Rectangle{
     // the object, so that it appears centered on it's point of origin. The actual position
     // on the screen will depend on the matrix's translation, as this will control where 
     // the object is drawn
-    rect(rectWidth/2, rectHeight/2, rectWidth, rectHeight);
+    rect(0, 0, rectWidth, rectHeight);
+    println("x = " + rectX + "; y = " + rectY);
     
     // Restoring the matrix to it's previous state
     popMatrix();

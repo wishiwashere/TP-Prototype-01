@@ -13,11 +13,11 @@ public class HomeScreen extends Screen{
     // class into the super class (Screen)
     super(col);
     
-    randomTravelIcon = new Icon(50, 100, 260, 50, #ffffff, "RandomTravelScreen");
-    searchTravelIcon = new Icon(50, 200, 260, 50, #ffffff, "SearchTravelScreen");
-    aboutIcon = new Icon(50, 300, 260, 50, #ffffff, "AboutScreen");
-    settingsIcon = new Icon(50, 400, 260, 50, #ffffff, "SettingsScreen");
-    myFavouritesIcon = new Icon(50, 500, 260, 50, #ffffff, "myFavouritesScreen");
+    randomTravelIcon = new Icon(width/2, 100, 260, 50, 0, #ffffff, "RandomTravelScreen");
+    searchTravelIcon = new Icon(width/2, 200, 260, 50, 0, #ffffff, "SearchTravelScreen");
+    aboutIcon = new Icon(width/2, 300, 260, 50, 0, #ffffff, "AboutScreen");
+    settingsIcon = new Icon(width/2, 400, 260, 50, 0, #ffffff, "SettingsScreen");
+    myFavouritesIcon = new Icon(width/2, 500, 260, 50, 0, #ffffff, "myFavouritesScreen");
   }
   
   public void showHomeScreen(){
