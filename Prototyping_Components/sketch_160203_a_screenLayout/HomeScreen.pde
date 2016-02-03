@@ -25,7 +25,7 @@ public class HomeScreen extends Screen{
     // stage. Passing in a colour value of while. Passing in a linkTo value of the name of the 
     // screen they will later link to, and finally, passing in the text that should be displayed
     // on them (this is the only parametre that is not required).
-    randomTravelIcon = new Icon(width/2, 100, 260, 50, 0, #ffffff, "RandomTravelScreen", "Random");
+    randomTravelIcon = new Icon(width/2, 100, 260, 50, 0, #ffffff, "CameraLiveViewScreen", "Random");
     searchTravelIcon = new Icon(width/2, 200, 260, 50, 0, #ffffff, "SearchTravelScreen", "Search");
     aboutIcon = new Icon(width/2, 300, 260, 50, 0, #ffffff, "AboutScreen", "About");
     settingsIcon = new Icon(width/2, 400, 260, 50, 0, #ffffff, "SettingsScreen", "Settings");

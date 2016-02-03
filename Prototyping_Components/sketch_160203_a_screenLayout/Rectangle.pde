@@ -10,6 +10,13 @@ protected class Rectangle{
   private color rectCol;
   private float rectRotation;
 
+  protected Rectangle(){
+    // If no x, y, or rotation are passed in, defaulting these to 0. If no width
+    // and height are passed in, defaulting these to the display size of the
+    // device and then passing the rest of the values to the full constructor function
+    this(width/2, height/2, width, height, 0, #FFFFFF);
+  }
+  
   protected Rectangle(color col){
     // If no x, y, or rotation are passed in, defaulting these to 0. If no width
     // and height are passed in, defaulting these to the display size of the

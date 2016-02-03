@@ -1,5 +1,6 @@
 // Declaring instances of the relevant screens
 HomeScreen myHomeScreen;
+CameraLiveViewScreen myCameraLiveViewScreen;
 FavouritesScreen myFavouritesScreen;
 SettingsScreen mySettingsScreen;
 
@@ -11,6 +12,7 @@ void setup(){
   
   // Creating the screens which will be used in this application
   myHomeScreen = new HomeScreen(#000000);
+  myCameraLiveViewScreen = new CameraLiveViewScreen();
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
   mySettingsScreen = new SettingsScreen(#2023A5);
 }
@@ -26,5 +28,8 @@ void draw(){
   }else if(currentScreen == "SettingsScreen"){
     // Displaying the Favourites Screen and it's icons
     mySettingsScreen.showSettingsScreen();
+  }else if(currentScreen == "CameraLiveViewScreen"){
+    // Displaying the Favourites Screen and it's icons
+    myCameraLiveViewScreen.showCameraLiveViewScreen();
   }
 }
