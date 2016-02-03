@@ -8,22 +8,18 @@ void setup(){
   // Setting the size of the sketch
   size(360, 640);
   
-  // Creating an myScreen using the Screen constructor
+  // Creating the screens which will be used in this application
   myHomeScreen = new HomeScreen(#000000);
-  
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
 }
 
 void draw(){
-  // Displaying the Home Screen and it's icons
-  myHomeScreen.showHomeScreen();
-  
-  // Displaying the Favourites Screen and it's icons
-  //myFavouritesScreen.showFavouritesScreen();
-}
-
-void mousePressed(){
-  if(currentScreen == "HomeScreen"){
-    myHomeScreen.checkIcons();
+  if(currentScreen == "HomeScreen")
+  {
+    // Displaying the Home Screen and it's icons
+    myHomeScreen.showHomeScreen();
+  }else if(currentScreen == "FavouritesScreen"){  
+    // Displaying the Favourites Screen and it's icons
+    myFavouritesScreen.showFavouritesScreen();
   }
 }

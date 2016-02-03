@@ -58,19 +58,22 @@ public class Icon extends Rectangle{
   }
   
   public void checkMouseOver(){ 
-    // Checking if the mouse (or finger) is over this icon (usually only
-    // called when a mouse event has occurred). Since the icons are drawn
-    // from the center, a bit of additional calculations are required to 
-    // find out if the mouse was over them i.e. to see if the mouseX was
-    // over this icon, we first have to take half the width from the x from 
-    // the x postion, to get the furthest left point, and then add half of
-    // the width to the x position of the icon, to get it's furthest right
-    // point. The process is simular for determining the mouseY
-    if((mouseX > (this.getX() - (this.getWidth()/2))) &&
-       (mouseX < (this.getX() + (this.getWidth()/2))) &&
-       (mouseY > (this.getY() - (this.getHeight()/2))) &&
-       (mouseY < (this.getY() + (this.getHeight()/2)))){
-          println(this.iconTitle + " was clicked");
+    if(mousePressed){
+      // Checking if the mouse (or finger) is over this icon (usually only
+      // called when a mouse event has occurred). Since the icons are drawn
+      // from the center, a bit of additional calculations are required to 
+      // find out if the mouse was over them i.e. to see if the mouseX was
+      // over this icon, we first have to take half the width from the x from 
+      // the x postion, to get the furthest left point, and then add half of
+      // the width to the x position of the icon, to get it's furthest right
+      // point. The process is simular for determining the mouseY
+      if((mouseX > (this.getX() - (this.getWidth()/2))) &&
+         (mouseX < (this.getX() + (this.getWidth()/2))) &&
+         (mouseY > (this.getY() - (this.getHeight()/2))) &&
+         (mouseY < (this.getY() + (this.getHeight()/2)))){
+            println(this.iconTitle + " was clicked");
+            currentScreen = this.iconLinkTo;
+      }
     }
   }
 }
