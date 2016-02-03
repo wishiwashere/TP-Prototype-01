@@ -4,6 +4,7 @@ CameraLiveViewScreen myCameraLiveViewScreen;
 FavouritesScreen myFavouritesScreen;
 SettingsScreen mySettingsScreen;
 AboutScreen myAboutScreen;
+SearchTravelScreen mySearchTravelScreen;
 
 String currentScreen = "HomeScreen";
 
@@ -17,6 +18,7 @@ void setup(){
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
   mySettingsScreen = new SettingsScreen(#2023A5);
   myAboutScreen = new AboutScreen (#30B727);
+  mySearchTravelScreen = new SearchTravelScreen(#E88121);
 }
 
 void draw(){
@@ -35,5 +37,7 @@ void draw(){
     myCameraLiveViewScreen.showCameraLiveViewScreen();
   }else if(currentScreen == "AboutScreen"){
     myAboutScreen.showAboutScreen();
+  }else if(currentScreen == "SearchTravelScreen"){
+    mySearchTravelScreen.showSearchTravelScreen();
   }
 }

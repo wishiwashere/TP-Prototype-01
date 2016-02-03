@@ -15,7 +15,10 @@ public class AboutScreen extends Screen{
     this.show();
     for(int i = 0; i < allIcons.length; i++){
       allIcons[i].showIcon();
-      allIcons[i].checkMouseOver();
+      if(mousePressed)
+      {
+        allIcons[i].checkMouseOver();
+      }
     }
   }
 }

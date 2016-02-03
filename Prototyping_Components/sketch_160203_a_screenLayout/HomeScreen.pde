@@ -52,7 +52,10 @@ public class HomeScreen extends Screen{
     // so that they will appear on the screen
     for(int i = 0; i < allIcons.length; i++){
       allIcons[i].showIcon();
-      allIcons[i].checkMouseOver();
+      if(mousePressed)
+      {
+        allIcons[i].checkMouseOver();
+      }
     }
   }
 }
