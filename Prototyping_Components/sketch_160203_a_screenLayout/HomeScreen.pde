@@ -16,11 +16,11 @@ public class HomeScreen extends Screen{
     // stage. Passing in a colour value of while. Passing in a linkTo value of the name of the 
     // screen they will later link to, and finally, passing in the text that should be displayed
     // on them (this is the only parametre that is not required).
-    Icon randomTravelIcon = new Icon(width/2, 100, 260, 50, 0, #ffffff, "CameraLiveViewScreen", "Random");
-    Icon searchTravelIcon = new Icon(width/2, 200, 260, 50, 0, #ffffff, "SearchTravelScreen", "Search");
-    Icon aboutIcon = new Icon(width/2, 300, 260, 50, 0, #ffffff, "AboutScreen", "About");
-    Icon settingsIcon = new Icon(width/2, 400, 260, 50, 0, #ffffff, "SettingsScreen", "Settings");
-    Icon myFavouritesIcon = new Icon(width/2, 500, 260, 50, 0, #ffffff, "FavouritesScreen", "My Favourites");
+    Icon randomTravelIcon = new Icon(width/2, 150, 260, 50, 0, #ffffff, "Random", true, "CameraLiveViewScreen");
+    Icon searchTravelIcon = new Icon(width/2, 250, 260, 50, 0, #ffffff, "Search", true, "SearchTravelScreen");
+    Icon aboutIcon = new Icon(width/2, 350, 260, 50, 0, #ffffff, "About", true, "AboutScreen");
+    Icon settingsIcon = new Icon(width/2, 450, 260, 50, 0, #ffffff, "Settings", true, "SettingsScreen");
+    Icon myFavouritesIcon = new Icon(width/2, 550, 260, 50, 0, #ffffff, "My Favourites", true, "FavouritesScreen");
     
     // Creating the allIcons array to be able to store 5 objects i.e. the 5 icons I created above
     allIcons = new Icon[5];

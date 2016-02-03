@@ -1,4 +1,6 @@
-// Declaring instances of the relevant screens
+// Declaring instances of the relevant screens, so that they will all be 
+// accessible throughout the main sketch i.e. so they can be displayed
+// when required
 HomeScreen myHomeScreen;
 CameraLiveViewScreen myCameraLiveViewScreen;
 FavouritesScreen myFavouritesScreen;

@@ -5,11 +5,15 @@ public class SearchTravelScreen extends Screen{
   public SearchTravelScreen(color col){
     super(col);
     
-    Icon homeIcon = new Icon(width/2, 100, 260, 50, 0, #ffffff, "HomeScreen", "Go Home");
-    Icon cameraLiveViewIcon = new Icon(width/2, 200, 260, 50, 0, #ffffff, "CameraLiveViewScreen", "Search");
+    Icon homeIcon = new Icon(width - 50, 50, 50, 50, 0, #ffffff, "Home", false, "HomeScreen");
+    Icon searchIcon = new Icon(width/2 + 75, height/2, 150, 50, 0, #ffffff, "Search", true, "CameraLiveViewScreen");
+    Icon cancelIcon = new Icon(width/2 - 75, height/2, 150, 50, 0, #ffffff, "Cancel", true, "HomeScreen");
     
-    allIcons = new Icon[2];
+    allIcons = new Icon[3];
     allIcons[0] = homeIcon;
-    allIcons[1] = cameraLiveViewIcon;
+    allIcons[1] = searchIcon;
+    allIcons[2] = cancelIcon;
+    
+    screenTitle = "Search";
   }
 }

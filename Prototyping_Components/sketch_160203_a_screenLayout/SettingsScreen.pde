@@ -5,9 +5,11 @@ public class SettingsScreen extends Screen{
   public SettingsScreen(color col){
     super(col);
     
-    Icon homeIcon = new Icon(width/2, 100, 260, 50, 0, #ffffff, "HomeScreen", "Go Home");
+    Icon homeIcon = new Icon(width - 50, 50, 50, 50, 0, #ffffff, "Home", false, "HomeScreen");
     
     allIcons = new Icon[1];
     allIcons[0] = homeIcon;
+    
+    screenTitle = "Settings";
   }
 }

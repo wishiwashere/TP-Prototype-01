@@ -4,16 +4,23 @@ public class Icon extends Rectangle{
   // it can only be accessed within this class
   private String iconLinkTo;
   private String iconTitle;
+  private Boolean showIconTitle;
   
   // Creating a public constructor for the Icon class, so that
   // instances of it can be created anywhere in the sketch
-  public Icon(float x, float y, float w, float h, int r, color col, String linkTo){
+  public Icon(float x, float y, float w, float h, int r, color col){
     
     // Passing all of the parametres from the constructor
     // class into the full constructor, passing null for the title parametre
-    this(x, y, w, h, r, col, linkTo, "");
+    this(x, y, w, h, r, col, "", false, "");
   }
-  public Icon(float x, float y, float w, float h, int r, color col, String linkTo, String title){
+  public Icon(float x, float y, float w, float h, int r, color col, String title, Boolean showTitle){
+    
+    // Passing all of the parametres from the constructor
+    // class into the full constructor, passing null for the title parametre
+    this(x, y, w, h, r, col, title, showTitle, "");
+  }
+  public Icon(float x, float y, float w, float h, int r, color col, String title, Boolean showTitle, String linkTo){
     
     // Passing all of the parametres from the constructor
     // class into the super class (Rectangle)
@@ -28,6 +35,8 @@ public class Icon extends Rectangle{
     // in, so we will temporarily store this and figure out later (in the showIcon
     // function) whether or not to display the text
     iconTitle = title;
+    
+    showIconTitle = showTitle;
   }
   
   // Creating a public showIcon function, which can be called anywhere in the code
@@ -51,9 +60,12 @@ public class Icon extends Rectangle{
       // Setting the text color to black
       fill(#000000);
       
-      // Adding the text to the screen, using the same x and y of the current 
-      // icon
-      text(iconTitle, this.getX(), this.getY());
+      if(showIconTitle)
+      {
+        // Adding the text to the screen, using the same x and y of the current 
+        // icon
+        text(iconTitle, this.getX(), this.getY());
+      }
     }
   }
   
@@ -70,8 +82,12 @@ public class Icon extends Rectangle{
        (mouseX < (this.getX() + (this.getWidth()/2))) &&
        (mouseY > (this.getY() - (this.getHeight()/2))) &&
        (mouseY < (this.getY() + (this.getHeight()/2)))){
-          println(this.iconTitle + " was clicked");
-          currentScreen = this.iconLinkTo;
+          println(this.iconTitle + " was clicked.");
+          if(iconLinkTo.length() > 1)
+          {
+            currentScreen = this.iconLinkTo;
+            println("Going to page " + this.iconLinkTo);
+          }
           mousePressed = false;
     }
   }

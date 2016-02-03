@@ -1,6 +1,7 @@
 protected class Screen extends Rectangle{
   
   protected Icon[] allIcons;
+  protected String screenTitle = "";
   
   // Creating a public constructor for the Screen class, so that
   // instances of it can be created anywhere in the sketch
@@ -17,6 +18,11 @@ protected class Screen extends Rectangle{
   
   public void showScreen(){
     this.show();
+    if(screenTitle.length() > 0)
+    {
+      fill(0);
+      text(screenTitle, width/2, 50);
+    }
     if(allIcons.length > 0)
     {
       for(int i = 0; i < allIcons.length; i++){
