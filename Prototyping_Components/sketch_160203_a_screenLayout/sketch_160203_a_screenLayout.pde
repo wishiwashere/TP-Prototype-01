@@ -3,6 +3,7 @@ HomeScreen myHomeScreen;
 CameraLiveViewScreen myCameraLiveViewScreen;
 FavouritesScreen myFavouritesScreen;
 SettingsScreen mySettingsScreen;
+AboutScreen myAboutScreen;
 
 String currentScreen = "HomeScreen";
 
@@ -15,6 +16,7 @@ void setup(){
   myCameraLiveViewScreen = new CameraLiveViewScreen();
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
   mySettingsScreen = new SettingsScreen(#2023A5);
+  myAboutScreen = new AboutScreen (#30B727);
 }
 
 void draw(){
@@ -31,5 +33,7 @@ void draw(){
   }else if(currentScreen == "CameraLiveViewScreen"){
     // Displaying the Favourites Screen and it's icons
     myCameraLiveViewScreen.showCameraLiveViewScreen();
+  }else if(currentScreen == "AboutScreen"){
+    myAboutScreen.showAboutScreen();
   }
 }
