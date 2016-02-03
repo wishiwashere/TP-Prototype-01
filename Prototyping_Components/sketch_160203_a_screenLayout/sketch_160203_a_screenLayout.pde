@@ -1,6 +1,7 @@
 // Declaring instances of the relevant screens
 HomeScreen myHomeScreen;
 FavouritesScreen myFavouritesScreen;
+SettingsScreen mySettingsScreen;
 
 String currentScreen = "HomeScreen";
 
@@ -11,6 +12,7 @@ void setup(){
   // Creating the screens which will be used in this application
   myHomeScreen = new HomeScreen(#000000);
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
+  mySettingsScreen = new SettingsScreen(#2023A5);
 }
 
 void draw(){
@@ -21,5 +23,8 @@ void draw(){
   }else if(currentScreen == "FavouritesScreen"){  
     // Displaying the Favourites Screen and it's icons
     myFavouritesScreen.showFavouritesScreen();
+  }else if(currentScreen == "SettingsScreen"){
+    // Displaying the Favourites Screen and it's icons
+    mySettingsScreen.showSettingsScreen();
   }
 }
