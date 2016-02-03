@@ -73,6 +73,7 @@ public class Icon extends Rectangle{
          (mouseY < (this.getY() + (this.getHeight()/2)))){
             println(this.iconTitle + " was clicked");
             currentScreen = this.iconLinkTo;
+            mousePressed = false;
       }
     }
   }

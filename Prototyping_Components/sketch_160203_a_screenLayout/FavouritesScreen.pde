@@ -5,7 +5,7 @@ public class FavouritesScreen extends Screen{
   public FavouritesScreen(color col){
     super(col);
     
-    homeIcon = new Icon(width/2, 500, 260, 50, 0, #ffffff, "HomeScreen", "Go Home");
+    homeIcon = new Icon(width/2, 100, 260, 50, 0, #ffffff, "HomeScreen", "Go Home");
     
     allIcons = new Icon[1];
     allIcons[0] = homeIcon;
