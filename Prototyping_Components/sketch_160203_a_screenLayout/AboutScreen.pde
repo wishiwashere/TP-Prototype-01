@@ -38,4 +38,11 @@ public class AboutScreen extends Screen{
     // then no header text will appear on this page
     this.setScreenTitle("About");
   }
+  
+  public void showScreen(){
+    
+    // Calling the drawScreen() method of the super class, to create the basic background, and 
+    // icons of the screen
+    this.drawScreen();
+  }
 }

@@ -14,6 +14,7 @@ FavouritesScreen myFavouritesScreen;
 SettingsScreen mySettingsScreen;
 AboutScreen myAboutScreen;
 SearchTravelScreen mySearchTravelScreen;
+SearchFailedScreen mySearchFailedScreen;
 
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
 // this is the first screen that is displayed. Since this global variable is available
@@ -23,7 +24,7 @@ SearchTravelScreen mySearchTravelScreen;
 // against each of the potential screen names (in the main sketch's draw function) to
 // decide which sketch should have the showScreen() method called on it i.e. (which
 // screen should be displayed
-String currentScreen = "HomeScreen";
+String currentScreen = "SearchFailedScreen";
 
 void setup(){
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
@@ -47,6 +48,7 @@ void setup(){
   mySettingsScreen = new SettingsScreen(#2023A5);
   myAboutScreen = new AboutScreen (#30B727);
   mySearchTravelScreen = new SearchTravelScreen(#E88121);
+  mySearchFailedScreen = new SearchFailedScreen(#F5C811);
 }
 
 void draw(){
@@ -70,5 +72,8 @@ void draw(){
   }else if(currentScreen == "SearchTravelScreen"){
     // Displaying the Search Travel Screen and it's icons
     mySearchTravelScreen.showScreen();
+  }else if(currentScreen == "SearchFailedScreen"){
+    // Displaying the Search Failed Screen and it's icons
+    mySearchFailedScreen.showScreen();
   }
 }

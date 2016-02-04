@@ -88,8 +88,9 @@ public class Icon extends Rectangle{
       // Setting the text color to black
       fill(#000000);
 
-      // Adding the text to the screen, using the same x and y of the current 
-      // icon
+      // Adding the screenTitle to the screen, setting the x and y positions to 0, 
+      // as the actual position on the screen will depend on the matrix's translation,
+      // as this will control where the text is drawn
       text(iconTitle, 0, 0);
       
       // Restoring the matrix to it's previous state

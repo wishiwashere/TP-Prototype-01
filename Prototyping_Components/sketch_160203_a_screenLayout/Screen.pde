@@ -36,7 +36,7 @@ protected class Screen extends Rectangle{
   
   // Creating a public method so that this screen can be displayed from
   // within the main sketch
-  public void showScreen(){
+  public void drawScreen(){
     // Calling the show() method (as inherited from the Rectangle class)
     // to display this screen's background
     this.show();
@@ -45,12 +45,35 @@ protected class Screen extends Rectangle{
     // of the screenTitle is at least one character long
     if(screenTitle.length() > 0)
     {
+      // Storing the current state of the matrix
+      pushMatrix();
+      
+      // Translating the position of the matrix be centered and just below the 
+      // top of the screen
+      translate(appWidth/2, appHeight * 0.08);
+      
+      // Rotating the matrix by the currnet rotation value of this object (which has been
+      // stored as a radian value)
+      rotate(this.getRotation());
+      
+      // Setting the text align to center (on both the x and the y) so that
+      // the text will be drawn from the center point of it's position on
+      // the page
+      textAlign(CENTER, CENTER);
+      
+      // Setting the text size to be responsive to the height of the app
+      textSize(appHeight * 0.05);
+      
       // Setting the fill color for the text to black
       fill(0);
       
-      // Adding the screenTitle to the screen, setting the x position to be
-      // centered within the screen, and to be 50px from the top
-      text(screenTitle, this.getWidth()/2, 50);
+      // Adding the screenTitle to the screen, setting the x and y positions to 0, 
+      // as the actual position on the screen will depend on the matrix's translation,
+      // as this will control where the text is drawn
+      text(screenTitle, 0, 0);
+      
+      // Restoring the matrix to it's previous state
+      popMatrix();
     }
     
     // Checking if this screen has any icons to be displayed

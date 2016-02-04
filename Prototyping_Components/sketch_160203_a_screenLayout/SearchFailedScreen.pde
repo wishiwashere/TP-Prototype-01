@@ -1,13 +1,17 @@
-public class SettingsScreen extends Screen{
+public class SearchFailedScreen extends Screen{
   
-  // Creating a public constructor for the SettingsScreen class, so that
+  PImage brokenSearchImage;
+  
+  // Creating a public constructor for the SearchFailedScreen class, so that
   // an instance of it can be declared in the main sketch
-  public SettingsScreen(color col){
+  public SearchFailedScreen(color col){
     
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(col);
+    
+    brokenSearchImage = loadImage("placeholder.PNG");
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -19,9 +23,11 @@ public class SettingsScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(appWidth * 0.85, appHeight * 0.085, #ffffff, "Home", false, "HomeScreen");
+    Icon searchTravelIcon = new Icon(appWidth * 0.3, appHeight * 0.8, appWidth * 0.35, appHeight * 0.08, #ffffff, "Search Again", true, "SearchTravelScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.7, appHeight * 0.8, appWidth * 0.35, appHeight * 0.08, #ffffff, "Random", true, "CameraLiveViewScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {homeIcon};
+    Icon[] allIcons = {homeIcon, searchTravelIcon, randomTravelIcon};
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
@@ -35,7 +41,7 @@ public class SettingsScreen extends Screen{
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
-    this.setScreenTitle("Settings");
+    this.setScreenTitle("We're sorry!");
   }
   
   public void showScreen(){
@@ -43,5 +49,8 @@ public class SettingsScreen extends Screen{
     // Calling the drawScreen() method of the super class, to create the basic background, and 
     // icons of the screen
     this.drawScreen();
+    
+    imageMode(CENTER);
+    image(brokenSearchImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
   }
 }
