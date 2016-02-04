@@ -24,20 +24,15 @@ public class HomeScreen extends Screen{
     Icon settingsIcon = new Icon(width/2, 450, 260, 50, 0, #ffffff, "Settings", true, "SettingsScreen");
     Icon myFavouritesIcon = new Icon(width/2, 550, 260, 50, 0, #ffffff, "My Favourites", true, "FavouritesScreen");
     
-    // Creating the allIcons array to store one icon. This array was declared in the
-    // super class, so that when icons are saved to it, they can be accessed by this
-    // screen's super class (Screen), so that they can be looped through by the showScreen()
-    // method, and methods inherited from the Icon class (such as showIcon and checkMouseOver)
-    // can be called on them from within this array. This reduces the need for each screen
-    // to have to loop through it's icons, or call the same method on multiple icons.
-    allIcons = new Icon[5];
+    // Creating a temporary allIcons array to store the icon/s we have created above.
+    Icon[] allIcons = {randomTravelIcon, searchTravelIcon, aboutIcon, settingsIcon, myFavouritesIcon};
     
-    // Storing each of the icon buttons in the allIcons array, to make it easier to call the same methods
-    // on them later on (i.e. I can now loop through them, instead of calling methods individually on them
-    allIcons[0] = randomTravelIcon;
-    allIcons[1] = searchTravelIcon;
-    allIcons[2] = aboutIcon;
-    allIcons[3] = settingsIcon;
-    allIcons[4] = myFavouritesIcon;
+    // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
+    // the temporary allIcons array to the screenIcons array of the Screen class so that they 
+    // can be looped through by the showScreen() method, and methods inherited from the Icon 
+    // class (such as showIcon and checkMouseOver) can be called on them from within this array. 
+    // This reduces the need for each screen to have to loop through it's icons, or call the 
+    // same method on multiple icons.
+    this.setScreenIcons(allIcons);
   }
 }

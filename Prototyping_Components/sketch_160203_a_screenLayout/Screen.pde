@@ -1,13 +1,14 @@
 protected class Screen extends Rectangle{
   
-  // Declaring the allIcons array, which will be used to store the 
-  // icons from each screen. This arry is not created or initialised until
-  // an instance of the Screen class is created. The purpose of declaring
+  // Declaring the screenIcons array, which will be used to store the 
+  // icons from each screen. This array will be initialised through the
+  // setScreenIcons() method, where each screen will pass in an array
+  // or the icons that are present on it's screen. The purpose of storing
   // this array within the Screen class, as opposed to in each instance's
   // own class, is that now we can deal with looping through, and calling
   // methods on multiple icons of a screen only when their screen is being
   // shown i.e. when showScreen() is being called
-  protected Icon[] allIcons;
+  private Icon[] screenIcons;
   
   // Creating and initialising the screenTitle property of the screen to be
   // equal to an empty string. Each instance of the Screen class can then
@@ -53,13 +54,13 @@ protected class Screen extends Rectangle{
     }
     
     // Checking if this screen has any icons to be displayed
-    if(allIcons.length > 0)
+    if(screenIcons.length > 0)
     {
       // Looping through each of the screen's icons
-      for(int i = 0; i < allIcons.length; i++){
+      for(int i = 0; i < screenIcons.length; i++){
         // Calling the showIcon() method (as inherited from the Icon class)
         // to display the icon on screen
-        allIcons[i].showIcon();
+        screenIcons[i].showIcon();
         
         // Checking if the mouse is currently pressed i.e. if a click has
         // been detected
@@ -67,13 +68,22 @@ protected class Screen extends Rectangle{
         {
           // Calling the checkMouseOver() method (as inherited from the Icon
           // class, to see if the mouse was over this icon when it was clicked
-          allIcons[i].checkMouseOver();
+          screenIcons[i].checkMouseOver();
         }
       }
     }
   }
   
   protected void setScreenTitle(String title){
+    // Setting the screenTitle to the title passed in by each screen. If no
+    // title is passed, this variable has already been initialised to an 
+    // empty string above
     screenTitle = title;
+  }
+  
+  protected void setScreenIcons(Icon[] icons){
+    // Initialising the screenIcons array with the contents from the allIcons
+    // array that each screen will pass in
+    screenIcons = icons;
   }
 }

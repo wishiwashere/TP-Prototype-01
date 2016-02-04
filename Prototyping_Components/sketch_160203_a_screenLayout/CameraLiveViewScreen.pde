@@ -22,20 +22,15 @@ public class CameraLiveViewScreen extends Screen{
     Icon shutterIcon = new Icon(width/2, height - 50, 50, 50, 0, #ffffff, "Take a Picture", false);
     Icon switchViewIcon = new Icon(width - 50, height - 50, 50, 50, 0, #ffffff, "Switch View", false);
     
-    // Creating the allIcons array to store one icon. This array was declared in the
-    // super class, so that when icons are saved to it, they can be accessed by this
-    // screen's super class (Screen), so that they can be looped through by the showScreen()
-    // method, and methods inherited from the Icon class (such as showIcon and checkMouseOver)
-    // can be called on them from within this array. This reduces the need for each screen
-    // to have to loop through it's icons, or call the same method on multiple icons.
-    allIcons = new Icon[5];
+    // Creating a temporary allIcons array to store the icon/s we have created above.
+    Icon[] allIcons = {homeIcon, favIcon, shakeIcon, shutterIcon, switchViewIcon};
     
-    // Storing this screen's icons in the allIcons array (which was declared in this class's
-    // super class (Screen)
-    allIcons[0] = homeIcon;
-    allIcons[1] = favIcon;
-    allIcons[2] = shakeIcon;
-    allIcons[3] = shutterIcon;
-    allIcons[4] = switchViewIcon;
+    // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
+    // the temporary allIcons array to the screenIcons array of the Screen class so that they 
+    // can be looped through by the showScreen() method, and methods inherited from the Icon 
+    // class (such as showIcon and checkMouseOver) can be called on them from within this array. 
+    // This reduces the need for each screen to have to loop through it's icons, or call the 
+    // same method on multiple icons.
+    this.setScreenIcons(allIcons);
   }
 }

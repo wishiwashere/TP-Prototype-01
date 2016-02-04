@@ -18,17 +18,16 @@ public class FavouritesScreen extends Screen{
     //screen they will later link to
     Icon homeIcon = new Icon(width - 50, 50, 50, 50, 0, #ffffff, "Home", false, "HomeScreen");
    
-    // Creating the allIcons array to store one icon. This array was declared in the
-    // super class, so that when icons are saved to it, they can be accessed by this
-    // screen's super class (Screen), so that they can be looped through by the showScreen()
-    // method, and methods inherited from the Icon class (such as showIcon and checkMouseOver)
-    // can be called on them from within this array. This reduces the need for each screen
-    // to have to loop through it's icons, or call the same method on multiple icons.
-    allIcons = new Icon[1];
+    // Creating a temporary allIcons array to store the icon/s we have created above.
+    Icon[] allIcons = {homeIcon};
     
-    // Storing this screen's icons in the allIcons array (which was declared in this class's
-    // super class (Screen)
-    allIcons[0] = homeIcon;
+    // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
+    // the temporary allIcons array to the screenIcons array of the Screen class so that they 
+    // can be looped through by the showScreen() method, and methods inherited from the Icon 
+    // class (such as showIcon and checkMouseOver) can be called on them from within this array. 
+    // This reduces the need for each screen to have to loop through it's icons, or call the 
+    // same method on multiple icons.
+    this.setScreenIcons(allIcons);
     
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
