@@ -8,24 +8,23 @@ public class HomeScreen extends Screen{
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(col);
-    
-    // Creating the icons for this screen, using locally scoped variables, as these
-    // icons will be only ever be referred to from the allIcons array. Setting their x to 
-    // width/2 (so that they will appear centered on the screen), incrementing their y by 100 pixels
-    // each, so that they will be spaced out vertically, setting their width to 260 and height to 50 
-    // (random numbers I chose for the time being). I am also passing in a rotation of 0 for the time being, as we
-    // may want to have the ability to rotate these based on the device's orientation at a later
-    // stage. Passing in a colour value of while. Passing in a name for the icon, followed by a
-    // boolean to choose whether this name should be displayed on the button or not. Finally, passing
-    // in a linkTo value of the name of the screen they will later link to
-    Icon randomTravelIcon = new Icon(width/2, 150, 260, 50, #ffffff, "Random", true, "CameraLiveViewScreen");
-    Icon searchTravelIcon = new Icon(width/2, 250, 260, 50, #ffffff, "Search", true, "SearchTravelScreen");
-    Icon aboutIcon = new Icon(width/2, 350, 260, 50, #ffffff, "About", true, "AboutScreen");
-    Icon settingsIcon = new Icon(width/2, 450, 260, 50, #ffffff, "Settings", true, "SettingsScreen");
-    Icon myFavouritesIcon = new Icon(width/2, 550, 260, 50, #ffffff, "My Favourites", true, "FavouritesScreen");
-    
+       
+    // Creating the icon/s for this screen, using locally scoped variables, as these
+    // icons will be only ever be referred to from the allIcons array. Setting their
+    // x, y, width and height properties based on percentages of the width and height
+    // of the app (these appWidth and appHeight variables were defined in the main
+    // sketch. Passing in a colour value of white. Passing in a name for the icon, followed by a
+    // boolean to choose whether this name should be displayed on the icon or not. Finally, passing
+    // in a linkTo value of the name of the screen they will later link to. The title arguments, as well
+    // as the linkTo argument, are optional
+    Icon randomTravelIcon = new Icon(appWidth * 0.3, appHeight * 0.4, appWidth * 0.35, appHeight * 0.08, #ffffff, "Random", true, "CameraLiveViewScreen");
+    Icon searchTravelIcon = new Icon(appWidth * 0.7, appHeight * 0.4, appWidth * 0.35, appHeight * 0.08, #ffffff, "Search", true, "SearchTravelScreen");
+    Icon myFavouritesIcon = new Icon(appWidth * 0.3, appHeight * 0.6, appWidth * 0.35, appHeight * 0.08, #ffffff, "My Favourites", true, "FavouritesScreen");
+    Icon aboutIcon = new Icon(appWidth * 0.7, appHeight * 0.6, appWidth * 0.35, appHeight * 0.08, #ffffff, "About", true, "AboutScreen");
+    Icon settingsIcon = new Icon(appWidth * 0.5, appHeight * 0.8, appWidth * 0.35, appHeight * 0.08, #ffffff, "Settings", true, "SettingsScreen");
+
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {randomTravelIcon, searchTravelIcon, aboutIcon, settingsIcon, myFavouritesIcon};
+    Icon[] allIcons = {randomTravelIcon, searchTravelIcon, myFavouritesIcon, aboutIcon, settingsIcon};
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 

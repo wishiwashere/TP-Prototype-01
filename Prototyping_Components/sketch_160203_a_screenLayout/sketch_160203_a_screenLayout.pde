@@ -1,3 +1,10 @@
+// Declaring global variables, which will contain the width and height of the device's
+// display, so that these values can be reused throughout all classes (i.e. to calculate
+// more dynamic position/width/height's so that the interface responds to different
+// screen sizes
+float appWidth;
+float appHeight;
+
 // Declaring instances of the each screen, so that they will all be 
 // accessible throughout the main sketch (i.e. so they can be displayed
 // when requested)
@@ -21,6 +28,15 @@ String currentScreen = "HomeScreen";
 void setup(){
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
   size(360, 640);
+  
+  // Initialising the appWidth and appHeight variable with the width and height of the device's
+  // display, so that these values can be reused throughout all classes (i.e. to calculate
+  // more dynamic position/width/height's so that the interface responds to different
+  // screen sizes (for testing purposes, I am currently setting these to the width and height
+  // of the sketch as the display size of my computer screen gets called when using displayWidth
+  // and displayHeight
+  appWidth = width;
+  appHeight = height;
   
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious

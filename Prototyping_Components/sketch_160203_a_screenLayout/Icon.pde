@@ -16,6 +16,7 @@ public class Icon extends Rectangle{
     // specified parametres, into the full constructor of this class
     this(x, y, w, h, col, "", false, "");
   }
+    
   public Icon(float x, float y, float w, float h, color col, String title, Boolean showTitle){
     
     // If no link is specified, then defaulting this to an empty string.
@@ -73,8 +74,8 @@ public class Icon extends Rectangle{
       // the page
       textAlign(CENTER, CENTER);
       
-      // Setting the text size to be 50% of the icon's height
-      textSize(this.getHeight() * 0.50);
+      // Setting the text size to be 30% of the icon's height
+      textSize(this.getHeight() * 0.30);
       
       // Setting the text color to black
       fill(#000000);
