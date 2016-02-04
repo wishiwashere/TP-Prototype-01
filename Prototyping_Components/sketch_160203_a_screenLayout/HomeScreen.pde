@@ -18,11 +18,11 @@ public class HomeScreen extends Screen{
     // stage. Passing in a colour value of while. Passing in a name for the icon, followed by a
     // boolean to choose whether this name should be displayed on the button or not. Finally, passing
     // in a linkTo value of the name of the screen they will later link to
-    Icon randomTravelIcon = new Icon(width/2, 150, 260, 50, 0, #ffffff, "Random", true, "CameraLiveViewScreen");
-    Icon searchTravelIcon = new Icon(width/2, 250, 260, 50, 0, #ffffff, "Search", true, "SearchTravelScreen");
-    Icon aboutIcon = new Icon(width/2, 350, 260, 50, 0, #ffffff, "About", true, "AboutScreen");
-    Icon settingsIcon = new Icon(width/2, 450, 260, 50, 0, #ffffff, "Settings", true, "SettingsScreen");
-    Icon myFavouritesIcon = new Icon(width/2, 550, 260, 50, 0, #ffffff, "My Favourites", true, "FavouritesScreen");
+    Icon randomTravelIcon = new Icon(width/2, 150, 260, 50, #ffffff, "Random", true, "CameraLiveViewScreen");
+    Icon searchTravelIcon = new Icon(width/2, 250, 260, 50, #ffffff, "Search", true, "SearchTravelScreen");
+    Icon aboutIcon = new Icon(width/2, 350, 260, 50, #ffffff, "About", true, "AboutScreen");
+    Icon settingsIcon = new Icon(width/2, 450, 260, 50, #ffffff, "Settings", true, "SettingsScreen");
+    Icon myFavouritesIcon = new Icon(width/2, 550, 260, 50, #ffffff, "My Favourites", true, "FavouritesScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {randomTravelIcon, searchTravelIcon, aboutIcon, settingsIcon, myFavouritesIcon};

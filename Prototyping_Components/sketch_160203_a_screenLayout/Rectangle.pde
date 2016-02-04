@@ -20,43 +20,38 @@ protected class Rectangle{
     // and height are passed in, defaulting these to the current width and height of
     // the sketch. If no rotation value is specified, defaulting this value to 0, and 
     // finally, if no color is specified, defaulting this to white
-    this(width/2, height/2, width, height, 0, #FFFFFF);
+    this(width/2, height/2, width, height, #FFFFFF);
   }
   
   protected Rectangle(color col){
     // If no x, y, or rotation are passed in, defaulting these to half of the sketch's
     // width and height (i.e. so that the rectangle will appear centered). If no width
     // and height are passed in, defaulting these to the current width and height of
-    // the sketch. If no rotation value is specified, defaulting this value to 0.
-    // Passing these default values, and the specified color value, to the main
+    // the sketch. Passing these default values, and the specified color value, to the main
     // constructor of the class
-    this(width/2, height/2, width, height, 0, col);
+    this(width/2, height/2, width, height, col);
   }
   
   protected Rectangle(float w, float h, color col){
-    // If no x, y, or rotation are passed in, defaulting these to half of the specified
-    // w and h parametres (i.e. so that the rectangle will appear centered). If no rotation 
-    // value is specified, defaulting this value to 0. Passing these default values, 
-    // and the specified width, height and color values, to the main constructor of the class
-    this(w/2, h/2, w, h, 0, col);
+    // If no x, y, are passed in, defaulting these to half of the specified
+    // w and h parametres (i.e. so that the rectangle will appear centered).
+    // Passing these default values, and the specified width, height and 
+    // color values, to the main constructor of the class
+    this(w/2, h/2, w, h, col);
   }
   
   protected Rectangle(float x, float y, float w, float h, color col){
-    // If no rotation value is specified, defaulting this value to 0. Passing this default value,
-    // along with all of the specified values, to the main constructor of this class
-    this(x, y, w, h, 0, col);
-  }
-  
-  protected Rectangle(float x, float y, float w, float h, int r, color col){
     // Storing the values that are passed into the constructor in the private
     // variables of this class, so that they can be accessed by other functions
-    // within this class, but not from anywhere outside of this class
+    // within this class, but not from anywhere outside of this class. Defaulting
+    // the rotation of the instance to 0 (as it can be changed later using the
+    // setRotation() method
     rectX = x;
     rectY = y;
     rectWidth = w;
     rectHeight = h;
-    rectRotation = radians(r);
     rectCol = col;
+    rectRotation = 0;
   }
   
   // Creating a method to redraw the object or "show" it on the screen (i.e so that only 
@@ -107,5 +102,10 @@ protected class Rectangle{
   // Get method that returns the instance's height
   protected float getHeight(){
     return rectHeight;
+  }
+  
+  // Set method that sets the rotation of instance
+  protected void setRotation(int r){
+    rectRotation = radians(r);
   }
 }

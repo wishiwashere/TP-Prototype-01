@@ -8,26 +8,26 @@ public class Icon extends Rectangle{
   
   // Creating a public constructor for the Icon class, so that
   // instances of it can be created anywhere in the sketch
-  public Icon(float x, float y, float w, float h, int r, color col){
+  public Icon(float x, float y, float w, float h, color col){
     
     // If no title or link specified, then defaulting these to empty strings.
     // Since there is no title, defaulting the showTitle argument to false, so it
     // won't be displayed on screen. Then passing all of these defaults, along with the
     // specified parametres, into the full constructor of this class
-    this(x, y, w, h, r, col, "", false, "");
+    this(x, y, w, h, col, "", false, "");
   }
-  public Icon(float x, float y, float w, float h, int r, color col, String title, Boolean showTitle){
+  public Icon(float x, float y, float w, float h, color col, String title, Boolean showTitle){
     
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, w, h, r, col, title, showTitle, "");
+    this(x, y, w, h, col, title, showTitle, "");
   }
-  public Icon(float x, float y, float w, float h, int r, color col, String title, Boolean showTitle, String linkTo){
+  public Icon(float x, float y, float w, float h, color col, String title, Boolean showTitle, String linkTo){
     
     // Passing the relevant parametres from the constructor into the constructor 
     // of the super class (Rectangle)
-    super(x, y, w, h, r, col);
+    super(x, y, w, h, col);
     
     // Initialising the iconLinkTo to be equal to the requested link
     // specified in the object's constructor. This link will be passed to the global

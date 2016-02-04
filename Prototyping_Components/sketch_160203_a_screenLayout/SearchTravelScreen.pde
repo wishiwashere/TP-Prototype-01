@@ -16,9 +16,9 @@ public class SearchTravelScreen extends Screen{
     // Passing in a name for the icon, followed by a boolean to choose whether this name should 
     // be displayed on the button or not. Finally, passing in a linkTo value of the name of the 
     //screen they will later link to
-    Icon homeIcon = new Icon(width - 50, 50, 50, 50, 0, #ffffff, "Home", false, "HomeScreen");
-    Icon searchIcon = new Icon(width/2 + 75, height/2, 150, 50, 0, #ffffff, "Search", true, "CameraLiveViewScreen");
-    Icon cancelIcon = new Icon(width/2 - 75, height/2, 150, 50, 0, #ffffff, "Cancel", true, "HomeScreen");
+    Icon homeIcon = new Icon(width - 50, 50, 50, 50, #ffffff, "Home", false, "HomeScreen");
+    Icon searchIcon = new Icon(width/2 + 75, height/2, 150, 50, #ffffff, "Search", true, "CameraLiveViewScreen");
+    Icon cancelIcon = new Icon(width/2 - 75, height/2, 150, 50, #ffffff, "Cancel", true, "HomeScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchIcon, cancelIcon};
