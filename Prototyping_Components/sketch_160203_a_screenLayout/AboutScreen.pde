@@ -9,14 +9,17 @@ public class AboutScreen extends Screen{
     // default values i.e. fullscreen, centered etc.
     super(col);
     
-    // Creating the icons for this screen, using locally scoped variables, as these
-    // icons will be only ever be referred to from the allIcons array. I am also passing in a 
-    // rotation of 0 for the time being, as we may want to have the ability to rotate these 
-    // based on the device's orientation at a later stage. Passing in a colour value of while. 
-    // Passing in a name for the icon, followed by a boolean to choose whether this name should 
-    // be displayed on the button or not. Finally, passing in a linkTo value of the name of the 
-    //screen they will later link to
-    Icon homeIcon = new Icon(width - 50, 50, 50, 50, #ffffff, "Home", false, "HomeScreen");
+    // Creating the icon/s for this screen, using locally scoped variables, as these
+    // icons will be only ever be referred to from the allIcons array. Setting their
+    // x, and y, based on percentages of the width and height (these appWidth and appHeight 
+    // variables were defined in the main sketch. Not passing in any width or height, so as 
+    // to allow this icon to be set to the default size in the Icon class of the app . Passing
+    // in a colour value of white. Passing in a name for the icon, followed by a boolean to choose
+    // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
+    // value of the name of the screen they will later link to. The title arguments, as well
+    // as the linkTo argument, are optional
+    Icon homeIcon = new Icon(appWidth * 0.85, appHeight * 0.085, #ffffff, "Home", false, "HomeScreen");
+   
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon};
