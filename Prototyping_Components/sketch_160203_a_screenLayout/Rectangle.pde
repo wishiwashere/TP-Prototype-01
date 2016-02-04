@@ -104,6 +104,11 @@ protected class Rectangle{
     return rectHeight;
   }
   
+  // Get method that returns the instance's rotation
+  protected float getRotation(){
+    return rectRotation;
+  }
+  
   // Set method that sets the rotation of instance
   protected void setRotation(int r){
     rectRotation = radians(r);

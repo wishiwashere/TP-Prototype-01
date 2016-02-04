@@ -58,6 +58,16 @@ public class Icon extends Rectangle{
     // Checking if this icon's title should be displayed as a header on the screen
     if(showIconTitle)
     {
+      // Storing the current state of the matrix
+      pushMatrix();
+      
+      // Translating the position of the matrix to the current x and y of this object
+      translate(this.getX(), this.getY());
+      
+      // Rotating the matrix by the currnet rotation value of this object (which has been
+      // stored as a radian value)
+      rotate(this.getRotation());
+      
       // Setting the text align to center (on both the x and the y) so that
       // the text will be drawn from the center point of it's position on
       // the page
@@ -71,7 +81,10 @@ public class Icon extends Rectangle{
 
       // Adding the text to the screen, using the same x and y of the current 
       // icon
-      text(iconTitle, this.getX(), this.getY());
+      text(iconTitle, 0, 0);
+      
+      // Restoring the matrix to it's previous state
+      popMatrix();
     }
   }
   
