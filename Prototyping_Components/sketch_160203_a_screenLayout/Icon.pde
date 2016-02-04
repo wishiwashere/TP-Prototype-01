@@ -9,6 +9,8 @@ public class Icon extends Rectangle{
   // Creating a public constructor for the Icon class, so that
   // instances of it can be created anywhere in the sketch
   
+  // This constructor is used by icons in the CameraLiveView Screen, that want to accept the 
+  // default width and height of an icon, but do not link to another page
   public Icon(float x, float y, color col, String title, Boolean showTitle){
     
     // If no width or height specified, defaulting these to 15% of the screen width.
@@ -18,6 +20,8 @@ public class Icon extends Rectangle{
     this(x, y, appWidth * 0.15, appWidth * 0.15, col, title, showTitle, "");
   }
   
+  // This constructor is used by icons such as the homeIcon, that want to accept the default 
+  // width and height of an icon, and also link to another page
   public Icon(float x, float y, color col, String title, Boolean showTitle, String linkTo){
     
     // If no width or height specified, defaulting these to 15% of the screen width.
@@ -25,25 +29,9 @@ public class Icon extends Rectangle{
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
     this(x, y, appWidth * 0.15, appWidth * 0.15, col, title, showTitle, linkTo);
-  }
-  
-  public Icon(float x, float y, float w, float h, color col){
-    
-    // If no title or link specified, then defaulting these to empty strings.
-    // Since there is no title, defaulting the showTitle argument to false, so it
-    // won't be displayed on screen. Then passing all of these defaults, along with the
-    // specified parametres, into the full constructor of this class
-    this(x, y, w, h, col, "", false, "");
-  }
-    
-  public Icon(float x, float y, float w, float h, color col, String title, Boolean showTitle){
-    
-    // If no link is specified, then defaulting this to an empty string.
-    // Then passing this default, along with the specified parametres, into the 
-    // full constructor of this class
-    this(x, y, w, h, col, title, showTitle, "");
-  }
-  
+  }   
+  // Full Constructor. Both of the above constructors both pass their values to this constructor, as
+  // well as other icon's in the app that want to pass arguments for all of the specified values
   public Icon(float x, float y, float w, float h, color col, String title, Boolean showTitle, String linkTo){
     
     // Passing the relevant parametres from the constructor into the constructor 
