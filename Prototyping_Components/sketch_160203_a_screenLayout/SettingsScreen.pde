@@ -37,11 +37,4 @@ public class SettingsScreen extends Screen{
     // then no header text will appear on this page
     this.setScreenTitle("Settings");
   }
-  
-  public void showScreen(){
-    
-    // Calling the drawScreen() method of the super class, to create the basic background, and 
-    // icons of the screen
-    this.drawScreen();
-  }
 }

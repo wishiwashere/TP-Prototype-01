@@ -16,12 +16,12 @@ protected class Screen extends Rectangle{
   // will then be used as the header text on that instance of the screen.
   // If no title is specified, then header text will not be added to the 
   // screen
-  private String screenTitle = "";
+  public String screenTitle = "";
   
   // Creating protected constructors for the Screen class, so that they can
   // only be accessed by classes which extend from this class
   
-  protected Screen(){
+  protected Screen(){    
     // Calling this class's super class (Screen) to create a screen using
     // the default settings
     super();
@@ -32,14 +32,24 @@ protected class Screen extends Rectangle{
     // the default settings, along with setting the colour as specified
     super(col);
   }
-  
-  
+   
   // Creating a public method so that this screen can be displayed from
   // within the main sketch
-  public void drawScreen(){
+  public void showScreen(){    
     // Calling the show() method (as inherited from the Rectangle class)
     // to display this screen's background
     this.show();
+    
+    // Using a try catch statement to test if the screenAdditions method
+    // exists in the current instance's class i.e. does this screen
+    // contain a function for creating additional portions of the screen.
+    // Currently not able to invoke this method, even if it does exist,
+    // but I can print out that it is available
+    try{
+     this.getClass().getMethod("screenAdditions", null);
+     println("ADDITONS REQUIRED");
+    } catch(NoSuchMethodException e){
+    }
     
     // Checking if this screen has been given a title (i.e. if the contents
     // of the screenTitle is at least one character long

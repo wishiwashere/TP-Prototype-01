@@ -44,12 +44,7 @@ public class SearchFailedScreen extends Screen{
     this.setScreenTitle("We're sorry!");
   }
   
-  public void showScreen(){
-    
-    // Calling the drawScreen() method of the super class, to create the basic background, and 
-    // icons of the screen
-    this.drawScreen();
-    
+  public void screenAdditions(){
     imageMode(CENTER);
     image(brokenSearchImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
   }
