@@ -45,6 +45,8 @@ protected class Screen extends Rectangle{
     // contain a function for creating additional portions of the screen.
     // Currently not able to invoke this method, even if it does exist,
     // but I can print out that it is available
+    // RESOURCE - http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html
+    // RESOURCE - http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html#getMethod%28java.lang.String,%20java.lang.Class...%29
     try{
      this.getClass().getMethod("screenAdditions", null);
      println("ADDITONS REQUIRED");
