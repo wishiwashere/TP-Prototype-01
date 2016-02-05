@@ -62,7 +62,7 @@ protected class Screen extends Rectangle{
       textAlign(CENTER, CENTER);
       
       // Setting the text size to be responsive to the height of the app
-      textSize(appHeight * 0.05);
+      textSize(appHeight * 0.04);
       
       // Setting the fill color for the text to black
       fill(0);

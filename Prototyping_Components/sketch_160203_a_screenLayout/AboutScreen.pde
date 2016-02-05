@@ -11,14 +11,14 @@ public class AboutScreen extends Screen{
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
-    // x, and y, based on percentages of the width and height (these appWidth and appHeight 
-    // variables were defined in the main sketch. Not passing in any width or height, so as 
+    // x, and y, based on percentages of the width and height (where icon positioning variables
+    // are used, these were defined in the main sketch. Not passing in any width or height, so as 
     // to allow this icon to be set to the default size in the Icon class of the app . Passing
     // in a colour value of white. Passing in a name for the icon, followed by a boolean to choose
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon homeIcon = new Icon(appWidth * 0.85, appHeight * 0.085, #ffffff, "Home", false, "HomeScreen");
+    Icon homeIcon = new Icon(iconRightX, iconTopY, #ffffff, "Home", false, "HomeScreen");
    
     
     // Creating a temporary allIcons array to store the icon/s we have created above.

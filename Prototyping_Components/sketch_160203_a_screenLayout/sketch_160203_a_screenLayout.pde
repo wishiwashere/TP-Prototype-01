@@ -5,6 +5,16 @@
 float appWidth;
 float appHeight;
 
+// Creating the icon positioning X and Y variables, which will be used globally to ensure that
+// the icons on each page all line up with one another. These measurements are all based on percentages
+// of the app's display, and are initialised in the setup function of this sketch
+
+float iconLeftX;
+float iconRightX;
+float iconCenterX;
+float iconTopY;
+float iconBottomY;
+
 // Declaring instances of the each screen, so that they will all be 
 // accessible throughout the main sketch (i.e. so they can be displayed
 // when requested)
@@ -24,7 +34,7 @@ SearchFailedScreen mySearchFailedScreen;
 // against each of the potential screen names (in the main sketch's draw function) to
 // decide which sketch should have the showScreen() method called on it i.e. (which
 // screen should be displayed
-String currentScreen = "SearchFailedScreen";
+String currentScreen = "HomeScreen";
 
 void setup(){
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
@@ -38,6 +48,15 @@ void setup(){
   // and displayHeight
   appWidth = width;
   appHeight = height;
+  
+  // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
+  // the icons on each page all line up with one another. These measurements are all based on percentages
+  // of the app's display width and height (as defined above
+  iconLeftX = appWidth * 0.15;
+  iconRightX = appWidth * 0.85;
+  iconCenterX = appWidth * 0.5;
+  iconTopY = appHeight * 0.085;
+  iconBottomY = appHeight * 0.92;
   
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious
