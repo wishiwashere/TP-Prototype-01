@@ -102,7 +102,7 @@ void draw() {
      if(thisScreen.indexOf(currentScreen) > -1){
        
        // Logging out the class name of this screen
-       //println(thisScreen);
+       println(thisScreen);
        
        // Calling the Screen method showScreen() to display the contents of the
        // current screen i.e. switching to this screen
