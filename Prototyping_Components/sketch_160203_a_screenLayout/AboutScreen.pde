@@ -1,5 +1,5 @@
 public class AboutScreen extends Screen{
-  
+    
   // Creating a public constructor for the AboutScreen class, so that
   // an instance of it can be declared in the main sketch
   public AboutScreen(color col){
@@ -18,7 +18,7 @@ public class AboutScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon homeIcon = new Icon(iconRightX, iconTopY, #ffffff, "Home", false, "HomeScreen");
+    Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
    
     
     // Creating a temporary allIcons array to store the icon/s we have created above.

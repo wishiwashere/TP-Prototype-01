@@ -10,6 +10,7 @@ protected class Rectangle{
   private float rectHeight;
   private color rectCol;
   private float rectRotation;
+  private PImage rectImage;;
 
   // Creating protected constructors for the Rectangle class, so that they can
   // only be accessed by classes which extend from this class
@@ -20,7 +21,16 @@ protected class Rectangle{
     // and height are passed in, defaulting these to the current width and height of
     // the sketch. If no rotation value is specified, defaulting this value to 0, and 
     // finally, if no color is specified, defaulting this to white
-    this(width/2, height/2, width, height, #FFFFFF);
+    this(appWidth/2, appHeight/2, appWidth, appHeight, #FFFFFF, null);
+  }
+  
+  protected Rectangle(PImage img){
+    // If no x, y, or rotation are passed in, defaulting these to half of the sketch's
+    // width and height (i.e. so that the rectangle will appear centered). If no width
+    // and height are passed in, defaulting these to the current width and height of
+    // the sketch. If no rotation value is specified, defaulting this value to 0, and 
+    // finally, if no color is specified, defaulting this to white
+    this(appWidth/2, appHeight/2, appWidth, appHeight, #FFFFFF, img);
   }
   
   protected Rectangle(color col){
@@ -29,7 +39,7 @@ protected class Rectangle{
     // and height are passed in, defaulting these to the current width and height of
     // the sketch. Passing these default values, and the specified color value, to the main
     // constructor of the class
-    this(width/2, height/2, width, height, col);
+    this(appWidth/2, appHeight/2, width, height, col, null);
   }
   
   protected Rectangle(float w, float h, color col){
@@ -37,10 +47,18 @@ protected class Rectangle{
     // w and h parametres (i.e. so that the rectangle will appear centered).
     // Passing these default values, and the specified width, height and 
     // color values, to the main constructor of the class
-    this(w/2, h/2, w, h, col);
+    this(w/2, h/2, w, h, col, null);
+  }
+  
+  protected Rectangle(float x, float y, float w, float h, PImage img){
+    this(x, y, w, h, #FFFFFF, img);
   }
   
   protected Rectangle(float x, float y, float w, float h, color col){
+    this(x, y, w, h, col, null);
+  }
+  
+  protected Rectangle(float x, float y, float w, float h, color col, PImage img){
     // Storing the values that are passed into the constructor in the private
     // variables of this class, so that they can be accessed by other functions
     // within this class, but not from anywhere outside of this class. Defaulting
@@ -52,6 +70,7 @@ protected class Rectangle{
     rectHeight = h;
     rectCol = col;
     rectRotation = 0;
+    rectImage = img;
   }
   
   // Creating a method to redraw the object or "show" it on the screen (i.e so that only 
@@ -80,6 +99,11 @@ protected class Rectangle{
     // the object is drawn
     rect(0, 0, rectWidth, rectHeight);
     
+    if(rectImage != null){
+      imageMode(CENTER);
+      image(rectImage, 0, 0, rectWidth, rectHeight);
+    }
+
     // Restoring the matrix to it's previous state
     popMatrix();
   }
@@ -135,7 +159,7 @@ protected class Rectangle{
   // Add method that adds text to the object
   protected void addText(String text, String align, float textX, float textY, float textSize){
     // Storing the current state of the matrix
-      pushMatrix();
+    pushMatrix();
       
     // Translating the position of the matrix be equal to the x and y positions
     // passed into the function
@@ -150,7 +174,7 @@ protected class Rectangle{
       // the text will be drawn from the center point of it's position on
       // the page
       textAlign(CENTER, CENTER);
-    }else if(align.equals("LEFT")){
+    }if(align.equals("LEFT")){
       // Setting the text align to Left on the x axis, and Center on the y so that
       // the text will be drawn from the center point of it's position on the left of
       // the page
@@ -171,4 +195,37 @@ protected class Rectangle{
     // Restoring the matrix to it's previous state
     popMatrix();
   }
+  
+  protected void addImage(PImage img, float imgX, float imgY){
+    // Calling the full addImage function, passing in the img,
+    // imgX and imgY, and then defaulting the width and height to be
+    // equal to that of the image (i.e. it's default resolution)
+    this.addImage(img, imgX, imgY, img.width, img.height);
+  }
+  
+  protected void addImage(PImage img, float imgX, float imgY, float imgWidth, float imgHeight){
+    // Storing the current state of the matrix
+      pushMatrix();
+      
+    // Translating the position of the matrix be equal to the x and y positions
+    // passed into the function
+    translate(imgX, imgY);
+    
+    // Rotating the matrix by the current rotation value of this screen (which has been
+    // stored as a radian value)
+    rotate(this.getRotation());
+    
+    // Setting the imageMode to center so that the image will be drawn from the center 
+    // point of it's position on the page
+    imageMode(CENTER);
+    
+    // Adding the image to the screen, setting the x and y positions to 0, 
+    // as the actual position on the screen will depend on the matrix's translation,
+    // as this will control where the text is drawn. Setting the width and height of the image
+    // to be equal to the values passed into the function
+    image(img, 0, 0, imgWidth, imgHeight);
+    
+    // Restoring the matrix to it's previous state
+    popMatrix();
+  }  
 }

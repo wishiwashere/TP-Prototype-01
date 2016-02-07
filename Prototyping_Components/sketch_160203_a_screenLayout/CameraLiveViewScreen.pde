@@ -18,11 +18,11 @@ public class CameraLiveViewScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon homeIcon = new Icon(iconRightX, iconTopY, #ffffff, "Home", false, "HomeScreen");
-    Icon favIcon = new Icon(iconLeftX, iconTopY, #ffffff, "Add to Favourites", false);
-    Icon shakeIcon = new Icon(iconLeftX, iconBottomY, #ffffff, "Turn on/off Shake", false);
-    Icon shutterIcon = new Icon(iconCenterX, iconBottomY, #ffffff, "Take a Picture", false, "ImagePreviewScreen");
-    Icon switchViewIcon = new Icon(iconRightX, iconBottomY, #ffffff, "Switch View", false);
+    Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
+    Icon favIcon = new Icon(iconLeftX, iconTopY, addFavouriteIconImage, "Add to Favourites", false);
+    Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
+    Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "ImagePreviewScreen");
+    Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false);
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, favIcon, shakeIcon, shutterIcon, switchViewIcon};

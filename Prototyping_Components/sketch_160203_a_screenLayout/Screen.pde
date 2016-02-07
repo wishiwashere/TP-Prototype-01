@@ -27,6 +27,12 @@ protected class Screen extends Rectangle{
     super();
   }
   
+  protected Screen(PImage img){    
+    // Calling this class's super class (Screen) to create a screen using
+    // the default settings
+    super(img);
+  }
+  
   protected Screen(color col){
     // Calling this class's super class (Screen) to create a screen using
     // the default settings, along with setting the colour as specified
@@ -80,38 +86,4 @@ protected class Screen extends Rectangle{
     // array that each screen will pass in
     screenIcons = icons;
   }
-  
-  protected void addImage(PImage img, float imgX, float imgY){
-    // Calling the full addImage function, passing in the img,
-    // imgX and imgY, and then defaulting the width and height to be
-    // equal to that of the image (i.e. it's default resolution)
-    this.addImage(img, imgX, imgY, img.width, img.height);
-  }
-  
-  
-  protected void addImage(PImage img, float imgX, float imgY, float imgWidth, float imgHeight){
-    // Storing the current state of the matrix
-      pushMatrix();
-      
-    // Translating the position of the matrix be equal to the x and y positions
-    // passed into the function
-    translate(imgX, imgY);
-    
-    // Rotating the matrix by the current rotation value of this screen (which has been
-    // stored as a radian value)
-    rotate(this.getRotation());
-    
-    // Setting the imageMode to center so that the image will be drawn from the center 
-    // point of it's position on the page
-    imageMode(CENTER);
-    
-    // Adding the image to the screen, setting the x and y positions to 0, 
-    // as the actual position on the screen will depend on the matrix's translation,
-    // as this will control where the text is drawn. Setting the width and height of the image
-    // to be equal to the values passed into the function
-    image(img, 0, 0, imgWidth, imgHeight);
-    
-    // Restoring the matrix to it's previous state
-    popMatrix();
-  }  
 }

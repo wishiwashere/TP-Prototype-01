@@ -11,33 +11,33 @@ public class Icon extends Rectangle{
   
   // This constructor is used by icons in the CameraLiveView Screen, that want to accept the 
   // default width and height of an icon, but do not link to another page
-  public Icon(float x, float y, color col, String title, Boolean showTitle){
+  public Icon(float x, float y, PImage img, String title, Boolean showTitle){
     
     // If no width or height specified, defaulting these to 15% of the screen width.
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.15, appWidth * 0.15, col, title, showTitle, "");
+    this(x, y, appWidth * 0.15, appWidth * 0.15, img, title, showTitle, "");
   }
   
   // This constructor is used by icons such as the homeIcon, that want to accept the default 
   // width and height of an icon, and also link to another page
-  public Icon(float x, float y, color col, String title, Boolean showTitle, String linkTo){
+  public Icon(float x, float y, PImage img, String title, Boolean showTitle, String linkTo){
     
     // If no width or height specified, defaulting these to 15% of the screen width.
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.15, appWidth * 0.15, col, title, showTitle, linkTo);
+    this(x, y, appWidth * 0.15, appWidth * 0.15, img, title, showTitle, linkTo);
   }   
   
   // Full Constructor. Both of the above constructors both pass their values to this constructor, as
   // well as other icon's in the app that want to pass arguments for all of the specified values
-  public Icon(float x, float y, float w, float h, color col, String title, Boolean showTitle, String linkTo){
+  public Icon(float x, float y, float w, float h, PImage img, String title, Boolean showTitle, String linkTo){
     
     // Passing the relevant parametres from the constructor into the constructor 
     // of the super class (Rectangle)
-    super(x, y, w, h, col);
+    super(x, y, w, h, img);
     
     // Initialising the iconLinkTo to be equal to the requested link
     // specified in the object's constructor. This link will be passed to the global

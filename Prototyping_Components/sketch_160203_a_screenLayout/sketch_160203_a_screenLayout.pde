@@ -7,6 +7,28 @@ import java.lang.reflect.Method;
 float appWidth;
 float appHeight;
 
+// Declaring the image holders for the icons that will appear throughout the sketch, 
+// so that they can all be loaded in once, and then used throughout the relevant screens
+PImage randomPageIconImage;
+PImage searchPageIconImage;
+PImage aboutPageIconImage;
+PImage favouritesPageIconImage;
+PImage settingsPageIconImage;
+PImage homeIconImage;
+PImage addFavouriteIconImage;
+PImage shakeIconImage;
+PImage shutterIconImage;
+PImage switchViewIconImage;
+PImage retryIconImage;
+PImage deleteIconImage;
+PImage saveIconImage;
+PImage disgardIconImage;
+PImage keepIconImage;
+PImage cancelIconImage;
+PImage twitterAccountIconImage;
+PImage instagramAccountIconImage;
+PImage buttonImage;
+
 // Declaring the icon positioning X and Y variables, which will be used globally to ensure that
 // the icons on each page all line up with one another. These measurements are all based on percentages
 // of the app's display, and are initialised in the setup function of this sketch
@@ -64,6 +86,29 @@ void setup() {
   // and displayHeight
   appWidth = width;
   appHeight = height;
+  
+  // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
+  // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
+  // reused on multiple pages
+  randomPageIconImage = loadImage("iconPlaceholder.png");
+  searchPageIconImage = loadImage("iconPlaceholder.png");
+  aboutPageIconImage = loadImage("iconPlaceholder.png");
+  favouritesPageIconImage = loadImage("iconPlaceholder.png");
+  settingsPageIconImage = loadImage("iconPlaceholder.png");
+  homeIconImage = loadImage("iconPlaceholder.png");
+  addFavouriteIconImage = loadImage("iconPlaceholder.png");
+  shakeIconImage = loadImage("iconPlaceholder.png");
+  shutterIconImage = loadImage("iconPlaceholder.png");
+  switchViewIconImage = loadImage("iconPlaceholder.png");
+  retryIconImage = loadImage("iconPlaceholder.png");
+  deleteIconImage = loadImage("iconPlaceholder.png");
+  saveIconImage = loadImage("iconPlaceholder.png");
+  disgardIconImage = loadImage("iconPlaceholder.png");
+  keepIconImage = loadImage("iconPlaceholder.png");
+  cancelIconImage = loadImage("iconPlaceholder.png");
+  twitterAccountIconImage = loadImage("iconPlaceholder.png");
+  instagramAccountIconImage = loadImage("iconPlaceholder.png");
+  buttonImage = loadImage("iconPlaceholder.png");
 
   // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
   // the icons on each page all line up with one another. These measurements are all based on percentages
