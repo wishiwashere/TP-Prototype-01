@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 float appWidth;
 float appHeight;
 
-// Creating the icon positioning X and Y variables, which will be used globally to ensure that
+// Declaring the icon positioning X and Y variables, which will be used globally to ensure that
 // the icons on each page all line up with one another. These measurements are all based on percentages
 // of the app's display, and are initialised in the setup function of this sketch
 
@@ -17,7 +17,8 @@ float iconCenterX;
 float iconTopY;
 float iconBottomY;
 
-  
+// Declaring a global variable which will contain the default text size, which will be
+// initialised in the setup() function of the app
 float defaultTextSize;
 
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
@@ -62,6 +63,7 @@ void setup() {
   iconTopY = appHeight * 0.085;
   iconBottomY = appHeight * 0.92;
   
+  // Initialising the defaultTextSize to be equal to a percentage of the app's current height
   defaultTextSize = appHeight * 0.04;
   
   // Creating the screens which will be used in this application. Setting a random background

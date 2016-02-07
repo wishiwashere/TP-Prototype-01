@@ -82,6 +82,9 @@ protected class Screen extends Rectangle{
   }
   
   protected void addImage(PImage img, float imgX, float imgY){
+    // Calling the full addImage function, passing in the img,
+    // imgX and imgY, and then defaulting the width and height to be
+    // equal to that of the image (i.e. it's default resolution)
     this.addImage(img, imgX, imgY, img.width, img.height);
   }
   
@@ -94,7 +97,7 @@ protected class Screen extends Rectangle{
     // passed into the function
     translate(imgX, imgY);
     
-    // Rotating the matrix by the currnet rotation value of this object (which has been
+    // Rotating the matrix by the current rotation value of this screen (which has been
     // stored as a radian value)
     rotate(this.getRotation());
     

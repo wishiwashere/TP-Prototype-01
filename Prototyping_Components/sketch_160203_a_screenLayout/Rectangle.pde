@@ -114,10 +114,13 @@ protected class Rectangle{
     rectRotation = radians(r);
   }
   
+  // Add method that adds text to the object
   protected void addText(String text, float textX, float textY){
+    // Calling the full addText() method, passing in the default text size
     this.addText(text, textX, textY, defaultTextSize);
   }
   
+  // Add method that adds text to the object
   protected void addText(String text, float textX, float textY, float textSize){
     // Storing the current state of the matrix
       pushMatrix();
