@@ -42,6 +42,9 @@ SearchScreen mySearchScreen;
 SearchFailedScreen mySearchFailedScreen;
 ImagePreviewScreen myImagePreviewScreen;
 SaveShareScreenA mySaveShareScreenA;
+SaveShareScreenB mySaveShareScreenB;
+SharingScreen mySharingScreen;
+ShareSaveSuccessfulScreen myShareSaveSuccessfulScreen;
 
 void setup() {
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
@@ -80,6 +83,9 @@ void setup() {
   mySearchFailedScreen = new SearchFailedScreen(#F5C811);
   myImagePreviewScreen = new ImagePreviewScreen();
   mySaveShareScreenA = new SaveShareScreenA(#5ACEBE);
+  mySaveShareScreenB = new SaveShareScreenB(#CEBD5A);
+  mySharingScreen = new SharingScreen(#1548EF);
+  myShareSaveSuccessfulScreen = new ShareSaveSuccessfulScreen(#CE04BA);
 }
 
 void draw() {
@@ -127,6 +133,25 @@ void switchScreens(){
       break;
     case "SaveShareScreenA":
       mySaveShareScreenA.showScreen();
+      break;
+    case "SaveShareScreenB":
+      mySaveShareScreenB.showScreen();
+      break;
+    case "SharingScreen":
+      mySharingScreen.showScreen();
+      if(mousePressed)
+      { 
+        currentScreen = "ShareSaveSuccessfulScreen";
+        mousePressed = false;
+      }
+      break;
+    case "ShareSaveSuccessfulScreen":
+      myShareSaveSuccessfulScreen.showScreen();
+      if(mousePressed)
+      { 
+        currentScreen = "CameraLiveViewScreen";
+        mousePressed = false;
+      }
       break;
   }
 }

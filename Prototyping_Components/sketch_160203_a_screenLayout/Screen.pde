@@ -8,7 +8,7 @@ protected class Screen extends Rectangle{
   // own class, is that now we can deal with looping through, and calling
   // methods on multiple icons of a screen only when their screen is being
   // shown i.e. when showScreen() is being called
-  private Icon[] screenIcons;
+  private Icon[] screenIcons = {};
   
   // Creating and initialising the screenTitle property of the screen to be
   // equal to an empty string. Each instance of the Screen class can then

@@ -1,8 +1,8 @@
-public class SaveShareScreenA extends Screen{
+public class SaveShareScreenB extends Screen{
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
-  public SaveShareScreenA(color col){
+  public SaveShareScreenB(color col){
     
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
@@ -18,11 +18,11 @@ public class SaveShareScreenA extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3, appHeight * 0.4, appWidth * 0.4, appHeight * 0.08, #ffffff, "Cancel", true, "CameraLiveViewScreen");
-    Icon nextIcon = new Icon(appWidth * 0.7, appHeight * 0.4, appWidth * 0.4, appHeight * 0.08, #ffffff, "Next", true, "SaveShareScreenB");
+    Icon cancelIcon = new Icon(appWidth * 0.3, appHeight * 0.4, appWidth * 0.4, appHeight * 0.08, #ffffff, "Cancel", true, "SaveShareScreenA");
+    Icon shareIcon = new Icon(appWidth * 0.7, appHeight * 0.4, appWidth * 0.4, appHeight * 0.08, #ffffff, "Next", true, "SharingScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {cancelIcon, nextIcon};
+    Icon[] allIcons = {cancelIcon, shareIcon};
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
@@ -36,7 +36,7 @@ public class SaveShareScreenA extends Screen{
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
-    this.setScreenTitle("Save Share Screen A");
+    this.setScreenTitle("Save Share Screen B");
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
