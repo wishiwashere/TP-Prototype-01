@@ -29,7 +29,7 @@ float defaultTextSize;
 // against each of the potential screen names (in the main sketch's draw function) to
 // decide which sketch should have the showScreen() method called on it i.e. (which
 // screen should be displayed
-String currentScreen = "HomeScreen";
+String currentScreen = "SearchUnsuccessfulScreen";
 
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
@@ -39,7 +39,7 @@ FavouritesScreen myFavouritesScreen;
 SettingsScreen mySettingsScreen;
 AboutScreen myAboutScreen;
 SearchScreen mySearchScreen;
-SearchFailedScreen mySearchFailedScreen;
+SearchUnsuccessfulScreen mySearchUnsuccessfulScreen;
 ImagePreviewScreen myImagePreviewScreen;
 SaveShareScreenA mySaveShareScreenA;
 SaveShareScreenB mySaveShareScreenB;
@@ -83,7 +83,7 @@ void setup() {
   mySettingsScreen = new SettingsScreen(#2023A5);
   myAboutScreen = new AboutScreen (#30B727);
   mySearchScreen = new SearchScreen(#E88121);
-  mySearchFailedScreen = new SearchFailedScreen(#F5C811);
+  mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(#F5C811);
   myImagePreviewScreen = new ImagePreviewScreen();
   mySaveShareScreenA = new SaveShareScreenA(#5ACEBE);
   mySaveShareScreenB = new SaveShareScreenB(#CEBD5A);
@@ -131,8 +131,8 @@ void switchScreens(){
     case "SearchScreen":
       mySearchScreen.showScreen();
       break;
-    case "SearchFailedScreen":
-      mySearchFailedScreen.showScreen();
+    case "SearchUnsuccessfulScreen":
+      mySearchUnsuccessfulScreen.showScreen();
       break;
     case "ImagePreviewScreen":
       myImagePreviewScreen.showScreen();

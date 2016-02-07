@@ -1,17 +1,17 @@
-public class SearchFailedScreen extends Screen{
+public class SearchUnsuccessfulScreen extends Screen{
   
-  PImage brokenSearchImage;
+  PImage searchUnsuccessfulImage;
   
   // Creating a public constructor for the SearchFailedScreen class, so that
   // an instance of it can be declared in the main sketch
-  public SearchFailedScreen(color col){
+  public SearchUnsuccessfulScreen(color col){
     
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(col);
     
-    brokenSearchImage = loadImage("placeholder.PNG");
+    searchUnsuccessfulImage = loadImage("placeholder.PNG");
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -53,6 +53,6 @@ public class SearchFailedScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addImage(brokenSearchImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
+    this.addImage(searchUnsuccessfulImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
   }
 }
