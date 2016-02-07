@@ -61,7 +61,7 @@ void setup() {
   
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious
-  // (for testing purposes only).
+  // (for testing purposes only). Note - setting a background color is optional
   myHomeScreen = new HomeScreen(#000000);
   myCameraLiveViewScreen = new CameraLiveViewScreen();
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
@@ -72,6 +72,21 @@ void setup() {
 }
 
 void draw() {
+  // Calling the monitorScreens() function to display the right screen by calling
+  // the showScreen() method. This function then calls the super class's drawScreen()
+  // method, which not only adds the icons and backgrounds to the screen, it also
+  // asks the icons on the screen to call their checkMouseOver() method (inherited from
+  // the Icon class) to see if they were clicked on when a mouse event occurs
+   switchScreens();
+}
+
+void switchScreens(){
+  // Checking if the String that is stored in the currentScreen variable 
+  // (which gets set in the Icon class when an icon is clicked on) is
+  // equal to a series of ScreenTitles, and if it is, then show that screen.
+  // The showScreen() method of the current screen needs to be called repeatedly,
+  // as this is where additonal funcitonality (such as checking of icons being
+  // clicked on etc) are called
   switch(currentScreen){
     case "HomeScreen":
       myHomeScreen.showScreen();

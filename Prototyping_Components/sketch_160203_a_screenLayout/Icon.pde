@@ -30,6 +30,7 @@ public class Icon extends Rectangle{
     // full constructor of this class
     this(x, y, appWidth * 0.15, appWidth * 0.15, col, title, showTitle, linkTo);
   }   
+  
   // Full Constructor. Both of the above constructors both pass their values to this constructor, as
   // well as other icon's in the app that want to pass arguments for all of the specified values
   public Icon(float x, float y, float w, float h, color col, String title, Boolean showTitle, String linkTo){
