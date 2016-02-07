@@ -17,20 +17,9 @@ float iconCenterX;
 float iconTopY;
 float iconBottomY;
 
-// Declaring instances of the each screen, so that they will all be 
-// accessible throughout the main sketch (i.e. so they can be displayed
-// when requested)
-HomeScreen myHomeScreen;
-CameraLiveViewScreen myCameraLiveViewScreen;
-FavouritesScreen myFavouritesScreen;
-SettingsScreen mySettingsScreen;
-AboutScreen myAboutScreen;
-SearchTravelScreen mySearchTravelScreen;
-SearchFailedScreen mySearchFailedScreen;
-
 // Creating a global array to store all of the app's screen's in, so that they can be looped
 // through in the draw function, to test whether they should be displayed or not, based
-// on the currentScreen variable (which holds the name of the screen that should be displayed
+// on the currentScreen variable (which holds the name of the screen that should be displayed)
 Screen[] allScreens;
 
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
@@ -65,25 +54,24 @@ void setup() {
   iconTopY = appHeight * 0.085;
   iconBottomY = appHeight * 0.92;
 
+  // Creating the allScreens array with a length of 7 (which will have to be adjusted each time a new
+  // screen is added below). This array will be used in the draw function of this sketch to loop
+  // through each screen, and test it's class name against the current screen that is required (i.e.
+  // the String value stored in the currentScreen variable, which is set in the Icon class when 
+  // an icon that links to another page is clicked on).
+  allScreens = new Screen[7];
+  
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious
-  // (for testing purposes only)
-  myHomeScreen = new HomeScreen(#000000);
-  myCameraLiveViewScreen = new CameraLiveViewScreen();
-  myFavouritesScreen = new FavouritesScreen(#CE04BA);
-  mySettingsScreen = new SettingsScreen(#2023A5);
-  myAboutScreen = new AboutScreen (#30B727);
-  mySearchTravelScreen = new SearchTravelScreen(#E88121);
-  mySearchFailedScreen = new SearchFailedScreen(#F5C811);
-
-  allScreens = new Screen[7];
-  allScreens[0] = myHomeScreen;
-  allScreens[1] = myCameraLiveViewScreen;
-  allScreens[2] = myFavouritesScreen;
-  allScreens[3] = mySettingsScreen;
-  allScreens[4] = myAboutScreen;
-  allScreens[5] = mySearchTravelScreen;
-  allScreens[6] = mySearchFailedScreen;
+  // (for testing purposes only). Not giving these screen's an instance name, instead storing them
+  // in the allScreens array (as this is the only place they will ever be accessed from.
+  allScreens[0] = new HomeScreen(#000000);
+  allScreens[1] = new CameraLiveViewScreen();
+  allScreens[2] = new FavouritesScreen(#CE04BA);
+  allScreens[3] = new SettingsScreen(#2023A5);
+  allScreens[4] = new AboutScreen (#30B727);
+  allScreens[5] = new SearchTravelScreen(#E88121);
+  allScreens[6] = new SearchFailedScreen(#F5C811);
 }
 
 void draw() {
@@ -102,7 +90,7 @@ void draw() {
      if(thisScreen.indexOf(currentScreen) > -1){
        
        // Logging out the class name of this screen
-       println(thisScreen);
+       //println(thisScreen);
        
        // Calling the Screen method showScreen() to display the contents of the
        // current screen i.e. switching to this screen
