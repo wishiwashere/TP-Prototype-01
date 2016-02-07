@@ -17,6 +17,9 @@ float iconCenterX;
 float iconTopY;
 float iconBottomY;
 
+  
+float defaultTextSize;
+
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
 // this is the first screen that is displayed. Since this global variable is available
 // throughout the sketch (i.e. within all classes as well as the main sketch) we will
@@ -59,6 +62,8 @@ void setup() {
   iconTopY = appHeight * 0.085;
   iconBottomY = appHeight * 0.92;
   
+  defaultTextSize = appHeight * 0.04;
+  
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious
   // (for testing purposes only). Note - setting a background color is optional
@@ -83,7 +88,7 @@ void draw() {
 void switchScreens(){
   // Checking if the String that is stored in the currentScreen variable 
   // (which gets set in the Icon class when an icon is clicked on) is
-  // equal to a series of ScreenTitles, and if it is, then show that screen.
+  // equal to a series of class Names (i.e. HomeScreen), and if it is, then show that screen.
   // The showScreen() method of the current screen needs to be called repeatedly,
   // as this is where additonal funcitonality (such as checking of icons being
   // clicked on etc) are called. Note - Each sub class of the Screen class

@@ -113,4 +113,40 @@ protected class Rectangle{
   protected void setRotation(int r){
     rectRotation = radians(r);
   }
+  
+  protected void addText(String text, float textX, float textY){
+    this.addText(text, textX, textY, defaultTextSize);
+  }
+  
+  protected void addText(String text, float textX, float textY, float textSize){
+    // Storing the current state of the matrix
+      pushMatrix();
+      
+    // Translating the position of the matrix be equal to the x and y positions
+    // passed into the function
+    translate(textX, textY);
+    
+    // Rotating the matrix by the currnet rotation value of this object (which has been
+    // stored as a radian value)
+    rotate(this.getRotation());
+    
+    // Setting the text align to center (on both the x and the y) so that
+    // the text will be drawn from the center point of it's position on
+    // the page
+    textAlign(CENTER, CENTER);
+    
+    // Setting the text size to be responsive to the height of the app
+    textSize(textSize);
+    
+    // Setting the fill color for the text to black
+    fill(0);
+    
+    // Adding the text to the screen, setting the x and y positions to 0, 
+    // as the actual position on the screen will depend on the matrix's translation,
+    // as this will control where the text is drawn
+    text(text, 0, 0);
+    
+    // Restoring the matrix to it's previous state
+    popMatrix();
+  }
 }

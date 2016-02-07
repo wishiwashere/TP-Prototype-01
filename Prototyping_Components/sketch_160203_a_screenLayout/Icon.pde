@@ -68,34 +68,11 @@ public class Icon extends Rectangle{
     // Checking if this icon's title should be displayed as a header on the screen
     if(showIconTitle)
     {
-      // Storing the current state of the matrix
-      pushMatrix();
-      
-      // Translating the position of the matrix to the current x and y of this object
-      translate(this.getX(), this.getY());
-      
-      // Rotating the matrix by the currnet rotation value of this object (which has been
-      // stored as a radian value)
-      rotate(this.getRotation());
-      
-      // Setting the text align to center (on both the x and the y) so that
-      // the text will be drawn from the center point of it's position on
-      // the page
-      textAlign(CENTER, CENTER);
-      
-      // Setting the text size to be 30% of the icon's height
-      textSize(this.getHeight() * 0.30);
-      
-      // Setting the text color to black
-      fill(#000000);
-
-      // Adding the screenTitle to the screen, setting the x and y positions to 0, 
-      // as the actual position on the screen will depend on the matrix's translation,
-      // as this will control where the text is drawn
-      text(iconTitle, 0, 0);
-      
-      // Restoring the matrix to it's previous state
-      popMatrix();
+      // Calling the super class's (Rectangle) addText method, to add the title to
+      // the icon. Passing in the String containing the title for the icon, the current
+      // x and y positions of the icon itself, and the font size (which is relative
+      // to the icon's current height
+      this.addText(this.iconTitle, this.getX(), this.getY(), this.getHeight() * 0.30);
     }
   }
   
