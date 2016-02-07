@@ -86,7 +86,9 @@ void switchScreens(){
   // equal to a series of ScreenTitles, and if it is, then show that screen.
   // The showScreen() method of the current screen needs to be called repeatedly,
   // as this is where additonal funcitonality (such as checking of icons being
-  // clicked on etc) are called
+  // clicked on etc) are called. Note - Each sub class of the Screen class
+  // MUST have a showScreen() method (even if this method is only used to call
+  // it's super class's (Screen) drawScreen() method
   switch(currentScreen){
     case "HomeScreen":
       myHomeScreen.showScreen();
