@@ -47,6 +47,7 @@ SharingScreen mySharingScreen;
 ShareSaveSuccessfulScreen myShareSaveSuccessfulScreen;
 ShareUnsuccessfulScreen myShareUnsuccessfulScreen;
 ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
+SearchingScreen mySearchingScreen;
 
 void setup() {
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
@@ -90,6 +91,7 @@ void setup() {
   myShareSaveSuccessfulScreen = new ShareSaveSuccessfulScreen(#CE04BA);
   myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(#30B727);
   myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(#2023A5);
+  mySearchingScreen = new SearchingScreen(#E88121);
 }
 
 void draw() {
@@ -162,5 +164,14 @@ void switchScreens(){
       break;
     case "ShareSaveUnsuccessfulScreen":
       myShareSaveUnsuccessfulScreen.showScreen();
+      break;
+    case "SearchingScreen":
+      mySearchingScreen.showScreen();
+      if(mousePressed)
+      { 
+        currentScreen = "CameraLiveViewScreen";
+        mousePressed = false;
+      }
+      break;
   }
 }
