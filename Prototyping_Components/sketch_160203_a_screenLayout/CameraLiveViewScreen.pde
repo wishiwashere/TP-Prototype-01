@@ -35,4 +35,14 @@ public class CameraLiveViewScreen extends Screen{
     // same method on multiple icons.
     this.setScreenIcons(allIcons);
   }
+  
+  // Creating a public showScreen method, which is called by the draw() funciton whenever this
+  // screen needs to be displayed
+  public void showScreen(){
+    
+    // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
+    // icons. This method will then in turn call it's super class's (Rectangle) method, to 
+    // generate the size and background of the screen
+    this.drawScreen();
+  }
 }
