@@ -41,8 +41,18 @@ int camNum;
 // avoid things being in reverse
 int cameraScale = -1;
 
+//
+////
+//////
+////////
 
-String directory;
+String directory = "";
+int photoNo = 0;
+
+////////
+//////
+////
+//
 
 void setup() {
   // Setting the width and height of the sketch to be relative to the width and 
@@ -110,11 +120,18 @@ void setup() {
   // Below is not working, but appears to be a built in method
   // println("ORIENTATION OF CAMERA IS NOW " + ketaiCamera.getOrientation());
   
+  //
+  ////
+  //////
+  ////////
   
-  directory = new String("/storage/sdcard0/DCIM/");
+  directory = new String("./WishIWasHereApp");
   ketaiCamera.setSaveDirectory(directory);
-  println("setting photo size");
-  ketaiCamera.setPhotoSize(1280,720);
+  
+  ////////
+  //////
+  ////
+  //
 }
 
 void draw() {    
@@ -139,6 +156,18 @@ void draw() {
   
   // Restoring the previous state of the matrix
   popMatrix();
+  
+  ///
+  /////
+  ////////
+  fill(0,128);
+  rect(3*(width/4),0,width/4-1,40);
+
+  fill(255);
+  text("save", 3*(width/4)+10,30);
+  ////////
+  /////
+  ///
 }
 
 // ketaiCamera event which is automatically called everytime a new frame becomes
@@ -160,10 +189,22 @@ void mousePressed()
   if (ketaiCamera.isStarted())
   {
     // Stopping the ketaiCamera so that no new frames will be read in
-    ketaiCamera.stop();
+   // ketaiCamera.stop();
     
-    //Saving photo from the camera with a name of ourApp
+    //
+    ////
+    //////
+    ////////
+    
+    println("Saving photo from the camera with a name of ourApp");
+    ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
+    photoNo++;//Saving photo from the camera with a name of ourApp
     ketaiCamera.savePhoto("ourApp.jpg");
+    
+    /////////
+    //////
+    ////
+    //
     
     // Checking if the device has more than one camera. If it does we want to toggle between them
     if(ketaiCamera.getNumberOfCameras() > 1)
@@ -176,6 +217,28 @@ void mousePressed()
       // is front or rear facing (only on devices with more than one camera)
       cameraScale *= -1;
     }
+    
+    ///
+    /////
+    ///////
+    /////////
+    if(mouseX >3*(width/4)&& mouseX < width)
+    {
+      ketaiCamera.stop();
+      ketaiCamera.savePhoto();
+     // println("Saving photo from the camera with a name of ourApp");
+     // ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
+     // photoNo++;
+      println("SSSSSSAAAAAAAAFFFFFFFFFEEEEEEE!!!!!!!!!!!!!!!!");
+      ketaiCamera.save("myPhoto.jpg");
+      println("WWWWHHHHHHHHHHHHHHHHHHHHHHHHHHHHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
+    }
+    /////////
+    ///////
+    /////
+    ///
+    
+    
     // Rotating the ketaiCamera image by 90 radians (as long as it is still less than
     // 360, otherwise resetting it to 0.
     orientationZ = orientationZ < 360 ? orientationZ + 90 : 0;
@@ -191,8 +254,13 @@ void onOrientationEvent(float x, float y, float z) {
   //println("------------------------------------ x = " + x + "; y = " + y + "; z = " + z + ";");
 }*/
 
+
 void onSavePhotoEvent(String filename)
 {
-  //ketaiCamera.addToMediaLibrary(filename);
+  ketaiCamera.addToMediaLibrary(filename);
   println("i saved!");
 }
+
+//void setSaveDirectory(String dirname){
+//  println("setting dir");
+//}
