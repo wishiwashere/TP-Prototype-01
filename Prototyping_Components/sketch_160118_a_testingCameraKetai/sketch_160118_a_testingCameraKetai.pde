@@ -41,18 +41,12 @@ int camNum;
 // avoid things being in reverse
 int cameraScale = -1;
 
-//
-////
-//////
-////////
-
+// Creating a string that will hold the directory of where the images will be saved to
 String directory = "";
-int photoNo = 0;
 
-////////
-//////
-////
-//
+// Creating a variable that holds a number, this number will be incremented to allow 
+// for multiple images and prevent overwriting
+int photoNo = 0;
 
 void setup() {
   // Setting the width and height of the sketch to be relative to the width and 
@@ -120,18 +114,14 @@ void setup() {
   // Below is not working, but appears to be a built in method
   // println("ORIENTATION OF CAMERA IS NOW " + ketaiCamera.getOrientation());
   
-  //
-  ////
-  //////
-  ////////
-  
+
+  // Storing a string that tells the app where to store the images, by default 
+  // it goes to the pictures folder and this string as it has WishIWasHereApp 
+  // it is creating a folder in the picture folder of the device
   directory = new String("./WishIWasHereApp");
   ketaiCamera.setSaveDirectory(directory);
   
-  ////////
-  //////
-  ////
-  //
+
 }
 
 void draw() {    
@@ -156,18 +146,6 @@ void draw() {
   
   // Restoring the previous state of the matrix
   popMatrix();
-  
-  ///
-  /////
-  ////////
-  fill(0,128);
-  rect(3*(width/4),0,width/4-1,40);
-
-  fill(255);
-  text("save", 3*(width/4)+10,30);
-  ////////
-  /////
-  ///
 }
 
 // ketaiCamera event which is automatically called everytime a new frame becomes
@@ -189,23 +167,9 @@ void mousePressed()
   if (ketaiCamera.isStarted())
   {
     // Stopping the ketaiCamera so that no new frames will be read in
-   // ketaiCamera.stop();
+    ketaiCamera.stop();
     
-    //
-    ////
-    //////
-    ////////
-    /*
-    println("Saving photo from the camera with a name of ourApp");
-    ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
-    photoNo++;//Saving photo from the camera with a name of ourApp
-    *///ketaiCamera.savePhoto("ourApp.jpg");
-    
-    /////////
-    //////
-    ////
-    //
-    
+
     // Checking if the device has more than one camera. If it does we want to toggle between them
     if(ketaiCamera.getNumberOfCameras() > 1)
     {
@@ -218,30 +182,6 @@ void mousePressed()
       cameraScale *= -1;
     }
     
-    ///
-    /////
-    ///////
-    /////////
-    if(mouseX >3*(width/4)&& mouseX < width)
-    {
-      ketaiCamera.stop();
-     // ketaiCamera.savePhoto();
-     // println("Saving photo from the camera with a name of ourApp");
-     // ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
-     // photoNo++;
-      println("SSSSSSAAAAAAAAFFFFFFFFFEEEEEEE!!!!!!!!!!!!!!!!");
-     // ketaiCamera.save("myPhoto.jpg");
-      println("Saving photo from the camera with a name of ourApp");
-      ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
-      photoNo++;
-      println("WWWWHHHHHHHHHHHHHHHHHHHHHHHHHHHHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
-    }
-    /////////
-    ///////
-    /////
-    ///
-    
-    
     // Rotating the ketaiCamera image by 90 radians (as long as it is still less than
     // 360, otherwise resetting it to 0.
     orientationZ = orientationZ < 360 ? orientationZ + 90 : 0;
@@ -250,6 +190,16 @@ void mousePressed()
   {    
     // Starting the ketaiCamera again so that it will start reading in new frames again
     ketaiCamera.start();
+    
+    // Saving the current frame of the ketaiCamera and assigning it a name, and incrementing 
+    // number to ensure images are not overwritten and to allow for multiple images
+    // Also assigning an image format so the frame is saved as a jpeg to the users phone and 
+    // can be seen in their gallery under a folder title of Wish I Was Here App
+    ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
+    
+    // Incrementing this variable which is used to 
+    photoNo++;
+    println("Saving to your directory as a jpeg");
   }
 }
 /*
@@ -258,12 +208,12 @@ void onOrientationEvent(float x, float y, float z) {
 }*/
 
 
+// Calling the onSavePhotoEvent when a savePhoto gets called, this function adds it 
+// to the media lirary of the android device
 void onSavePhotoEvent(String filename)
 {
   ketaiCamera.addToMediaLibrary(filename);
+  // Printing out this line as it indicates whether this function is being 
+  // called and whether the image has actaully been saved to the directory / device
   println("i saved!");
 }
-
-//void setSaveDirectory(String dirname){
-//  println("setting dir");
-//}
