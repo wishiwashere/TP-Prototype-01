@@ -195,11 +195,11 @@ void mousePressed()
     ////
     //////
     ////////
-    
+    /*
     println("Saving photo from the camera with a name of ourApp");
     ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
     photoNo++;//Saving photo from the camera with a name of ourApp
-    ketaiCamera.savePhoto("ourApp.jpg");
+    *///ketaiCamera.savePhoto("ourApp.jpg");
     
     /////////
     //////
@@ -225,12 +225,15 @@ void mousePressed()
     if(mouseX >3*(width/4)&& mouseX < width)
     {
       ketaiCamera.stop();
-      ketaiCamera.savePhoto();
+     // ketaiCamera.savePhoto();
      // println("Saving photo from the camera with a name of ourApp");
      // ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
      // photoNo++;
       println("SSSSSSAAAAAAAAFFFFFFFFFEEEEEEE!!!!!!!!!!!!!!!!");
-      ketaiCamera.save("myPhoto.jpg");
+     // ketaiCamera.save("myPhoto.jpg");
+      println("Saving photo from the camera with a name of ourApp");
+      ketaiCamera.savePhoto("WishIWasHere" + photoNo + ".jpg"); 
+      photoNo++;
       println("WWWWHHHHHHHHHHHHHHHHHHHHHHHHHHHHOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO");
     }
     /////////
