@@ -117,11 +117,23 @@ protected class Rectangle{
   // Add method that adds text to the object
   protected void addText(String text, float textX, float textY){
     // Calling the full addText() method, passing in the default text size
-    this.addText(text, textX, textY, defaultTextSize);
+    this.addText(text, "CENTER", textX, textY, defaultTextSize);
+  }
+  
+  // Add method that adds text to the object
+  protected void addText(String text, String align, float textX, float textY){
+    // Calling the full addText() method, passing in the default text size
+    this.addText(text, align, textX, textY, defaultTextSize);
   }
   
   // Add method that adds text to the object
   protected void addText(String text, float textX, float textY, float textSize){
+    // Calling the full addText() method, passing in the default text size
+    this.addText(text, "CENTER", textX, textY, textSize);
+  }
+  
+  // Add method that adds text to the object
+  protected void addText(String text, String align, float textX, float textY, float textSize){
     // Storing the current state of the matrix
       pushMatrix();
       
@@ -133,10 +145,17 @@ protected class Rectangle{
     // stored as a radian value)
     rotate(this.getRotation());
     
-    // Setting the text align to center (on both the x and the y) so that
-    // the text will be drawn from the center point of it's position on
-    // the page
-    textAlign(CENTER, CENTER);
+    if(align.equals("CENTER")){
+      // Setting the text align to center (on both the x and the y) so that
+      // the text will be drawn from the center point of it's position on
+      // the page
+      textAlign(CENTER, CENTER);
+    }else if(align.equals("LEFT")){
+      // Setting the text align to Left on the x axis, and Center on the y so that
+      // the text will be drawn from the center point of it's position on the left of
+      // the page
+      textAlign(LEFT, CENTER);
+    }
     
     // Setting the text size to be responsive to the height of the app
     textSize(textSize);

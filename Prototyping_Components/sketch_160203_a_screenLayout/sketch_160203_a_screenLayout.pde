@@ -16,6 +16,7 @@ float iconRightX;
 float iconCenterX;
 float iconTopY;
 float iconBottomY;
+float iconCenterY;
 
 // Declaring a global variable which will contain the default text size, which will be
 // initialised in the setup() function of the app
@@ -29,7 +30,7 @@ float defaultTextSize;
 // against each of the potential screen names (in the main sketch's draw function) to
 // decide which sketch should have the showScreen() method called on it i.e. (which
 // screen should be displayed
-String currentScreen = "SearchUnsuccessfulScreen";
+String currentScreen = "SocialMediaLoginScreen";
 
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
@@ -48,6 +49,7 @@ ShareSaveSuccessfulScreen myShareSaveSuccessfulScreen;
 ShareUnsuccessfulScreen myShareUnsuccessfulScreen;
 ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
 SearchingScreen mySearchingScreen;
+SocialMediaLoginScreen mySocialMediaLoginScreen;
 
 void setup() {
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
@@ -70,6 +72,7 @@ void setup() {
   iconCenterX = appWidth * 0.5;
   iconTopY = appHeight * 0.085;
   iconBottomY = appHeight * 0.92;
+  iconCenterY = appHeight * 0.5;
   
   // Initialising the defaultTextSize to be equal to a percentage of the app's current height
   defaultTextSize = appHeight * 0.04;
@@ -92,6 +95,7 @@ void setup() {
   myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(#30B727);
   myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(#2023A5);
   mySearchingScreen = new SearchingScreen(#E88121);
+  mySocialMediaLoginScreen = new SocialMediaLoginScreen(#E88121);
 }
 
 void draw() {
@@ -172,6 +176,9 @@ void switchScreens(){
         currentScreen = "CameraLiveViewScreen";
         mousePressed = false;
       }
+      break;
+    case "SocialMediaLoginScreen":
+      mySocialMediaLoginScreen.showScreen();
       break;
   }
 }
