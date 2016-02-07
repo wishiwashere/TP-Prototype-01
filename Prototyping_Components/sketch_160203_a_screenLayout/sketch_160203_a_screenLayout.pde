@@ -38,8 +38,10 @@ CameraLiveViewScreen myCameraLiveViewScreen;
 FavouritesScreen myFavouritesScreen;
 SettingsScreen mySettingsScreen;
 AboutScreen myAboutScreen;
-SearchTravelScreen mySearchTravelScreen;
+SearchScreen mySearchScreen;
 SearchFailedScreen mySearchFailedScreen;
+ImagePreviewScreen myImagePreviewScreen;
+SaveShareScreenA mySaveShareScreenA;
 
 void setup() {
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
@@ -74,8 +76,10 @@ void setup() {
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
   mySettingsScreen = new SettingsScreen(#2023A5);
   myAboutScreen = new AboutScreen (#30B727);
-  mySearchTravelScreen = new SearchTravelScreen(#E88121);
+  mySearchScreen = new SearchScreen(#E88121);
   mySearchFailedScreen = new SearchFailedScreen(#F5C811);
+  myImagePreviewScreen = new ImagePreviewScreen();
+  mySaveShareScreenA = new SaveShareScreenA(#5ACEBE);
 }
 
 void draw() {
@@ -112,11 +116,17 @@ void switchScreens(){
     case "AboutScreen":
       myAboutScreen.showScreen();
       break;
-    case "SearchTravelScreen":
-      mySearchTravelScreen.showScreen();
+    case "SearchScreen":
+      mySearchScreen.showScreen();
       break;
     case "SearchFailedScreen":
       mySearchFailedScreen.showScreen();
+      break;
+    case "ImagePreviewScreen":
+      myImagePreviewScreen.showScreen();
+      break;
+    case "SaveShareScreenA":
+      mySaveShareScreenA.showScreen();
       break;
   }
 }
