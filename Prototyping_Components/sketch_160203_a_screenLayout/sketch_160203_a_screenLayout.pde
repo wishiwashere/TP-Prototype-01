@@ -30,7 +30,7 @@ float defaultTextSize;
 // against each of the potential screen names (in the main sketch's draw function) to
 // decide which sketch should have the showScreen() method called on it i.e. (which
 // screen should be displayed
-String currentScreen = "SocialMediaLoginScreen";
+String currentScreen = "SocialMediaLogoutScreen";
 
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
@@ -50,6 +50,7 @@ ShareUnsuccessfulScreen myShareUnsuccessfulScreen;
 ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
 SearchingScreen mySearchingScreen;
 SocialMediaLoginScreen mySocialMediaLoginScreen;
+SocialMediaLogoutScreen mySocialMediaLogoutScreen;
 
 void setup() {
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
@@ -96,6 +97,7 @@ void setup() {
   myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(#2023A5);
   mySearchingScreen = new SearchingScreen(#E88121);
   mySocialMediaLoginScreen = new SocialMediaLoginScreen(#E88121);
+  mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(#CEBD54);
 }
 
 void draw() {
@@ -180,5 +182,7 @@ void switchScreens(){
     case "SocialMediaLoginScreen":
       mySocialMediaLoginScreen.showScreen();
       break;
+    case "SocialMediaLogoutScreen":
+      mySocialMediaLogoutScreen.showScreen();
   }
 }
