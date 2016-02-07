@@ -29,7 +29,7 @@ float defaultTextSize;
 // against each of the potential screen names (in the main sketch's draw function) to
 // decide which sketch should have the showScreen() method called on it i.e. (which
 // screen should be displayed
-String currentScreen = "ShareUnsuccessfulScreen";
+String currentScreen = "HomeScreen";
 
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
@@ -46,6 +46,7 @@ SaveShareScreenB mySaveShareScreenB;
 SharingScreen mySharingScreen;
 ShareSaveSuccessfulScreen myShareSaveSuccessfulScreen;
 ShareUnsuccessfulScreen myShareUnsuccessfulScreen;
+ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
 
 void setup() {
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
@@ -88,6 +89,7 @@ void setup() {
   mySharingScreen = new SharingScreen(#1548EF);
   myShareSaveSuccessfulScreen = new ShareSaveSuccessfulScreen(#CE04BA);
   myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(#30B727);
+  myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(#2023A5);
 }
 
 void draw() {
@@ -158,5 +160,7 @@ void switchScreens(){
     case "ShareUnsuccessfulScreen":
       myShareUnsuccessfulScreen.showScreen();
       break;
+    case "ShareSaveUnsuccessfulScreen":
+      myShareSaveUnsuccessfulScreen.showScreen();
   }
 }
