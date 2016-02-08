@@ -12,9 +12,9 @@ protected class Rectangle{
   private float rectRotation;
   private PImage rectImage;;
 
-  // Creating protected constructors for the Rectangle class, so that they can
-  // only be accessed by classes which extend from this class
+  /*-------------------------------------- Constructor() ------------------------------------------------*/
   
+  // This constructor is used by screens that want to accept all the defaults
   protected Rectangle(){
     // If no x, y, or rotation are passed in, defaulting these to half of the sketch's
     // width and height (i.e. so that the rectangle will appear centered). If no width
@@ -24,40 +24,44 @@ protected class Rectangle{
     this(appWidth/2, appHeight/2, appWidth, appHeight, #FFFFFF, null);
   }
   
+  // This constructor is used by screens that want to accept all the defaults, as well
+  // as setting a background image
   protected Rectangle(PImage img){
-    // If no x, y, or rotation are passed in, defaulting these to half of the sketch's
-    // width and height (i.e. so that the rectangle will appear centered). If no width
-    // and height are passed in, defaulting these to the current width and height of
-    // the sketch. If no rotation value is specified, defaulting this value to 0, and 
-    // finally, if no color is specified, defaulting this to white
+    // If no x, y passed in, defaulting these to half of the sketch's width and height 
+    // (i.e. so that the rectangle will appear centered). If no width and height are 
+    // passed in, defaulting these to the current width and height of the sketch. If 
+    // no color is specified, defaulting this to white. Passing these default values, 
+    // along with the image that was passed in, to the main constructor of this class
     this(appWidth/2, appHeight/2, appWidth, appHeight, #FFFFFF, img);
   }
   
+  // This constructor is used by screens that want to accept all the defaults, as well
+  // as setting a background color
   protected Rectangle(color col){
-    // If no x, y, or rotation are passed in, defaulting these to half of the sketch's
-    // width and height (i.e. so that the rectangle will appear centered). If no width
-    // and height are passed in, defaulting these to the current width and height of
-    // the sketch. Passing these default values, and the specified color value, to the main
-    // constructor of the class
-    this(appWidth/2, appHeight/2, width, height, col, null);
+    // If no x, y passed in, defaulting these to half of the sketch's width and height 
+    // (i.e. so that the rectangle will appear centered). If no width and height are 
+    // passed in, defaulting these to the current width and height of the sketch. If 
+    // no image is specified, defaulting this null. Passing these default values, along 
+    // with the color that was passed in, to the main constructor of this class
+    this(appWidth/2, appHeight/2, appWidth, appHeight, col, null);
   }
   
-  protected Rectangle(float w, float h, color col){
-    // If no x, y, are passed in, defaulting these to half of the specified
-    // w and h parametres (i.e. so that the rectangle will appear centered).
-    // Passing these default values, and the specified width, height and 
-    // color values, to the main constructor of the class
-    this(w/2, h/2, w, h, col, null);
-  }
-  
+  // This constructor is used by icons that do not link to anything, and that
+  // want to have an image as their background
   protected Rectangle(float x, float y, float w, float h, PImage img){
+    // If no color passed in, defaulting it to white and then passing this default value,
+    // along with the x, y, width, height and image that was passed in, to the main 
+    // constructor of this class
     this(x, y, w, h, #FFFFFF, img);
   }
   
+  // This constructor is used by text input boxes (TEMPORARILY)
   protected Rectangle(float x, float y, float w, float h, color col){
     this(x, y, w, h, col, null);
   }
   
+  // This is the main constructor of this class, to which all other constructors pass
+  // their values to be stored as the instance's properties
   protected Rectangle(float x, float y, float w, float h, color col, PImage img){
     // Storing the values that are passed into the constructor in the private
     // variables of this class, so that they can be accessed by other functions
@@ -72,6 +76,8 @@ protected class Rectangle{
     rectRotation = 0;
     rectImage = img;
   }
+  
+  /*-------------------------------------- show() ------------------------------------------------*/
   
   // Creating a method to redraw the object or "show" it on the screen (i.e so that only 
   // descendants of this class can access
@@ -98,16 +104,130 @@ protected class Rectangle{
     // on the screen will depend on the matrix's translation, as this will control where 
     // the object is drawn
     rect(0, 0, rectWidth, rectHeight);
-    
-    if(rectImage != null){
-      imageMode(CENTER);
-      image(rectImage, 0, 0, rectWidth, rectHeight);
-    }
 
+    // Restoring the matrix to it's previous state
+    popMatrix();
+    
+    // Checking if a background image has been passed in
+    if(rectImage != null){
+      // Calling the addImage() method of the this class, to add the image to the screen,
+      // passing in the image, along with the current x, y, width and height of the instance,
+      // so that the image will appear the full size of the object
+      this.addImage(rectImage, rectX, rectY, rectWidth, rectHeight);
+    }
+  }
+  
+  /*-------------------------------------- addText() ------------------------------------------------*/
+  
+  // Partial addText() method that adds text to the object using the default text size
+  protected void addText(String text, float textX, float textY){
+    // If no alignment specified, defaulting it to center on the x-axis. If no
+    // text size specified, defaulting it to the defaultTextSize variable (as
+    // defined in the main sketch. Passing these default values, along with the
+    // specified text, x and y to the main addText() method
+    this.addText(text, "CENTER", textX, textY, defaultTextSize);
+  }
+  
+  // Partial addText() method that adds text to the object, using the default text size, and
+  // changing the alignment on the x-axis to a specified alignment (as it will
+  // default to CENTER otherwise
+  protected void addText(String text, String align, float textX, float textY){
+    // If no text size specified, defaulting it to the defaultTextSize variable
+    // (as defined in the main sketch. Passing these default values, along with
+    // the specified text, alignment, x and y to the main addText() method
+    this.addText(text, align, textX, textY, defaultTextSize);
+  }
+  
+  // Partial addText() method that adds text to the object, with a specific text size
+  protected void addText(String text, float textX, float textY, float textSize){
+    // If no alignment specified, defaulting it to center on the x-axis. Passing
+    // this default value, along with the specified text, x, y and text size to
+    // the main addText() method
+    this.addText(text, "CENTER", textX, textY, textSize);
+  }
+  
+  // Full addText() method, which takes in the values specified (some of which may have
+  // been defaulted by the partial addText() methods above)
+  protected void addText(String text, String align, float textX, float textY, float textSize){
+    // Storing the current state of the matrix
+    pushMatrix();
+      
+    // Translating the position of the matrix be equal to the x and y positions
+    // passed into the function
+    translate(textX, textY);
+    
+    // Rotating the matrix by the currnet rotation value of this object (which has been
+    // stored as a radian value)
+    rotate(this.getRotation());
+    
+    if(align.equals("LEFT")){
+      // Setting the text align to Left on the x axis, and Center on the y so that
+      // the text will be drawn from the center point of it's position on the left of
+      // the page
+      textAlign(LEFT, CENTER);
+    }else{
+      // Setting the text align to center (on both the x and the y) so that
+      // the text will be drawn from the center point of it's position on
+      // the page
+      textAlign(CENTER, CENTER);
+    }
+    
+    // Setting the text size to be responsive to the height of the app
+    textSize(textSize);
+    
+    // Setting the fill color for the text to black
+    fill(0);
+    
+    // Adding the text to the screen, setting the x and y positions to 0, 
+    // as the actual position on the screen will depend on the matrix's translation,
+    // as this will control where the text is drawn
+    text(text, 0, 0);
+    
     // Restoring the matrix to it's previous state
     popMatrix();
   }
   
+  /*-------------------------------------- addImage() ------------------------------------------------*/
+  
+  // Partial addImage() method which is used by images that need to be displayed
+  // at their default resolution
+  protected void addImage(PImage img, float imgX, float imgY){
+    // If no image width or height passed in, defaulting the width and height to be
+    // equal to that of the image (i.e. it's default resolution). Passing these
+    // default values, along with the image, x and y to the full addImage() method
+    this.addImage(img, imgX, imgY, img.width, img.height);
+  }
+  
+  // Full addImage() method which is used by images that require a specific width and height
+  // (Some of these values may have been defaulted by the partial addImage() method)
+  protected void addImage(PImage img, float imgX, float imgY, float imgWidth, float imgHeight){
+    // Storing the current state of the matrix
+    pushMatrix();
+      
+    // Translating the position of the matrix be equal to the x and y positions
+    // passed into the function
+    translate(imgX, imgY);
+    
+    // Rotating the matrix by the current rotation value of this screen (which has been
+    // stored as a radian value)
+    rotate(this.getRotation());
+    
+    // Setting the imageMode to center so that the image will be drawn from the center 
+    // point of it's position on the page
+    imageMode(CENTER);
+    
+    // Adding the image to the screen, setting the x and y positions to 0, 
+    // as the actual position on the screen will depend on the matrix's translation,
+    // as this will control where the text is drawn. Setting the width and height of the image
+    // to be equal to the values passed into the function
+    image(img, 0, 0, imgWidth, imgHeight);
+    
+    // Restoring the matrix to it's previous state
+    popMatrix();
+  }  
+  
+  /*-------------------------------------- get() and set() ------------------------------------------------*/
+    
   // Get method that returns the instance's x position
   protected float getX(){
     return rectX;
@@ -137,95 +257,4 @@ protected class Rectangle{
   protected void setRotation(int r){
     rectRotation = radians(r);
   }
-  
-  // Add method that adds text to the object
-  protected void addText(String text, float textX, float textY){
-    // Calling the full addText() method, passing in the default text size
-    this.addText(text, "CENTER", textX, textY, defaultTextSize);
-  }
-  
-  // Add method that adds text to the object
-  protected void addText(String text, String align, float textX, float textY){
-    // Calling the full addText() method, passing in the default text size
-    this.addText(text, align, textX, textY, defaultTextSize);
-  }
-  
-  // Add method that adds text to the object
-  protected void addText(String text, float textX, float textY, float textSize){
-    // Calling the full addText() method, passing in the default text size
-    this.addText(text, "CENTER", textX, textY, textSize);
-  }
-  
-  // Add method that adds text to the object
-  protected void addText(String text, String align, float textX, float textY, float textSize){
-    // Storing the current state of the matrix
-    pushMatrix();
-      
-    // Translating the position of the matrix be equal to the x and y positions
-    // passed into the function
-    translate(textX, textY);
-    
-    // Rotating the matrix by the currnet rotation value of this object (which has been
-    // stored as a radian value)
-    rotate(this.getRotation());
-    
-    if(align.equals("CENTER")){
-      // Setting the text align to center (on both the x and the y) so that
-      // the text will be drawn from the center point of it's position on
-      // the page
-      textAlign(CENTER, CENTER);
-    }if(align.equals("LEFT")){
-      // Setting the text align to Left on the x axis, and Center on the y so that
-      // the text will be drawn from the center point of it's position on the left of
-      // the page
-      textAlign(LEFT, CENTER);
-    }
-    
-    // Setting the text size to be responsive to the height of the app
-    textSize(textSize);
-    
-    // Setting the fill color for the text to black
-    fill(0);
-    
-    // Adding the text to the screen, setting the x and y positions to 0, 
-    // as the actual position on the screen will depend on the matrix's translation,
-    // as this will control where the text is drawn
-    text(text, 0, 0);
-    
-    // Restoring the matrix to it's previous state
-    popMatrix();
-  }
-  
-  protected void addImage(PImage img, float imgX, float imgY){
-    // Calling the full addImage function, passing in the img,
-    // imgX and imgY, and then defaulting the width and height to be
-    // equal to that of the image (i.e. it's default resolution)
-    this.addImage(img, imgX, imgY, img.width, img.height);
-  }
-  
-  protected void addImage(PImage img, float imgX, float imgY, float imgWidth, float imgHeight){
-    // Storing the current state of the matrix
-      pushMatrix();
-      
-    // Translating the position of the matrix be equal to the x and y positions
-    // passed into the function
-    translate(imgX, imgY);
-    
-    // Rotating the matrix by the current rotation value of this screen (which has been
-    // stored as a radian value)
-    rotate(this.getRotation());
-    
-    // Setting the imageMode to center so that the image will be drawn from the center 
-    // point of it's position on the page
-    imageMode(CENTER);
-    
-    // Adding the image to the screen, setting the x and y positions to 0, 
-    // as the actual position on the screen will depend on the matrix's translation,
-    // as this will control where the text is drawn. Setting the width and height of the image
-    // to be equal to the values passed into the function
-    image(img, 0, 0, imgWidth, imgHeight);
-    
-    // Restoring the matrix to it's previous state
-    popMatrix();
-  }  
 }
