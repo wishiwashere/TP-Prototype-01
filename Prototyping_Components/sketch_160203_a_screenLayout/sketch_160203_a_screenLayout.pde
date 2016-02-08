@@ -199,25 +199,11 @@ void switchScreens(){
       break;
     case "SharingScreen":
       mySharingScreen.showScreen();
-      if(mousePressed)
-      { 
-        // TESTING PURPOSES ONLY - THIS SCREEN HAS NO INTERACTION
-      // so needed a way to clear it from the screen until the
-      // code that normally would clear it is added
-        currentScreen = "ShareSaveSuccessfulScreen";
-        mousePressed = false;
-      }
+      testingTimeoutScreen("ShareSaveSuccessfulScreen");
       break;
     case "ShareSaveSuccessfulScreen":
       myShareSaveSuccessfulScreen.showScreen();
-      if(mousePressed)
-      { 
-        // TESTING PURPOSES ONLY - THIS SCREEN HAS NO INTERACTION
-        // so needed a way to clear it from the screen until the
-        // code that normally would clear it is added
-        currentScreen = "CameraLiveViewScreen";
-        mousePressed = false;
-      }
+      testingTimeoutScreen("CameraLiveViewScreen");
       break;
     case "ShareUnsuccessfulScreen":
       myShareUnsuccessfulScreen.showScreen();
@@ -227,19 +213,24 @@ void switchScreens(){
       break;
     case "SearchingScreen":
       mySearchingScreen.showScreen();
-      if(mousePressed)
-      { 
-        // TESTING PURPOSES ONLY - THIS SCREEN HAS NO INTERACTION
-        // so needed a way to clear it from the screen until the
-        // code that normally would clear it is added
-        currentScreen = "CameraLiveViewScreen";
-        mousePressed = false;
-      }
+      testingTimeoutScreen("CameraLiveViewScreen");
       break;
     case "SocialMediaLoginScreen":
       mySocialMediaLoginScreen.showScreen();
       break;
     case "SocialMediaLogoutScreen":
       mySocialMediaLogoutScreen.showScreen();
+  }
+}
+
+// TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
+// so needed a way to clear it from the screen until the
+// code that normally would clear it is added
+void testingTimeoutScreen(String fadeToScreen){
+  if(mousePressed)
+  { 
+    
+    currentScreen = fadeToScreen;
+    mousePressed = false;
   }
 }
