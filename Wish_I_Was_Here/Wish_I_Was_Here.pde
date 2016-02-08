@@ -1,5 +1,5 @@
-//import ketai.*;
-//import ketai.camera.*;
+import ketai.*;
+import ketai.camera.*;
 
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
 // this is the first screen that is displayed. Since this global variable is available
@@ -18,7 +18,7 @@ String currentScreen = "CameraLiveViewScreen";
 // Creating a global variable to store the ketaiCamera object, so that it can be
 // accessed thoroughout the sketch once it has been initiated i.e. to read in,
 // display and eventually alter the live stream images
-PImage ketaiCamera;
+KetaiCamera ketaiCamera;
 
 // Creating a global variable to store the number of the camera we want to view
 // at any given time. The front facing camera (on a device with more than one camera)
@@ -105,10 +105,10 @@ SocialMediaLogoutScreen mySocialMediaLogoutScreen;
 void setup() {
   // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
-  size(360, 640);
+  //size(360, 640);
   
   // ANDROID TESTING SETTINGS
-  //fullScreen();
+  fullScreen();
   
   // Locking the applications orientation to portrait, so that the image being read in from the 
   // the camera is maintained, even when the device is rotated
@@ -125,15 +125,14 @@ void setup() {
   
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
-  //ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
+  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
   
   // Printing out the list of available cameras i.e. front/rear facing
-  //println(ketaiCamera.list());
+  println(ketaiCamera.list());
   
   // Printing out the number of availabe cameras
-  //println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
+  println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
   
-  /*
   // Check if the device has more than one camera i.e. does it have a front
   // and a rear facing camera?
   if(ketaiCamera.getNumberOfCameras() > 1)
@@ -151,7 +150,7 @@ void setup() {
   
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
-  */
+  
   // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
   // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
   // reused on multiple pages
@@ -174,7 +173,6 @@ void setup() {
   twitterAccountIconImage = loadImage("iconPlaceholder.png");
   instagramAccountIconImage = loadImage("iconPlaceholder.png");
   buttonImage = loadImage("iconPlaceholder.png");
-  ketaiCamera = loadImage("placeholderKetai.PNG");
 
   // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
   // the icons on each page all line up with one another. These measurements are all based on percentages
@@ -283,7 +281,6 @@ void testingTimeoutScreen(String fadeToScreen){
   }
 }
 
-/*
 // ketaiCamera event which is automatically called everytime a new frame becomes
 // available from the ketaiCamera.
 void onCameraPreviewEvent()
@@ -291,4 +288,3 @@ void onCameraPreviewEvent()
   // Reading in a new frame from the ketaiCamera.
   ketaiCamera.read();
 }
-*/

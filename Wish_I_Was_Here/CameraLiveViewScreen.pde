@@ -51,13 +51,11 @@ public class CameraLiveViewScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    /*
     if (!ketaiCamera.isStarted())
     {
       // Starting the ketaiCamera i.e. beginning to capture frames in.
       ketaiCamera.start();
     }
-    */
     
     // Calls super super class (Rectangle)
     this.showCameraImage(ketaiCamera, cameraScale, cameraRotation);
