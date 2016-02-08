@@ -8,7 +8,7 @@ protected class Rectangle{
   private float rectY;
   private float rectWidth;
   private float rectHeight;
-  private color rectCol;
+  private color rectCol = #FFFFFF;
   private float rectRotation;
   private PImage rectImage = null;
   private PImage rectBackgroundImg = null;
@@ -84,31 +84,33 @@ protected class Rectangle{
   // Creating a method to redraw the object or "show" it on the screen (i.e so that only 
   // descendants of this class can access
   protected void show(){
-    // Storing the current state of the matrix
-    pushMatrix();
     
-    // Translating the position of the matrix to the specified x and y of the object
-    translate(rectX, rectY);
-    
-    // Rotating the matrix by the specified rotation value of the object (which has been
-    // stored as a radian value)
-    rotate(rectRotation);
-    
-    // Setting the fill colour of the object to the value specified
-    fill(rectCol);
-    
-    // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
-    // been applied to the rectangle, it will pivot around it's center point
-    rectMode(CENTER);
-    
-    // Drawing the rectangle with x and y values based on half of the width and height of
-    // the object, so that it appears centered on it's point of origin. The actual position
-    // on the screen will depend on the matrix's translation, as this will control where 
-    // the object is drawn
-    rect(0, 0, rectWidth, rectHeight);
-    
-    // Restoring the matrix to it's previous state
-    popMatrix();
+    if(rectCol != #FFFFFF){
+      // Storing the current state of the matrix
+      pushMatrix();
+      
+      // Translating the position of the matrix to the specified x and y of the object
+      translate(rectX, rectY);
+      
+      // Rotating the matrix by the specified rotation value of the object (which has been
+      // stored as a radian value)
+      rotate(rectRotation);
+      // Setting the fill colour of the object to the value specified
+      fill(rectCol);
+      
+      // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
+      // been applied to the rectangle, it will pivot around it's center point
+      rectMode(CENTER);
+      
+      // Drawing the rectangle with x and y values based on half of the width and height of
+      // the object, so that it appears centered on it's point of origin. The actual position
+      // on the screen will depend on the matrix's translation, as this will control where 
+      // the object is drawn
+      rect(0, 0, rectWidth, rectHeight);
+      
+      // Restoring the matrix to it's previous state
+      popMatrix();
+    }
     
     // Checking if a Background Image has been passed in
     if(rectBackgroundImg != null){    
