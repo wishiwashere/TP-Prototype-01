@@ -11,7 +11,7 @@ import ketai.camera.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "LoadingScreen";
+String currentScreen = "ShareSaveUnsuccessfulScreen";
 
 PImage saveThisImage;
 
@@ -79,7 +79,8 @@ float iconCenterX;
 float iconTopY;
 float iconBottomY;
 float iconCenterY;
-float homeIconSize;
+float squareIconSize;
+float squareIconBottomY;
 
 // Declaring a global variable which will contain the default text size, which will be
 // initialised in the setup() function of the app
@@ -191,7 +192,8 @@ void setup() {
   iconTopY = appHeight * 0.085;
   iconBottomY = appHeight * 0.92;
   iconCenterY = appHeight * 0.5;
-  homeIconSize = appWidth * 0.35;
+  squareIconSize = appWidth * 0.35;
+  squareIconBottomY = iconBottomY - (squareIconSize/2);
   
   // Initialising the defaultTextSize to be equal to a percentage of the app's current height
   defaultTextSize = appHeight * 0.04;
