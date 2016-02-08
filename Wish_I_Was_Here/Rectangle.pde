@@ -11,8 +11,9 @@ protected class Rectangle{
   private color rectCol;
   private float rectRotation;
   private PImage rectImage;
-  private int rectScaleX = 1;
-  private int rectBgRotate = 0;
+  private PImage rectCameraImg;
+  private int rectCameraImgScaleX = 1;
+  private int rectCameraImgRotate = 0;
 
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   
@@ -105,16 +106,16 @@ protected class Rectangle{
     // on the screen will depend on the matrix's translation, as this will control where 
     // the object is drawn
     rect(0, 0, rectWidth, rectHeight);
-
+    
     // Restoring the matrix to it's previous state
     popMatrix();
     
     // Checking if a background image has been passed in
-    if(rectImage != null){
+    if(rectImage != null){    
       // Calling the addImage() method of the this class, to add the image to the screen,
       // passing in the image, along with the current x, y, width and height of the instance,
       // so that the image will appear the full size of the object
-      this.addImage(rectImage, this.getX(), this.getY(), this.getWidth(), this.getHeight(), rectScaleX, rectBgRotate);
+      this.addImage(rectImage, rectX, rectY, rectWidth, rectHeight, rectCameraImgScaleX, rectCameraImgRotate); 
     }
   }
   
@@ -284,15 +285,15 @@ protected class Rectangle{
   
   protected void setScaleX(int sX){
     if(sX == 1 || sX == -1){
-      rectScaleX = sX;
+      rectCameraImgScaleX = sX;
     }
   }
   
-  protected void setBackgroundImage(PImage bgImg, int scaleX, int rotate){
-    rectWidth = bgImg.width;
-    rectHeight = bgImg.height;
+  protected void showCameraImage(PImage bgImg, int scaleX, int rotate){
+    rectWidth = appHeight;
+    rectHeight = appWidth;
     rectImage = bgImg;
-    rectScaleX =  scaleX;
-    rectBgRotate = rotate;
+    rectCameraImgScaleX =  scaleX;
+    rectCameraImgRotate = rotate;
   }
 }
