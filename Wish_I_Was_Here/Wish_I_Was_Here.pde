@@ -11,7 +11,7 @@ import ketai.camera.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "ShareSaveUnsuccessfulScreen";
+String currentScreen = "HomeScreen";
 
 PImage saveThisImage;
 
