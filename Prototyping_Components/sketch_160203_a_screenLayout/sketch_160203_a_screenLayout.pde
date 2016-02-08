@@ -211,7 +211,7 @@ void switchScreens(){
 }
 
 // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
-// so needed a way to clear it from the screen until the
+// eeded a way to clear it from the screen until the
 // code that normally would clear it is added
 void testingTimeoutScreen(String fadeToScreen){
   if(mousePressed)

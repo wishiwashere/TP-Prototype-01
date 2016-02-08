@@ -18,8 +18,8 @@ public class SaveShareScreenB extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3, appHeight * 0.4, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "SaveShareScreenA");
-    Icon shareIcon = new Icon(appWidth * 0.7, appHeight * 0.4, appWidth * 0.4, appHeight * 0.08, buttonImage, "Next", true, "SharingScreen");
+    Icon cancelIcon = new Icon(appWidth * 0.3, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "SaveShareScreenA");
+    Icon shareIcon = new Icon(appWidth * 0.7, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Next", true, "SharingScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, shareIcon};
