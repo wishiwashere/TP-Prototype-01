@@ -20,6 +20,8 @@ protected class Screen extends Rectangle{
   
   // Creating protected constructors for the Screen class, so that they can
   // only be accessed by classes which extend from this class
+
+  /*-------------------------------------- Constructor() ------------------------------------------------*/
   
   protected Screen(){    
     // Calling this class's super class (Screen) to create a screen using
@@ -29,7 +31,7 @@ protected class Screen extends Rectangle{
   
   protected Screen(PImage img){    
     // Calling this class's super class (Screen) to create a screen using
-    // the default settings
+    // the default settings along with a background image
     super(img);
   }
   
@@ -38,6 +40,8 @@ protected class Screen extends Rectangle{
     // the default settings, along with setting the colour as specified
     super(col);
   }
+  
+  /*-------------------------------------- drawScreen() ------------------------------------------------*/
    
   // Creating a public method so that this screen can be displayed from
   // within the main sketch
@@ -73,6 +77,8 @@ protected class Screen extends Rectangle{
       }
     }
   }
+  
+  /*-------------------------------------- get() and set() ------------------------------------------------*/
   
   protected void setScreenTitle(String title){
     // Setting the screenTitle to the title passed in by each screen. If no

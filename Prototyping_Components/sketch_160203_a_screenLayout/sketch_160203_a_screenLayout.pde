@@ -53,7 +53,7 @@ float defaultTextSize;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "SocialMediaLogoutScreen";
+String currentScreen = "HomeScreen";
 
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
@@ -126,12 +126,14 @@ void setup() {
   
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious
-  // (for testing purposes only). Note - setting a background color is optional
+  // (for testing purposes only). Note - setting a background color is optional. Depending on the
+  // screen's constructor, you can pass in a background color, a background image, or nothing at
+  // all if you want to default to white
   myHomeScreen = new HomeScreen(#000000);
   myCameraLiveViewScreen = new CameraLiveViewScreen();
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
   mySettingsScreen = new SettingsScreen(#2023A5);
-  myAboutScreen = new AboutScreen (#30B727);
+  myAboutScreen = new AboutScreen (#CEBD5A);
   mySearchScreen = new SearchScreen(#E88121);
   mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(#F5C811);
   myImagePreviewScreen = new ImagePreviewScreen();
@@ -141,7 +143,7 @@ void setup() {
   myShareSaveSuccessfulScreen = new ShareSaveSuccessfulScreen(#CE04BA);
   myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(#30B727);
   myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(#2023A5);
-  mySearchingScreen = new SearchingScreen(#E88121);
+  mySearchingScreen = new SearchingScreen(#2023A5);
   mySocialMediaLoginScreen = new SocialMediaLoginScreen(#E88121);
   mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(#CEBD54);
 }

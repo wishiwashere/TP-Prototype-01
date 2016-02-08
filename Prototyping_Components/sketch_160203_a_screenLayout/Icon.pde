@@ -6,8 +6,7 @@ public class Icon extends Rectangle{
   private String iconTitle;
   private Boolean showIconTitle;
   
-  // Creating a public constructor for the Icon class, so that
-  // instances of it can be created anywhere in the sketch
+  /*-------------------------------------- Constructor() ------------------------------------------------*/
   
   // This constructor is used by icons in the CameraLiveView Screen, that want to accept the 
   // default width and height of an icon, but do not link to another page
@@ -57,9 +56,10 @@ public class Icon extends Rectangle{
     showIconTitle = showTitle;
   }
   
+  /*-------------------------------------- showIcon() ------------------------------------------------*/
+  
   // Creating a public showIcon function, which can be called anywhere in the code
   // to display the icon, and add any text that has been specified
-  
   public void showIcon(){
     // Calling the show() method (which was inherited from the Rectangle class)
     // so that this icon will be displayed on screen
@@ -75,6 +75,8 @@ public class Icon extends Rectangle{
       this.addText(this.iconTitle, this.getX(), this.getY(), this.getHeight() * 0.30);
     }
   }
+  
+  /*-------------------------------------- checkMouseOver() ------------------------------------------------*/
   
   public void checkMouseOver(){ 
     // Checking if the mouse (or finger) is over this icon (called by the Screen
