@@ -199,7 +199,7 @@ void setup() {
   myAboutScreen = new AboutScreen (#CEBD5A);
   mySearchScreen = new SearchScreen(#E88121);
   mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(#F5C811);
-  myImagePreviewScreen = new ImagePreviewScreen();
+  myImagePreviewScreen = new ImagePreviewScreen(#E88121);
   mySaveShareScreenA = new SaveShareScreenA(#5ACEBE);
   mySaveShareScreenB = new SaveShareScreenB(#CEBD5A);
   mySharingScreen = new SharingScreen(#1548EF);
@@ -269,6 +269,18 @@ void switchScreens(){
   } else if(currentScreen.equals("_SwitchCameraView")){
       myCameraLiveViewScreen.switchCameraView();
       currentScreen = "CameraLiveViewScreen";
+  }
+  
+  // Turning the camera on and off (if the current screen
+  // is the camera live view, and the camera is  not yet turned
+  // on, then start the camera, otherwise, if you are on any other screen,
+  // stop the camera
+  if(currentScreen.equals("CameraLiveViewScreen")){
+    if(!ketaiCamera.isStarted()){
+      ketaiCamera.start();
+    }
+  }else if(ketaiCamera.isStarted()) {
+    ketaiCamera.stop();
   }
 }
 

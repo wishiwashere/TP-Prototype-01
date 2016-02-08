@@ -51,12 +51,6 @@ public class CameraLiveViewScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    if (!ketaiCamera.isStarted())
-    {
-      // Starting the ketaiCamera i.e. beginning to capture frames in.
-      ketaiCamera.start();
-    }
-    
     // Calls super super class (Rectangle). Passing in the current frame image, the width and height
     // which have been reversed - i.e. the width will now be equal to the height of the app, as the 
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 

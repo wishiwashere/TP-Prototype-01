@@ -2,12 +2,12 @@ public class ImagePreviewScreen extends Screen{
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
-  public ImagePreviewScreen(){
+  public ImagePreviewScreen(color col){
     
     // Calling the super class (Screen), which will in turn call it's super class 
     // (Rectangle) and create a rectangle with the default values i.e. fullscreen, 
     // centered etc.
-    super();
+    super(col);
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -47,5 +47,12 @@ public class ImagePreviewScreen extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    // Calls super super class (Rectangle). Passing in the current frame image, the width and height
+    // which have been reversed - i.e. the width will now be equal to the height of the app, as the 
+    // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
+    // minus depending on whether you are using the front or rear camera) so the width and the height
+    // need to swap to fit with the image's new resolution
+    this.addBackgroundImage(ketaiCamera, appHeight, appWidth, cameraScale, cameraRotation);
   }
 }
