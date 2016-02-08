@@ -10,10 +10,10 @@ protected class Rectangle{
   private float rectHeight;
   private color rectCol;
   private float rectRotation;
-  private PImage rectImage;
-  private PImage rectCameraImg;
-  private int rectCameraImgScaleX = 1;
-  private int rectCameraImgRotate = 0;
+  private PImage rectImage = null;
+  private PImage rectBackgroundImg = null;
+  private int rectBackgroundImgScaleX = 1;
+  private int rectBackgroundImgRotate = 0;
 
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   
@@ -110,12 +110,20 @@ protected class Rectangle{
     // Restoring the matrix to it's previous state
     popMatrix();
     
-    // Checking if a background image has been passed in
+    // Checking if a Background Image has been passed in
+    if(rectBackgroundImg != null){    
+      // Calling the addImage() method of the this class, to add the background image to the screen,
+      // passing in the image, along with the current x, y, width and height of the instance,
+      // so that the image will appear the full size of the object
+      this.addImage(rectBackgroundImg, rectX, rectY, rectWidth, rectHeight, rectBackgroundImgScaleX, rectBackgroundImgRotate); 
+    }
+    
+    // Checking if an image has been passed in
     if(rectImage != null){    
       // Calling the addImage() method of the this class, to add the image to the screen,
       // passing in the image, along with the current x, y, width and height of the instance,
       // so that the image will appear the full size of the object
-      this.addImage(rectImage, rectX, rectY, rectWidth, rectHeight, rectCameraImgScaleX, rectCameraImgRotate); 
+      this.addImage(rectImage, rectX, rectY, rectWidth, rectHeight); 
     }
   }
   
@@ -283,17 +291,17 @@ protected class Rectangle{
     rectRotation = radians(r);
   }
   
-  protected void setScaleX(int sX){
+  protected void setBackgroundImgScaleX(int sX){
     if(sX == 1 || sX == -1){
-      rectCameraImgScaleX = sX;
+      rectBackgroundImgScaleX = sX;
     }
   }
   
-  protected void showCameraImage(PImage bgImg, int scaleX, int rotate){
-    rectWidth = appHeight;
-    rectHeight = appWidth;
-    rectImage = bgImg;
-    rectCameraImgScaleX =  scaleX;
-    rectCameraImgRotate = rotate;
+  protected void addBackgroundImage(PImage bgImg, float w, float h, int scaleX, int rotate){
+    rectBackgroundImg = bgImg;
+    rectWidth = w;
+    rectHeight = h;
+    rectBackgroundImgScaleX =  scaleX;
+    rectBackgroundImgRotate = rotate;
   }
 }

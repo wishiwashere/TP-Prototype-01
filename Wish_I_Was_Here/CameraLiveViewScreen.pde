@@ -57,7 +57,11 @@ public class CameraLiveViewScreen extends Screen{
       ketaiCamera.start();
     }
     
-    // Calls super super class (Rectangle)
-    this.showCameraImage(ketaiCamera, cameraScale, cameraRotation);
+    // Calls super super class (Rectangle). Passing in the current frame image, the width and height
+    // which have been reversed - i.e. the width will now be equal to the height of the app, as the 
+    // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
+    // minus depending on whether you are using the front or rear camera) so the width and the height
+    // need to swap to fit with the image's new resolution
+    this.addBackgroundImage(ketaiCamera, appHeight, appWidth, cameraScale, cameraRotation);
   }
 }
