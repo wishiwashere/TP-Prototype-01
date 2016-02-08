@@ -1,6 +1,6 @@
 public class ShareSaveSuccessfulScreen extends Screen{
   
-  private PImage successfullShareSaveImage;
+  private PImage shareSaveSuccessfulScreenImage;
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -11,7 +11,7 @@ public class ShareSaveSuccessfulScreen extends Screen{
     // default values i.e. fullscreen, centered etc.
     super(col);
     
-    successfullShareSaveImage = loadImage("placeholder.PNG");
+    shareSaveSuccessfulScreenImage = loadImage("sharingScreenImage.png");
     
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
@@ -29,6 +29,6 @@ public class ShareSaveSuccessfulScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addImage(successfullShareSaveImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
+    this.addImage(shareSaveSuccessfulScreenImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
   }
 }

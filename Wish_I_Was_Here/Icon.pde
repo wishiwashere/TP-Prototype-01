@@ -72,7 +72,7 @@ public class Icon extends Rectangle{
       // the icon. Passing in the String containing the title for the icon, the current
       // x and y positions of the icon itself, and the font size (which is relative
       // to the icon's current height
-      this.addText(this.iconTitle, this.getX(), this.getY(), this.getHeight() * 0.30);
+      this.addText(this.iconTitle, this.getX(), this.getY(), this.getWidth() * 0.20);
     }
   }
   

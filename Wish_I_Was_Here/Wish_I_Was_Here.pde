@@ -11,7 +11,7 @@ import ketai.camera.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "CameraLiveViewScreen";
+String currentScreen = "LoadingScreen";
 
 PImage saveThisImage;
 
@@ -79,6 +79,7 @@ float iconCenterX;
 float iconTopY;
 float iconBottomY;
 float iconCenterY;
+float homeIconSize;
 
 // Declaring a global variable which will contain the default text size, which will be
 // initialised in the setup() function of the app
@@ -103,6 +104,7 @@ ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
 SearchingScreen mySearchingScreen;
 SocialMediaLoginScreen mySocialMediaLoginScreen;
 SocialMediaLogoutScreen mySocialMediaLogoutScreen;
+LoadingScreen myLoadingScreen;
 
  /*-------------------------------------- Saving ------------------------------------------------*/
  // Creating a string that will hold the directory path of where the images will be saved to
@@ -160,25 +162,25 @@ void setup() {
   // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
   // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
   // reused on multiple pages
-  randomPageIconImage = loadImage("iconPlaceholder.png");
-  searchPageIconImage = loadImage("iconPlaceholder.png");
-  aboutPageIconImage = loadImage("iconPlaceholder.png");
-  favouritesPageIconImage = loadImage("iconPlaceholder.png");
-  settingsPageIconImage = loadImage("iconPlaceholder.png");
-  homeIconImage = loadImage("iconPlaceholder.png");
-  favIconImage = loadImage("favIconImage.png");
+  randomPageIconImage = loadImage("randomPageIconImage.png");
+  searchPageIconImage = loadImage("searchPageIconImage.png");
+  aboutPageIconImage = loadImage("aboutPageIconImage.png");
+  favouritesPageIconImage = loadImage("favouritesPageIconImage.png");
+  settingsPageIconImage = loadImage("settingsPageIconImage.png");
+  homeIconImage = loadImage("homeIconImage.png");
+  favIconImage = loadImage("favIconYesImage.png");
   shakeIconImage = loadImage("iconPlaceholder.png");
-  shutterIconImage = loadImage("iconPlaceholder.png");
+  shutterIconImage = loadImage("shutterIconImage.png");
   switchViewIconImage = loadImage("switchViewIconImage.png");
   retryIconImage = loadImage("iconPlaceholder.png");
-  deleteIconImage = loadImage("iconPlaceholder.png");
-  saveIconImage = loadImage("iconPlaceholder.png");
-  disgardIconImage = loadImage("iconPlaceholder.png");
-  keepIconImage = loadImage("iconPlaceholder.png");
+  deleteIconImage = loadImage("deleteIconImage.png");
+  saveIconImage = loadImage("saveIconImage.png");
+  disgardIconImage = loadImage("disgardIconImage.png");
+  keepIconImage = loadImage("keepIconImage.png");
   cancelIconImage = loadImage("iconPlaceholder.png");
   twitterAccountIconImage = loadImage("iconPlaceholder.png");
   instagramAccountIconImage = loadImage("iconPlaceholder.png");
-  buttonImage = loadImage("iconPlaceholder.png");
+  buttonImage = loadImage("buttonImage.png");
 
   // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
   // the icons on each page all line up with one another. These measurements are all based on percentages
@@ -189,6 +191,7 @@ void setup() {
   iconTopY = appHeight * 0.085;
   iconBottomY = appHeight * 0.92;
   iconCenterY = appHeight * 0.5;
+  homeIconSize = appWidth * 0.35;
   
   // Initialising the defaultTextSize to be equal to a percentage of the app's current height
   defaultTextSize = appHeight * 0.04;
@@ -198,7 +201,7 @@ void setup() {
   // (for testing purposes only). Note - setting a background color is optional. Depending on the
   // screen's constructor, you can pass in a background color, a background image, or nothing at
   // all if you want to default to white
-  myHomeScreen = new HomeScreen(#000000);
+  myHomeScreen = new HomeScreen(#8CBCD8);
   myCameraLiveViewScreen = new CameraLiveViewScreen(#000000);
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
   mySettingsScreen = new SettingsScreen(#2023A5);
@@ -215,6 +218,7 @@ void setup() {
   mySearchingScreen = new SearchingScreen(#2023A5);
   mySocialMediaLoginScreen = new SocialMediaLoginScreen(#E88121);
   mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(#CEBD54);
+  myLoadingScreen = new LoadingScreen();
   
   // Storing a string that tells the app where to store the images, by default 
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
@@ -284,6 +288,9 @@ void switchScreens(){
   } else if(currentScreen.equals("_keepImage")){
     keepImage();
     currentScreen = "ImagePreviewScreen";
+  } else if(currentScreen.equals("LoadingScreen")){
+      myLoadingScreen.showScreen();
+      testingTimeoutScreen("HomeScreen");
   } else{
     println("This screen doesn't exist");
   }

@@ -18,11 +18,11 @@ public class HomeScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon searchTravelIcon = new Icon(appWidth * 0.3, appHeight * 0.4, appWidth * 0.35, appHeight * 0.08, searchPageIconImage, "Search", true, "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.7, appHeight * 0.4, appWidth * 0.35, appHeight * 0.08, randomPageIconImage, "Random", true, "CameraLiveViewScreen");
-    Icon myFavouritesIcon = new Icon(appWidth * 0.3, appHeight * 0.6, appWidth * 0.35, appHeight * 0.08, favouritesPageIconImage, "My Favourites", true, "FavouritesScreen");
-    Icon aboutIcon = new Icon(appWidth * 0.7, appHeight * 0.6, appWidth * 0.35, appHeight * 0.08, aboutPageIconImage, "About", true, "AboutScreen");
-    Icon settingsIcon = new Icon(appWidth * 0.5, appHeight * 0.8, appWidth * 0.35, appHeight * 0.08, settingsPageIconImage, "Settings", true, "SettingsScreen");
+    Icon searchTravelIcon = new Icon(appWidth * 0.3, appHeight * 0.2, homeIconSize, homeIconSize, searchPageIconImage, "Search", true, "SearchScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.7, appHeight * 0.2, homeIconSize, homeIconSize, randomPageIconImage, "Random", true, "CameraLiveViewScreen");
+    Icon myFavouritesIcon = new Icon(appWidth * 0.3, appHeight * 0.5, homeIconSize, homeIconSize, favouritesPageIconImage, "My Favourites", true, "FavouritesScreen");
+    Icon aboutIcon = new Icon(appWidth * 0.7, appHeight * 0.5, homeIconSize, homeIconSize, aboutPageIconImage, "About", true, "AboutScreen");
+    Icon settingsIcon = new Icon(appWidth * 0.5, appHeight * 0.8, homeIconSize, homeIconSize, settingsPageIconImage, "Settings", true, "SettingsScreen");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {randomTravelIcon, searchTravelIcon, myFavouritesIcon, aboutIcon, settingsIcon};

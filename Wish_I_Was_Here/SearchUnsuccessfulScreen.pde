@@ -1,7 +1,7 @@
 public class SearchUnsuccessfulScreen extends Screen{
   
   // Declaring a variable to hold an image that will be added to the screen
-  private PImage searchUnsuccessfulImage;
+  private PImage searchUnsuccessfulScreenImage;
   
   // Creating a public constructor for the SearchFailedScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -13,7 +13,7 @@ public class SearchUnsuccessfulScreen extends Screen{
     super(col);
     
     // Initialising the page image by loading in an image
-    searchUnsuccessfulImage = loadImage("placeholder.PNG");
+    searchUnsuccessfulScreenImage = loadImage("searchUnsuccessfulScreenImage.png");
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -57,6 +57,6 @@ public class SearchUnsuccessfulScreen extends Screen{
     
     // Calling the super class's super class (Rectangle) to add an image to the screen, passing
     // in the image, x, y, width and height
-    this.addImage(searchUnsuccessfulImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
+    this.addImage(searchUnsuccessfulScreenImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
   }
 }

@@ -1,4 +1,5 @@
 public class ShareSaveUnsuccessfulScreen extends Screen{
+  PImage shareSaveUnsuccessfulScreenImage;
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -25,6 +26,8 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {retryIcon, deleteIcon, saveIcon};
     
+    shareSaveUnsuccessfulScreenImage = loadImage("shareSaveUnsuccessfulScreenImage.png");
+    
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
     // can be looped through by the showScreen() method, and methods inherited from the Icon 
@@ -48,5 +51,8 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    
+    this.addImage(shareSaveUnsuccessfulScreenImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
   }
 }
