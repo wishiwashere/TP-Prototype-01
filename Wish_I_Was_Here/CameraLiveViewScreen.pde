@@ -22,7 +22,7 @@ public class CameraLiveViewScreen extends Screen{
     Icon favIcon = new Icon(iconLeftX, iconTopY, addFavouriteIconImage, "Add to Favourites", false);
     Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
     Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "ImagePreviewScreen");
-    Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false);
+    Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_SwitchCameraView");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, favIcon, shakeIcon, shutterIcon, switchViewIcon};
@@ -63,5 +63,32 @@ public class CameraLiveViewScreen extends Screen{
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
     this.addBackgroundImage(ketaiCamera, appHeight, appWidth, cameraScale, cameraRotation);
+  }
+  
+  private void switchCameraView()
+  {
+    // If the camera is already running before we try and effect it
+    if (ketaiCamera.isStarted())
+    {
+      // Checking if the device has more than one camera. If it does we want to toggle between them
+      if(ketaiCamera.getNumberOfCameras() > 1)
+      {
+        // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
+        camNum = camNum == 0 ? 1 : 0;
+        
+        // Toggle the image rotation value between a plus and a minus i.e. -90 and 90
+        cameraRotation *= -1;
+        
+        // Toggling the scale of the camera image between 1 and -1 (depending on if the camera
+        // is front or rear facing (only on devices with more than one camera)
+        cameraScale *= -1;
+        
+        // Stopping the ketaiCamera so that no new frames will be read in, switching to the camera specified
+        // by the camNum, then restarting the camera
+        ketaiCamera.stop();
+        ketaiCamera.setCameraID(camNum);
+        ketaiCamera.start();
+      }
+    }
   }
 }

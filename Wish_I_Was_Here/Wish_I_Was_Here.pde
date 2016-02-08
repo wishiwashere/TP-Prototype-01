@@ -266,6 +266,9 @@ void switchScreens(){
       mySocialMediaLoginScreen.showScreen();
   } else if(currentScreen.equals("SocialMediaLogoutScreen")){
       mySocialMediaLogoutScreen.showScreen();
+  } else if(currentScreen.equals("_SwitchCameraView")){
+      myCameraLiveViewScreen.switchCameraView();
+      currentScreen = "CameraLiveViewScreen";
   }
 }
 
