@@ -76,8 +76,12 @@ SocialMediaLoginScreen mySocialMediaLoginScreen;
 SocialMediaLogoutScreen mySocialMediaLogoutScreen;
 
 void setup() {
+  // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
-  size(360, 640);
+  // size(360, 640);
+  
+  // ANDROID TESTING SETTINGS
+  fullScreen();
 
   // Initialising the appWidth and appHeight variable with the width and height of the device's
   // display, so that these values can be reused throughout all classes (i.e. to calculate
@@ -166,59 +170,42 @@ void switchScreens(){
   // clicked on etc) are called. Note - Each sub class of the Screen class
   // MUST have a showScreen() method (even if this method is only used to call
   // it's super class's (Screen) drawScreen() method
-  switch(currentScreen){
-    case "HomeScreen":
-      myHomeScreen.showScreen();
-      break;
-    case "CameraLiveViewScreen":
-      myCameraLiveViewScreen.showScreen();
-      break;
-    case "FavouritesScreen":
+  if(currentScreen.equals("HomeScreen")){
+    myHomeScreen.showScreen();
+  } else if(currentScreen.equals("CameraLiveViewScreen")){
+    myCameraLiveViewScreen.showScreen();
+  } else if(currentScreen.equals("FavouritesScreen")){
       myFavouritesScreen.showScreen();
-      break;
-    case "SettingsScreen":
+  } else if(currentScreen.equals("SettingsScreen")){
       mySettingsScreen.showScreen();
-      break;
-    case "AboutScreen":
+  } else if(currentScreen.equals("AboutScreen")){
       myAboutScreen.showScreen();
-      break;
-    case "SearchScreen":
+  } else if(currentScreen.equals("SearchScreen")){
       mySearchScreen.showScreen();
-      break;
-    case "SearchUnsuccessfulScreen":
+  } else if(currentScreen.equals("SearchUnsuccessfulScreen")){
       mySearchUnsuccessfulScreen.showScreen();
-      break;
-    case "ImagePreviewScreen":
+  } else if(currentScreen.equals("ImagePreviewScreen")){
       myImagePreviewScreen.showScreen();
-      break;
-    case "SaveShareScreenA":
+  } else if(currentScreen.equals("SaveShareScreenA")){
       mySaveShareScreenA.showScreen();
-      break;
-    case "SaveShareScreenB":
+  } else if(currentScreen.equals("SaveShareScreenB")){
       mySaveShareScreenB.showScreen();
-      break;
-    case "SharingScreen":
+  } else if(currentScreen.equals("SharingScreen")){
       mySharingScreen.showScreen();
       testingTimeoutScreen("ShareSaveSuccessfulScreen");
-      break;
-    case "ShareSaveSuccessfulScreen":
+  } else if(currentScreen.equals("ShareSaveSuccessfulScreen")){
       myShareSaveSuccessfulScreen.showScreen();
       testingTimeoutScreen("CameraLiveViewScreen");
-      break;
-    case "ShareUnsuccessfulScreen":
+  } else if(currentScreen.equals("ShareUnsuccessfulScreen")){
       myShareUnsuccessfulScreen.showScreen();
-      break;
-    case "ShareSaveUnsuccessfulScreen":
+  } else if(currentScreen.equals("ShareSaveUnsuccessfulScreen")){
       myShareSaveUnsuccessfulScreen.showScreen();
-      break;
-    case "SearchingScreen":
+  } else if(currentScreen.equals("SearchingScreen")){
       mySearchingScreen.showScreen();
       testingTimeoutScreen("CameraLiveViewScreen");
-      break;
-    case "SocialMediaLoginScreen":
+  } else if(currentScreen.equals("SocialMediaLoginScreen")){
       mySocialMediaLoginScreen.showScreen();
-      break;
-    case "SocialMediaLogoutScreen":
+  } else if(currentScreen.equals("SocialMediaLogoutScreen")){
       mySocialMediaLogoutScreen.showScreen();
   }
 }
