@@ -1,4 +1,14 @@
-import java.lang.reflect.Method;
+// Setting the default screen to be the HomeScreen, so that when the app is loaded,
+// this is the first screen that is displayed. Since this global variable is available
+// throughout the sketch (i.e. within all classes as well as the main sketch) we will
+// use this variable to pass in the value of "iconLinkTo" when the icon is clicked on
+// within the checkMouseOver() method of the Icon class. The variable will then be tested
+// against each of the potential screen names (in the main sketch's draw function) to
+// decide which sketch should have the showScreen() method called on it i.e. (which
+// screen should be displayed). 
+// FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
+// FORCE IT TO LOAD FIRST WHEN THE APP RUNS
+String currentScreen = "HomeScreen";
 
 // Declaring global variables, which will contain the width and height of the device's
 // display, so that these values can be reused throughout all classes (i.e. to calculate
@@ -43,18 +53,6 @@ float iconCenterY;
 // initialised in the setup() function of the app
 float defaultTextSize;
 
-// Setting the default screen to be the HomeScreen, so that when the app is loaded,
-// this is the first screen that is displayed. Since this global variable is available
-// throughout the sketch (i.e. within all classes as well as the main sketch) we will
-// use this variable to pass in the value of "iconLinkTo" when the icon is clicked on
-// within the checkMouseOver() method of the Icon class. The variable will then be tested
-// against each of the potential screen names (in the main sketch's draw function) to
-// decide which sketch should have the showScreen() method called on it i.e. (which
-// screen should be displayed). 
-// FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
-// FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "HomeScreen";
-
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
 HomeScreen myHomeScreen;
@@ -78,7 +76,7 @@ SocialMediaLogoutScreen mySocialMediaLogoutScreen;
 void setup() {
   // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
-  // size(360, 640);
+  //size(360, 640);
   
   // ANDROID TESTING SETTINGS
   fullScreen();
