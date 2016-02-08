@@ -32,7 +32,6 @@ PImage buttonImage;
 // Declaring the icon positioning X and Y variables, which will be used globally to ensure that
 // the icons on each page all line up with one another. These measurements are all based on percentages
 // of the app's display, and are initialised in the setup function of this sketch
-
 float iconLeftX;
 float iconRightX;
 float iconCenterX;
@@ -51,7 +50,9 @@ float defaultTextSize;
 // within the checkMouseOver() method of the Icon class. The variable will then be tested
 // against each of the potential screen names (in the main sketch's draw function) to
 // decide which sketch should have the showScreen() method called on it i.e. (which
-// screen should be displayed
+// screen should be displayed). 
+// FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
+// FORCE IT TO LOAD FIRST WHEN THE APP RUNS
 String currentScreen = "SocialMediaLogoutScreen";
 
 // Declaring a new instance of each screen in the application, so that they
@@ -198,6 +199,9 @@ void switchScreens(){
       mySharingScreen.showScreen();
       if(mousePressed)
       { 
+        // TESTING PURPOSES ONLY - THIS SCREEN HAS NO INTERACTION
+      // so needed a way to clear it from the screen until the
+      // code that normally would clear it is added
         currentScreen = "ShareSaveSuccessfulScreen";
         mousePressed = false;
       }
@@ -206,6 +210,9 @@ void switchScreens(){
       myShareSaveSuccessfulScreen.showScreen();
       if(mousePressed)
       { 
+        // TESTING PURPOSES ONLY - THIS SCREEN HAS NO INTERACTION
+        // so needed a way to clear it from the screen until the
+        // code that normally would clear it is added
         currentScreen = "CameraLiveViewScreen";
         mousePressed = false;
       }
@@ -220,6 +227,9 @@ void switchScreens(){
       mySearchingScreen.showScreen();
       if(mousePressed)
       { 
+        // TESTING PURPOSES ONLY - THIS SCREEN HAS NO INTERACTION
+        // so needed a way to clear it from the screen until the
+        // code that normally would clear it is added
         currentScreen = "CameraLiveViewScreen";
         mousePressed = false;
       }
