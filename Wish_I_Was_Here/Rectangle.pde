@@ -11,7 +11,7 @@ protected class Rectangle{
   private color rectCol = #FFFFFF;
   private float rectRotation;
   private PImage rectImage = null;
-  private PImage rectBackgroundImg = null;
+  public PImage rectBackgroundImg = null;
   private int rectBackgroundImgScaleX = 1;
   private int rectBackgroundImgRotate = 0;
 
@@ -305,5 +305,9 @@ protected class Rectangle{
     rectHeight = h;
     rectBackgroundImgScaleX =  scaleX;
     rectBackgroundImgRotate = rotate;
+  }
+  
+  public PImage getBackgroundImage(){
+    return rectBackgroundImg;
   }
 }

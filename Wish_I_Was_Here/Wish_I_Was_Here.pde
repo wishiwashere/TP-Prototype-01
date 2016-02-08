@@ -13,6 +13,8 @@ import ketai.camera.*;
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
 String currentScreen = "CameraLiveViewScreen";
 
+PImage saveThisImage;
+
   /*-------------------------------------- KetaiCamera ------------------------------------------------*/
   
 // Creating a global variable to store the ketaiCamera object, so that it can be
@@ -101,6 +103,10 @@ ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
 SearchingScreen mySearchingScreen;
 SocialMediaLoginScreen mySocialMediaLoginScreen;
 SocialMediaLogoutScreen mySocialMediaLogoutScreen;
+
+ /*-------------------------------------- Saving ------------------------------------------------*/
+ // Creating a string that will hold the directory path of where the images will be saved to
+String directory = "";
 
 void setup() {
   // PC TESTING SETTINGS
@@ -209,6 +215,12 @@ void setup() {
   mySearchingScreen = new SearchingScreen(#2023A5);
   mySocialMediaLoginScreen = new SocialMediaLoginScreen(#E88121);
   mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(#CEBD54);
+  
+  // Storing a string that tells the app where to store the images, by default 
+  // it goes to the pictures folder and this string as it has WishIWasHereApp 
+  // it is creating a folder in the picture folder of the device
+  directory = "./WishIWasHereApp";
+  ketaiCamera.setSaveDirectory(directory);
 }
 
 void draw() {
@@ -269,19 +281,47 @@ void switchScreens(){
   } else if(currentScreen.equals("_SwitchCameraView")){
       myCameraLiveViewScreen.switchCameraView();
       currentScreen = "CameraLiveViewScreen";
+  } else if(currentScreen.equals("_keepImage")){
+    keepImage();
+    currentScreen = "ImagePreviewScreen";
+  } else{
+    println("This screen doesn't exist");
   }
+  
   
   // Turning the camera on and off (if the current screen
   // is the camera live view, and the camera is  not yet turned
   // on, then start the camera, otherwise, if you are on any other screen,
   // stop the camera
-  if(currentScreen.equals("CameraLiveViewScreen")){
+  if(currentScreen.equals("CameraLiveViewScreen") || currentScreen.equals("ImagePreviewScreen")){
     if(!ketaiCamera.isStarted()){
       ketaiCamera.start();
     }
   }else if(ketaiCamera.isStarted()) {
-    ketaiCamera.stop();
+    //ketaiCamera.stop();
   }
+}
+
+void keepImage(){  
+  // Saving the current frame of the ketaiCamera and assigning it a name, and incrementing 
+  // number to ensure images are not overwritten and to allow for multiple images
+  // Also assigning an image format so the frame is saved as a jpeg to the users phone and 
+  // can be seen in their gallery under a folder title of Wish I Was Here App
+  ketaiCamera.savePhoto("WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg"); 
+  println("Trying to keep the image, but not fully saved yet");
+}
+
+// Calling the onSavePhotoEvent when a savePhoto gets called, this function adds it 
+// to the media lirary of the android device
+void onSavePhotoEvent(String filename)
+{
+  println("About to save");
+  ketaiCamera.addToMediaLibrary(filename);
+  // Printing out this line as it indicates whether this function is being 
+  // called and whether the image has actaully been saved to the directory / device
+  println("I saved!");
+  
+  currentScreen = "ImagePreviewScreen";
 }
 
 // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
