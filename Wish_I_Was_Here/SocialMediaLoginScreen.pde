@@ -21,8 +21,8 @@ public class SocialMediaLoginScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "CameraLiveViewScreen");
-    Icon loginIcon = new Icon(appWidth * 0.7, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Login", true, "CameraLiveViewScreen");
+    Icon cancelIcon = new Icon(appWidth * 0.3, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "CameraLiveViewScreen");
+    Icon loginIcon = new Icon(appWidth * 0.7, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Login", true, "Middle", "CameraLiveViewScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, loginIcon};

@@ -5,6 +5,7 @@ public class Icon extends Rectangle{
   private String iconLinkTo;
   private String iconTitle;
   private Boolean showIconTitle;
+  private String iconTitlePosition;
   
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   
@@ -16,7 +17,7 @@ public class Icon extends Rectangle{
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.2, appWidth * 0.2, img, title, showTitle, "");
+    this(x, y, appWidth * 0.2, appWidth * 0.2, img, title, showTitle, "Middle", "");
   }
   
   // This constructor is used by icons such as the homeIcon, that want to accept the default 
@@ -27,12 +28,23 @@ public class Icon extends Rectangle{
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.2, appWidth * 0.2, img, title, showTitle, linkTo);
+    this(x, y, appWidth * 0.2, appWidth * 0.2, img, title, showTitle, "Middle", linkTo);
+  }  
+  
+  // This constructor is used by icons such as the homeIcon, that want to accept the default 
+  // width and height of an icon, and also link to another page
+  public Icon(float x, float y, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo){
+    
+    // If no width or height specified, defaulting these to 15% of the screen width.
+    // If no link is specified, then defaulting this to an empty string.
+    // Then passing this default, along with the specified parametres, into the 
+    // full constructor of this class
+    this(x, y, appWidth * 0.2, appWidth * 0.2, img, title, showTitle, titlePosition, linkTo);
   }   
   
   // Full Constructor. Both of the above constructors both pass their values to this constructor, as
   // well as other icon's in the app that want to pass arguments for all of the specified values
-  public Icon(float x, float y, float w, float h, PImage img, String title, Boolean showTitle, String linkTo){
+  public Icon(float x, float y, float w, float h, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo){
     
     // Passing the relevant parametres from the constructor into the constructor 
     // of the super class (Rectangle)
@@ -54,6 +66,8 @@ public class Icon extends Rectangle{
     // will be used later to decide if this page's title will be displayed as a heading
     // on the page or not
     showIconTitle = showTitle;
+    
+    iconTitlePosition = titlePosition;
   }
   
   /*-------------------------------------- showIcon() ------------------------------------------------*/
@@ -72,7 +86,11 @@ public class Icon extends Rectangle{
       // the icon. Passing in the String containing the title for the icon, the current
       // x and y positions of the icon itself, and the font size (which is relative
       // to the icon's current height
-      this.addText(this.iconTitle, this.getX(), this.getY(), this.getWidth() * 0.20);
+      if(iconTitlePosition == "Middle"){
+        this.addText(this.iconTitle, this.getX(), this.getY(), this.getWidth() * 0.20);
+      }else if(iconTitlePosition == "Below"){
+        this.addText(this.iconTitle, this.getX(), this.getY() + (this.getHeight()*0.6), this.getWidth() * 0.20);
+      }
     }
   }
   
