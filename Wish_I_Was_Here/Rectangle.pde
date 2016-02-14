@@ -98,6 +98,8 @@ protected class Rectangle{
       // Setting the fill colour of the object to the value specified
       fill(rectCol);
       
+      noStroke();
+      
       // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
       // been applied to the rectangle, it will pivot around it's center point
       rectMode(CENTER);
@@ -274,9 +276,9 @@ protected class Rectangle{
   }
 
   protected void setY(float y){
-    if((y < appHeight/2) && (y > -appHeight * 0.75)){
+    //if((y < appHeight/2) && (y > -appHeight * 0.75)){
       rectY = y;
-    }
+    //}
   }
   
   // Get method that returns the instance's width

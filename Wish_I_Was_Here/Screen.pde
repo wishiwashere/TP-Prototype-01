@@ -58,7 +58,7 @@ protected class Screen extends Rectangle{
     // of the screenTitle is at least one character long
     if(screenTitle.length() > 0)
     {
-      this.addText(screenTitle, appWidth/2, appHeight * 0.08);
+      this.addText(screenTitle, appWidth/2, screenTitleY);
     }
     
     // Checking if this screen has any icons to be displayed

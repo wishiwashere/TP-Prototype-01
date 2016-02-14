@@ -84,6 +84,7 @@ float iconCenterY;
 float largeIconSize;
 float smallIconSize;
 float largeIconBottomY;
+float screenTitleY;
 
 // Declaring a global variable which will contain the default text size, which will be
 // initialised in the setup() function of the app
@@ -199,6 +200,7 @@ void setup() {
   largeIconSize = appWidth * 0.35;
   smallIconSize = appWidth * 0.15;
   largeIconBottomY = iconBottomY - (largeIconSize/2);
+  screenTitleY = appHeight * 0.08;
   
   // Initialising the defaultTextSize to be equal to a percentage of the app's current height
   defaultTextSize = appHeight * 0.04;

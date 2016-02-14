@@ -128,6 +128,7 @@ public class Icon extends Rectangle{
               // in the main sketch to determine which page to display)
               currentScreen = this.iconLinkTo;
               
+              screenTitleY = appHeight * 0.08;
               // Logging out what page the app will now be taken to
             }
             println("Going to " + this.iconLinkTo);
