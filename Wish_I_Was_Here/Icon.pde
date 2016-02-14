@@ -17,7 +17,7 @@ public class Icon extends Rectangle{
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.2, appWidth * 0.2, img, title, showTitle, "Middle", "");
+    this(x, y, smallIconSize, smallIconSize, img, title, showTitle, "Middle", "");
   }
   
   // This constructor is used by icons such as the homeIcon, that want to accept the default 
@@ -28,7 +28,7 @@ public class Icon extends Rectangle{
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.2, appWidth * 0.2, img, title, showTitle, "Middle", linkTo);
+    this(x, y, smallIconSize, smallIconSize, img, title, showTitle, "Middle", linkTo);
   }  
   
   // This constructor is used by icons such as the homeIcon, that want to accept the default 
@@ -39,7 +39,7 @@ public class Icon extends Rectangle{
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.2, appWidth * 0.2, img, title, showTitle, titlePosition, linkTo);
+    this(x, y, smallIconSize, smallIconSize, img, title, showTitle, titlePosition, linkTo);
   }   
   
   // Full Constructor. Both of the above constructors both pass their values to this constructor, as

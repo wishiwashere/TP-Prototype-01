@@ -18,11 +18,11 @@ public class HomeScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon searchTravelIcon = new Icon(appWidth * 0.3, appHeight * 0.2, squareIconSize, squareIconSize, searchPageIconImage, "Search", true, "Below", "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.7, appHeight * 0.2, squareIconSize, squareIconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
-    Icon myFavouritesIcon = new Icon(appWidth * 0.3, appHeight * 0.5, squareIconSize, squareIconSize, favouritesPageIconImage, "My Favourites", true, "Below", "FavouritesScreen");
-    Icon aboutIcon = new Icon(appWidth * 0.7, appHeight * 0.5, squareIconSize, squareIconSize, aboutPageIconImage, "About", true, "Below", "AboutScreen");
-    Icon settingsIcon = new Icon(appWidth * 0.5, appHeight * 0.8, squareIconSize, squareIconSize, settingsPageIconImage, "Settings", true, "Below", "SettingsScreen");
+    Icon searchTravelIcon = new Icon(appWidth * 0.3, appHeight * 0.2, largeIconSize, largeIconSize, searchPageIconImage, "Search", true, "Below", "SearchScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.7, appHeight * 0.2, largeIconSize, largeIconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
+    Icon myFavouritesIcon = new Icon(appWidth * 0.3, appHeight * 0.5, largeIconSize, largeIconSize, favouritesPageIconImage, "My Favourites", true, "Below", "FavouritesScreen");
+    Icon aboutIcon = new Icon(appWidth * 0.7, appHeight * 0.5, largeIconSize, largeIconSize, aboutPageIconImage, "About", true, "Below", "AboutScreen");
+    Icon settingsIcon = new Icon(appWidth * 0.5, appHeight * 0.8, largeIconSize, largeIconSize, settingsPageIconImage, "Settings", true, "Below", "SettingsScreen");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {randomTravelIcon, searchTravelIcon, myFavouritesIcon, aboutIcon, settingsIcon};
