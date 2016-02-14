@@ -1,7 +1,7 @@
 public class AboutScreen extends Screen{
   
   String aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus, turpis sit amet condimentum gravida, est quam bibendum purus, ac efficitur lectus justo in tortor. Phasellus et interdum mi.";
-    
+  Icon[] pageIcons;
   float previousY = 0; 
   
   // Creating a public constructor for the AboutScreen class, so that
@@ -31,6 +31,7 @@ public class AboutScreen extends Screen{
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, facebookIcon, twitterIcon, instagramIcon, emailIcon};
+    pageIcons = allIcons;
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
@@ -38,7 +39,7 @@ public class AboutScreen extends Screen{
     // class (such as showIcon and checkMouseOver) can be called on them from within this array. 
     // This reduces the need for each screen to have to loop through it's icons, or call the 
     // same method on multiple icons.
-    //this.setScreenIcons(allIcons);
+    this.setScreenIcons(allIcons);
     
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
@@ -67,10 +68,14 @@ public class AboutScreen extends Screen{
     // Checking if the page is being scrolled
     if(mousePressed){
       float amountScrolled = dist(0, previousMouseY, 0, mouseY);
-      if(previousMouseY > mouseY){
-        this.setY(this.getY() - amountScrolled);
-      } else {
-        this.setY(this.getY() + amountScrolled);
+      for(int i = 0; i < pageIcons.length; i++){
+        if(previousMouseY > mouseY){
+          pageIcons[i].setY(pageIcons[i].getY() - amountScrolled);
+          this.setY(this.getY() - amountScrolled);
+        } else {
+          pageIcons[i].setY(pageIcons[i].getY() + amountScrolled);
+          this.setY(this.getY() + amountScrolled);
+        }
       }
       previousMouseY = mouseY;
     }
