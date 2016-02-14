@@ -41,6 +41,10 @@ protected class Screen extends Rectangle{
     super(col);
   }
   
+  protected Screen(float x, float y, float w, float h, color col){
+    super(x, y, w, h, col);
+  }
+  
   /*-------------------------------------- drawScreen() ------------------------------------------------*/
    
   // Creating a public method so that this screen can be displayed from

@@ -2,6 +2,8 @@ public class AboutScreen extends Screen{
   
   String aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus, turpis sit amet condimentum gravida, est quam bibendum purus, ac efficitur lectus justo in tortor. Phasellus et interdum mi.";
     
+  float previousY = 0; 
+  
   // Creating a public constructor for the AboutScreen class, so that
   // an instance of it can be declared in the main sketch
   public AboutScreen(color col){
@@ -9,7 +11,7 @@ public class AboutScreen extends Screen{
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
-    super(col);
+    super(appWidth/2, appHeight/2, appWidth, appHeight * 2, col);
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -36,7 +38,7 @@ public class AboutScreen extends Screen{
     // class (such as showIcon and checkMouseOver) can be called on them from within this array. 
     // This reduces the need for each screen to have to loop through it's icons, or call the 
     // same method on multiple icons.
-    this.setScreenIcons(allIcons);
+    //this.setScreenIcons(allIcons);
     
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
@@ -54,12 +56,23 @@ public class AboutScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addImage(loadImage("placeholder.PNG"), appWidth/2, appHeight * 0.3, appWidth * 0.8, appHeight * 0.2);
+    this.addImage(loadImage("placeholder.PNG"), appWidth/2, this.getY() + (appHeight * -0.25), appWidth * 0.8, appHeight * 0.2);
     
     rectMode(CORNER);
     textAlign(LEFT);
     textSize(appWidth * 0.05);
    
-    text(aboutText, appWidth * 0.1, appHeight * 0.5, appWidth * 0.8, appHeight * 0.9);
+    text(aboutText, appWidth * 0.1, this.getY()  + (appHeight * -0.1), appWidth * 0.8, appHeight * 0.9);
+    
+    // Checking if the page is being scrolled
+    if(mousePressed){
+      float amountScrolled = dist(0, previousMouseY, 0, mouseY);
+      if(previousMouseY > mouseY){
+        this.setY(this.getY() - amountScrolled);
+      } else {
+        this.setY(this.getY() + amountScrolled);
+      }
+      previousMouseY = mouseY;
+    }
   }
 }

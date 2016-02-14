@@ -39,6 +39,8 @@ int cameraScale = -1;
 // Initialising at -90 degrees, as we will be starting on the front facing camera
 int cameraRotation = -90;
 
+float previousMouseY;
+
   /*-------------------------------------- Sizing ------------------------------------------------*/
   
 // Declaring global variables, which will contain the width and height of the device's
@@ -356,4 +358,8 @@ void onCameraPreviewEvent()
 {
   // Reading in a new frame from the ketaiCamera.
   //ketaiCamera.read();
+}
+
+void mousePressed(){
+  previousMouseY = mouseY;
 }

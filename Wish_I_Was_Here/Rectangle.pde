@@ -272,6 +272,12 @@ protected class Rectangle{
   protected float getY(){
     return rectY;
   }
+
+  protected void setY(float y){
+    if((y < appHeight/2) && (y > -appHeight * 0.75)){
+      rectY = y;
+    }
+  }
   
   // Get method that returns the instance's width
   protected float getWidth(){
