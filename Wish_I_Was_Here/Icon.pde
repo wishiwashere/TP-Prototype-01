@@ -116,13 +116,21 @@ public class Icon extends Rectangle{
           // Checking if this icon has a link associated with it
           if(this.iconLinkTo.length() > 0)
           {
-            // Setting the global currentScreen variable to be equal to the link
-            // contained within the icon that was clicked on (so it can be used
-            // in the main sketch to determine which page to display)
-            currentScreen = this.iconLinkTo;
-            
-            // Logging out what page the app will now be taken to
-            println("Going to page " + this.iconLinkTo);
+            // Checking if the iconTitle is equal to any of the 4 external hyperlinks
+            if(this.iconTitle.equals("Facebook") || this.iconTitle.equals("Twitter") || this.iconTitle.equals("Instagram") || this.iconTitle.equals("Email"))
+            {
+              // Passing the icon's link into the link() method, so that it can be treated as 
+              // an external link i.e. to a website
+              link(this.iconLinkTo);
+            } else {
+              // Setting the global currentScreen variable to be equal to the link
+              // contained within the icon that was clicked on (so it can be used
+              // in the main sketch to determine which page to display)
+              currentScreen = this.iconLinkTo;
+              
+              // Logging out what page the app will now be taken to
+            }
+            println("Going to " + this.iconLinkTo);
           }
           
           // Setting mousePressed back to false, so that if the user still has their

@@ -11,7 +11,7 @@ import ketai.camera.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "HomeScreen";
+String currentScreen = "AboutScreen";
 
 PImage saveThisImage;
 
@@ -297,7 +297,7 @@ void switchScreens(){
       myLoadingScreen.showScreen();
       testingTimeoutScreen("HomeScreen");
   } else{
-    println("This screen doesn't exist");
+    //println("This screen doesn't exist");
   }
   
   

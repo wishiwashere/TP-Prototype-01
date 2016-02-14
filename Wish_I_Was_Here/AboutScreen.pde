@@ -1,4 +1,6 @@
 public class AboutScreen extends Screen{
+  
+  String aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus, turpis sit amet condimentum gravida, est quam bibendum purus, ac efficitur lectus justo in tortor. Phasellus et interdum mi.";
     
   // Creating a public constructor for the AboutScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -19,10 +21,14 @@ public class AboutScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
+    Icon facebookIcon = new Icon(appWidth * 0.2, iconBottomY, loadImage("placeholder.PNG"), "Facebook", false, "https://www.facebook.com/wishiwashereapp");
+    Icon twitterIcon = new Icon(appWidth * 0.4, iconBottomY, loadImage("placeholder.PNG"), "Twitter", false, "https://twitter.com/wishiwashere");
+    Icon instagramIcon = new Icon(appWidth * 0.6, iconBottomY, loadImage("placeholder.PNG"), "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
+    Icon emailIcon = new Icon(appWidth * 0.8, iconBottomY, loadImage("placeholder.PNG"), "Email", false, "mailto:wishiwashere.thenopayholiday@gmail.com");
    
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {homeIcon};
+    Icon[] allIcons = {homeIcon, facebookIcon, twitterIcon, instagramIcon, emailIcon};
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
@@ -47,5 +53,13 @@ public class AboutScreen extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    this.addImage(loadImage("placeholder.PNG"), appWidth/2, appHeight * 0.3, appWidth * 0.8, appHeight * 0.2);
+    
+    rectMode(CORNER);
+    textAlign(LEFT);
+    textSize(appWidth * 0.05);
+   
+    text(aboutText, appWidth * 0.1, appHeight * 0.5, appWidth * 0.8, appHeight * 0.9);
   }
 }
