@@ -19,9 +19,9 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon retryIcon = new Icon(iconCenterX, squareIconBottomY * 0.9, retryIconImage, "Retry Sending", false, "SharingScreen");
-    Icon deleteIcon = new Icon(iconLeftX, squareIconBottomY, deleteIconImage, "Delete Image", false, "CameraLiveViewScreen");
-    Icon saveIcon = new Icon(iconRightX, squareIconBottomY, saveIconImage, "Save Image", false, "ShareSaveSuccessfulScreen");
+    Icon retryIcon = new Icon(iconCenterX, largeIconBottomY * 0.9, retryIconImage, "Retry Sending", false, "SharingScreen");
+    Icon deleteIcon = new Icon(iconLeftX, largeIconBottomY, deleteIconImage, "Delete Image", false, "CameraLiveViewScreen");
+    Icon saveIcon = new Icon(iconRightX, largeIconBottomY, saveIconImage, "Save Image", false, "ShareSaveSuccessfulScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {retryIcon, deleteIcon, saveIcon};
