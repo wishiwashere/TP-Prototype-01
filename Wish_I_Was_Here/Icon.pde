@@ -116,8 +116,8 @@ public class Icon extends Rectangle{
           // Checking if this icon has a link associated with it
           if(this.iconLinkTo.length() > 0)
           {
-            // Checking if the iconTitle is equal to any of the 4 external hyperlinks
-            if(this.iconTitle.equals("Facebook") || this.iconTitle.equals("Twitter") || this.iconTitle.equals("Instagram") || this.iconTitle.equals("Email"))
+            // Checking if the iconTitle contains "http" i.e. if it is an external link
+            if(this.iconLinkTo.indexOf("http") > -1)
             {
               // Passing the icon's link into the link() method, so that it can be treated as 
               // an external link i.e. to a website
