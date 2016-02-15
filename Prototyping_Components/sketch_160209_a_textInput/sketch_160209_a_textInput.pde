@@ -9,48 +9,28 @@ import ketai.net.wifidirect.*;
 import ketai.sensors.*;
 import ketai.ui.*;
 
-import controlP5.*;
+//import controlP5.*;
 
-ControlP5 cp5;
+//ControlP5 cp5;
 
 String myText = "";
-String textValue = "";
+//String textValue = "";
 
 void setup() {
-  size(700,400);
+  fullScreen();
   
   //PFont font = createFont("arial",20);
   
-  cp5 = new ControlP5(this);
+  //cp5 = new ControlP5(this);
  
                  
-  cp5.addTextfield("textValue")
-     .setPosition(20,20)
-     .setSize(200,40)
-    // .setFont(createFont("arial",20))
-     .setAutoClear(false)
-     ;
+  //cp5.addTextfield("textValue").setPosition(20,20).setSize(200,40).setFont(createFont("arial",20)).setAutoClear(false);
    
-   cp5.addTextfield("password")
-     .setPosition(20,80)
-     .setSize(200,40)
-    // .setFont(createFont("arial",20))
-     .setAutoClear(false)
-     .setPasswordMode(true)
-     ;
+   //cp5.addTextfield("password").setPosition(20,80).setSize(200,40).setFont(createFont("arial",20)).setAutoClear(false).setPasswordMode(true);
        
-  cp5.addBang("clear")
-     .setPosition(300,80)
-     .setSize(80,40)
-     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-     ;    
+  //cp5.addBang("clear").setPosition(300,80).setSize(80,40).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);    
   
-  cp5.addBang("enter")
-     .setPosition(300,20)
-     .setSize(80,40)
-     .getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER)
-     
-     ;   
+  //cp5.addBang("enter").setPosition(300,20).setSize(80,40).getCaptionLabel().align(ControlP5.CENTER, ControlP5.CENTER);   
  /* cp5.addTextfield("default")
      .setPosition(20,350)
      .setAutoClear(false)
@@ -63,21 +43,26 @@ void setup() {
 void draw() {
   background(0);
   fill(255);
+  textSize(width * 0.1);
+  textAlign(CENTER, CENTER);
+  text(myText, width/2, height/2);
   //text(textValue, 360,180);
-  cp5.get(Textfield.class,"textValue").submit();
-  cp5.get(Textfield.class,"password").submit();
+  //cp5.get(Textfield.class,"textValue").submit();
+  //cp5.get(Textfield.class,"password").submit();
 }
 
 public void clear() {
-  cp5.get(Textfield.class,"textValue").clear();
-  cp5.get(Textfield.class,"password").clear();
+  //cp5.get(Textfield.class,"textValue").clear();
+  //cp5.get(Textfield.class,"password").clear();
 }
 
+/*
 void controlEvent(ControlEvent theEvent) {
   if(theEvent.isAssignableFrom(Textfield.class)) {
     //println("controlEvent: accessing a string from controller '" + theEvent.getName()+"': " + theEvent.getStringValue());
   }
 }
+*/
 
 
 public void input(String theText) {
@@ -95,8 +80,10 @@ void keyPressed(){
   // Checking if the key pressed is a coded value i.e. backspace etc
   if(key == CODED){
     //println(key);
-    // Checking if the key pressed was the backspace key
-    if(keyCode == 67)
+    // Checking if the key pressed was the backspace key, and that the length of the
+    // current myText string is greater than 0 (i.e. if the string is empty, don't try
+    // to delete anything)
+    if(keyCode == 67 && myText.length() > 0)
     {
       println("BACKSPACE");
       // Removing the last character from myText string, by creating a substring
