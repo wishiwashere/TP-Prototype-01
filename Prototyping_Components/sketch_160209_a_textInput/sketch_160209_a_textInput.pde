@@ -14,6 +14,7 @@ import ketai.ui.*;
 //ControlP5 cp5;
 
 String myText = "";
+String textWarning = "";
 //String textValue = "";
 
 void setup() {
@@ -42,25 +43,41 @@ void setup() {
 
 void draw() {
   background(0);
-  fill(255);
-  textSize(width * 0.1);
-  textAlign(CENTER, CENTER);
-  
+   
   // Creating a temporary string to store the **** for the password (i.e. we do not want
   // to display the user's password, we just want to reflect the length of it in terms
   // of * stars *
   String passwordStars = "";
   
   // Looping through the length of the myText string, to determine how many stars should
-  // be displayed for the current password length
+  // be displayed for the current password length, and allowing just the last letter to be
+  // displayed
   for(int i = 0; i < myText.length(); i++){
-    passwordStars += "*";
+    // Creating a temporary variable for the index position of the last character in myText
+    // string
+    int lastLetter = myText.length() - 1;
+    
+    // Checking if the current loop has reached the last letter in the myText string
+    if(i == lastLetter){
+      // Since this is the last letter in the string, we want to display it with the 
+      // preceeing stars i.e. so the user can always see the most recent character
+      // they have entered
+      passwordStars += myText.charAt(lastLetter);
+    } else {
+      // Add a star in place of this character
+      passwordStars += "*";
+    }
   }
+  
+  fill(255);
+  textSize(width * 0.1);
+  textAlign(CENTER, CENTER);
   
   // Adding the user input text and the password stars to the sketch, so we can see that the
   // length always matches
   text(myText, width/2, height * 0.2);
   text(passwordStars, width/2, height * 0.5);
+  
   //text(textValue, 360,180);
   //cp5.get(Textfield.class,"textValue").submit();
   //cp5.get(Textfield.class,"password").submit();
@@ -96,15 +113,17 @@ void keyPressed(){
   // Checking if the key pressed is a coded value i.e. backspace etc
   if(key == CODED){
     //println(key);
-    // Checking if the key pressed was the backspace key, and that the length of the
-    // current myText string is greater than 0 (i.e. if the string is empty, don't try
-    // to delete anything)
-    if(keyCode == 67 && myText.length() > 0)
+    // Checking if the key pressed was the backspace key
+    if(keyCode == 67)
     {
-      println("BACKSPACE");
-      // Removing the last character from myText string, by creating a substring
-      // of myText, that is one shorter than the current myText string
-      myText = myText.substring(0, myText.length() - 1);
+      // Checking that the length of the current myText string is greater than 0 (i.e. 
+      // if the string is empty, don't try to delete anything)
+      if(myText.length() > 0){
+        println("BACKSPACE");
+        // Removing the last character from myText string, by creating a substring
+        // of myText, that is one shorter than the current myText string
+        myText = myText.substring(0, myText.length() - 1);
+      }
     }
   } else {
     // If the key is not a coded value, adding the character to myText string
