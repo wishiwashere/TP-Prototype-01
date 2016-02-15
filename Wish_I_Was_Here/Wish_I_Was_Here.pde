@@ -11,9 +11,9 @@ import ketai.camera.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "AboutScreen";
+String currentScreen = "CameraLiveViewScreen";
 
-PImage saveThisImage;
+PImage currentImage;
 
   /*-------------------------------------- KetaiCamera ------------------------------------------------*/
   
@@ -138,7 +138,8 @@ void setup() {
   
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
-  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
+  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 12);
+  frameRate(12);
   
   // Printing out the list of available cameras i.e. front/rear facing
   println(ketaiCamera.list());
@@ -187,6 +188,7 @@ void setup() {
   twitterAccountIconImage = loadImage("iconPlaceholder.png");
   instagramAccountIconImage = loadImage("iconPlaceholder.png");
   buttonImage = loadImage("buttonImage.png");
+  currentImage = loadImage("placeholder.PNG");
 
   // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
   // the icons on each page all line up with one another. These measurements are all based on percentages
@@ -294,8 +296,8 @@ void switchScreens(){
   } else if(currentScreen.equals("_SwitchCameraView")){
       myCameraLiveViewScreen.switchCameraView();
       currentScreen = "CameraLiveViewScreen";
-  } else if(currentScreen.equals("_keepImage")){
-    keepImage();
+  } else if(currentScreen.equals("_mergeImages")){
+    mergeImages();
     currentScreen = "ImagePreviewScreen";
   } else if(currentScreen.equals("LoadingScreen")){
       myLoadingScreen.showScreen();
@@ -318,6 +320,26 @@ void switchScreens(){
   }else if(ketaiCamera.isStarted()) {
     //ketaiCamera.stop();
   }
+}
+
+void mergeImages(){
+  ketaiCamera.loadPixels();
+  currentImage.loadPixels();
+  for(int x = 0; x < ketaiCamera.width; x++)
+  {
+    for(int y = 0; y < 50; y++)
+    {
+      int currentPixel = x + y * ketaiCamera.width;
+      
+      ketaiCamera.pixels[currentPixel] = currentImage.get(x, y);
+      
+      if(x == ketaiCamera.width - 1 && y == 49){
+        keepImage();
+      }
+    }
+  }
+  currentImage.updatePixels();
+  ketaiCamera.updatePixels();
 }
 
 void keepImage(){  
@@ -360,8 +382,26 @@ void onCameraPreviewEvent()
 {
   // Reading in a new frame from the ketaiCamera.
   ketaiCamera.read();
+  currentImage = ketaiCamera.get();
+  manipulatePixels();
 }
 
 void mousePressed(){
   previousMouseY = mouseY;
+}
+
+void manipulatePixels(){
+  currentImage.loadPixels();
+  for(int x = 0; x < currentImage.width; x++)
+  {
+    for(int y = 0; y < 50; y++)
+    {
+      int currentPixel = x + y * currentImage.width;
+      
+      currentImage.pixels[currentPixel] = color(#0000FF);
+    }
+  }
+  currentImage.updatePixels();
+  
+  //ketaiCamera = currentImage.get(0, 0, 100, 100);
 }

@@ -58,6 +58,7 @@ protected class Screen extends Rectangle{
     // of the screenTitle is at least one character long
     if(screenTitle.length() > 0)
     {
+      fill(0);
       this.addText(screenTitle, appWidth/2, screenTitleY);
     }
     
