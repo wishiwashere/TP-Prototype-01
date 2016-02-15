@@ -91,6 +91,10 @@ protected class Screen extends Rectangle{
     screenTitle = title;
   }
   
+  protected Icon[] getScreenIcons(){
+    return screenIcons;
+  }
+  
   protected void setScreenIcons(Icon[] icons){
     // Initialising the screenIcons array with the contents from the allIcons
     // array that each screen will pass in

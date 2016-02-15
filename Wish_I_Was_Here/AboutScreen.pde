@@ -1,8 +1,7 @@
 public class AboutScreen extends Screen{
-  
-  String aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus, turpis sit amet condimentum gravida, est quam bibendum purus, ac efficitur lectus justo in tortor. Phasellus et interdum mi.";
-  Icon[] pageIcons;
-  float previousY = 0; 
+  private String aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus, turpis sit amet condimentum gravida, est quam bibendum purus, ac efficitur lectus justo in tortor. Phasellus et interdum mi.";
+  private Icon[] pageIcons;
+  public Boolean loaded = false;
   
   // Creating a public constructor for the AboutScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -51,6 +50,22 @@ public class AboutScreen extends Screen{
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen(){
+    if(!loaded){
+      // Resetting the position values of the element so on the screen every time the page is opened,
+      // so that if a user leaves the screen half scrolled, it will still be reset upon their return
+      this.setY(appHeight/2);
+      this.getScreenIcons()[0].setY(iconTopY);
+      this.getScreenIcons()[1].setY(iconBottomY);
+      this.getScreenIcons()[2].setY(iconBottomY);
+      this.getScreenIcons()[3].setY(iconBottomY);
+      this.getScreenIcons()[4].setY(iconBottomY);
+      
+      // Setting loaded to true, so that this block of code will only run once (each time this page
+      // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
+      // when an icon that links to another page has been clicked.
+      loaded = true;
+      println("firstLoad");
+    }
     
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
@@ -75,17 +90,19 @@ public class AboutScreen extends Screen{
       // while the person is still moving their hand (and not just after they release the screen)
       float amountScrolled = dist(0, previousMouseY, 0, mouseY);
       
+      Icon[] icons = this.getScreenIcons();
+      
       // Looping through each of the page icons, which are only being stored in an array within
       // this class so that they can be looped through to be repositioned (i.e. in every other
       // screen, these icons would be stored only in the super class, and not directly accessible
       // within the individual screen classes
-      for(int i = 0; i < pageIcons.length; i++){
+      for(int i = 0; i < icons.length; i++){
         // Checking which direction the user scrolled
         if(previousMouseY > mouseY){
           // The user has scrolled UP
           // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
           // moving the icon up the screen
-          pageIcons[i].setY(pageIcons[i].getY() - amountScrolled);
+          icons[i].setY(icons[i].getY() - amountScrolled);
         } else {
           // The user has scrolled DOWN
           // Checking if the screen's y position is less than or equal to half of the height i.e. is 
@@ -93,7 +110,7 @@ public class AboutScreen extends Screen{
           if(this.getY() <= appHeight/2){
             // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
             // moving the icon down the screen
-            pageIcons[i].setY(pageIcons[i].getY() + amountScrolled);
+            icons[i].setY(icons[i].getY() + amountScrolled);
           }
         }
       }

@@ -119,18 +119,26 @@ public class Icon extends Rectangle{
             // Checking if the iconTitle contains "http" i.e. if it is an external link
             if(this.iconLinkTo.indexOf("http") > -1)
             {
+              // This is an EXTERNAL link
               // Passing the icon's link into the link() method, so that it can be treated as 
               // an external link i.e. to a website
               link(this.iconLinkTo);
             } else {
+              // This is an INTERNAL link
               // Setting the global currentScreen variable to be equal to the link
               // contained within the icon that was clicked on (so it can be used
               // in the main sketch to determine which page to display)
               currentScreen = this.iconLinkTo;
               
+              // Resets required for the About Screen.
+              // Resetting teh screenTitleY position to it's original value (as it may have been
+              // incremented if the about screen was scrolled
               screenTitleY = appHeight * 0.08;
-              // Logging out what page the app will now be taken to
+              // Resetting the about screen's loaded value to false, so that the next time it is opened
+              // it will reset to it's original positions
+              myAboutScreen.loaded = false;
             }
+            // Logging out what page the app will now be taken to
             println("Going to " + this.iconLinkTo);
           }
           
