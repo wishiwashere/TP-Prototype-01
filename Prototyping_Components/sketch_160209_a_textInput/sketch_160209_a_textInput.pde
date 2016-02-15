@@ -45,7 +45,22 @@ void draw() {
   fill(255);
   textSize(width * 0.1);
   textAlign(CENTER, CENTER);
-  text(myText, width/2, height/2);
+  
+  // Creating a temporary string to store the **** for the password (i.e. we do not want
+  // to display the user's password, we just want to reflect the length of it in terms
+  // of * stars *
+  String passwordStars = "";
+  
+  // Looping through the length of the myText string, to determine how many stars should
+  // be displayed for the current password length
+  for(int i = 0; i < myText.length(); i++){
+    passwordStars += "*";
+  }
+  
+  // Adding the user input text and the password stars to the sketch, so we can see that the
+  // length always matches
+  text(myText, width/2, height * 0.2);
+  text(passwordStars, width/2, height * 0.5);
   //text(textValue, 360,180);
   //cp5.get(Textfield.class,"textValue").submit();
   //cp5.get(Textfield.class,"password").submit();
@@ -72,6 +87,7 @@ public void input(String theText) {
 
 
 void mousePressed(){
+  // Triggering the device's keyboard to be displayed/hidden
  KetaiKeyboard.toggle(this);
 }
 
