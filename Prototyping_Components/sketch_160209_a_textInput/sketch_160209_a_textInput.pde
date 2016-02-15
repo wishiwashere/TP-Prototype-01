@@ -1,4 +1,4 @@
-/*import ketai.camera.*;
+import ketai.camera.*;
 import ketai.cv.facedetector.*;
 import ketai.data.*;
 import ketai.net.*;
@@ -7,18 +7,19 @@ import ketai.net.nfc.*;
 import ketai.net.nfc.record.*;
 import ketai.net.wifidirect.*;
 import ketai.sensors.*;
-import ketai.ui.*;*/
+import ketai.ui.*;
 
 import controlP5.*;
 
 ControlP5 cp5;
 
+String myText = "";
 String textValue = "";
 
 void setup() {
   size(700,400);
   
-  PFont font = createFont("arial",20);
+  //PFont font = createFont("arial",20);
   
   cp5 = new ControlP5(this);
  
@@ -56,7 +57,7 @@ void setup() {
      ;
  */
      
-  textFont(font);
+  //textFont(font);
 }
 
 void draw() {
@@ -74,26 +75,41 @@ public void clear() {
 
 void controlEvent(ControlEvent theEvent) {
   if(theEvent.isAssignableFrom(Textfield.class)) {
-    println("controlEvent: accessing a string from controller '"
-            +theEvent.getName()+"': "
-            +theEvent.getStringValue()
-            );
+    //println("controlEvent: accessing a string from controller '" + theEvent.getName()+"': " + theEvent.getStringValue());
   }
 }
 
 
 public void input(String theText) {
   // automatically receives results from controller input
-  println("a textfield event for controller 'input' : "+theText);
+  //println("a textfield event for controller 'input' : "+theText);
 }
 
 
-/*void mousePressed(){
+void mousePressed(){
  KetaiKeyboard.toggle(this);
-}*/
+}
 
+// Listening for keypresses on our soft keyboard (i.e. ketaiKeyboard)
 void keyPressed(){
-  println("Text is being typed !");
+  // Checking if the key pressed is a coded value i.e. backspace etc
+  if(key == CODED){
+    //println(key);
+    // Checking if the key pressed was the backspace key
+    if(keyCode == 67)
+    {
+      println("BACKSPACE");
+      // Removing the last character from myText string, by creating a substring
+      // of myText, that is one shorter than the current myText string
+      myText = myText.substring(0, myText.length() - 1);
+    }
+  } else {
+    // If the key is not a coded value, adding the character to myText string
+    myText += key;
+  }
+  // Logging out the current value of myText string
+  println(myText);
+  //println("Text is being typed !");
 }
 
 
