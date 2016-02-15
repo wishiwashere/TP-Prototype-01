@@ -56,12 +56,11 @@ public class CameraLiveViewScreen extends Screen{
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
-    //this.addBackgroundImage(ketaiCamera, appHeight, appWidth, cameraScale, cameraRotation);
+    this.addBackgroundImage(ketaiCamera, appHeight, appWidth, cameraScale, cameraRotation);
   }
   
   private void switchCameraView()
   {
-    /*
     // If the camera is already running before we try and effect it
     if (ketaiCamera.isStarted())
     {
@@ -85,6 +84,5 @@ public class CameraLiveViewScreen extends Screen{
         ketaiCamera.start();
       }
     }
-    */
   }
 }

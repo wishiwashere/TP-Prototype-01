@@ -20,7 +20,7 @@ PImage saveThisImage;
 // Creating a global variable to store the ketaiCamera object, so that it can be
 // accessed thoroughout the sketch once it has been initiated i.e. to read in,
 // display and eventually alter the live stream images
-//KetaiCamera ketaiCamera;
+KetaiCamera ketaiCamera;
 
 // Creating a global variable to store the number of the camera we want to view
 // at any given time. The front facing camera (on a device with more than one camera)
@@ -138,17 +138,17 @@ void setup() {
   
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
-  //ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
+  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
   
   // Printing out the list of available cameras i.e. front/rear facing
-  //println(ketaiCamera.list());
+  println(ketaiCamera.list());
   
   // Printing out the number of availabe cameras
-  //println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
+  println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
   
   // Check if the device has more than one camera i.e. does it have a front
   // and a rear facing camera?
-  /*
+  
   if(ketaiCamera.getNumberOfCameras() > 1)
   {
     // If there is more than one camera, then default to the front camera
@@ -164,7 +164,7 @@ void setup() {
   
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
-  */
+  
   // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
   // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
   // reused on multiple pages
@@ -233,7 +233,7 @@ void setup() {
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
   directory = "./WishIWasHereApp";
-  //ketaiCamera.setSaveDirectory(directory);
+  ketaiCamera.setSaveDirectory(directory);
 }
 
 void draw() {
@@ -309,7 +309,8 @@ void switchScreens(){
   // is the camera live view, and the camera is  not yet turned
   // on, then start the camera, otherwise, if you are on any other screen,
   // stop the camera
-  /*
+  
+  
   if(currentScreen.equals("CameraLiveViewScreen") || currentScreen.equals("ImagePreviewScreen")){
     if(!ketaiCamera.isStarted()){
       ketaiCamera.start();
@@ -317,7 +318,6 @@ void switchScreens(){
   }else if(ketaiCamera.isStarted()) {
     //ketaiCamera.stop();
   }
-  */
 }
 
 void keepImage(){  
@@ -325,7 +325,7 @@ void keepImage(){
   // number to ensure images are not overwritten and to allow for multiple images
   // Also assigning an image format so the frame is saved as a jpeg to the users phone and 
   // can be seen in their gallery under a folder title of Wish I Was Here App
-  //ketaiCamera.savePhoto("WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg"); 
+  ketaiCamera.savePhoto("WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg"); 
   println("Trying to keep the image, but not fully saved yet");
 }
 
@@ -334,7 +334,7 @@ void keepImage(){
 void onSavePhotoEvent(String filename)
 {
   println("About to save");
-  //ketaiCamera.addToMediaLibrary(filename);
+  ketaiCamera.addToMediaLibrary(filename);
   // Printing out this line as it indicates whether this function is being 
   // called and whether the image has actaully been saved to the directory / device
   println("I saved!");
@@ -359,7 +359,7 @@ void testingTimeoutScreen(String fadeToScreen){
 void onCameraPreviewEvent()
 {
   // Reading in a new frame from the ketaiCamera.
-  //ketaiCamera.read();
+  ketaiCamera.read();
 }
 
 void mousePressed(){
