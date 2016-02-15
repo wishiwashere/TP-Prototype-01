@@ -118,10 +118,10 @@ String directory = "";
 void setup() {
   // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
-  size(360, 640);
+  //size(360, 640);
   
   // ANDROID TESTING SETTINGS
-  //fullScreen();
+  fullScreen();
   
   // Locking the applications orientation to portrait, so that the image being read in from the 
   // the camera is maintained, even when the device is rotated

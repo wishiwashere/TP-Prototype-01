@@ -23,13 +23,13 @@ public class AboutScreen extends Screen{
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
     Icon facebookIcon = new Icon(appWidth * 0.2, iconBottomY, loadImage("placeholder.PNG"), "Facebook", false, "https://www.facebook.com/wishiwashereapp");
-    Icon twitterIcon = new Icon(appWidth * 0.4, iconBottomY, loadImage("placeholder.PNG"), "Twitter", false, "https://twitter.com/wishiwashere");
-    Icon instagramIcon = new Icon(appWidth * 0.6, iconBottomY, loadImage("placeholder.PNG"), "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
-    Icon emailIcon = new Icon(appWidth * 0.8, iconBottomY, loadImage("placeholder.PNG"), "Email", false, "mailto:wishiwashere.thenopayholiday@gmail.com");
+    Icon twitterIcon = new Icon(appWidth * 0.5, iconBottomY, loadImage("placeholder.PNG"), "Twitter", false, "https://twitter.com/wishiwashere");
+    Icon instagramIcon = new Icon(appWidth * 0.8, iconBottomY, loadImage("placeholder.PNG"), "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
+    //Icon emailIcon = new Icon(appWidth * 0.8, iconBottomY, loadImage("placeholder.PNG"), "Email", false, "mailto:wishiwashere.thenopayholiday@gmail.com");
    
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {homeIcon, facebookIcon, twitterIcon, instagramIcon, emailIcon};
+    Icon[] allIcons = {homeIcon, facebookIcon, twitterIcon, instagramIcon};
     pageIcons = allIcons;
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
@@ -58,7 +58,6 @@ public class AboutScreen extends Screen{
       this.getScreenIcons()[1].setY(iconBottomY);
       this.getScreenIcons()[2].setY(iconBottomY);
       this.getScreenIcons()[3].setY(iconBottomY);
-      this.getScreenIcons()[4].setY(iconBottomY);
       
       // Setting loaded to true, so that this block of code will only run once (each time this page
       // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
