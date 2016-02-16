@@ -60,7 +60,7 @@ public class CameraLiveViewScreen extends Screen{
   }
   
   private void switchCameraView()
-  {
+  {    
     // If the camera is already running before we try and effect it
     if (ketaiCamera.isStarted())
     {

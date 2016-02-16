@@ -1,4 +1,4 @@
-public class Icon extends Rectangle{
+public class Icon extends ClickableElement{
   
   // Creating private variables to store the icon's link, title and show title
   // properties, so that they can only be accessed within this class
@@ -48,7 +48,7 @@ public class Icon extends Rectangle{
     
     // Passing the relevant parametres from the constructor into the constructor 
     // of the super class (Rectangle)
-    super(x, y, w, h, img);
+    super(x, y, w, h, img, title);
     
     // Initialising the iconLinkTo to be equal to the requested link
     // specified in the object's constructor. This link will be passed to the global
@@ -92,60 +92,47 @@ public class Icon extends Rectangle{
         this.addText(this.iconTitle, this.getX(), this.getY() + (this.getHeight()*0.6), this.getWidth() * 0.20);
       }
     }
-  }
-  
-  /*-------------------------------------- checkMouseOver() ------------------------------------------------*/
-  
-  public void checkMouseOver(){ 
-    // Checking if the mouse (or finger) is over this icon (called by the Screen
-    // class if a mouse event has occurred while this icon's screen is being 
-    // displayed. Since the icons are drawn from the center, a bit of additional 
-    // calculations are required to find out if the mouse was over them (i.e. 
-    // to see if the mouseX was over this icon, we first have to take half 
-    // the width from the x from the x postion, to get the furthest left point, 
-    // and then add half of the width to the x position of the icon, to get 
-    // it's furthest right point. The process is simular for determining the mouseY)
-    if((mouseX > (this.getX() - (this.getWidth()/2))) &&
-       (mouseX < (this.getX() + (this.getWidth()/2))) &&
-       (mouseY > (this.getY() - (this.getHeight()/2))) &&
-       (mouseY < (this.getY() + (this.getHeight()/2)))){
-         
-         // Logging out the name of the icon that was clicked on
-          println(this.iconTitle + " was clicked");
-          
-          // Checking if this icon has a link associated with it
-          if(this.iconLinkTo.length() > 0)
+    if(mousePressed){
+      if(this.checkMouseOver()){
+        // Checking if this icon has a link associated with it
+        if(this.iconLinkTo.length() > 0)
+        {
+          // Checking if the iconTitle contains "http" i.e. if it is an external link
+          if(this.iconLinkTo.indexOf("http") > -1)
           {
-            // Checking if the iconTitle contains "http" i.e. if it is an external link
-            if(this.iconLinkTo.indexOf("http") > -1)
-            {
-              // This is an EXTERNAL link
-              // Passing the icon's link into the link() method, so that it can be treated as 
-              // an external link i.e. to a website
-              link(this.iconLinkTo);
-            } else {
-              // This is an INTERNAL link
-              // Setting the global currentScreen variable to be equal to the link
-              // contained within the icon that was clicked on (so it can be used
-              // in the main sketch to determine which page to display)
-              currentScreen = this.iconLinkTo;
-              
-              // Resets required for the About Screen.
-              // Resetting teh screenTitleY position to it's original value (as it may have been
-              // incremented if the about screen was scrolled
-              screenTitleY = appHeight * 0.08;
-              // Resetting the about screen's loaded value to false, so that the next time it is opened
-              // it will reset to it's original positions
-              myAboutScreen.loaded = false;
-            }
-            // Logging out what page the app will now be taken to
+            // This is an EXTERNAL link
+            // Passing the icon's link into the link() method, so that it can be treated as 
+            // an external link i.e. to a website
+            link(this.iconLinkTo);
+            
+            // Logging out what site the app will now be taken to
             println("Going to " + this.iconLinkTo);
+            
+          } else if(this.iconLinkTo.indexOf("_") == 0){
+            callFunction = this.iconLinkTo;
+            
+            // Logging out what page the app will now be taken to
+            println("Calling the " + this.iconLinkTo + "() function");
+          } else {
+            // This is an INTERNAL link
+            // Setting the global currentScreen variable to be equal to the link
+            // contained within the icon that was clicked on (so it can be used
+            // in the main sketch to determine which page to display)
+            currentScreen = this.iconLinkTo;
+            
+            // Resets required for the About Screen.
+            // Resetting teh screenTitleY position to it's original value (as it may have been
+            // incremented if the about screen was scrolled
+            screenTitleY = appHeight * 0.08;
+            // Resetting the about screen's loaded value to false, so that the next time it is opened
+            // it will reset to it's original positions
+            myAboutScreen.loaded = false;
+            
+            // Logging out what page the app will now be taken to
+            println("Going to the " + this.iconLinkTo);
           }
-          
-          // Setting mousePressed back to false, so that if the user still has their
-          // mouse pressed after the screen changes, this will not be considered
-          // a new click (as otherwise they could inadvertantly click on another button)
-          mousePressed = false;
+        }
+      }
     }
   }
 }

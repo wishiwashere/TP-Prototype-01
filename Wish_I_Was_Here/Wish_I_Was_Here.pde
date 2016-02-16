@@ -15,6 +15,8 @@ import android.content.*;
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
 String currentScreen = "CameraLiveViewScreen";
 
+String callFunction = "";
+
 PImage currentImage;
 
   /*-------------------------------------- KetaiCamera ------------------------------------------------*/
@@ -294,17 +296,19 @@ void switchScreens(){
       mySocialMediaLoginScreen.showScreen();
   } else if(currentScreen.equals("SocialMediaLogoutScreen")){
       mySocialMediaLogoutScreen.showScreen();
-  } else if(currentScreen.equals("_SwitchCameraView")){
-      myCameraLiveViewScreen.switchCameraView();
-      currentScreen = "CameraLiveViewScreen";
-  } else if(currentScreen.equals("_keepImage")){
-    keepImage();
   } else if(currentScreen.equals("LoadingScreen")){
       myLoadingScreen.showScreen();
       testingTimeoutScreen("HomeScreen");
   } else{
     println("This screen doesn't exist");
   }
+  
+  if(callFunction.equals("_keepImage"))
+  {
+    keepImage();
+  } else if(callFunction.equals("_SwitchCameraView")){
+     myCameraLiveViewScreen.switchCameraView();
+  } 
   
   
   // Turning the camera on and off (if the current screen
