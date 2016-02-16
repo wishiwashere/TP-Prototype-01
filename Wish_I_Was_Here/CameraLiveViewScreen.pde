@@ -21,7 +21,7 @@ public class CameraLiveViewScreen extends Screen{
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
     Icon favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false);
     Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
-    Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "_mergeImages");
+    Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "ImagePreviewScreen");
     Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_SwitchCameraView");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.

@@ -1,5 +1,7 @@
 import ketai.*;
 import ketai.camera.*;
+import android.os.Environment;
+import android.content.*;
 
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
 // this is the first screen that is displayed. Since this global variable is available
@@ -234,8 +236,7 @@ void setup() {
   // Storing a string that tells the app where to store the images, by default 
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
-  directory = "./WishIWasHereApp";
-  ketaiCamera.setSaveDirectory(directory);
+  directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
 }
 
 void draw() {
@@ -296,14 +297,13 @@ void switchScreens(){
   } else if(currentScreen.equals("_SwitchCameraView")){
       myCameraLiveViewScreen.switchCameraView();
       currentScreen = "CameraLiveViewScreen";
-  } else if(currentScreen.equals("_mergeImages")){
-    mergeImages();
-    currentScreen = "ImagePreviewScreen";
+  } else if(currentScreen.equals("_keepImage")){
+    keepImage();
   } else if(currentScreen.equals("LoadingScreen")){
       myLoadingScreen.showScreen();
       testingTimeoutScreen("HomeScreen");
   } else{
-    //println("This screen doesn't exist");
+    println("This screen doesn't exist");
   }
   
   
@@ -313,55 +313,45 @@ void switchScreens(){
   // stop the camera
   
   
-  if(currentScreen.equals("CameraLiveViewScreen") || currentScreen.equals("ImagePreviewScreen")){
+  if(currentScreen.equals("CameraLiveViewScreen")){
     if(!ketaiCamera.isStarted()){
       ketaiCamera.start();
     }
-  }else if(ketaiCamera.isStarted()) {
-    //ketaiCamera.stop();
+  } else if(ketaiCamera.isStarted()) {
+    ketaiCamera.stop();
   }
-}
-
-void mergeImages(){
-  ketaiCamera.loadPixels();
-  currentImage.loadPixels();
-  for(int x = 0; x < ketaiCamera.width; x++)
-  {
-    for(int y = 0; y < 50; y++)
-    {
-      int currentPixel = x + y * ketaiCamera.width;
-      
-      ketaiCamera.pixels[currentPixel] = currentImage.get(x, y);
-      
-      if(x == ketaiCamera.width - 1 && y == 49){
-        keepImage();
-      }
-    }
-  }
-  currentImage.updatePixels();
-  ketaiCamera.updatePixels();
 }
 
 void keepImage(){  
-  // Saving the current frame of the ketaiCamera and assigning it a name, and incrementing 
-  // number to ensure images are not overwritten and to allow for multiple images
-  // Also assigning an image format so the frame is saved as a jpeg to the users phone and 
-  // can be seen in their gallery under a folder title of Wish I Was Here App
-  ketaiCamera.savePhoto("WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg"); 
-  println("Trying to keep the image, but not fully saved yet");
+  // Checking if Storage is available
+  if(isExternalStorageWritable()){    
+    // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
+    if (currentImage.save(directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg")){
+      println("Successfully saved image to = " + directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg");
+      currentScreen = "SaveShareScreenA";
+    } else {
+      println("Failed to save image");
+    }
+  }  
 }
 
-// Calling the onSavePhotoEvent when a savePhoto gets called, this function adds it 
-// to the media lirary of the android device
-void onSavePhotoEvent(String filename)
-{
-  println("About to save");
-  ketaiCamera.addToMediaLibrary(filename);
-  // Printing out this line as it indicates whether this function is being 
-  // called and whether the image has actaully been saved to the directory / device
-  println("I saved!");
+Boolean isExternalStorageWritable() {
+  Boolean answer = false;
   
-  currentScreen = "ImagePreviewScreen";
+  // Creating a string to store the state of the external storage
+  String state = Environment.getExternalStorageState();
+  
+  // Testing the string value of the enviroment property media_mounted, against the
+  // string value of the state (as declared above). If media_mounted then storage
+  // is available to be written/read, and all permissions are in place
+  if (Environment.MEDIA_MOUNTED.equals(state)) {
+    println("External Storage is writable: " + state);
+    answer = true;
+  } else {
+    println("External Storage is writable: " + state);
+  }
+  
+  return answer;
 }
 
 // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
@@ -383,7 +373,7 @@ void onCameraPreviewEvent()
   // Reading in a new frame from the ketaiCamera.
   ketaiCamera.read();
   currentImage = ketaiCamera.get();
-  manipulatePixels();
+  //manipulatePixels();
 }
 
 void mousePressed(){
