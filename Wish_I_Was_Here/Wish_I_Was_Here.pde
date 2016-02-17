@@ -301,7 +301,26 @@ void draw() {
   // method, which not only adds the icons and backgrounds to the screen, it also
   // asks the icons on the screen to call their checkMouseOver() method (inherited from
   // the Icon class) to see if they were clicked on when a mouse event occurs
-   switchScreens();
+  switchScreens();
+   
+  
+  // Checking if any screen's icons are trying to trigger any functions
+  if(callFunction.equals("_keepImage")){
+    keepImage();
+  } else if(callFunction.equals("_switchCameraView")){
+     myCameraLiveViewScreen.switchCameraView();
+  } else {
+    println("This function does not exist / cannot be triggered by this icon");
+  }
+  
+  // Checking if the keyboard is required i.e. if an input field is currently in focus
+  if(keyboardRequired){
+    KetaiKeyboard.show(this);
+    callFunction = "";
+  } else {
+    KetaiKeyboard.hide(this);
+    callFunction = "";
+  }
 }
 
 void mousePressed(){
@@ -404,27 +423,10 @@ void switchScreens(){
     currentScreen = "HomeScreen";
   }
   
-  if(callFunction.equals("_keepImage"))
-  {
-    keepImage();
-  } else if(callFunction.equals("_SwitchCameraView")){
-     myCameraLiveViewScreen.switchCameraView();
-  } 
-  
-  if(keyboardRequired){
-    KetaiKeyboard.show(this);
-    callFunction = "";
-  } else {
-    KetaiKeyboard.hide(this);
-    callFunction = "";
-  }
-  
   // Turning the camera on and off (if the current screen
   // is the camera live view, and the camera is  not yet turned
   // on, then start the camera, otherwise, if you are on any other screen,
   // stop the camera
-  
-  
   if(currentScreen.equals("CameraLiveViewScreen")){
     if(!ketaiCamera.isStarted()){
       ketaiCamera.start();
@@ -489,6 +491,4 @@ void manipulatePixels(){
     }
   }
   currentImage.updatePixels();
-  
-  //ketaiCamera = currentImage.get(0, 0, 100, 100);
 }
