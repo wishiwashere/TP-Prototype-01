@@ -4,7 +4,10 @@ public class TextInput extends ClickableElement{
   // properties, so that they can only be accessed within this class
   private String inputTitle = "";
   private String inputValue = "";
+  private String inputTextAlign = "";
   private Boolean passwordInput;
+  private float textX;
+  private float textY;
   
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   // This partial constructor is used by text inputs that do not require their contents
@@ -14,11 +17,31 @@ public class TextInput extends ClickableElement{
     // Passing the relevant parametres to the main constructor. Since a password value
     // has not been included, passing false for this argument (i.e. assuming this in not
     // a password textInput
-    this(x, y, w, h, col, title, false);
+    this(x, y, w, h, col, title, false, "LEFT");
+  }
+  
+  // This partial constructor is used by text inputs that do not require their contents
+  // to be blocked out i.e. any text input that is not a password
+  public TextInput(float x, float y, float w, float h, color col, String title, String align){
+
+    // Passing the relevant parametres to the main constructor. Since a password value
+    // has not been included, passing false for this argument (i.e. assuming this in not
+    // a password textInput
+    this(x, y, w, h, col, title, false, align);
+  }
+  
+  // This partial constructor is used by text inputs that do not require their contents
+  // to be blocked out i.e. any text input that is not a password
+  public TextInput(float x, float y, float w, float h, color col, String title, Boolean password){
+
+    // Passing the relevant parametres to the main constructor. Since a password value
+    // has not been included, passing false for this argument (i.e. assuming this in not
+    // a password textInput
+    this(x, y, w, h, col, title, password, "LEFT");
   }
   
   // This constructor is used by all text inputs
-  public TextInput(float x, float y, float w, float h, color col, String title, Boolean password){
+  public TextInput(float x, float y, float w, float h, color col, String title, Boolean password, String align){
 
     // Passing the relevant parametres from the constructor into the constructor 
     // of the super class (ClickableElement)
@@ -28,6 +51,20 @@ public class TextInput extends ClickableElement{
     inputTitle = title;
     
     passwordInput = password;
+    
+    inputTextAlign = align;
+    
+    if(inputTextAlign.equals("LEFT")){
+      textX = x - (w * 0.45);
+      textY = y;
+    } else if(inputTextAlign.equals("LEFT-TOP")){
+      textX = x - (w * 0.45);
+      textY = y - (h * 0.45);
+      println("LEFT-TOP");
+    } else {
+      textX = x;
+      textY = y;
+    }
   }
   
   /*-------------------------------------- showTextInput() ------------------------------------------------*/
@@ -62,7 +99,7 @@ public class TextInput extends ClickableElement{
         // field
         displayText = this.inputValue;
       }
-      this.addText(displayText, "LEFT", this.getX() - (this.getWidth() * 0.45), this.getY(), this.getWidth() * 0.1);
+      this.addText(displayText, inputTextAlign, textX, textY, this.getWidth() * 0.1);
     }
     if(mousePressed){
       if(this.checkMouseOver()){

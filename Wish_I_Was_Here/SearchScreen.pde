@@ -1,5 +1,5 @@
 public class SearchScreen extends Screen{
-  
+  private TextInput searchInput;
   // Creating a public constructor for the SearchTravelScreen class, so that
   // an instance of it can be declared in the main sketch
   public SearchScreen(color col){
@@ -8,6 +8,8 @@ public class SearchScreen extends Screen{
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(col);
+    
+    searchInput = new TextInput(iconCenterX, iconCenterY, appWidth * 0.8, appHeight * 0.2, #FFFFFE, "searchInput", "LEFT-TOP");
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -48,5 +50,7 @@ public class SearchScreen extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    searchInput.showTextInput();
   }
 }

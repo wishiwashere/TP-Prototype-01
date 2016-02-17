@@ -179,6 +179,11 @@ protected class Rectangle{
       // the text will be drawn from the center point of it's position on the left of
       // the page
       textAlign(LEFT, CENTER);
+    }else if (align.equals("LEFT-TOP")){
+      // Setting the text align to center (on both the x and the y) so that
+      // the text will be drawn from the center point of it's position on
+      // the page
+      textAlign(LEFT, TOP);
     }else{
       // Setting the text align to center (on both the x and the y) so that
       // the text will be drawn from the center point of it's position on
