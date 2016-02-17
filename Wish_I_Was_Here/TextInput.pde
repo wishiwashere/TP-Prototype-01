@@ -51,6 +51,12 @@ public class TextInput extends ClickableElement{
         // Setting display text to be equal to the value returned from the hidePassword() method
         // i.e. starred out (asides fromt the last letter)
         displayText = hidePassword();
+        /*
+        // Code to only display last letter of password for a specified period of time. Currently
+        // not using, but keeping for future reference
+        delay(500);
+        displayText = displayText.substring(0, displayText.length() -1) + "*";
+        */
       } else {
         // Since this field does not contain a password, set the display text to the value of the input
         // field

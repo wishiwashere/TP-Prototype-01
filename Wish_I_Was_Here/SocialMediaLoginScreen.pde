@@ -40,8 +40,8 @@ public class SocialMediaLoginScreen extends Screen{
     // then no header text will appear on this page
     this.setScreenTitle("Social Media Login Screen");
     
-    usernameInput = new TextInput(iconCenterX, iconCenterY * 0.85, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "usernameInput");
-    passwordInput = new TextInput(iconCenterX, iconCenterY * 1.35, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "passwordInput", true);
+    usernameInput = new TextInput(iconCenterX, iconCenterY * 0.65, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "usernameInput");
+    passwordInput = new TextInput(iconCenterX, iconCenterY * 1.15, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "passwordInput", true);
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -53,8 +53,8 @@ public class SocialMediaLoginScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.7);
-    this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 1.2);
+    this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.5);
+    this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 1);
     usernameInput.showTextInput();
     passwordInput.showTextInput();
   }
