@@ -1,4 +1,5 @@
 public class SaveShareScreenB extends Screen{
+  private TextInput messageInput;
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -8,6 +9,8 @@ public class SaveShareScreenB extends Screen{
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(col);
+    
+    messageInput = new TextInput(iconCenterX, iconCenterY, appWidth * 0.8, appHeight * 0.2, #FFFFFE, "messageInput", "LEFT-TOP");
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -47,5 +50,7 @@ public class SaveShareScreenB extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    messageInput.showTextInput();
   }
 }
