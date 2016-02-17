@@ -7,6 +7,9 @@ import processing.opengl.*;
 
 import ketai.*; 
 import ketai.camera.*; 
+import ketai.ui.*; 
+import android.os.Environment; 
+import android.content.*; 
 
 import java.util.HashMap; 
 import java.util.ArrayList; 
@@ -22,6 +25,11 @@ public class Wish_I_Was_Here extends PApplet {
 
 
 
+
+
+
+  /*-------------------------------------- Globally Accessed Variables ------------------------------------------------*/
+  
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
 // this is the first screen that is displayed. Since this global variable is available
 // throughout the sketch (i.e. within all classes as well as the main sketch) we will
@@ -32,9 +40,30 @@ public class Wish_I_Was_Here extends PApplet {
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "HomeScreen";
+String currentScreen = "SocialMediaLoginScreen";
 
-PImage saveThisImage;
+// Creating a global variable, which any icon can use to pass the name of the function
+// they link to. The value of this variable is set in the Icon class when an icon is clicked
+// on, and it's iconLinkTo value begins with a "_". This is a naming convention we created
+// so that it is clearer which icons link to screens and which link to functions.
+String callFunction = "";
+
+// Creating a global boolean, to determine if the keyboard is required. This value is set to 
+// true within the TextInput class if a text input has been clicked on. While this value is
+// set to true, the draw function will call the KetaiKeyboard .show() method, to trigger the 
+// device to display it's keyboard. Each time a mousePressed event occurs, this variable
+// is reset to false, so that if a user clicks anywhere else on the screen, the keyboard
+// will automatically close
+Boolean keyboardRequired = false;
+
+TextInput currentTextInput = null;
+String currentTextInputValue = "";
+
+// Creating a global variable which will contain the value of the most recent y position of the 
+// mouse. This variable gets it's first value each time a mousePressed event occurs (i.e. when the 
+// user first holds down the mouse). It will then be continually updated (on any pages that scroll)
+// and used to determine how much a user has scrolled, and move the contents of these page's accordingly
+float previousMouseY;
 
   /*-------------------------------------- KetaiCamera ------------------------------------------------*/
   
@@ -60,14 +89,7 @@ int cameraScale = -1;
 // Initialising at -90 degrees, as we will be starting on the front facing camera
 int cameraRotation = -90;
 
-  /*-------------------------------------- Sizing ------------------------------------------------*/
-  
-// Declaring global variables, which will contain the width and height of the device's
-// display, so that these values can be reused throughout all classes (i.e. to calculate
-// more dynamic position/width/height's so that the interface responds to different
-// screen sizes
-int appWidth;
-int appHeight;
+  /*-------------------------------------- Images ------------------------------------------------*/
 
 // Declaring the image holders for the icons that will appear throughout the sketch, 
 // so that they can all be loaded in once, and then used throughout the relevant screens
@@ -91,6 +113,15 @@ PImage twitterAccountIconImage;
 PImage instagramAccountIconImage;
 PImage buttonImage;
 
+  /*-------------------------------------- Sizing ------------------------------------------------*/
+  
+// Declaring global variables, which will contain the width and height of the device's
+// display, so that these values can be reused throughout all classes (i.e. to calculate
+// more dynamic position/width/height's so that the interface responds to different
+// screen sizes
+int appWidth;
+int appHeight;
+
 // Declaring the icon positioning X and Y variables, which will be used globally to ensure that
 // the icons on each page all line up with one another. These measurements are all based on percentages
 // of the app's display, and are initialised in the setup function of this sketch
@@ -100,13 +131,17 @@ float iconCenterX;
 float iconTopY;
 float iconBottomY;
 float iconCenterY;
-float squareIconSize;
-float squareIconBottomY;
+float largeIconSize;
+float smallIconSize;
+float largeIconBottomY;
+float screenTitleY;
 
 // Declaring a global variable which will contain the default text size, which will be
 // initialised in the setup() function of the app
 float defaultTextSize;
 
+  /*-------------------------------------- Screens ------------------------------------------------*/
+  
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
 HomeScreen myHomeScreen;
@@ -132,7 +167,18 @@ LoadingScreen myLoadingScreen;
  // Creating a string that will hold the directory path of where the images will be saved to
 String directory = "";
 
+// Creating a global image variable, to store the currentImage. Currently, this image is
+// simply the current frame of the ketaiCamera, but evenually this variable will be
+// used to hold the "postcard" of the person standing in a Google Street View enviroment.
+// This variable is set to the current frame of the camera each time a new frame is read
+// in (i.e. in the onCameraPreviewEvent() of the main sketch)
+PImage currentImage;
+
+ /*-------------------------------------- Built In Functions ------------------------------------------------*/
+
 public void setup() {
+   /*-------------------------------------- Global ------------------------------------------------*/
+   
   // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
   //size(360, 640);
@@ -153,6 +199,8 @@ public void setup() {
   appWidth = width;
   appHeight = height;
   
+    /*-------------------------------------- Ketai ------------------------------------------------*/
+    
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
   ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
@@ -165,6 +213,7 @@ public void setup() {
   
   // Check if the device has more than one camera i.e. does it have a front
   // and a rear facing camera?
+  
   if(ketaiCamera.getNumberOfCameras() > 1)
   {
     // If there is more than one camera, then default to the front camera
@@ -181,6 +230,8 @@ public void setup() {
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
   
+   /*-------------------------------------- Images ------------------------------------------------*/
+   
   // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
   // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
   // reused on multiple pages
@@ -204,6 +255,8 @@ public void setup() {
   instagramAccountIconImage = loadImage("iconPlaceholder.png");
   buttonImage = loadImage("buttonImage.png");
 
+   /*-------------------------------------- Sizing ------------------------------------------------*/
+   
   // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
   // the icons on each page all line up with one another. These measurements are all based on percentages
   // of the app's display width and height (as defined above
@@ -213,12 +266,16 @@ public void setup() {
   iconTopY = appHeight * 0.085f;
   iconBottomY = appHeight * 0.92f;
   iconCenterY = appHeight * 0.5f;
-  squareIconSize = appWidth * 0.35f;
-  squareIconBottomY = iconBottomY - (squareIconSize/2);
+  largeIconSize = appWidth * 0.35f;
+  smallIconSize = appWidth * 0.15f;
+  largeIconBottomY = iconBottomY - (largeIconSize/2);
+  screenTitleY = appHeight * 0.08f;
   
   // Initialising the defaultTextSize to be equal to a percentage of the app's current height
   defaultTextSize = appHeight * 0.04f;
   
+   /*-------------------------------------- Screens ------------------------------------------------*/
+   
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious
   // (for testing purposes only). Note - setting a background color is optional. Depending on the
@@ -243,12 +300,24 @@ public void setup() {
   mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(0xffCEBD54);
   myLoadingScreen = new LoadingScreen();
   
+   /*-------------------------------------- Saving ------------------------------------------------*/
+   
   // Storing a string that tells the app where to store the images, by default 
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
-  directory = "./WishIWasHereApp";
-  ketaiCamera.setSaveDirectory(directory);
-}
+  directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
+  
+  // Initialising the currentImage to be equal to a plain black image. This is so that if the 
+  // currentImage get's referred to before the camera has started, it will just contain a plain
+  // black screen. Creating this black image by using createImage to make it the full size
+  // of the screen, and then setting each pixel in the image to black
+  currentImage = createImage(appWidth, appHeight, RGB);
+  currentImage.loadPixels();
+  for (int i = 0; i < currentImage.pixels.length; i++) {
+      currentImage.pixels[i] = color(0); 
+    }
+    currentImage.updatePixels();
+  }
 
 public void draw() {
   // Calling the monitorScreens() function to display the right screen by calling
@@ -256,9 +325,74 @@ public void draw() {
   // method, which not only adds the icons and backgrounds to the screen, it also
   // asks the icons on the screen to call their checkMouseOver() method (inherited from
   // the Icon class) to see if they were clicked on when a mouse event occurs
-   switchScreens();
+  switchScreens();
+   
+  
+  // Checking if any screen's icons are trying to trigger any functions
+  if(callFunction.equals("_keepImage")){
+    keepImage();
+  } else if(callFunction.equals("_switchCameraView")){
+     myCameraLiveViewScreen.switchCameraView();
+  } else {
+    //println("This function does not exist / cannot be triggered by this icon");
+  }
+  
+  // Checking if the keyboard is required i.e. if an input field is currently in focus
+  if(keyboardRequired){
+    KetaiKeyboard.show(this);
+    callFunction = "";
+  } else {
+    KetaiKeyboard.hide(this);
+    callFunction = "";
+  }
 }
 
+public void mousePressed(){
+  keyboardRequired = false;
+  previousMouseY = mouseY;
+}
+
+public void keyPressed(){
+  // Getting the current input value of this text input (i.e. so that if a user clicks between different
+  // text fields, they can resume their input instead of the textfield becoming empty)
+  currentTextInputValue = currentTextInput.getInputValue();
+  
+  // Checking if the key pressed is a coded value i.e. backspace etc
+  if(key == CODED){
+    //println(key);
+    // Checking if the key pressed was the backspace key
+    if(keyCode == 67)
+    {
+      // Checking that the length of the current currentTextInputValue string is greater than 0 (i.e. 
+      // if the string is empty, don't try to delete anything)
+      if(currentTextInputValue.length() > 0){
+        //println("BACKSPACE");
+        // Removing the last character from currentTextInputValue string, by creating a substring
+        // of currentTextInputValue, that is one shorter than the current currentTextInputValue string
+        currentTextInputValue = currentTextInputValue.substring(0, currentTextInputValue.length() - 1);
+      }
+    }
+  } else {
+    // If the key is not a coded value, adding the character to currentTextInputValue string
+    currentTextInputValue += key;
+  }
+  // Passing the currentTextInputValue string into the setInputValue of the currentTextInput field
+  currentTextInput.setInputValue(currentTextInputValue);
+}
+
+ /*-------------------------------------- Ketai Functions ------------------------------------------------*/
+ 
+// ketaiCamera event which is automatically called everytime a new frame becomes
+// available from the ketaiCamera.
+public void onCameraPreviewEvent()
+{
+  // Reading in a new frame from the ketaiCamera.
+  ketaiCamera.read();
+  currentImage = ketaiCamera.get();
+  //manipulatePixels();
+}
+
+ /*-------------------------------------- Custom Functions ------------------------------------------------*/
 public void switchScreens(){
   // Checking if the String that is stored in the currentScreen variable 
   // (which gets set in the Icon class when an icon is clicked on) is
@@ -305,53 +439,57 @@ public void switchScreens(){
       mySocialMediaLoginScreen.showScreen();
   } else if(currentScreen.equals("SocialMediaLogoutScreen")){
       mySocialMediaLogoutScreen.showScreen();
-  } else if(currentScreen.equals("_SwitchCameraView")){
-      myCameraLiveViewScreen.switchCameraView();
-      currentScreen = "CameraLiveViewScreen";
-  } else if(currentScreen.equals("_keepImage")){
-    keepImage();
-    currentScreen = "ImagePreviewScreen";
   } else if(currentScreen.equals("LoadingScreen")){
       myLoadingScreen.showScreen();
       testingTimeoutScreen("HomeScreen");
   } else{
     println("This screen doesn't exist");
+    currentScreen = "HomeScreen";
   }
-  
   
   // Turning the camera on and off (if the current screen
   // is the camera live view, and the camera is  not yet turned
   // on, then start the camera, otherwise, if you are on any other screen,
   // stop the camera
-  if(currentScreen.equals("CameraLiveViewScreen") || currentScreen.equals("ImagePreviewScreen")){
+  if(currentScreen.equals("CameraLiveViewScreen")){
     if(!ketaiCamera.isStarted()){
       ketaiCamera.start();
     }
-  }else if(ketaiCamera.isStarted()) {
-    //ketaiCamera.stop();
+  } else if(ketaiCamera.isStarted()) {
+    ketaiCamera.stop();
   }
 }
-
+ 
 public void keepImage(){  
-  // Saving the current frame of the ketaiCamera and assigning it a name, and incrementing 
-  // number to ensure images are not overwritten and to allow for multiple images
-  // Also assigning an image format so the frame is saved as a jpeg to the users phone and 
-  // can be seen in their gallery under a folder title of Wish I Was Here App
-  ketaiCamera.savePhoto("WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg"); 
-  println("Trying to keep the image, but not fully saved yet");
+  // Checking if Storage is available
+  if(isExternalStorageWritable()){    
+    // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
+    if (currentImage.save(directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg")){
+      println("Successfully saved image to = " + directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg");
+      currentScreen = "SaveShareScreenA";
+    } else {
+      println("Failed to save image");
+    }
+  }  
 }
 
-// Calling the onSavePhotoEvent when a savePhoto gets called, this function adds it 
-// to the media lirary of the android device
-public void onSavePhotoEvent(String filename)
-{
-  println("About to save");
-  ketaiCamera.addToMediaLibrary(filename);
-  // Printing out this line as it indicates whether this function is being 
-  // called and whether the image has actaully been saved to the directory / device
-  println("I saved!");
+public Boolean isExternalStorageWritable() {
+  Boolean answer = false;
   
-  currentScreen = "ImagePreviewScreen";
+  // Creating a string to store the state of the external storage
+  String state = Environment.getExternalStorageState();
+  
+  // Testing the string value of the enviroment property media_mounted, against the
+  // string value of the state (as declared above). If media_mounted then storage
+  // is available to be written/read, and all permissions are in place
+  if (Environment.MEDIA_MOUNTED.equals(state)) {
+    println("External Storage is writable: " + state);
+    answer = true;
+  } else {
+    println("External Storage is writable: " + state);
+  }
+  
+  return answer;
 }
 
 // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
@@ -360,21 +498,29 @@ public void onSavePhotoEvent(String filename)
 public void testingTimeoutScreen(String fadeToScreen){
   if(mousePressed)
   { 
-    
     currentScreen = fadeToScreen;
     mousePressed = false;
   }
 }
-
-// ketaiCamera event which is automatically called everytime a new frame becomes
-// available from the ketaiCamera.
-public void onCameraPreviewEvent()
-{
-  // Reading in a new frame from the ketaiCamera.
-  ketaiCamera.read();
+ 
+public void manipulatePixels(){
+  currentImage.loadPixels();
+  for(int x = 0; x < currentImage.width; x++)
+  {
+    for(int y = 0; y < 50; y++)
+    {
+      int currentPixel = x + y * currentImage.width;
+      
+      currentImage.pixels[currentPixel] = color(0xff0000FF);
+    }
+  }
+  currentImage.updatePixels();
 }
 public class AboutScreen extends Screen{
-    
+  private String aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus, turpis sit amet condimentum gravida, est quam bibendum purus, ac efficitur lectus justo in tortor. Phasellus et interdum mi.";
+  private Icon[] pageIcons;
+  public Boolean loaded = false;
+  
   // Creating a public constructor for the AboutScreen class, so that
   // an instance of it can be declared in the main sketch
   public AboutScreen(int col){
@@ -382,7 +528,7 @@ public class AboutScreen extends Screen{
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
-    super(col);
+    super(appWidth/2, appHeight/2, appWidth, appHeight * 2, col);
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -394,10 +540,15 @@ public class AboutScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
+    Icon facebookIcon = new Icon(appWidth * 0.2f, iconBottomY, loadImage("placeholder.PNG"), "Facebook", false, "https://www.facebook.com/wishiwashereapp");
+    Icon twitterIcon = new Icon(appWidth * 0.5f, iconBottomY, loadImage("placeholder.PNG"), "Twitter", false, "https://twitter.com/wishiwashere");
+    Icon instagramIcon = new Icon(appWidth * 0.8f, iconBottomY, loadImage("placeholder.PNG"), "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
+    //Icon emailIcon = new Icon(appWidth * 0.8, iconBottomY, loadImage("placeholder.PNG"), "Email", false, "mailto:wishiwashere.thenopayholiday@gmail.com");
    
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {homeIcon};
+    Icon[] allIcons = {homeIcon, facebookIcon, twitterIcon, instagramIcon};
+    pageIcons = allIcons;
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
@@ -417,11 +568,100 @@ public class AboutScreen extends Screen{
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen(){
+    if(!loaded){
+      // Resetting the position values of the element so on the screen every time the page is opened,
+      // so that if a user leaves the screen half scrolled, it will still be reset upon their return
+      this.setY(appHeight/2);
+      this.getScreenIcons()[0].setY(iconTopY);
+      this.getScreenIcons()[1].setY(iconBottomY);
+      this.getScreenIcons()[2].setY(iconBottomY);
+      this.getScreenIcons()[3].setY(iconBottomY);
+      
+      // Setting loaded to true, so that this block of code will only run once (each time this page
+      // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
+      // when an icon that links to another page has been clicked.
+      loaded = true;
+      println("firstLoad");
+    }
     
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    this.addImage(loadImage("placeholder.PNG"), appWidth/2, this.getY() + (appHeight * -0.25f), appWidth * 0.8f, appHeight * 0.2f);
+    
+    rectMode(CORNER);
+    textAlign(LEFT);
+    textSize(appWidth * 0.05f);
+   
+    text(aboutText, appWidth * 0.1f, this.getY()  + (appHeight * -0.1f), appWidth * 0.8f, appHeight * 0.9f);
+    
+    // Checking if the page is being scrolled
+    if(mousePressed){
+      
+      // Calculating the amount scolled, based on the distance between the previous y position, 
+      // and the current y position. When the mouse is first pressed, the previous y position
+      // is initialised (in the main sketch) but then while the mouse is held down, the previous
+      // y position gets updated each time this function runs (so that the scrolling can occur
+      // while the person is still moving their hand (and not just after they release the screen)
+      float amountScrolled = dist(0, previousMouseY, 0, mouseY);
+      
+      Icon[] icons = this.getScreenIcons();
+      
+      // Looping through each of the page icons, which are only being stored in an array within
+      // this class so that they can be looped through to be repositioned (i.e. in every other
+      // screen, these icons would be stored only in the super class, and not directly accessible
+      // within the individual screen classes
+      for(int i = 0; i < icons.length; i++){
+        // Checking which direction the user scrolled
+        if(previousMouseY > mouseY){
+          // The user has scrolled UP
+          // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
+          // moving the icon up the screen
+          icons[i].setY(icons[i].getY() - amountScrolled);
+        } else {
+          // The user has scrolled DOWN
+          // Checking if the screen's y position is less than or equal to half of the height i.e. is 
+          // so that the screen cannot be down any further once you reach the top
+          if(this.getY() <= appHeight/2){
+            // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
+            // moving the icon down the screen
+            icons[i].setY(icons[i].getY() + amountScrolled);
+          }
+        }
+      }
+      
+      // Checking which direction the user scrolled (the reason I have to do this seperatley from above is
+      // that including these lines within the icons loop above makes these elements move faster than the
+      // page icons
+      if(previousMouseY > mouseY){
+        // The user has scrolled UP
+        // Setting the screen's y postion to it's current y position, minus the amount scrolled
+        this.setY(this.getY() - amountScrolled);
+        // Setting the global positioning variable screenTitleY to be decremented by the amount scrolled. Note:
+        // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
+        // an icon's link is passed in to change a page)
+        screenTitleY -= amountScrolled;
+      } else {
+        // The user has scrolled DOWN
+        // Checking if the screen's y position is less than or equal to half of the height i.e. is 
+        // so that the screen cannot be down any further once you reach the top
+        if(this.getY() <= appHeight/2){
+          // Setting the screen's y postion to it's current y position, plus the amount scrolled
+          this.setY(this.getY() + amountScrolled);
+          // Setting the global positioning variable screenTitleY to be incremented by the amount scrolled. Note:
+        // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
+        // an icon's link is passed in to change a page)
+          screenTitleY += amountScrolled;
+        }
+      }
+      
+      // Updating the previous mouse Y to be equal to the current mouse y, so that the next time this function is
+      // called, the scrolling will be detected from this point i.e. so that scrolling appears continous, even if the
+      // user keeps there finger/mouse held on the screen while moving up and down
+      previousMouseY = mouseY;
+    }
   }
 }
 public class CameraLiveViewScreen extends Screen{
@@ -447,8 +687,8 @@ public class CameraLiveViewScreen extends Screen{
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
     Icon favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false);
     Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
-    Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "_keepImage");
-    Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_SwitchCameraView");
+    Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "ImagePreviewScreen");
+    Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_switchCameraView");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, favIcon, shakeIcon, shutterIcon, switchViewIcon};
@@ -482,11 +722,11 @@ public class CameraLiveViewScreen extends Screen{
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
-    this.addBackgroundImage(ketaiCamera, appHeight, appWidth, cameraScale, cameraRotation);
+    this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
   }
   
   private void switchCameraView()
-  {
+  {    
     // If the camera is already running before we try and effect it
     if (ketaiCamera.isStarted())
     {
@@ -510,6 +750,53 @@ public class CameraLiveViewScreen extends Screen{
         ketaiCamera.start();
       }
     }
+  }
+}
+public class ClickableElement extends Rectangle{
+  String elementTitle = "";
+  
+  /*-------------------------------------- Constructor() ------------------------------------------------*/
+  
+  // This constructor is used by icons
+  public ClickableElement(float x, float y, float w, float h, PImage img, String title){
+    super(x, y, w, h, img);
+    elementTitle = title;
+  }
+  
+  // This constructor is used by textInputs
+  public ClickableElement(float x, float y, float w, float h, int col, String title){
+    super(x, y, w, h, col);
+    elementTitle = title;
+  }
+  
+  /*-------------------------------------- checkMouseOver() ------------------------------------------------*/
+  
+  protected Boolean checkMouseOver(){ 
+    Boolean clickedOn = false;
+    // Checking if the mouse (or finger) is over this icon (called by the Screen
+    // class if a mouse event has occurred while this icon's screen is being 
+    // displayed. Since the icons are drawn from the center, a bit of additional 
+    // calculations are required to find out if the mouse was over them (i.e. 
+    // to see if the mouseX was over this icon, we first have to take half 
+    // the width from the x from the x postion, to get the furthest left point, 
+    // and then add half of the width to the x position of the icon, to get 
+    // it's furthest right point. The process is simular for determining the mouseY)
+    if((mouseX > (this.getX() - (this.getWidth()/2))) &&
+       (mouseX < (this.getX() + (this.getWidth()/2))) &&
+       (mouseY > (this.getY() - (this.getHeight()/2))) &&
+       (mouseY < (this.getY() + (this.getHeight()/2)))){
+         
+         // Logging out the name of the element that was clicked on
+          println(this.elementTitle + " was clicked");
+          
+          // Setting mousePressed back to false, so that if the user still has their
+          // mouse pressed after the screen changes, this will not be considered
+          // a new click (as otherwise they could inadvertantly click on another button)
+          mousePressed = false;
+          
+          clickedOn = true;
+    }
+    return clickedOn;
   }
 }
 public class FavouritesScreen extends Screen{
@@ -582,11 +869,11 @@ public class HomeScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon searchTravelIcon = new Icon(appWidth * 0.3f, appHeight * 0.2f, squareIconSize, squareIconSize, searchPageIconImage, "Search", true, "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.7f, appHeight * 0.2f, squareIconSize, squareIconSize, randomPageIconImage, "Random", true, "CameraLiveViewScreen");
-    Icon myFavouritesIcon = new Icon(appWidth * 0.3f, appHeight * 0.5f, squareIconSize, squareIconSize, favouritesPageIconImage, "My Favourites", true, "FavouritesScreen");
-    Icon aboutIcon = new Icon(appWidth * 0.7f, appHeight * 0.5f, squareIconSize, squareIconSize, aboutPageIconImage, "About", true, "AboutScreen");
-    Icon settingsIcon = new Icon(appWidth * 0.5f, appHeight * 0.8f, squareIconSize, squareIconSize, settingsPageIconImage, "Settings", true, "SettingsScreen");
+    Icon searchTravelIcon = new Icon(appWidth * 0.3f, appHeight * 0.2f, largeIconSize, largeIconSize, searchPageIconImage, "Search", true, "Below", "SearchScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.7f, appHeight * 0.2f, largeIconSize, largeIconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
+    Icon myFavouritesIcon = new Icon(appWidth * 0.3f, appHeight * 0.5f, largeIconSize, largeIconSize, favouritesPageIconImage, "My Favourites", true, "Below", "FavouritesScreen");
+    Icon aboutIcon = new Icon(appWidth * 0.7f, appHeight * 0.5f, largeIconSize, largeIconSize, aboutPageIconImage, "About", true, "Below", "AboutScreen");
+    Icon settingsIcon = new Icon(appWidth * 0.5f, appHeight * 0.8f, largeIconSize, largeIconSize, settingsPageIconImage, "Settings", true, "Below", "SettingsScreen");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {randomTravelIcon, searchTravelIcon, myFavouritesIcon, aboutIcon, settingsIcon};
@@ -610,13 +897,14 @@ public class HomeScreen extends Screen{
     this.drawScreen();
   }
 }
-public class Icon extends Rectangle{
+public class Icon extends ClickableElement{
   
   // Creating private variables to store the icon's link, title and show title
   // properties, so that they can only be accessed within this class
   private String iconLinkTo;
   private String iconTitle;
   private Boolean showIconTitle;
+  private String iconTitlePosition;
   
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   
@@ -628,7 +916,7 @@ public class Icon extends Rectangle{
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.2f, appWidth * 0.2f, img, title, showTitle, "");
+    this(x, y, smallIconSize, smallIconSize, img, title, showTitle, "Middle", "");
   }
   
   // This constructor is used by icons such as the homeIcon, that want to accept the default 
@@ -639,16 +927,27 @@ public class Icon extends Rectangle{
     // If no link is specified, then defaulting this to an empty string.
     // Then passing this default, along with the specified parametres, into the 
     // full constructor of this class
-    this(x, y, appWidth * 0.2f, appWidth * 0.2f, img, title, showTitle, linkTo);
+    this(x, y, smallIconSize, smallIconSize, img, title, showTitle, "Middle", linkTo);
+  }  
+  
+  // This constructor is used by icons such as the homeIcon, that want to accept the default 
+  // width and height of an icon, and also link to another page
+  public Icon(float x, float y, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo){
+    
+    // If no width or height specified, defaulting these to 15% of the screen width.
+    // If no link is specified, then defaulting this to an empty string.
+    // Then passing this default, along with the specified parametres, into the 
+    // full constructor of this class
+    this(x, y, smallIconSize, smallIconSize, img, title, showTitle, titlePosition, linkTo);
   }   
   
   // Full Constructor. Both of the above constructors both pass their values to this constructor, as
   // well as other icon's in the app that want to pass arguments for all of the specified values
-  public Icon(float x, float y, float w, float h, PImage img, String title, Boolean showTitle, String linkTo){
+  public Icon(float x, float y, float w, float h, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo){
     
     // Passing the relevant parametres from the constructor into the constructor 
     // of the super class (Rectangle)
-    super(x, y, w, h, img);
+    super(x, y, w, h, img, title);
     
     // Initialising the iconLinkTo to be equal to the requested link
     // specified in the object's constructor. This link will be passed to the global
@@ -666,6 +965,8 @@ public class Icon extends Rectangle{
     // will be used later to decide if this page's title will be displayed as a heading
     // on the page or not
     showIconTitle = showTitle;
+    
+    iconTitlePosition = titlePosition;
   }
   
   /*-------------------------------------- showIcon() ------------------------------------------------*/
@@ -684,45 +985,53 @@ public class Icon extends Rectangle{
       // the icon. Passing in the String containing the title for the icon, the current
       // x and y positions of the icon itself, and the font size (which is relative
       // to the icon's current height
-      this.addText(this.iconTitle, this.getX(), this.getY(), this.getWidth() * 0.20f);
+      if(iconTitlePosition == "Middle"){
+        this.addText(this.iconTitle, this.getX(), this.getY(), this.getWidth() * 0.20f);
+      }else if(iconTitlePosition == "Below"){
+        this.addText(this.iconTitle, this.getX(), this.getY() + (this.getHeight()*0.6f), this.getWidth() * 0.20f);
+      }
     }
-  }
-  
-  /*-------------------------------------- checkMouseOver() ------------------------------------------------*/
-  
-  public void checkMouseOver(){ 
-    // Checking if the mouse (or finger) is over this icon (called by the Screen
-    // class if a mouse event has occurred while this icon's screen is being 
-    // displayed. Since the icons are drawn from the center, a bit of additional 
-    // calculations are required to find out if the mouse was over them (i.e. 
-    // to see if the mouseX was over this icon, we first have to take half 
-    // the width from the x from the x postion, to get the furthest left point, 
-    // and then add half of the width to the x position of the icon, to get 
-    // it's furthest right point. The process is simular for determining the mouseY)
-    if((mouseX > (this.getX() - (this.getWidth()/2))) &&
-       (mouseX < (this.getX() + (this.getWidth()/2))) &&
-       (mouseY > (this.getY() - (this.getHeight()/2))) &&
-       (mouseY < (this.getY() + (this.getHeight()/2)))){
-         
-         // Logging out the name of the icon that was clicked on
-          println(this.iconTitle + " was clicked");
-          
-          // Checking if this icon has a link associated with it
-          if(this.iconLinkTo.length() > 0)
+    if(mousePressed){
+      if(this.checkMouseOver()){
+        // Checking if this icon has a link associated with it
+        if(this.iconLinkTo.length() > 0)
+        {
+          // Checking if the iconTitle contains "http" i.e. if it is an external link
+          if(this.iconLinkTo.indexOf("http") > -1)
           {
+            // This is an EXTERNAL link
+            // Passing the icon's link into the link() method, so that it can be treated as 
+            // an external link i.e. to a website
+            link(this.iconLinkTo);
+            
+            // Logging out what site the app will now be taken to
+            println("Going to " + this.iconLinkTo);
+            
+          } else if(this.iconLinkTo.indexOf("_") == 0){
+            callFunction = this.iconLinkTo;
+            
+            // Logging out what page the app will now be taken to
+            println("Calling the " + this.iconLinkTo + "() function");
+          } else {
+            // This is an INTERNAL link
             // Setting the global currentScreen variable to be equal to the link
             // contained within the icon that was clicked on (so it can be used
             // in the main sketch to determine which page to display)
             currentScreen = this.iconLinkTo;
             
+            // Resets required for the About Screen.
+            // Resetting teh screenTitleY position to it's original value (as it may have been
+            // incremented if the about screen was scrolled
+            screenTitleY = appHeight * 0.08f;
+            // Resetting the about screen's loaded value to false, so that the next time it is opened
+            // it will reset to it's original positions
+            myAboutScreen.loaded = false;
+            
             // Logging out what page the app will now be taken to
-            println("Going to page " + this.iconLinkTo);
+            println("Going to the " + this.iconLinkTo);
           }
-          
-          // Setting mousePressed back to false, so that if the user still has their
-          // mouse pressed after the screen changes, this will not be considered
-          // a new click (as otherwise they could inadvertantly click on another button)
-          mousePressed = false;
+        }
+      }
     }
   }
 }
@@ -747,7 +1056,7 @@ public class ImagePreviewScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon disgardIcon = new Icon(iconLeftX, iconBottomY, disgardIconImage, "Disgard Image", false, "CameraLiveViewScreen");
-    Icon keepIcon = new Icon(iconRightX, iconBottomY, keepIconImage, "Keep Image", false, "SaveShareScreenA");
+    Icon keepIcon = new Icon(iconRightX, iconBottomY, keepIconImage, "Keep Image", false, "_keepImage");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {disgardIcon, keepIcon};
@@ -781,7 +1090,7 @@ public class ImagePreviewScreen extends Screen{
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
-    this.addBackgroundImage(ketaiCamera, appHeight, appWidth, cameraScale, cameraRotation);
+    this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
   }
 }
 public class LoadingScreen extends Screen{
@@ -906,6 +1215,8 @@ protected class Rectangle{
       // Setting the fill colour of the object to the value specified
       fill(rectCol);
       
+      noStroke();
+      
       // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
       // been applied to the rectangle, it will pivot around it's center point
       rectMode(CENTER);
@@ -985,6 +1296,11 @@ protected class Rectangle{
       // the text will be drawn from the center point of it's position on the left of
       // the page
       textAlign(LEFT, CENTER);
+    }else if (align.equals("LEFT-TOP")){
+      // Setting the text align to center (on both the x and the y) so that
+      // the text will be drawn from the center point of it's position on
+      // the page
+      textAlign(LEFT, TOP);
     }else{
       // Setting the text align to center (on both the x and the y) so that
       // the text will be drawn from the center point of it's position on
@@ -1080,6 +1396,12 @@ protected class Rectangle{
   protected float getY(){
     return rectY;
   }
+
+  protected void setY(float y){
+    //if((y < appHeight/2) && (y > -appHeight * 0.75)){
+      rectY = y;
+    //}
+  }
   
   // Get method that returns the instance's width
   protected float getWidth(){
@@ -1139,8 +1461,8 @@ public class SaveShareScreenA extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "CameraLiveViewScreen");
-    Icon nextIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Next", true, "SaveShareScreenB");
+    Icon cancelIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle",  "CameraLiveViewScreen");
+    Icon nextIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Next", true, "Middle", "SaveShareScreenB");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, nextIcon};
@@ -1171,6 +1493,7 @@ public class SaveShareScreenA extends Screen{
   }
 }
 public class SaveShareScreenB extends Screen{
+  private TextInput messageInput;
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -1181,6 +1504,8 @@ public class SaveShareScreenB extends Screen{
     // default values i.e. fullscreen, centered etc.
     super(col);
     
+    messageInput = new TextInput(iconCenterX, iconCenterY, appWidth * 0.8f, appHeight * 0.2f, 0xffFFFFFE, "messageInput", "LEFT-TOP");
+    
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
     // x, and y, based on percentages of the width and height (where icon positioning variables
@@ -1190,8 +1515,8 @@ public class SaveShareScreenB extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "SaveShareScreenA");
-    Icon shareIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Share", true, "SharingScreen");
+    Icon cancelIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
+    Icon shareIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Share", true, "Middle", "SharingScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, shareIcon};
@@ -1219,6 +1544,8 @@ public class SaveShareScreenB extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    messageInput.showTextInput();
   }
 }
 protected class Screen extends Rectangle{
@@ -1264,6 +1591,10 @@ protected class Screen extends Rectangle{
     super(col);
   }
   
+  protected Screen(float x, float y, float w, float h, int col){
+    super(x, y, w, h, col);
+  }
+  
   /*-------------------------------------- drawScreen() ------------------------------------------------*/
    
   // Creating a public method so that this screen can be displayed from
@@ -1277,7 +1608,8 @@ protected class Screen extends Rectangle{
     // of the screenTitle is at least one character long
     if(screenTitle.length() > 0)
     {
-      this.addText(screenTitle, appWidth/2, appHeight * 0.08f);
+      fill(0);
+      this.addText(screenTitle, appWidth/2, screenTitleY);
     }
     
     // Checking if this screen has any icons to be displayed
@@ -1310,6 +1642,10 @@ protected class Screen extends Rectangle{
     screenTitle = title;
   }
   
+  protected Icon[] getScreenIcons(){
+    return screenIcons;
+  }
+  
   protected void setScreenIcons(Icon[] icons){
     // Initialising the screenIcons array with the contents from the allIcons
     // array that each screen will pass in
@@ -1317,7 +1653,7 @@ protected class Screen extends Rectangle{
   }
 }
 public class SearchScreen extends Screen{
-  
+  private TextInput searchInput;
   // Creating a public constructor for the SearchTravelScreen class, so that
   // an instance of it can be declared in the main sketch
   public SearchScreen(int col){
@@ -1326,6 +1662,8 @@ public class SearchScreen extends Screen{
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(col);
+    
+    searchInput = new TextInput(iconCenterX, iconCenterY, appWidth * 0.8f, appHeight * 0.2f, 0xffFFFFFE, "searchInput", "LEFT-TOP");
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -1337,8 +1675,8 @@ public class SearchScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
-    Icon cancelIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "HomeScreen");
-    Icon searchIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Search", true, "SearchingScreen");
+    Icon cancelIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle", "HomeScreen");
+    Icon searchIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Search", true, "Middle", "SearchingScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchIcon, cancelIcon};
@@ -1366,6 +1704,8 @@ public class SearchScreen extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    searchInput.showTextInput();
   }
 }
 public class SearchUnsuccessfulScreen extends Screen{
@@ -1395,8 +1735,8 @@ public class SearchUnsuccessfulScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
-    Icon searchTravelIcon = new Icon(appWidth * 0.3f, squareIconBottomY, squareIconSize, squareIconSize, searchPageIconImage, "Search Again", true, "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.7f, squareIconBottomY, squareIconSize, squareIconSize, randomPageIconImage, "Random", true, "CameraLiveViewScreen");
+    Icon searchTravelIcon = new Icon(appWidth * 0.3f, largeIconBottomY, largeIconSize, largeIconSize, searchPageIconImage, "Search Again", true, "Below", "SearchScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.7f, largeIconBottomY, largeIconSize, largeIconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchTravelIcon, randomTravelIcon};
@@ -1569,9 +1909,9 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon retryIcon = new Icon(iconCenterX, squareIconBottomY * 0.9f, retryIconImage, "Retry Sending", false, "SharingScreen");
-    Icon deleteIcon = new Icon(iconLeftX, squareIconBottomY, deleteIconImage, "Delete Image", false, "CameraLiveViewScreen");
-    Icon saveIcon = new Icon(iconRightX, squareIconBottomY, saveIconImage, "Save Image", false, "ShareSaveSuccessfulScreen");
+    Icon retryIcon = new Icon(iconCenterX, largeIconBottomY * 0.9f, retryIconImage, "Retry Sending", false, "SharingScreen");
+    Icon deleteIcon = new Icon(iconLeftX, largeIconBottomY, deleteIconImage, "Delete Image", false, "CameraLiveViewScreen");
+    Icon saveIcon = new Icon(iconRightX, largeIconBottomY, saveIconImage, "Save Image", false, "ShareSaveSuccessfulScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {retryIcon, deleteIcon, saveIcon};
@@ -1692,9 +2032,8 @@ public class SharingScreen extends Screen{
   }
 }
 public class SocialMediaLoginScreen extends Screen{
-  
-  Rectangle usernameInput;
-  Rectangle passwordInput;
+  private TextInput usernameInput;
+  private TextInput passwordInput;
   
   // Creating a public constructor for the SearchTravelScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -1714,8 +2053,8 @@ public class SocialMediaLoginScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "CameraLiveViewScreen");
-    Icon loginIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Login", true, "CameraLiveViewScreen");
+    Icon cancelIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle", "CameraLiveViewScreen");
+    Icon loginIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Login", true, "Middle", "CameraLiveViewScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, loginIcon};
@@ -1733,9 +2072,9 @@ public class SocialMediaLoginScreen extends Screen{
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
     this.setScreenTitle("Social Media Login Screen");
-   
-    usernameInput = new Rectangle(iconCenterX, iconCenterY * 0.85f, appWidth * 0.8f, appHeight * 0.08f, 0xffFFFFFF);
-    passwordInput = new Rectangle(iconCenterX, iconCenterY * 1.35f, appWidth * 0.8f, appHeight * 0.08f, 0xffFFFFFF);
+    
+    usernameInput = new TextInput(iconCenterX, iconCenterY * 0.65f, appWidth * 0.8f, appHeight * 0.08f, 0xffFFFFFE, "usernameInput");
+    passwordInput = new TextInput(iconCenterX, iconCenterY * 1.15f, appWidth * 0.8f, appHeight * 0.08f, 0xffFFFFFE, "passwordInput", true);
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -1747,10 +2086,10 @@ public class SocialMediaLoginScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.7f);
-    this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 1.2f);
-    usernameInput.show();
-    passwordInput.show();
+    this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.5f);
+    this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 1);
+    usernameInput.showTextInput();
+    passwordInput.showTextInput();
   }
 }
 public class SocialMediaLogoutScreen extends Screen{
@@ -1773,8 +2112,8 @@ public class SocialMediaLogoutScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon noIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "No", true, "SettingsScreen");
-    Icon yesIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Yes", true, "SettingsScreen");
+    Icon noIcon = new Icon(appWidth * 0.3f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "No", true, "Middle", "SettingsScreen");
+    Icon yesIcon = new Icon(appWidth * 0.7f, iconBottomY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Yes", true, "Middle", "SettingsScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {noIcon, yesIcon};
@@ -1803,6 +2142,201 @@ public class SocialMediaLogoutScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
   }
+}
+public class TextInput extends ClickableElement{
+  
+  // Creating private variables to store the TextInput's title and value
+  // properties, so that they can only be accessed within this class
+  private String inputTitle = "";
+  private String inputValue = "";
+  private String inputTextAlign = "";
+  private Boolean passwordInput;
+  private float textX;
+  private float textY;
+  
+  /*
+  // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
+  private int textAlignX;
+  private int textAlignY;
+  private int textBoxMode;
+  private float textWidth;
+  private float textHeight;
+  */
+  
+  /*-------------------------------------- Constructor() ------------------------------------------------*/
+  // This partial constructor is used by text inputs that do not require their contents
+  // to be blocked out i.e. any text input that is not a password
+  public TextInput(float x, float y, float w, float h, int col, String title){
+
+    // Passing the relevant parametres to the main constructor. Since a password value
+    // has not been included, passing false for this argument (i.e. assuming this in not
+    // a password textInput
+    this(x, y, w, h, col, title, false, "LEFT");
+  }
+  
+  // This partial constructor is used by text inputs that do not require their contents
+  // to be blocked out i.e. any text input that is not a password
+  public TextInput(float x, float y, float w, float h, int col, String title, String align){
+
+    // Passing the relevant parametres to the main constructor. Since a password value
+    // has not been included, passing false for this argument (i.e. assuming this in not
+    // a password textInput
+    this(x, y, w, h, col, title, false, align);
+  }
+  
+  // This partial constructor is used by text inputs that do not require their contents
+  // to be blocked out i.e. any text input that is not a password
+  public TextInput(float x, float y, float w, float h, int col, String title, Boolean password){
+
+    // Passing the relevant parametres to the main constructor. Since a password value
+    // has not been included, passing false for this argument (i.e. assuming this in not
+    // a password textInput
+    this(x, y, w, h, col, title, password, "LEFT");
+  }
+  
+  // This constructor is used by all text inputs
+  public TextInput(float x, float y, float w, float h, int col, String title, Boolean password, String align){
+
+    // Passing the relevant parametres from the constructor into the constructor 
+    // of the super class (ClickableElement)
+    super(x, y, w, h, col, title);
+    
+    // Initialising the inputTitle to be equal to the requested title
+    inputTitle = title;
+    
+    passwordInput = password;
+    
+    inputTextAlign = align;
+    
+    if(inputTextAlign.equals("LEFT")){
+      textX = x - (w * 0.45f);
+      textY = y;
+    } else if(inputTextAlign.equals("LEFT-TOP")){
+      textX = x - (w * 0.45f);
+      textY = y - (h * 0.45f);
+    } else {
+      textX = x;
+      textY = y;
+    }
+    
+    /*
+    // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
+    if(inputTextAlign.equals("LEFT")){
+      textX = this.getX() - (w * 0.45);
+      textY = this.getY();
+      textAlignX = LEFT;
+      textAlignY = CENTER;
+    } else if(inputTextAlign.equals("LEFT-TOP")){
+      textX = this.getX()  - (w * 0.45);
+      textY = this.getY() * 1.1;
+      textAlignX = LEFT;
+      textAlignY = TOP;
+    } else {
+      textX = this.getX();
+      textY = this.getY();
+      textAlignX = CENTER;
+      textAlignY = CENTER;
+    }
+    
+    textWidth = textX + (this.getWidth() * 0.9);
+    textHeight = textY + (this.getHeight() * 0.9);
+    */
+  }
+  
+  /*-------------------------------------- showTextInput() ------------------------------------------------*/
+  
+  // Creating a public showTextInput function, which can be called anywhere in the code
+  // to display the icon, and add any text that has been specified
+  public void showTextInput(){
+    // Calling the show() method (which was inherited from the Rectangle class)
+    // so that this icon will be displayed on screen
+    this.show();
+    
+    // Checking if the length of the value is greater than 0 i.e. 
+    if(this.inputValue.length() > 0){
+      // Creating a temporary varaible to store the string we are going to display in the text input.
+      // This string will either contain the value of the text input, or in the case of a password,
+      // stars which represent the value's length (along with the last letter of the password)
+      String displayText = "";
+      
+      // Checking if this textInput is a password field
+      if(passwordInput){
+        // Setting display text to be equal to the value returned from the hidePassword() method
+        // i.e. starred out (asides fromt the last letter)
+        displayText = hidePassword();
+        /*
+        // Code to only display last letter of password for a specified period of time. Currently
+        // not using, but keeping for future reference
+        delay(500);
+        displayText = displayText.substring(0, displayText.length() -1) + "*";
+        */
+      } else {
+        // Since this field does not contain a password, set the display text to the value of the input
+        // field
+        displayText = this.inputValue;
+      }
+      this.addText(displayText, inputTextAlign, textX, textY, this.getWidth() * 0.1f);
+      // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
+      //this.addTextBox(displayText);
+    }
+    if(mousePressed){
+      if(this.checkMouseOver()){
+        keyboardRequired = true;
+        currentTextInput = this;
+        currentTextInputValue = "";
+        println("The " + inputTitle + " text input was clicked on");
+      }
+    }
+  }
+  
+  public void setInputValue(String val){
+    this.inputValue = val;
+  }
+  
+  public String getInputValue(){
+    return this.inputValue;
+  }
+  
+  private String hidePassword(){
+    // Creating a temporary string to store the **** for the password (i.e. we do not want
+    // to display the user's password, we just want to reflect the length of it in terms
+    // of * stars *
+    String passwordStars = "";
+    
+    // Looping through the length of the myText string, to determine how many stars should
+    // be displayed for the current password length, and allowing just the last letter to be
+    // displayed
+    for(int i = 0; i < this.inputValue.length(); i++){
+      // Creating a temporary variable for the index position of the last character in myText
+      // string
+      int lastLetter = this.inputValue.length() - 1;
+      
+      // Checking if the current loop has reached the last letter in the myText string
+      if(i == lastLetter){
+        // Since this is the last letter in the string, we want to display it with the 
+        // preceeing stars i.e. so the user can always see the most recent character
+        // they have entered
+        passwordStars += this.inputValue.charAt(lastLetter);
+      } else {
+        // Add a star in place of this character
+        passwordStars += "*";
+      }
+    }
+    return passwordStars;
+  }
+  
+  /*
+  // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
+  private void addTextBox(String text){
+    rectMode(CORNERS);
+    textAlign(textAlignX, textAlignY);
+    fill(255, 0, 0);
+    rect(textX, textY, textWidth, textHeight); 
+    fill(0);
+    text(text, textX, textY, textWidth, textHeight);
+    rectMode(CORNER);
+  }
+  */
 }
   public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {

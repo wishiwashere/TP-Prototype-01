@@ -310,7 +310,7 @@ void draw() {
   } else if(callFunction.equals("_switchCameraView")){
      myCameraLiveViewScreen.switchCameraView();
   } else {
-    println("This function does not exist / cannot be triggered by this icon");
+    //println("This function does not exist / cannot be triggered by this icon");
   }
   
   // Checking if the keyboard is required i.e. if an input field is currently in focus
