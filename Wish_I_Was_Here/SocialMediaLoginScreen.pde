@@ -1,7 +1,7 @@
 public class SocialMediaLoginScreen extends Screen{
   
-  Rectangle usernameInput;
-  Rectangle passwordInput;
+  TextInput usernameInput;
+  TextInput passwordInput;
   
   // Creating a public constructor for the SearchTravelScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -40,9 +40,9 @@ public class SocialMediaLoginScreen extends Screen{
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
     this.setScreenTitle("Social Media Login Screen");
-   
-    usernameInput = new Rectangle(iconCenterX, iconCenterY * 0.85, appWidth * 0.8, appHeight * 0.08, #FFFFFF);
-    passwordInput = new Rectangle(iconCenterX, iconCenterY * 1.35, appWidth * 0.8, appHeight * 0.08, #FFFFFF);
+    
+    usernameInput = new TextInput(iconCenterX, iconCenterY * 0.85, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "usernameInput");
+    passwordInput = new TextInput(iconCenterX, iconCenterY * 1.35, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "passwordInput");
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -56,7 +56,7 @@ public class SocialMediaLoginScreen extends Screen{
     
     this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.7);
     this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 1.2);
-    usernameInput.show();
-    passwordInput.show();
+    usernameInput.showTextInput();
+    passwordInput.showTextInput();
   }
 }

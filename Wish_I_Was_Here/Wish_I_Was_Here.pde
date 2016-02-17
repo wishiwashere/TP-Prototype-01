@@ -1,8 +1,11 @@
 import ketai.*;
 import ketai.camera.*;
+import ketai.ui.*;
 import android.os.Environment;
 import android.content.*;
 
+  /*-------------------------------------- Globally Accessed Variables ------------------------------------------------*/
+  
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
 // this is the first screen that is displayed. Since this global variable is available
 // throughout the sketch (i.e. within all classes as well as the main sketch) we will
@@ -13,11 +16,27 @@ import android.content.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "CameraLiveViewScreen";
+String currentScreen = "SocialMediaLoginScreen";
 
+// Creating a global variable, which any icon can use to pass the name of the function
+// they link to. The value of this variable is set in the Icon class when an icon is clicked
+// on, and it's iconLinkTo value begins with a "_". This is a naming convention we created
+// so that it is clearer which icons link to screens and which link to functions.
 String callFunction = "";
 
-PImage currentImage;
+// Creating a global boolean, to determine if the keyboard is required. This value is set to 
+// true within the TextInput class if a text input has been clicked on. While this value is
+// set to true, the draw function will call the KetaiKeyboard .show() method, to trigger the 
+// device to display it's keyboard. Each time a mousePressed event occurs, this variable
+// is reset to false, so that if a user clicks anywhere else on the screen, the keyboard
+// will automatically close
+Boolean keyboardRequired = false;
+
+// Creating a global variable which will contain the value of the most recent y position of the 
+// mouse. This variable gets it's first value each time a mousePressed event occurs (i.e. when the 
+// user first holds down the mouse). It will then be continually updated (on any pages that scroll)
+// and used to determine how much a user has scrolled, and move the contents of these page's accordingly
+float previousMouseY;
 
   /*-------------------------------------- KetaiCamera ------------------------------------------------*/
   
@@ -43,16 +62,7 @@ int cameraScale = -1;
 // Initialising at -90 degrees, as we will be starting on the front facing camera
 int cameraRotation = -90;
 
-float previousMouseY;
-
-  /*-------------------------------------- Sizing ------------------------------------------------*/
-  
-// Declaring global variables, which will contain the width and height of the device's
-// display, so that these values can be reused throughout all classes (i.e. to calculate
-// more dynamic position/width/height's so that the interface responds to different
-// screen sizes
-int appWidth;
-int appHeight;
+  /*-------------------------------------- Images ------------------------------------------------*/
 
 // Declaring the image holders for the icons that will appear throughout the sketch, 
 // so that they can all be loaded in once, and then used throughout the relevant screens
@@ -76,6 +86,15 @@ PImage twitterAccountIconImage;
 PImage instagramAccountIconImage;
 PImage buttonImage;
 
+  /*-------------------------------------- Sizing ------------------------------------------------*/
+  
+// Declaring global variables, which will contain the width and height of the device's
+// display, so that these values can be reused throughout all classes (i.e. to calculate
+// more dynamic position/width/height's so that the interface responds to different
+// screen sizes
+int appWidth;
+int appHeight;
+
 // Declaring the icon positioning X and Y variables, which will be used globally to ensure that
 // the icons on each page all line up with one another. These measurements are all based on percentages
 // of the app's display, and are initialised in the setup function of this sketch
@@ -94,6 +113,8 @@ float screenTitleY;
 // initialised in the setup() function of the app
 float defaultTextSize;
 
+  /*-------------------------------------- Screens ------------------------------------------------*/
+  
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
 HomeScreen myHomeScreen;
@@ -119,7 +140,18 @@ LoadingScreen myLoadingScreen;
  // Creating a string that will hold the directory path of where the images will be saved to
 String directory = "";
 
+// Creating a global image variable, to store the currentImage. Currently, this image is
+// simply the current frame of the ketaiCamera, but evenually this variable will be
+// used to hold the "postcard" of the person standing in a Google Street View enviroment.
+// This variable is set to the current frame of the camera each time a new frame is read
+// in (i.e. in the onCameraPreviewEvent() of the main sketch)
+PImage currentImage;
+
+ /*-------------------------------------- Built In Functions ------------------------------------------------*/
+
 void setup() {
+   /*-------------------------------------- Global ------------------------------------------------*/
+   
   // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
   //size(360, 640);
@@ -140,10 +172,11 @@ void setup() {
   appWidth = width;
   appHeight = height;
   
+    /*-------------------------------------- Ketai ------------------------------------------------*/
+    
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
-  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 12);
-  frameRate(12);
+  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
   
   // Printing out the list of available cameras i.e. front/rear facing
   println(ketaiCamera.list());
@@ -170,6 +203,8 @@ void setup() {
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
   
+   /*-------------------------------------- Images ------------------------------------------------*/
+   
   // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
   // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
   // reused on multiple pages
@@ -192,8 +227,9 @@ void setup() {
   twitterAccountIconImage = loadImage("iconPlaceholder.png");
   instagramAccountIconImage = loadImage("iconPlaceholder.png");
   buttonImage = loadImage("buttonImage.png");
-  currentImage = loadImage("placeholder.PNG");
 
+   /*-------------------------------------- Sizing ------------------------------------------------*/
+   
   // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
   // the icons on each page all line up with one another. These measurements are all based on percentages
   // of the app's display width and height (as defined above
@@ -211,6 +247,8 @@ void setup() {
   // Initialising the defaultTextSize to be equal to a percentage of the app's current height
   defaultTextSize = appHeight * 0.04;
   
+   /*-------------------------------------- Screens ------------------------------------------------*/
+   
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious
   // (for testing purposes only). Note - setting a background color is optional. Depending on the
@@ -235,11 +273,24 @@ void setup() {
   mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(#CEBD54);
   myLoadingScreen = new LoadingScreen();
   
+   /*-------------------------------------- Saving ------------------------------------------------*/
+   
   // Storing a string that tells the app where to store the images, by default 
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
   directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
-}
+  
+  // Initialising the currentImage to be equal to a plain black image. This is so that if the 
+  // currentImage get's referred to before the camera has started, it will just contain a plain
+  // black screen. Creating this black image by using createImage to make it the full size
+  // of the screen, and then setting each pixel in the image to black
+  currentImage = createImage(appWidth, appHeight, RGB);
+  currentImage.loadPixels();
+  for (int i = 0; i < currentImage.pixels.length; i++) {
+      currentImage.pixels[i] = color(0); 
+    }
+    currentImage.updatePixels();
+  }
 
 void draw() {
   // Calling the monitorScreens() function to display the right screen by calling
@@ -250,6 +301,24 @@ void draw() {
    switchScreens();
 }
 
+void mousePressed(){
+  keyboardRequired = false;
+  previousMouseY = mouseY;
+}
+
+ /*-------------------------------------- Ketai Functions ------------------------------------------------*/
+ 
+// ketaiCamera event which is automatically called everytime a new frame becomes
+// available from the ketaiCamera.
+void onCameraPreviewEvent()
+{
+  // Reading in a new frame from the ketaiCamera.
+  ketaiCamera.read();
+  currentImage = ketaiCamera.get();
+  //manipulatePixels();
+}
+
+ /*-------------------------------------- Custom Functions ------------------------------------------------*/
 void switchScreens(){
   // Checking if the String that is stored in the currentScreen variable 
   // (which gets set in the Icon class when an icon is clicked on) is
@@ -310,6 +379,13 @@ void switchScreens(){
      myCameraLiveViewScreen.switchCameraView();
   } 
   
+  if(keyboardRequired){
+    KetaiKeyboard.show(this);
+    callFunction = "";
+  } else {
+    KetaiKeyboard.hide(this);
+    callFunction = "";
+  }
   
   // Turning the camera on and off (if the current screen
   // is the camera live view, and the camera is  not yet turned
@@ -325,7 +401,7 @@ void switchScreens(){
     ketaiCamera.stop();
   }
 }
-
+ 
 void keepImage(){  
   // Checking if Storage is available
   if(isExternalStorageWritable()){    
@@ -364,26 +440,11 @@ Boolean isExternalStorageWritable() {
 void testingTimeoutScreen(String fadeToScreen){
   if(mousePressed)
   { 
-    
     currentScreen = fadeToScreen;
     mousePressed = false;
   }
 }
-
-// ketaiCamera event which is automatically called everytime a new frame becomes
-// available from the ketaiCamera.
-void onCameraPreviewEvent()
-{
-  // Reading in a new frame from the ketaiCamera.
-  ketaiCamera.read();
-  currentImage = ketaiCamera.get();
-  //manipulatePixels();
-}
-
-void mousePressed(){
-  previousMouseY = mouseY;
-}
-
+ 
 void manipulatePixels(){
   currentImage.loadPixels();
   for(int x = 0; x < currentImage.width; x++)

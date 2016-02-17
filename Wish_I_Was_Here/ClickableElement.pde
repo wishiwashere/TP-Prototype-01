@@ -3,10 +3,15 @@ public class ClickableElement extends Rectangle{
   
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   
-  // This constructor is used by icons in the CameraLiveView Screen, that want to accept the 
-  // default width and height of an icon, but do not link to another page
+  // This constructor is used by icons
   public ClickableElement(float x, float y, float w, float h, PImage img, String title){
     super(x, y, w, h, img);
+    elementTitle = title;
+  }
+  
+  // This constructor is used by textInputs
+  public ClickableElement(float x, float y, float w, float h, color col, String title){
+    super(x, y, w, h, col);
     elementTitle = title;
   }
   
