@@ -32,6 +32,9 @@ String callFunction = "";
 // will automatically close
 Boolean keyboardRequired = false;
 
+TextInput currentTextInput = null;
+String currentTextInputValue = "";
+
 // Creating a global variable which will contain the value of the most recent y position of the 
 // mouse. This variable gets it's first value each time a mousePressed event occurs (i.e. when the 
 // user first holds down the mouse). It will then be continually updated (on any pages that scroll)
@@ -304,6 +307,34 @@ void draw() {
 void mousePressed(){
   keyboardRequired = false;
   previousMouseY = mouseY;
+}
+
+void keyPressed(){
+  // Getting the current input value of this text input (i.e. so that if a user clicks between different
+  // text fields, they can resume their input instead of the textfield becoming empty)
+  currentTextInputValue = currentTextInput.getInputValue();
+  
+  // Checking if the key pressed is a coded value i.e. backspace etc
+  if(key == CODED){
+    //println(key);
+    // Checking if the key pressed was the backspace key
+    if(keyCode == 67)
+    {
+      // Checking that the length of the current currentTextInputValue string is greater than 0 (i.e. 
+      // if the string is empty, don't try to delete anything)
+      if(currentTextInputValue.length() > 0){
+        //println("BACKSPACE");
+        // Removing the last character from currentTextInputValue string, by creating a substring
+        // of currentTextInputValue, that is one shorter than the current currentTextInputValue string
+        currentTextInputValue = currentTextInputValue.substring(0, currentTextInputValue.length() - 1);
+      }
+    }
+  } else {
+    // If the key is not a coded value, adding the character to currentTextInputValue string
+    currentTextInputValue += key;
+  }
+  // Passing the currentTextInputValue string into the setInputValue of the currentTextInput field
+  currentTextInput.setInputValue(currentTextInputValue);
 }
 
  /*-------------------------------------- Ketai Functions ------------------------------------------------*/

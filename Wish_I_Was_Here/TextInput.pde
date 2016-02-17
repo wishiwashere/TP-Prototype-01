@@ -27,14 +27,25 @@ public class TextInput extends ClickableElement{
     // so that this icon will be displayed on screen
     this.show();
     
+    // Checking if the length of the value is greater than 0 i.e. 
     if(this.inputValue.length() > 0){
-      //this.addText(this.inputValue, this.getX(), this.getY(), this.getWidth() * 0.4);
+      this.addText(this.inputValue, "LEFT", this.getX() - (this.getWidth() * 0.45), this.getY(), this.getWidth() * 0.1);
     }
     if(mousePressed){
       if(this.checkMouseOver()){
         keyboardRequired = true;
+        currentTextInput = this;
+        currentTextInputValue = "";
         println("The " + inputTitle + " text input was clicked on");
       }
     }
+  }
+  
+  public void setInputValue(String val){
+    this.inputValue = val;
+  }
+  
+  public String getInputValue(){
+    return this.inputValue;
   }
 }
