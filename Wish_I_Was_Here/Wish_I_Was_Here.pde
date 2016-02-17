@@ -16,7 +16,7 @@ import android.content.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "SaveShareScreenB";
+String currentScreen = "SocialMediaLoginScreen";
 
 // Creating a global variable, which any icon can use to pass the name of the function
 // they link to. The value of this variable is set in the Icon class when an icon is clicked

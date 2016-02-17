@@ -9,6 +9,15 @@ public class TextInput extends ClickableElement{
   private float textX;
   private float textY;
   
+  /*
+  // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
+  private int textAlignX;
+  private int textAlignY;
+  private int textBoxMode;
+  private float textWidth;
+  private float textHeight;
+  */
+  
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   // This partial constructor is used by text inputs that do not require their contents
   // to be blocked out i.e. any text input that is not a password
@@ -60,11 +69,33 @@ public class TextInput extends ClickableElement{
     } else if(inputTextAlign.equals("LEFT-TOP")){
       textX = x - (w * 0.45);
       textY = y - (h * 0.45);
-      println("LEFT-TOP");
     } else {
       textX = x;
       textY = y;
     }
+    
+    /*
+    // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
+    if(inputTextAlign.equals("LEFT")){
+      textX = this.getX() - (w * 0.45);
+      textY = this.getY();
+      textAlignX = LEFT;
+      textAlignY = CENTER;
+    } else if(inputTextAlign.equals("LEFT-TOP")){
+      textX = this.getX()  - (w * 0.45);
+      textY = this.getY() * 1.1;
+      textAlignX = LEFT;
+      textAlignY = TOP;
+    } else {
+      textX = this.getX();
+      textY = this.getY();
+      textAlignX = CENTER;
+      textAlignY = CENTER;
+    }
+    
+    textWidth = textX + (this.getWidth() * 0.9);
+    textHeight = textY + (this.getHeight() * 0.9);
+    */
   }
   
   /*-------------------------------------- showTextInput() ------------------------------------------------*/
@@ -100,6 +131,8 @@ public class TextInput extends ClickableElement{
         displayText = this.inputValue;
       }
       this.addText(displayText, inputTextAlign, textX, textY, this.getWidth() * 0.1);
+      // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
+      //this.addTextBox(displayText);
     }
     if(mousePressed){
       if(this.checkMouseOver()){
@@ -146,4 +179,17 @@ public class TextInput extends ClickableElement{
     }
     return passwordStars;
   }
+  
+  /*
+  // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
+  private void addTextBox(String text){
+    rectMode(CORNERS);
+    textAlign(textAlignX, textAlignY);
+    fill(255, 0, 0);
+    rect(textX, textY, textWidth, textHeight); 
+    fill(0);
+    text(text, textX, textY, textWidth, textHeight);
+    rectMode(CORNER);
+  }
+  */
 }
