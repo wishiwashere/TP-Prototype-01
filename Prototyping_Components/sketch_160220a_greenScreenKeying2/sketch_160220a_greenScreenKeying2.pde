@@ -13,8 +13,16 @@ void setup(){
     float pixelHue = hue(girlGreenScreen.pixels[i]);
     float pixelSaturation = saturation(girlGreenScreen.pixels[i]);
     float pixelBrightness = brightness(girlGreenScreen.pixels[i]);
+    float previousPixelHue = pixelHue;
+    float nextPixelHue = pixelHue;
+    if(i > 1){
+      previousPixelHue = hue(girlGreenScreen.pixels[i - 1]);
+    }
+    if(i < girlGreenScreen.pixels.length - 1){
+      nextPixelHue = hue(girlGreenScreen.pixels[i + 1]);
+    }
     
-    if (pixelHue > 85 && pixelHue < 150 && pixelSaturation > 30 && pixelBrightness > 30){
+    if (previousPixelHue > 96 && previousPixelHue < 150 && pixelHue > 85 && pixelHue < 150 && previousPixelHue > 96 && nextPixelHue < 150 && pixelSaturation > 30 && pixelBrightness > 30){
       pixels[i] = color(#ffffff);
     } else {
       pixels[i] = girlGreenScreen.pixels[i];
