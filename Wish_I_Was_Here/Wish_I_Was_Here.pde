@@ -152,6 +152,8 @@ String directory = "";
 // in (i.e. in the onCameraPreviewEvent() of the main sketch)
 PImage currentImage;
 
+PImage greenScreenTestingImage;
+
  /*-------------------------------------- Built In Functions ------------------------------------------------*/
 
 void setup() {
@@ -181,8 +183,7 @@ void setup() {
     
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
-  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 12);
-  frameRate(12);
+  ketaiCamera = new KetaiCamera(this, appHeight, appWidth, 24);
   
   // Printing out the list of available cameras i.e. front/rear facing
   println(ketaiCamera.list());
@@ -261,7 +262,7 @@ void setup() {
   // screen's constructor, you can pass in a background color, a background image, or nothing at
   // all if you want to default to white
   myHomeScreen = new HomeScreen(#8CBCD8);
-  myCameraLiveViewScreen = new CameraLiveViewScreen(#000000);
+  myCameraLiveViewScreen = new CameraLiveViewScreen();
   myFavouritesScreen = new FavouritesScreen(#CE04BA);
   mySettingsScreen = new SettingsScreen(#2023A5);
   myAboutScreen = new AboutScreen (#CEBD5A);
@@ -290,12 +291,14 @@ void setup() {
   // currentImage get's referred to before the camera has started, it will just contain a plain
   // black screen. Creating this black image by using createImage to make it the full size
   // of the screen, and then setting each pixel in the image to black
-  currentImage = createImage(ketaiCamera.width, ketaiCamera.height, RGB);
+  currentImage = createImage(appWidth, appHeight, RGB);
   currentImage.loadPixels();
   for (int i = 0; i < currentImage.pixels.length; i++) {
     currentImage.pixels[i] = color(0); 
   }
   currentImage.updatePixels();
+  
+  greenScreenTestingImage = loadImage("greenScreenTestingImage.jpg");
 }
 
 void draw() {
@@ -324,6 +327,7 @@ void draw() {
     KetaiKeyboard.hide(this);
     callFunction = "";
   }
+  //image(greenScreenTestingImage, width/2, height/2);
 }
 
 void mousePressed(){
@@ -369,7 +373,7 @@ void onCameraPreviewEvent()
   if(readingImage == false){
     ketaiCamera.read();
     readingImage = true;
-    thread("removeGreenScreen");
+    removeGreenScreen();
   }
 }
 
@@ -488,90 +492,94 @@ void removeGreenScreen(){
   // Changing the colour mode to HSB, so that I can work with the hue, satruation and
   // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
   // and brightness to 100.
-  colorMode(HSB, 360, 100, 100);
+  //colorMode(HSB, 360, 100, 100);
   
-  PImage keyedImage = createImage(currentImage.width, currentImage.height, ARGB);
+  PImage keyedImage = createImage(greenScreenTestingImage.width, greenScreenTestingImage.height, ARGB);
 
   // Loading in the pixel arrays of the keyed image and the girl green screen image
   keyedImage.loadPixels();
-  ketaiCamera.loadPixels();
+  greenScreenTestingImage.loadPixels();
+  /*
+  for (int i = 0; i < ketaiCamera.pixels.length; i++) {
+    // Determining the current location of the pixel
+    keyedImage.pixels[i] = ketaiCamera.pixels[i];
+  }
+  */
+  for (int i = 0; i < greenScreenTestingImage.pixels.length; i++) {
+    
+    /*
+    // Getting the hue, saturation and brightness values of the current pixel
+    float pixelHue = hue(greenScreenTestingImage.pixels[i]);
+    float pixelSaturation = saturation(greenScreenTestingImage.pixels[i]);
+    float pixelBrightness = brightness(greenScreenTestingImage.pixels[i]);
+    
+    // Creating variables to store the hue of the pixels surrounding the current pixel.
+    // Defaulting these the be equal to the current pixels hue, and only changing them if
+    // the current pixel is away from the edge of the picture
+    float pixelHueToLeft = pixelHue;
+    float pixelHueToRight = pixelHue;
+    float pixelHueAbove = pixelHue;
+    float pixelHueBelow = pixelHue;
+    
+    // If the current pixel is not near the edge of the image, changing the values of the variables
+    // for the pixels around it to get their hue values
+    if (i > greenScreenTestingImage.width + 1 && i < greenScreenTestingImage.pixels.length - greenScreenTestingImage.width - 1) {
+      pixelHueToLeft = hue(greenScreenTestingImage.pixels[i - 1]);
+      pixelHueToRight = hue(greenScreenTestingImage.pixels[i + 1]);
+      pixelHueAbove = hue(greenScreenTestingImage.pixels[i - greenScreenTestingImage.width]);
+      pixelHueBelow = hue(greenScreenTestingImage.pixels[i + greenScreenTestingImage.width]);
+    }
 
-  for (int x = 0; x < ketaiCamera.width; x++) {
-    for (int y = 0; y < ketaiCamera.height; y++) {
-      // Determining the current location of the pixel
-      int currentPixel = x + y * ketaiCamera.width;
-      
-      // Getting the hue, saturation and brightness values of the current pixel
-      float pixelHue = hue(ketaiCamera.pixels[currentPixel]);
-      float pixelSaturation = saturation(ketaiCamera.pixels[currentPixel]);
-      float pixelBrightness = brightness(ketaiCamera.pixels[currentPixel]);
-      
-      // Creating variables to store the hue of the pixels surrounding the current pixel.
-      // Defaulting these the be equal to the current pixels hue, and only changing them if
-      // the current pixel is away from the edge of the picture
-      float pixelHueToLeft = pixelHue;
-      float pixelHueToRight = pixelHue;
-      float pixelHueAbove = pixelHue;
-      float pixelHueBelow = pixelHue;
-      
-      // If the current pixel is not near the edge of the image, changing the values of the variables
-      // for the pixels around it to get their hue values
-      if (x > 1 && x < ketaiCamera.width - 1 && y > 1 && y < ketaiCamera.height - 1) {
-        pixelHueToLeft = hue(ketaiCamera.pixels[(x - 1) + y * ketaiCamera.width]);
-        pixelHueToRight = hue(ketaiCamera.pixels[(x + 1) + y * ketaiCamera.width]);
-        pixelHueAbove = hue(ketaiCamera.pixels[x + (y - 1) * ketaiCamera.width]);
-        pixelHueBelow = hue(ketaiCamera.pixels[x + (y + 1) * ketaiCamera.width]);
-      }
-
-      // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
-      if (pixelHue > 60 && pixelHue < 180) {
-        // If the saturation and brightness are above 30, then this is a green pixel
-        if (pixelSaturation > 30 && pixelBrightness > 30)
-        {
-          // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge 
-          if (pixelHue > 90 && pixelHue < 100) {
-            // This seems to effect the girl's hair on the left
-            // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
-            keyedImage.pixels[currentPixel] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
-          } else if (pixelHue > 155) {
-            // Increasing the hue, and reducing the saturation
-            keyedImage.pixels[currentPixel] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
-          } else if (pixelHue < 115) {
-            // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
-            // the green screeen in greenScreenImage2)
-            //keyedImage.pixels[currentPixel] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
-          } else {
-            // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
-            if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
-              // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-              keyedImage.pixels[currentPixel] = color(0, 0, 0, 0);
-            } else if (pixelHue > 130) {
-              // This seems to be the edges around the girl
-              // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
-              keyedImage.pixels[currentPixel] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
-            } else {
-              // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-              keyedImage.pixels[currentPixel] = color(0, 0, 0, 0);
-            }
-          }
+    // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
+    if (pixelHue > 60 && pixelHue < 180) {
+      // If the saturation and brightness are above 30, then this is a green pixel
+      if (pixelSaturation > 30 && pixelBrightness > 30)
+      {
+        // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge 
+        if (pixelHue > 90 && pixelHue < 100) {
+          // This seems to effect the girl's hair on the left
+          // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
+          //keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
+        } else if (pixelHue > 155) {
+          // Increasing the hue, and reducing the saturation
+          //keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
+        } else if (pixelHue < 115) {
+          // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
+          // the green screeen in greenScreenImage2)
+          //keyedImage.pixels[currentPixel] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
         } else {
-          // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
-          // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
-          // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
-          // from this pixel.
-          keyedImage.pixels[currentPixel] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
+          // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
+          if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
+            // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
+            //keyedImage.pixels[i] = color(0, 0, 0, 0);
+          } else if (pixelHue > 130) {
+            // This seems to be the edges around the girl
+            // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
+            //keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
+          } else {
+            // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
+            //keyedImage.pixels[i] = color(0, 0, 0, 0);
+          }
         }
       } else {
-        // Since this pixel did not fall within any of the wider ranges of green in the colour spectrum,
-        // we are going to use this pixel exactly as it was read in, by setting the equilivant pixel in the 
-        // keyedImage to be equal to the equilivant pixel in the greenScreen image
-        keyedImage.pixels[currentPixel] = ketaiCamera.pixels[currentPixel];
+        // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
+        // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
+        // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
+        // from this pixel.
+        //keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
       }
+    } else {
+      // Since this pixel did not fall within any of the wider ranges of green in the colour spectrum,
+      // we are going to use this pixel exactly as it was read in, by setting the equilivant pixel in the 
+      // keyedImage to be equal to the equilivant pixel in the greenScreen image
+      keyedImage.pixels[i] = greenScreenTestingImage.pixels[i];
     }
+    */
+    keyedImage.pixels[i] = greenScreenTestingImage.pixels[i];
   }
   
   // Updating the pixel arrays of the ketaiCamera and the keyed image
-  ketaiCamera.updatePixels();
+  greenScreenTestingImage.updatePixels();
   keyedImage.updatePixels();
   
   // Resetting the color mode to RGB
