@@ -22,7 +22,7 @@ void setup(){
       nextPixelHue = hue(girlGreenScreen.pixels[i + 1]);
     }
     
-    if (previousPixelHue > 96 && previousPixelHue < 150 && pixelHue > 85 && pixelHue < 150 && previousPixelHue > 96 && nextPixelHue < 150 && pixelSaturation > 30 && pixelBrightness > 30){
+    if (pixelHue > 85 && pixelHue < 150 && ((previousPixelHue > 85 && previousPixelHue < 150) || (nextPixelHue > 85 && nextPixelHue < 150)) && pixelSaturation > 30 && pixelBrightness > 35){
       pixels[i] = color(#ffffff);
     } else {
       pixels[i] = girlGreenScreen.pixels[i];
