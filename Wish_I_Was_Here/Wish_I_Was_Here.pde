@@ -492,7 +492,7 @@ void removeGreenScreen(){
   // Changing the colour mode to HSB, so that I can work with the hue, satruation and
   // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
   // and brightness to 100.
-  //colorMode(HSB, 360, 100, 100);
+  colorMode(HSB, 360, 100, 100);
   
   PImage keyedImage = createImage(greenScreenTestingImage.width, greenScreenTestingImage.height, ARGB);
 
@@ -507,7 +507,7 @@ void removeGreenScreen(){
   */
   for (int i = 0; i < greenScreenTestingImage.pixels.length; i++) {
     
-    /*
+    
     // Getting the hue, saturation and brightness values of the current pixel
     float pixelHue = hue(greenScreenTestingImage.pixels[i]);
     float pixelSaturation = saturation(greenScreenTestingImage.pixels[i]);
@@ -520,6 +520,7 @@ void removeGreenScreen(){
     float pixelHueToRight = pixelHue;
     float pixelHueAbove = pixelHue;
     float pixelHueBelow = pixelHue;
+    
     
     // If the current pixel is not near the edge of the image, changing the values of the variables
     // for the pixels around it to get their hue values
@@ -539,10 +540,10 @@ void removeGreenScreen(){
         if (pixelHue > 90 && pixelHue < 100) {
           // This seems to effect the girl's hair on the left
           // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
-          //keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
+          keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
         } else if (pixelHue > 155) {
           // Increasing the hue, and reducing the saturation
-          //keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
+          keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
         } else if (pixelHue < 115) {
           // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
           // the green screeen in greenScreenImage2)
@@ -551,14 +552,14 @@ void removeGreenScreen(){
           // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
           if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
             // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-            //keyedImage.pixels[i] = color(0, 0, 0, 0);
+            keyedImage.pixels[i] = color(0, 0, 0, 0);
           } else if (pixelHue > 130) {
             // This seems to be the edges around the girl
             // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
-            //keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
+            keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
           } else {
             // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-            //keyedImage.pixels[i] = color(0, 0, 0, 0);
+            keyedImage.pixels[i] = color(0, 0, 0, 0);
           }
         }
       } else {
@@ -566,7 +567,7 @@ void removeGreenScreen(){
         // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
         // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
         // from this pixel.
-        //keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
+        keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
       }
     } else {
       // Since this pixel did not fall within any of the wider ranges of green in the colour spectrum,
@@ -574,8 +575,6 @@ void removeGreenScreen(){
       // keyedImage to be equal to the equilivant pixel in the greenScreen image
       keyedImage.pixels[i] = greenScreenTestingImage.pixels[i];
     }
-    */
-    keyedImage.pixels[i] = greenScreenTestingImage.pixels[i];
   }
   
   // Updating the pixel arrays of the ketaiCamera and the keyed image
