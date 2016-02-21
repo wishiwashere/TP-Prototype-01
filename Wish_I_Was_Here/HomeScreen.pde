@@ -1,16 +1,16 @@
-public class HomeScreen extends Screen{
-  
+public class HomeScreen extends Screen {
+
   // Creating a public constructor for the HomeScreen class, so that
   // an instance of it can be declared in the main sketch
-  public HomeScreen(PImage bgImage){
-    
+  public HomeScreen(PImage bgImage) {
+
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
-    
+
     float iconSize = largeIconSize * 1.3;
-       
+
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
     // x, and y, based on percentages of the width and height (where icon positioning variables
@@ -28,7 +28,7 @@ public class HomeScreen extends Screen{
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {randomTravelIcon, searchTravelIcon, myFavouritesIcon, aboutIcon, settingsIcon};
-    
+
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
     // can be looped through by the showScreen() method, and methods inherited from the Icon 
@@ -37,11 +37,11 @@ public class HomeScreen extends Screen{
     // same method on multiple icons.
     this.setScreenIcons(allIcons);
   }
-  
+
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
-  public void showScreen(){
-    
+  public void showScreen() {
+
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen

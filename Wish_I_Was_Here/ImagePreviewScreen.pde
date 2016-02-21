@@ -1,14 +1,14 @@
-public class ImagePreviewScreen extends Screen{
-  
+public class ImagePreviewScreen extends Screen {
+
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
-  public ImagePreviewScreen(color col){
-    
+  public ImagePreviewScreen(color col) {
+
     // Calling the super class (Screen), which will in turn call it's super class 
     // (Rectangle) and create a rectangle with the default values i.e. fullscreen, 
     // centered etc.
     super(col);
-    
+
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
     // x, and y, based on percentages of the width and height (where icon positioning variables
@@ -20,10 +20,10 @@ public class ImagePreviewScreen extends Screen{
     // as the linkTo argument, are optional
     Icon disgardIcon = new Icon(iconLeftX, iconBottomY, disgardIconImage, "Disgard Image", false, "CameraLiveViewScreen");
     Icon keepIcon = new Icon(iconRightX, iconBottomY, keepIconImage, "Keep Image", false, "_keepImage");
-    
+
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {disgardIcon, keepIcon};
-    
+
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
     // can be looped through by the showScreen() method, and methods inherited from the Icon 
@@ -31,23 +31,23 @@ public class ImagePreviewScreen extends Screen{
     // This reduces the need for each screen to have to loop through it's icons, or call the 
     // same method on multiple icons.
     this.setScreenIcons(allIcons);
-    
+
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
-    this.setScreenTitle("Image Preview Screen");
+    this.setScreenTitle("");
   }
-  
+
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
-  public void showScreen(){
-    
+  public void showScreen() {
+
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
-    
+
     // Calls super super class (Rectangle). Passing in the current frame image, the width and height
     // which have been reversed - i.e. the width will now be equal to the height of the app, as the 
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
