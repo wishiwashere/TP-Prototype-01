@@ -1,4 +1,5 @@
 public class ShareUnsuccessfulScreen extends Screen{
+  private float textSize = appWidth * 0.07;
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -18,8 +19,9 @@ public class ShareUnsuccessfulScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(iconLeftX, iconBottomY, cancelIconImage, "Cancel Sending", false, "CameraLiveViewScreen");
-    Icon retryIcon = new Icon(iconRightX, iconBottomY, retryIconImage, "Retry Sending", false, "SharingScreen");
+    
+    Icon cancelIcon = new Icon(iconCenterX * 0.55, largeIconBottomY, largeIconSize, largeIconSize, cancelIconImage, "Cancel", true, "Below", "CameraLiveViewScreen");
+    Icon retryIcon = new Icon(iconCenterX * 1.45, largeIconBottomY, largeIconSize, largeIconSize, retryIconImage, "Retry", true, "Below", "SharingScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, retryIcon};
@@ -36,7 +38,7 @@ public class ShareUnsuccessfulScreen extends Screen{
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
-    this.setScreenTitle("Share Unsuccessful Screen");
+    this.setScreenTitle("");
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -47,5 +49,13 @@ public class ShareUnsuccessfulScreen extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1, textSize);
+    this.addText("Your postcard", iconCenterX, appHeight * 0.18, textSize);
+    this.addText("was not sent", iconCenterX, appHeight * 0.26, textSize);
+    this.addImage(loadImage("sharingScreenImage.png"), iconCenterX, appHeight * 0.4, appWidth * 0.5, appHeight * 0.16);
+    this.addText("But good news :)", iconCenterX, appHeight * 0.54, textSize);
+    this.addText("We have still", iconCenterX, appHeight * 0.62, textSize);
+    this.addText("saved it for you!", iconCenterX, appHeight * 0.7, textSize);
   }
 }

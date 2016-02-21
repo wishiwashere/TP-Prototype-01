@@ -1,5 +1,6 @@
 public class ShareSaveUnsuccessfulScreen extends Screen{
   PImage shareSaveUnsuccessfulScreenImage;
+  private float textSize = appWidth * 0.07;
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -19,9 +20,9 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon retryIcon = new Icon(iconCenterX, largeIconBottomY * 0.9, retryIconImage, "Retry Sending", false, "SharingScreen");
-    Icon deleteIcon = new Icon(iconLeftX, largeIconBottomY, deleteIconImage, "Delete Image", false, "CameraLiveViewScreen");
-    Icon saveIcon = new Icon(iconRightX, largeIconBottomY, saveIconImage, "Save Image", false, "ShareSaveSuccessfulScreen");
+    Icon retryIcon = new Icon(iconCenterX, largeIconBottomY * 0.7, largeIconSize, largeIconSize, retryIconImage, "Retry", true, "Below", "SharingScreen");
+    Icon deleteIcon = new Icon(iconCenterX * 0.55, largeIconBottomY, largeIconSize, largeIconSize, deleteIconImage, "Delete", true, "Below", "CameraLiveViewScreen");
+    Icon saveIcon = new Icon(iconCenterX * 1.45, largeIconBottomY, largeIconSize, largeIconSize, saveIconImage, "Save", true, "Below", "ShareSaveSuccessfulScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {retryIcon, deleteIcon, saveIcon};
@@ -40,7 +41,7 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
-    this.setScreenTitle("Share Unsuccessful Screen");
+    this.setScreenTitle("");
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -52,7 +53,9 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    
-    this.addImage(shareSaveUnsuccessfulScreenImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
+    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1, textSize);
+    this.addText("Your postcard", iconCenterX, appHeight * 0.18, textSize);
+    this.addText("was not sent", iconCenterX, appHeight * 0.26, textSize);
+    this.addImage(loadImage("sharingScreenImage.png"), iconCenterX, appHeight * 0.4, appWidth * 0.5, appHeight * 0.16);
   }
 }

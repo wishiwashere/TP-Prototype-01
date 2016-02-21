@@ -1,4 +1,5 @@
 public class SearchUnsuccessfulScreen extends Screen{
+  private float textSize = appWidth * 0.07;
   
   // Declaring a variable to hold an image that will be added to the screen
   private PImage searchUnsuccessfulScreenImage;
@@ -43,7 +44,7 @@ public class SearchUnsuccessfulScreen extends Screen{
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
-    this.setScreenTitle("We're sorry!");
+    this.setScreenTitle("");
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -55,8 +56,13 @@ public class SearchUnsuccessfulScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
+    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1, textSize);
+    this.addText("We could not", iconCenterX, appHeight * 0.18, textSize);
+    this.addText("find what you", iconCenterX, appHeight * 0.26, textSize);
+    this.addText("were looking for...", iconCenterX, appHeight * 0.34, textSize);
+    
     // Calling the super class's super class (Rectangle) to add an image to the screen, passing
     // in the image, x, y, width and height
-    this.addImage(searchUnsuccessfulScreenImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
+    this.addImage(searchUnsuccessfulScreenImage, iconCenterX, appHeight * 0.55, appWidth * 0.8, appWidth * 0.4);
   }
 }

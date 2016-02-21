@@ -41,7 +41,7 @@ public class CameraLiveViewScreen extends Screen{
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
-    this.setScreenTitle("Live View");
+    this.setScreenTitle("");
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this

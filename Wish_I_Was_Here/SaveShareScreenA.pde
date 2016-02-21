@@ -18,9 +18,9 @@ public class SaveShareScreenA extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon instagramIcon = new Icon(iconCenterX * 0.55, iconCenterY, appWidth * 0.3, appWidth * 0.3, instagramAccountIconImage, "Instagram", true, "Below",  "SocialMediaLoginScreen");
-    Icon twitterIcon = new Icon(iconCenterX * 1.45, iconCenterY, appWidth * 0.3, appWidth * 0.3, twitterAccountIconImage, "Twitter", true, "Below",  "SocialMediaLoginScreen");
-    Icon saveIcon = new Icon(iconCenterX, iconCenterY * 1.5, appWidth * 0.3, appWidth * 0.3, saveIconImage, "Save", true, "Below",  "_keepImage");
+    Icon instagramIcon = new Icon(iconCenterX * 0.55, iconCenterY, largeIconSize, largeIconSize, instagramAccountIconImage, "Instagram", true, "Below",  "SocialMediaLoginScreen");
+    Icon twitterIcon = new Icon(iconCenterX * 1.45, iconCenterY, largeIconSize, largeIconSize, twitterAccountIconImage, "Twitter", true, "Below",  "SocialMediaLoginScreen");
+    Icon saveIcon = new Icon(iconCenterX, iconCenterY * 1.5, largeIconSize, largeIconSize, saveIconImage, "Save", true, "Below",  "_keepImage");
     Icon cancelIcon = new Icon(appWidth * 0.3, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle",  "CameraLiveViewScreen");
     Icon nextIcon = new Icon(appWidth * 0.7, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Next", true, "Middle", "SaveShareScreenB");
     
@@ -51,8 +51,6 @@ public class SaveShareScreenA extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addImage(currentImage, iconCenterX, iconCenterY * 0.4, appWidth * 0.8, appWidth * 0.6);
-    
-    
+    this.addImage(currentImage, iconCenterX, iconCenterY * 0.4, appWidth * 0.8, appWidth * 0.6);    
   }
 }

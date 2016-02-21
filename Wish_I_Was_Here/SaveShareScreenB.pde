@@ -10,7 +10,7 @@ public class SaveShareScreenB extends Screen{
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
     
-    messageInput = new TextInput(iconCenterX, iconCenterY, appWidth * 0.8, appHeight * 0.2, #FFFFFE, "messageInput", "LEFT-TOP");
+    messageInput = new TextInput(iconCenterX, iconCenterY * 0.98, appWidth * 0.8, appHeight * 0.2, #FFFFFE, "messageInput", "LEFT-TOP");
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -21,8 +21,8 @@ public class SaveShareScreenB extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
-    Icon shareIcon = new Icon(appWidth * 0.7, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "SharingScreen");
+    Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
+    Icon shareIcon = new Icon(appWidth * 0.7, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "SharingScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, shareIcon};
@@ -50,6 +50,8 @@ public class SaveShareScreenB extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    this.addImage(currentImage, iconCenterX, iconCenterY * 0.4, appWidth * 0.8, appWidth * 0.6);
     
     messageInput.showTextInput();
   }

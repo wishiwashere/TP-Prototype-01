@@ -1,13 +1,13 @@
 /*
 import ketai.*;
-import ketai.camera.*;
-import ketai.ui.*;
-import android.os.Environment;
-import android.content.*;
-*/
+ import ketai.camera.*;
+ import ketai.ui.*;
+ import android.os.Environment;
+ import android.content.*;
+ */
 
-  /*-------------------------------------- Globally Accessed Variables ------------------------------------------------*/
-  
+/*-------------------------------------- Globally Accessed Variables ------------------------------------------------*/
+
 // Setting the default screen to be the HomeScreen, so that when the app is loaded,
 // this is the first screen that is displayed. Since this global variable is available
 // throughout the sketch (i.e. within all classes as well as the main sketch) we will
@@ -18,7 +18,7 @@ import android.content.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "SaveShareScreenA";
+String currentScreen = "SocialMediaLogoutScreen";
 
 String returnTo = "HomeScreen";
 
@@ -45,8 +45,8 @@ String currentTextInputValue = "";
 // and used to determine how much a user has scrolled, and move the contents of these page's accordingly
 float previousMouseY;
 
-  /*-------------------------------------- KetaiCamera ------------------------------------------------*/
-  
+/*-------------------------------------- KetaiCamera ------------------------------------------------*/
+
 // Creating a global variable to store the ketaiCamera object, so that it can be
 // accessed thoroughout the sketch once it has been initiated i.e. to read in,
 // display and eventually alter the live stream images
@@ -69,7 +69,7 @@ int cameraScale = -1;
 // Initialising at -90 degrees, as we will be starting on the front facing camera
 int cameraRotation = -90;
 
-  /*-------------------------------------- Images ------------------------------------------------*/
+/*-------------------------------------- Images ------------------------------------------------*/
 
 // Declaring the image holders for the icons that will appear throughout the sketch, 
 // so that they can all be loaded in once, and then used throughout the relevant screens
@@ -96,8 +96,8 @@ PImage emailIconImage;
 PImage buttonImage;
 PImage placeholderBackgroundImage;
 
-  /*-------------------------------------- Sizing ------------------------------------------------*/
-  
+/*-------------------------------------- Sizing ------------------------------------------------*/
+
 // Declaring global variables, which will contain the width and height of the device's
 // display, so that these values can be reused throughout all classes (i.e. to calculate
 // more dynamic position/width/height's so that the interface responds to different
@@ -123,8 +123,8 @@ float screenTitleY;
 // initialised in the setup() function of the app
 float defaultTextSize;
 
-  /*-------------------------------------- Screens ------------------------------------------------*/
-  
+/*-------------------------------------- Screens ------------------------------------------------*/
+
 // Declaring a new instance of each screen in the application, so that they
 // can be accessed by the draw function to be displayed when needed
 HomeScreen myHomeScreen;
@@ -146,8 +146,8 @@ SocialMediaLoginScreen mySocialMediaLoginScreen;
 SocialMediaLogoutScreen mySocialMediaLogoutScreen;
 LoadingScreen myLoadingScreen;
 
- /*-------------------------------------- Saving ------------------------------------------------*/
- // Creating a string that will hold the directory path of where the images will be saved to
+/*-------------------------------------- Saving ------------------------------------------------*/
+// Creating a string that will hold the directory path of where the images will be saved to
 String directory = "";
 
 // Creating a global image variable, to store the currentImage. Currently, this image is
@@ -157,18 +157,18 @@ String directory = "";
 // in (i.e. in the onCameraPreviewEvent() of the main sketch)
 PImage currentImage;
 
- /*-------------------------------------- Built In Functions ------------------------------------------------*/
+/*-------------------------------------- Built In Functions ------------------------------------------------*/
 
 void setup() {
-   /*-------------------------------------- Global ------------------------------------------------*/
-   
+  /*-------------------------------------- Global ------------------------------------------------*/
+
   // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
   size(360, 640);
-  
+
   // ANDROID TESTING SETTINGS
   //fullScreen();
-  
+
   // Locking the applications orientation to portrait, so that the image being read in from the 
   // the camera is maintained, even when the device is rotated
   orientation(PORTRAIT);
@@ -181,40 +181,40 @@ void setup() {
   // and displayHeight
   appWidth = width;
   appHeight = height;
-  
-    /*-------------------------------------- Ketai ------------------------------------------------*/
-    
+
+  /*-------------------------------------- Ketai ------------------------------------------------*/
+
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
   //ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
-  
+
   // Printing out the list of available cameras i.e. front/rear facing
   //println(ketaiCamera.list());
-  
+
   // Printing out the number of availabe cameras
   //println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
-  
+
   // Check if the device has more than one camera i.e. does it have a front
   // and a rear facing camera?
   /*
   if(ketaiCamera.getNumberOfCameras() > 1)
-  {
-    // If there is more than one camera, then default to the front camera
-    // (which as far as I can tell tends to be at index 1)
-    camNum = 1;
-  }
-  else
-  {
-    // If there is only one camera, then default to the rear camera
-    // (which as far as I can tell tends to be at index 0)
-    camNum = 0;
-  }
-  
-  // Setting the camera to default to the front camera
-  ketaiCamera.setCameraID(camNum);
-  */
-   /*-------------------------------------- Images ------------------------------------------------*/
+   {
+   // If there is more than one camera, then default to the front camera
+   // (which as far as I can tell tends to be at index 1)
+   camNum = 1;
+   }
+   else
+   {
+   // If there is only one camera, then default to the rear camera
+   // (which as far as I can tell tends to be at index 0)
+   camNum = 0;
+   }
    
+   // Setting the camera to default to the front camera
+   ketaiCamera.setCameraID(camNum);
+   */
+  /*-------------------------------------- Images ------------------------------------------------*/
+
   // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
   // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
   // reused on multiple pages
@@ -241,8 +241,8 @@ void setup() {
   buttonImage = loadImage("buttonImage.png");
   placeholderBackgroundImage = loadImage("placeholderBackgroundImage.png");
 
-   /*-------------------------------------- Sizing ------------------------------------------------*/
-   
+  /*-------------------------------------- Sizing ------------------------------------------------*/
+
   // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
   // the icons on each page all line up with one another. These measurements are all based on percentages
   // of the app's display width and height (as defined above
@@ -252,16 +252,16 @@ void setup() {
   iconTopY = appHeight * 0.085;
   iconBottomY = appHeight * 0.92;
   iconCenterY = appHeight * 0.5;
-  largeIconSize = appWidth * 0.35;
+  largeIconSize = appWidth * 0.3;
   smallIconSize = appWidth * 0.15;
   largeIconBottomY = iconBottomY - (largeIconSize/2);
   screenTitleY = appHeight * 0.08;
-  
+
   // Initialising the defaultTextSize to be equal to a percentage of the app's current height
   defaultTextSize = appHeight * 0.04;
-  
-   /*-------------------------------------- Screens ------------------------------------------------*/
-   
+
+  /*-------------------------------------- Screens ------------------------------------------------*/
+
   // Creating the screens which will be used in this application. Setting a random background
   // colour for each of these screens so that transitions between them can be more obvious
   // (for testing purposes only). Note - setting a background color is optional. Depending on the
@@ -285,14 +285,14 @@ void setup() {
   mySocialMediaLoginScreen = new SocialMediaLoginScreen(placeholderBackgroundImage);
   mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(placeholderBackgroundImage);
   myLoadingScreen = new LoadingScreen(placeholderBackgroundImage);
-  
-   /*-------------------------------------- Saving ------------------------------------------------*/
-   
+
+  /*-------------------------------------- Saving ------------------------------------------------*/
+
   // Storing a string that tells the app where to store the images, by default 
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
   //directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
-  
+
   // Initialising the currentImage to be equal to a plain black image. This is so that if the 
   // currentImage get's referred to before the camera has started, it will just contain a plain
   // black screen. Creating this black image by using createImage to make it the full size
@@ -300,10 +300,10 @@ void setup() {
   currentImage = createImage(appWidth, appHeight, RGB);
   currentImage.loadPixels();
   for (int i = 0; i < currentImage.pixels.length; i++) {
-      currentImage.pixels[i] = color(0); 
-    }
-    currentImage.updatePixels();
+    currentImage.pixels[i] = color(0);
   }
+  currentImage.updatePixels();
+}
 
 void draw() {
   background(0);
@@ -313,21 +313,21 @@ void draw() {
   // asks the icons on the screen to call their checkMouseOver() method (inherited from
   // the Icon class) to see if they were clicked on when a mouse event occurs
   switchScreens();
-   
-  
+
+
   // Checking if any screen's icons are trying to trigger any functions
-  if(callFunction.equals("_keepImage")){
+  if (callFunction.equals("_keepImage")) {
     keepImage();
-  } else if(callFunction.equals("_switchCameraView")){
-     myCameraLiveViewScreen.switchCameraView();
-  } else if(callFunction.equals("_addToFavourites")){
+  } else if (callFunction.equals("_switchCameraView")) {
+    myCameraLiveViewScreen.switchCameraView();
+  } else if (callFunction.equals("_addToFavourites")) {
     addToFavourites("Favourite");
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
   }
-  
+
   // Checking if the keyboard is required i.e. if an input field is currently in focus
-  if(keyboardRequired){
+  if (keyboardRequired) {
     //KetaiKeyboard.show(this);
     callFunction = "";
   } else {
@@ -336,25 +336,25 @@ void draw() {
   }
 }
 
-void mousePressed(){
+void mousePressed() {
   keyboardRequired = false;
   previousMouseY = mouseY;
 }
 
-void keyPressed(){
+void keyPressed() {
   // Getting the current input value of this text input (i.e. so that if a user clicks between different
   // text fields, they can resume their input instead of the textfield becoming empty)
   currentTextInputValue = currentTextInput.getInputValue();
 
   // Checking if the key pressed is a coded value i.e. backspace etc
-  if(key == CODED){
+  if (key == CODED) {
     //println(key);
     // Checking if the key pressed was the backspace key
-    if(keyCode == 67)
+    if (keyCode == 67)
     {
       // Checking that the length of the current currentTextInputValue string is greater than 0 (i.e. 
       // if the string is empty, don't try to delete anything)
-      if(currentTextInputValue.length() > 0){
+      if (currentTextInputValue.length() > 0) {
         //println("BACKSPACE");
         // Removing the last character from currentTextInputValue string, by creating a substring
         // of currentTextInputValue, that is one shorter than the current currentTextInputValue string
@@ -369,20 +369,20 @@ void keyPressed(){
   currentTextInput.setInputValue(currentTextInputValue);
 }
 
- /*-------------------------------------- Ketai Functions ------------------------------------------------*/
+/*-------------------------------------- Ketai Functions ------------------------------------------------*/
 /*
 // ketaiCamera event which is automatically called everytime a new frame becomes
-// available from the ketaiCamera.
-void onCameraPreviewEvent()
-{
-  // Reading in a new frame from the ketaiCamera.
-  ketaiCamera.read();
-  currentImage = ketaiCamera.get();
-  //manipulatePixels();
-}
-*/
- /*-------------------------------------- Custom Functions ------------------------------------------------*/
-void switchScreens(){
+ // available from the ketaiCamera.
+ void onCameraPreviewEvent()
+ {
+ // Reading in a new frame from the ketaiCamera.
+ ketaiCamera.read();
+ currentImage = ketaiCamera.get();
+ //manipulatePixels();
+ }
+ */
+/*-------------------------------------- Custom Functions ------------------------------------------------*/
+void switchScreens() {
   // Checking if the String that is stored in the currentScreen variable 
   // (which gets set in the Icon class when an icon is clicked on) is
   // equal to a series of class Names (i.e. HomeScreen), and if it is, then show that screen.
@@ -391,129 +391,129 @@ void switchScreens(){
   // clicked on etc) are called. Note - Each sub class of the Screen class
   // MUST have a showScreen() method (even if this method is only used to call
   // it's super class's (Screen) drawScreen() method
-  if(currentScreen.equals("HomeScreen")){
+  if (currentScreen.equals("HomeScreen")) {
     myHomeScreen.showScreen();
-  } else if(currentScreen.equals("CameraLiveViewScreen")){
+  } else if (currentScreen.equals("CameraLiveViewScreen")) {
     myCameraLiveViewScreen.showScreen();
-  } else if(currentScreen.equals("FavouritesScreen")){
+  } else if (currentScreen.equals("FavouritesScreen")) {
     myFavouritesScreen.showScreen();
-  } else if(currentScreen.equals("SettingsScreen")){
+  } else if (currentScreen.equals("SettingsScreen")) {
     returnTo = "SettingsScreen";
     mySettingsScreen.showScreen();
-  } else if(currentScreen.equals("AboutScreen")){
+  } else if (currentScreen.equals("AboutScreen")) {
     myAboutScreen.showScreen();
-  } else if(currentScreen.equals("SearchScreen")){
+  } else if (currentScreen.equals("SearchScreen")) {
     mySearchScreen.showScreen();
-  } else if(currentScreen.equals("SearchUnsuccessfulScreen")){
+  } else if (currentScreen.equals("SearchUnsuccessfulScreen")) {
     mySearchUnsuccessfulScreen.showScreen();
-  } else if(currentScreen.equals("ImagePreviewScreen")){
+  } else if (currentScreen.equals("ImagePreviewScreen")) {
     myImagePreviewScreen.showScreen();
-  } else if(currentScreen.equals("SaveShareScreenA")){
+  } else if (currentScreen.equals("SaveShareScreenA")) {
     returnTo = "SaveShareScreenA";
     mySaveShareScreenA.showScreen();
-  } else if(currentScreen.equals("SaveShareScreenB")){
+  } else if (currentScreen.equals("SaveShareScreenB")) {
     mySaveShareScreenB.showScreen();
-  } else if(currentScreen.equals("SharingScreen")){
+  } else if (currentScreen.equals("SharingScreen")) {
     mySharingScreen.showScreen();
     testingTimeoutScreen("ShareSaveSuccessfulScreen");
-  } else if(currentScreen.equals("ShareSaveSuccessfulScreen")){
+  } else if (currentScreen.equals("ShareSaveSuccessfulScreen")) {
     myShareSaveSuccessfulScreen.showScreen();
     testingTimeoutScreen("CameraLiveViewScreen");
-  } else if(currentScreen.equals("ShareUnsuccessfulScreen")){
+  } else if (currentScreen.equals("ShareUnsuccessfulScreen")) {
     myShareUnsuccessfulScreen.showScreen();
-  } else if(currentScreen.equals("ShareSaveUnsuccessfulScreen")){
+  } else if (currentScreen.equals("ShareSaveUnsuccessfulScreen")) {
     myShareSaveUnsuccessfulScreen.showScreen();
-  } else if(currentScreen.equals("SearchingScreen")){
+  } else if (currentScreen.equals("SearchingScreen")) {
     mySearchingScreen.showScreen();
     testingTimeoutScreen("CameraLiveViewScreen");
-  } else if(currentScreen.equals("SocialMediaLoginScreen")){
+  } else if (currentScreen.equals("SocialMediaLoginScreen")) {
     mySocialMediaLoginScreen.showScreen();
-  } else if(currentScreen.equals("SocialMediaLogoutScreen")){
+  } else if (currentScreen.equals("SocialMediaLogoutScreen")) {
     mySocialMediaLogoutScreen.showScreen();
-  } else if(currentScreen.equals("LoadingScreen")){
+  } else if (currentScreen.equals("LoadingScreen")) {
     myLoadingScreen.showScreen();
     testingTimeoutScreen("HomeScreen");
-  } else{
+  } else {
     println("This screen doesn't exist");
     //currentScreen = "HomeScreen";
   }
-  
+
   /*
   // Turning the camera on and off (if the current screen
-  // is the camera live view, and the camera is  not yet turned
-  // on, then start the camera, otherwise, if you are on any other screen,
-  // stop the camera
-  if(currentScreen.equals("CameraLiveViewScreen")){
-    if(!ketaiCamera.isStarted()){
-      ketaiCamera.start();
-    }
-  } else if(ketaiCamera.isStarted()) {
-    ketaiCamera.stop();
-  }
-  */
+   // is the camera live view, and the camera is  not yet turned
+   // on, then start the camera, otherwise, if you are on any other screen,
+   // stop the camera
+   if(currentScreen.equals("CameraLiveViewScreen")){
+   if(!ketaiCamera.isStarted()){
+   ketaiCamera.start();
+   }
+   } else if(ketaiCamera.isStarted()) {
+   ketaiCamera.stop();
+   }
+   */
 }
- 
-void keepImage(){  
+
+void keepImage() {  
   /*
   // Checking if Storage is available
-  if(isExternalStorageWritable()){    
-    // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
-    if (currentImage.save(directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg")){
-      println("Successfully saved image to = " + directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg");
-      currentScreen = "SaveShareScreenA";
-    } else {
-      println("Failed to save image");
-    }
-  } 
-  */
+   if(isExternalStorageWritable()){    
+   // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
+   if (currentImage.save(directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg")){
+   println("Successfully saved image to = " + directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg");
+   currentScreen = "SaveShareScreenA";
+   } else {
+   println("Failed to save image");
+   }
+   } 
+   */
 }
 /*
 Boolean isExternalStorageWritable() {
-  Boolean answer = false;
-  
-  // Creating a string to store the state of the external storage
-  String state = Environment.getExternalStorageState();
-  
-  // Testing the string value of the enviroment property media_mounted, against the
-  // string value of the state (as declared above). If media_mounted then storage
-  // is available to be written/read, and all permissions are in place
-  if (Environment.MEDIA_MOUNTED.equals(state)) {
-    println("External Storage is writable: " + state);
-    answer = true;
-  } else {
-    println("External Storage is writable: " + state);
-  }
-  
-  return answer;
-}
-*/
+ Boolean answer = false;
+ 
+ // Creating a string to store the state of the external storage
+ String state = Environment.getExternalStorageState();
+ 
+ // Testing the string value of the enviroment property media_mounted, against the
+ // string value of the state (as declared above). If media_mounted then storage
+ // is available to be written/read, and all permissions are in place
+ if (Environment.MEDIA_MOUNTED.equals(state)) {
+ println("External Storage is writable: " + state);
+ answer = true;
+ } else {
+ println("External Storage is writable: " + state);
+ }
+ 
+ return answer;
+ }
+ */
 
 // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
 // eeded a way to clear it from the screen until the
 // code that normally would clear it is added
-void testingTimeoutScreen(String fadeToScreen){
-  if(mousePressed)
+void testingTimeoutScreen(String fadeToScreen) {
+  if (mousePressed)
   { 
     currentScreen = fadeToScreen;
     mousePressed = false;
   }
 }
- 
-void manipulatePixels(){
+
+void manipulatePixels() {
   currentImage.loadPixels();
-  for(int x = 0; x < currentImage.width; x++)
+  for (int x = 0; x < currentImage.width; x++)
   {
-    for(int y = 0; y < 50; y++)
+    for (int y = 0; y < 50; y++)
     {
       int currentPixel = x + y * currentImage.width;
-      
+
       currentImage.pixels[currentPixel] = color(#0000FF);
     }
   }
   currentImage.updatePixels();
 }
 
-void addToFavourites(String place){
+void addToFavourites(String place) {
   myCameraLiveViewScreen.favouriteLocation = !myCameraLiveViewScreen.favouriteLocation;
   println("Favourite location is now: " + myCameraLiveViewScreen.favouriteLocation);
 }
