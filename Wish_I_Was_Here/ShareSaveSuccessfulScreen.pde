@@ -1,7 +1,5 @@
 public class ShareSaveSuccessfulScreen extends Screen{
   
-  private PImage shareSaveSuccessfulScreenImage;
-  
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
   public ShareSaveSuccessfulScreen(PImage bgImage){
@@ -11,13 +9,11 @@ public class ShareSaveSuccessfulScreen extends Screen{
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
     
-    shareSaveSuccessfulScreenImage = loadImage("sharingScreenImage.png");
-    
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,
     // then no header text will appear on this page
-    this.setScreenTitle("Successful Share Save");
+    this.setScreenTitle("");
   }
   
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -28,7 +24,10 @@ public class ShareSaveSuccessfulScreen extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
-    
-    this.addImage(shareSaveSuccessfulScreenImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
+    this.addText("Your postcard", iconCenterX, appHeight * 0.1);
+    this.addText("has been", iconCenterX, appHeight * 0.18);
+    this.addText("successfully", iconCenterX, appHeight * 0.26);
+    this.addText("shared & saved", iconCenterX, appHeight * 0.34);
+    this.addImage(loadImage("sharingScreenImage.png"), appWidth/2, appHeight * 0.6, appWidth * 0.8, appWidth * 0.4);
   }
 }

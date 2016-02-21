@@ -8,6 +8,8 @@ public class HomeScreen extends Screen{
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
+    
+    float iconSize = largeIconSize * 1.3;
        
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -18,11 +20,11 @@ public class HomeScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon searchTravelIcon = new Icon(appWidth * 0.3, appHeight * 0.2, largeIconSize, largeIconSize, searchPageIconImage, "Search", true, "Below", "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.7, appHeight * 0.2, largeIconSize, largeIconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
-    Icon myFavouritesIcon = new Icon(appWidth * 0.3, appHeight * 0.5, largeIconSize, largeIconSize, favouritesPageIconImage, "My Favourites", true, "Below", "FavouritesScreen");
-    Icon aboutIcon = new Icon(appWidth * 0.7, appHeight * 0.5, largeIconSize, largeIconSize, aboutPageIconImage, "About", true, "Below", "AboutScreen");
-    Icon settingsIcon = new Icon(appWidth * 0.5, appHeight * 0.8, largeIconSize, largeIconSize, settingsPageIconImage, "Settings", true, "Below", "SettingsScreen");
+    Icon searchTravelIcon = new Icon(appWidth * 0.28, appHeight * 0.2, iconSize, iconSize, searchPageIconImage, "Search", true, "Below", "SearchScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.72, appHeight * 0.2, iconSize, iconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
+    Icon myFavouritesIcon = new Icon(appWidth * 0.28, appHeight * 0.5, iconSize, iconSize, favouritesPageIconImage, "My Favourites", true, "Below", "FavouritesScreen");
+    Icon aboutIcon = new Icon(appWidth * 0.72, appHeight * 0.5, iconSize, iconSize, aboutPageIconImage, "About", true, "Below", "AboutScreen");
+    Icon settingsIcon = new Icon(appWidth * 0.5, appHeight * 0.8, iconSize, iconSize, settingsPageIconImage, "Settings", true, "Below", "SettingsScreen");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {randomTravelIcon, searchTravelIcon, myFavouritesIcon, aboutIcon, settingsIcon};

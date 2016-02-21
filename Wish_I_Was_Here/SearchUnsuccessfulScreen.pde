@@ -1,8 +1,4 @@
 public class SearchUnsuccessfulScreen extends Screen{
-  private float textSize = appWidth * 0.07;
-  
-  // Declaring a variable to hold an image that will be added to the screen
-  private PImage searchUnsuccessfulScreenImage;
   
   // Creating a public constructor for the SearchFailedScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -12,9 +8,6 @@ public class SearchUnsuccessfulScreen extends Screen{
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
-    
-    // Initialising the page image by loading in an image
-    searchUnsuccessfulScreenImage = loadImage("searchUnsuccessfulScreenImage.png");
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -56,13 +49,13 @@ public class SearchUnsuccessfulScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1, textSize);
-    this.addText("We could not", iconCenterX, appHeight * 0.18, textSize);
-    this.addText("find what you", iconCenterX, appHeight * 0.26, textSize);
-    this.addText("were looking for...", iconCenterX, appHeight * 0.34, textSize);
+    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1);
+    this.addText("We could not", iconCenterX, appHeight * 0.18);
+    this.addText("find what you", iconCenterX, appHeight * 0.26);
+    this.addText("were looking for...", iconCenterX, appHeight * 0.34);
     
     // Calling the super class's super class (Rectangle) to add an image to the screen, passing
     // in the image, x, y, width and height
-    this.addImage(searchUnsuccessfulScreenImage, iconCenterX, appHeight * 0.55, appWidth * 0.8, appWidth * 0.4);
+    this.addImage(loadImage("searchUnsuccessfulScreenImage.png"), iconCenterX, appHeight * 0.55, appWidth * 0.8, appWidth * 0.4);
   }
 }

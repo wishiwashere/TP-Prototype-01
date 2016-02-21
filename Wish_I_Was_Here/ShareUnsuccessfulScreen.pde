@@ -1,5 +1,4 @@
 public class ShareUnsuccessfulScreen extends Screen{
-  private float textSize = appWidth * 0.07;
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -50,12 +49,12 @@ public class ShareUnsuccessfulScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1, textSize);
-    this.addText("Your postcard", iconCenterX, appHeight * 0.18, textSize);
-    this.addText("was not sent", iconCenterX, appHeight * 0.26, textSize);
+    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1);
+    this.addText("Your postcard", iconCenterX, appHeight * 0.18);
+    this.addText("was not sent", iconCenterX, appHeight * 0.26);
     this.addImage(loadImage("sharingScreenImage.png"), iconCenterX, appHeight * 0.4, appWidth * 0.5, appHeight * 0.16);
-    this.addText("But good news :)", iconCenterX, appHeight * 0.54, textSize);
-    this.addText("We have still", iconCenterX, appHeight * 0.62, textSize);
-    this.addText("saved it for you!", iconCenterX, appHeight * 0.7, textSize);
+    this.addText("But good news :)", iconCenterX, appHeight * 0.54);
+    this.addText("We have still", iconCenterX, appHeight * 0.62);
+    this.addText("saved it for you!", iconCenterX, appHeight * 0.7);
   }
 }

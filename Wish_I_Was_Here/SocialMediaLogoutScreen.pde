@@ -47,5 +47,11 @@ public class SocialMediaLogoutScreen extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    this.addText("Are you sure you want", iconCenterX, appHeight * 0.3);
+    this.addText("to remove your", iconCenterX, appHeight * 0.38);
+    this.addText("@username", iconCenterX, appHeight * 0.46);
+    this.addText("Instagram account from", iconCenterX, appHeight * 0.54);
+    this.addText("our app?", iconCenterX, appHeight * 0.62);
   }
 }

@@ -1,6 +1,4 @@
 public class ShareSaveUnsuccessfulScreen extends Screen{
-  PImage shareSaveUnsuccessfulScreenImage;
-  private float textSize = appWidth * 0.07;
   
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -20,14 +18,12 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon retryIcon = new Icon(iconCenterX, largeIconBottomY * 0.7, largeIconSize, largeIconSize, retryIconImage, "Retry", true, "Below", "SharingScreen");
+    Icon retryIcon = new Icon(iconCenterX, largeIconBottomY * 0.75, largeIconSize, largeIconSize, retryIconImage, "Retry", true, "Below", "SharingScreen");
     Icon deleteIcon = new Icon(iconCenterX * 0.55, largeIconBottomY, largeIconSize, largeIconSize, deleteIconImage, "Delete", true, "Below", "CameraLiveViewScreen");
     Icon saveIcon = new Icon(iconCenterX * 1.45, largeIconBottomY, largeIconSize, largeIconSize, saveIconImage, "Save", true, "Below", "ShareSaveSuccessfulScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {retryIcon, deleteIcon, saveIcon};
-    
-    shareSaveUnsuccessfulScreenImage = loadImage("shareSaveUnsuccessfulScreenImage.png");
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
@@ -53,9 +49,9 @@ public class ShareSaveUnsuccessfulScreen extends Screen{
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1, textSize);
-    this.addText("Your postcard", iconCenterX, appHeight * 0.18, textSize);
-    this.addText("was not sent", iconCenterX, appHeight * 0.26, textSize);
-    this.addImage(loadImage("sharingScreenImage.png"), iconCenterX, appHeight * 0.4, appWidth * 0.5, appHeight * 0.16);
+    this.addText("We're sorry :(", iconCenterX, appHeight * 0.1);
+    this.addText("Your postcard", iconCenterX, appHeight * 0.18);
+    this.addText("was not sent", iconCenterX, appHeight * 0.26);
+    this.addImage(loadImage("shareSaveUnsuccessfulScreenImage.png"), iconCenterX, appHeight * 0.4, appWidth * 0.5, appHeight * 0.16);
   }
 }

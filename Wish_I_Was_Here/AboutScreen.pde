@@ -10,7 +10,7 @@ public class AboutScreen extends Screen{
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
-    super(appWidth/2, appHeight/2, appWidth, appHeight * 2, bgImage);
+    super(appWidth/2, appHeight/2, appWidth, appHeight * 2, loadImage("aboutScreenBackgroundImage.png"));
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -120,7 +120,7 @@ public class AboutScreen extends Screen{
       if(previousMouseY > mouseY){
         // The user has scrolled UP
         // Setting the screen's y postion to it's current y position, minus the amount scrolled
-        this.setY(this.getY() - amountScrolled);
+          this.setY(this.getY() - amountScrolled);
         // Setting the global positioning variable screenTitleY to be decremented by the amount scrolled. Note:
         // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
         // an icon's link is passed in to change a page)

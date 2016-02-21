@@ -18,7 +18,7 @@ import ketai.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "SocialMediaLogoutScreen";
+String currentScreen = "HomeScreen";
 
 String returnTo = "HomeScreen";
 
@@ -252,7 +252,7 @@ void setup() {
   iconTopY = appHeight * 0.085;
   iconBottomY = appHeight * 0.92;
   iconCenterY = appHeight * 0.5;
-  largeIconSize = appWidth * 0.3;
+  largeIconSize = appWidth * 0.25;
   smallIconSize = appWidth * 0.15;
   largeIconBottomY = iconBottomY - (largeIconSize/2);
   screenTitleY = appHeight * 0.08;
