@@ -19,9 +19,11 @@ public class SettingsScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
+    Icon instagramAccountIcon = new Icon(iconCenterX * 0.55, iconCenterY, appWidth * 0.4, appWidth * 0.4, instagramAccountIconImage, "Instagram", false, "Below", "SocialMediaLoginScreen");
+    Icon twitterAccountIcon = new Icon(iconCenterX * 1.45, iconCenterY, appWidth * 0.4, appWidth * 0.4, twitterAccountIconImage, "Home", false, "Below", "SocialMediaLoginScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {homeIcon};
+    Icon[] allIcons = {homeIcon, instagramAccountIcon, twitterAccountIcon};
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 

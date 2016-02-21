@@ -18,7 +18,9 @@ import android.content.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "FavouritesScreen";
+String currentScreen = "SaveShareScreenA";
+
+String returnTo = "HomeScreen";
 
 // Creating a global variable, which any icon can use to pass the name of the function
 // they link to. The value of this variable is set in the Icon class when an icon is clicked
@@ -394,44 +396,46 @@ void switchScreens(){
   } else if(currentScreen.equals("CameraLiveViewScreen")){
     myCameraLiveViewScreen.showScreen();
   } else if(currentScreen.equals("FavouritesScreen")){
-      myFavouritesScreen.showScreen();
+    myFavouritesScreen.showScreen();
   } else if(currentScreen.equals("SettingsScreen")){
-      mySettingsScreen.showScreen();
+    returnTo = "SettingsScreen";
+    mySettingsScreen.showScreen();
   } else if(currentScreen.equals("AboutScreen")){
-      myAboutScreen.showScreen();
+    myAboutScreen.showScreen();
   } else if(currentScreen.equals("SearchScreen")){
-      mySearchScreen.showScreen();
+    mySearchScreen.showScreen();
   } else if(currentScreen.equals("SearchUnsuccessfulScreen")){
-      mySearchUnsuccessfulScreen.showScreen();
+    mySearchUnsuccessfulScreen.showScreen();
   } else if(currentScreen.equals("ImagePreviewScreen")){
-      myImagePreviewScreen.showScreen();
+    myImagePreviewScreen.showScreen();
   } else if(currentScreen.equals("SaveShareScreenA")){
-      mySaveShareScreenA.showScreen();
+    returnTo = "SaveShareScreenA";
+    mySaveShareScreenA.showScreen();
   } else if(currentScreen.equals("SaveShareScreenB")){
-      mySaveShareScreenB.showScreen();
+    mySaveShareScreenB.showScreen();
   } else if(currentScreen.equals("SharingScreen")){
-      mySharingScreen.showScreen();
-      testingTimeoutScreen("ShareSaveSuccessfulScreen");
+    mySharingScreen.showScreen();
+    testingTimeoutScreen("ShareSaveSuccessfulScreen");
   } else if(currentScreen.equals("ShareSaveSuccessfulScreen")){
-      myShareSaveSuccessfulScreen.showScreen();
-      testingTimeoutScreen("CameraLiveViewScreen");
+    myShareSaveSuccessfulScreen.showScreen();
+    testingTimeoutScreen("CameraLiveViewScreen");
   } else if(currentScreen.equals("ShareUnsuccessfulScreen")){
-      myShareUnsuccessfulScreen.showScreen();
+    myShareUnsuccessfulScreen.showScreen();
   } else if(currentScreen.equals("ShareSaveUnsuccessfulScreen")){
-      myShareSaveUnsuccessfulScreen.showScreen();
+    myShareSaveUnsuccessfulScreen.showScreen();
   } else if(currentScreen.equals("SearchingScreen")){
-      mySearchingScreen.showScreen();
-      testingTimeoutScreen("CameraLiveViewScreen");
+    mySearchingScreen.showScreen();
+    testingTimeoutScreen("CameraLiveViewScreen");
   } else if(currentScreen.equals("SocialMediaLoginScreen")){
-      mySocialMediaLoginScreen.showScreen();
+    mySocialMediaLoginScreen.showScreen();
   } else if(currentScreen.equals("SocialMediaLogoutScreen")){
-      mySocialMediaLogoutScreen.showScreen();
+    mySocialMediaLogoutScreen.showScreen();
   } else if(currentScreen.equals("LoadingScreen")){
-      myLoadingScreen.showScreen();
-      testingTimeoutScreen("HomeScreen");
+    myLoadingScreen.showScreen();
+    testingTimeoutScreen("HomeScreen");
   } else{
     println("This screen doesn't exist");
-    currentScreen = "HomeScreen";
+    //currentScreen = "HomeScreen";
   }
   
   /*

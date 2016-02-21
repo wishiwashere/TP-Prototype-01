@@ -18,11 +18,14 @@ public class SaveShareScreenA extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
+    Icon instagramIcon = new Icon(iconCenterX * 0.55, iconCenterY, appWidth * 0.3, appWidth * 0.3, instagramAccountIconImage, "Instagram", true, "Below",  "SocialMediaLoginScreen");
+    Icon twitterIcon = new Icon(iconCenterX * 1.45, iconCenterY, appWidth * 0.3, appWidth * 0.3, twitterAccountIconImage, "Twitter", true, "Below",  "SocialMediaLoginScreen");
+    Icon saveIcon = new Icon(iconCenterX, iconCenterY * 1.5, appWidth * 0.3, appWidth * 0.3, saveIconImage, "Save", true, "Below",  "_keepImage");
     Icon cancelIcon = new Icon(appWidth * 0.3, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle",  "CameraLiveViewScreen");
     Icon nextIcon = new Icon(appWidth * 0.7, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Next", true, "Middle", "SaveShareScreenB");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {cancelIcon, nextIcon};
+    Icon[] allIcons = {instagramIcon, twitterIcon, saveIcon, cancelIcon, nextIcon};
     
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
@@ -47,5 +50,9 @@ public class SaveShareScreenA extends Screen{
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
+    
+    this.addImage(currentImage, iconCenterX, iconCenterY * 0.4, appWidth * 0.8, appWidth * 0.6);
+    
+    
   }
 }

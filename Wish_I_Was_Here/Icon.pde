@@ -121,6 +121,11 @@ public class Icon extends ClickableElement{
             
             // Logging out what page the app will now be taken to
             println("Calling the " + this.iconLinkTo + "() function");
+          } else if(this.iconLinkTo.indexOf("-") == 0){
+            currentScreen = returnTo;
+            // Logging out what page the app will now be taken to
+            println("Returning to the " + this.iconLinkTo + "screen");
+            
           } else {
             // This is an INTERNAL link
             // Setting the global currentScreen variable to be equal to the link
