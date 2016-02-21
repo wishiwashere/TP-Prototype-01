@@ -66,6 +66,7 @@ int cameraScale = -1;
 int cameraRotation = -90;
 
 Boolean readingImage = false;
+PImage currentFrame;
 
   /*-------------------------------------- Images ------------------------------------------------*/
 
@@ -291,12 +292,14 @@ void setup() {
   // currentImage get's referred to before the camera has started, it will just contain a plain
   // black screen. Creating this black image by using createImage to make it the full size
   // of the screen, and then setting each pixel in the image to black
-  currentImage = createImage(appWidth, appHeight, RGB);
+  currentImage = createImage(ketaiCamera.width, ketaiCamera.height, ARGB);
   currentImage.loadPixels();
   for (int i = 0; i < currentImage.pixels.length; i++) {
-    currentImage.pixels[i] = color(0); 
+    currentImage.pixels[i] = color(0, 0, 0, 0); 
   }
   currentImage.updatePixels();
+  
+  currentFrame = createImage(ketaiCamera.width, ketaiCamera.height, ARGB);
   
   greenScreenTestingImage = loadImage("greenScreenTestingImage.jpg");
 }
@@ -372,6 +375,7 @@ void onCameraPreviewEvent()
   // Reading in a new frame from the ketaiCamera
   if(readingImage == false){
     ketaiCamera.read();
+    currentFrame = ketaiCamera.get();
     readingImage = true;
     removeGreenScreen();
   }
@@ -489,29 +493,31 @@ void testingTimeoutScreen(String fadeToScreen){
 }
 
 void removeGreenScreen(){
+  println("Starting removing Green Screen at frame " + frameCount);
+  
   // Changing the colour mode to HSB, so that I can work with the hue, satruation and
   // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
   // and brightness to 100.
   colorMode(HSB, 360, 100, 100);
   
-  PImage keyedImage = createImage(greenScreenTestingImage.width, greenScreenTestingImage.height, ARGB);
+  PImage keyedImage = createImage(ketaiCamera.width, ketaiCamera.height, ARGB);
 
   // Loading in the pixel arrays of the keyed image and the girl green screen image
   keyedImage.loadPixels();
-  greenScreenTestingImage.loadPixels();
+  currentFrame.loadPixels();
   /*
   for (int i = 0; i < ketaiCamera.pixels.length; i++) {
     // Determining the current location of the pixel
     keyedImage.pixels[i] = ketaiCamera.pixels[i];
   }
   */
-  for (int i = 0; i < greenScreenTestingImage.pixels.length; i++) {
-    
+  for (int i = 0; i < ketaiCamera.pixels.length; i++) {
     
     // Getting the hue, saturation and brightness values of the current pixel
-    float pixelHue = hue(greenScreenTestingImage.pixels[i]);
-    float pixelSaturation = saturation(greenScreenTestingImage.pixels[i]);
-    float pixelBrightness = brightness(greenScreenTestingImage.pixels[i]);
+    float pixelHue = hue(currentFrame.pixels[i]);
+    float pixelSaturation = saturation(currentFrame.pixels[i]);
+    float pixelBrightness = brightness(currentFrame.pixels[i]);
+    
     
     // Creating variables to store the hue of the pixels surrounding the current pixel.
     // Defaulting these the be equal to the current pixels hue, and only changing them if
@@ -524,11 +530,15 @@ void removeGreenScreen(){
     
     // If the current pixel is not near the edge of the image, changing the values of the variables
     // for the pixels around it to get their hue values
-    if (i > greenScreenTestingImage.width + 1 && i < greenScreenTestingImage.pixels.length - greenScreenTestingImage.width - 1) {
-      pixelHueToLeft = hue(greenScreenTestingImage.pixels[i - 1]);
-      pixelHueToRight = hue(greenScreenTestingImage.pixels[i + 1]);
-      pixelHueAbove = hue(greenScreenTestingImage.pixels[i - greenScreenTestingImage.width]);
-      pixelHueBelow = hue(greenScreenTestingImage.pixels[i + greenScreenTestingImage.width]);
+    if (i > ketaiCamera.width + 1 && i < ketaiCamera.pixels.length - ketaiCamera.width - 1) {
+      pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
+      pixelHueToRight = hue(currentFrame.pixels[i + 1]);
+      pixelHueAbove = hue(currentFrame.pixels[i - ketaiCamera.width]);
+      pixelHueBelow = hue(currentFrame.pixels[i + ketaiCamera.width]);
+    }
+    
+    if(i == 0){
+        println("Current hue is: " + pixelHue + ". Current saturation is: " + pixelSaturation + ". Current brightness is: " + pixelBrightness);
     }
 
     // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
@@ -573,12 +583,12 @@ void removeGreenScreen(){
       // Since this pixel did not fall within any of the wider ranges of green in the colour spectrum,
       // we are going to use this pixel exactly as it was read in, by setting the equilivant pixel in the 
       // keyedImage to be equal to the equilivant pixel in the greenScreen image
-      keyedImage.pixels[i] = greenScreenTestingImage.pixels[i];
+      keyedImage.pixels[i] = color(pixelHue, pixelSaturation, pixelBrightness);
     }
   }
   
   // Updating the pixel arrays of the ketaiCamera and the keyed image
-  greenScreenTestingImage.updatePixels();
+  currentFrame.updatePixels();
   keyedImage.updatePixels();
   
   // Resetting the color mode to RGB
@@ -587,5 +597,5 @@ void removeGreenScreen(){
   currentImage = keyedImage.get();
 
   readingImage = false;
-  println("Green Screen Removed at frame " + frameCount);
+  println("Finished removing Green Screen at frame " + frameCount);
 }
