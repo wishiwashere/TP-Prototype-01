@@ -1,13 +1,15 @@
 public class CameraLiveViewScreen extends Screen{
+  public Boolean favouriteLocation;
   
   // Creating a public constructor for the CameraLiveViewScreen class, so that
   // an instance of it can be declared in the main sketch
   public CameraLiveViewScreen(){
-    
     // Calling the super class (Screen), which will in turn call it's super class 
     // (Rectangle) and create a rectangle with the default values i.e. fullscreen, 
     // centered etc.
     super();
+    
+    favouriteLocation = false;
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -19,7 +21,7 @@ public class CameraLiveViewScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
-    Icon favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false);
+    Icon favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false, "_addToFavourites");
     Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
     Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "ImagePreviewScreen");
     Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_switchCameraView");
@@ -63,6 +65,7 @@ public class CameraLiveViewScreen extends Screen{
   
   private void switchCameraView()
   {    
+    /*
     // If the camera is already running before we try and effect it
     if (ketaiCamera.isStarted())
     {
@@ -86,5 +89,6 @@ public class CameraLiveViewScreen extends Screen{
         ketaiCamera.start();
       }
     }
+    */
   }
 }

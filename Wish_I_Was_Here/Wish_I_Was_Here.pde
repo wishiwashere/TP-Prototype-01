@@ -1,8 +1,10 @@
+/*
 import ketai.*;
 import ketai.camera.*;
 import ketai.ui.*;
 import android.os.Environment;
 import android.content.*;
+*/
 
   /*-------------------------------------- Globally Accessed Variables ------------------------------------------------*/
   
@@ -46,7 +48,7 @@ float previousMouseY;
 // Creating a global variable to store the ketaiCamera object, so that it can be
 // accessed thoroughout the sketch once it has been initiated i.e. to read in,
 // display and eventually alter the live stream images
-KetaiCamera ketaiCamera;
+//KetaiCamera ketaiCamera;
 
 // Creating a global variable to store the number of the camera we want to view
 // at any given time. The front facing camera (on a device with more than one camera)
@@ -85,8 +87,10 @@ PImage saveIconImage;
 PImage disgardIconImage;
 PImage keepIconImage;
 PImage cancelIconImage;
+PImage facebookAccountIconImage;
 PImage twitterAccountIconImage;
 PImage instagramAccountIconImage;
+PImage emailIconImage;
 PImage buttonImage;
 
   /*-------------------------------------- Sizing ------------------------------------------------*/
@@ -157,10 +161,10 @@ void setup() {
    
   // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
-  //size(360, 640);
+  size(360, 640);
   
   // ANDROID TESTING SETTINGS
-  fullScreen();
+  //fullScreen();
   
   // Locking the applications orientation to portrait, so that the image being read in from the 
   // the camera is maintained, even when the device is rotated
@@ -179,17 +183,17 @@ void setup() {
     
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
-  ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
+  //ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
   
   // Printing out the list of available cameras i.e. front/rear facing
-  println(ketaiCamera.list());
+  //println(ketaiCamera.list());
   
   // Printing out the number of availabe cameras
-  println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
+  //println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
   
   // Check if the device has more than one camera i.e. does it have a front
   // and a rear facing camera?
-  
+  /*
   if(ketaiCamera.getNumberOfCameras() > 1)
   {
     // If there is more than one camera, then default to the front camera
@@ -205,7 +209,7 @@ void setup() {
   
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
-  
+  */
    /*-------------------------------------- Images ------------------------------------------------*/
    
   // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
@@ -217,18 +221,20 @@ void setup() {
   favouritesPageIconImage = loadImage("favouritesPageIconImage.png");
   settingsPageIconImage = loadImage("settingsPageIconImage.png");
   homeIconImage = loadImage("homeIconImage.png");
-  favIconImage = loadImage("favIconYesImage.png");
-  shakeIconImage = loadImage("iconPlaceholder.png");
+  favIconImage = loadImage("favIconNoImage.png");
+  shakeIconImage = loadImage("shakeIconImage.png");
   shutterIconImage = loadImage("shutterIconImage.png");
   switchViewIconImage = loadImage("switchViewIconImage.png");
-  retryIconImage = loadImage("iconPlaceholder.png");
+  retryIconImage = loadImage("retryIconImage.png");
   deleteIconImage = loadImage("deleteIconImage.png");
   saveIconImage = loadImage("saveIconImage.png");
   disgardIconImage = loadImage("disgardIconImage.png");
   keepIconImage = loadImage("keepIconImage.png");
-  cancelIconImage = loadImage("iconPlaceholder.png");
-  twitterAccountIconImage = loadImage("iconPlaceholder.png");
-  instagramAccountIconImage = loadImage("iconPlaceholder.png");
+  cancelIconImage = loadImage("cancelIconImage.png");
+  facebookAccountIconImage = loadImage("placeholder.PNG");
+  twitterAccountIconImage = loadImage("twitterAccountIconImage.png");
+  instagramAccountIconImage = loadImage("instagramAccountIconImage.png");
+  emailIconImage = loadImage("emailIconImage.png");
   buttonImage = loadImage("buttonImage.png");
 
    /*-------------------------------------- Sizing ------------------------------------------------*/
@@ -281,7 +287,7 @@ void setup() {
   // Storing a string that tells the app where to store the images, by default 
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
-  directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
+  //directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
   
   // Initialising the currentImage to be equal to a plain black image. This is so that if the 
   // currentImage get's referred to before the camera has started, it will just contain a plain
@@ -309,16 +315,18 @@ void draw() {
     keepImage();
   } else if(callFunction.equals("_switchCameraView")){
      myCameraLiveViewScreen.switchCameraView();
+  } else if(callFunction.equals("_addToFavourites")){
+    addToFavourites("Favourite");
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
   }
   
   // Checking if the keyboard is required i.e. if an input field is currently in focus
   if(keyboardRequired){
-    KetaiKeyboard.show(this);
+    //KetaiKeyboard.show(this);
     callFunction = "";
   } else {
-    KetaiKeyboard.hide(this);
+    //KetaiKeyboard.hide(this);
     callFunction = "";
   }
 }
@@ -357,7 +365,7 @@ void keyPressed(){
 }
 
  /*-------------------------------------- Ketai Functions ------------------------------------------------*/
- 
+/*
 // ketaiCamera event which is automatically called everytime a new frame becomes
 // available from the ketaiCamera.
 void onCameraPreviewEvent()
@@ -367,7 +375,7 @@ void onCameraPreviewEvent()
   currentImage = ketaiCamera.get();
   //manipulatePixels();
 }
-
+*/
  /*-------------------------------------- Custom Functions ------------------------------------------------*/
 void switchScreens(){
   // Checking if the String that is stored in the currentScreen variable 
@@ -423,6 +431,7 @@ void switchScreens(){
     currentScreen = "HomeScreen";
   }
   
+  /*
   // Turning the camera on and off (if the current screen
   // is the camera live view, and the camera is  not yet turned
   // on, then start the camera, otherwise, if you are on any other screen,
@@ -434,9 +443,11 @@ void switchScreens(){
   } else if(ketaiCamera.isStarted()) {
     ketaiCamera.stop();
   }
+  */
 }
  
 void keepImage(){  
+  /*
   // Checking if Storage is available
   if(isExternalStorageWritable()){    
     // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
@@ -446,9 +457,10 @@ void keepImage(){
     } else {
       println("Failed to save image");
     }
-  }  
+  } 
+  */
 }
-
+/*
 Boolean isExternalStorageWritable() {
   Boolean answer = false;
   
@@ -467,6 +479,7 @@ Boolean isExternalStorageWritable() {
   
   return answer;
 }
+*/
 
 // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
 // eeded a way to clear it from the screen until the
@@ -491,4 +504,9 @@ void manipulatePixels(){
     }
   }
   currentImage.updatePixels();
+}
+
+void addToFavourites(String place){
+  myCameraLiveViewScreen.favouriteLocation = !myCameraLiveViewScreen.favouriteLocation;
+  println("Favourite location is now: " + myCameraLiveViewScreen.favouriteLocation);
 }

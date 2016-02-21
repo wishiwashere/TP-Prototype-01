@@ -110,6 +110,14 @@ public class Icon extends ClickableElement{
             
           } else if(this.iconLinkTo.indexOf("_") == 0){
             callFunction = this.iconLinkTo;
+            if(this.iconLinkTo.equals("_addToFavourites")){
+              if(myCameraLiveViewScreen.favouriteLocation){
+                this.setImage(loadImage("favIconNoImage.png"));
+                
+              } else {
+                this.setImage(loadImage("favIconYesImage.png"));
+              }
+            }
             
             // Logging out what page the app will now be taken to
             println("Calling the " + this.iconLinkTo + "() function");

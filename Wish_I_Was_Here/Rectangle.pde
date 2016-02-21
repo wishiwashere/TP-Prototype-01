@@ -301,6 +301,12 @@ protected class Rectangle{
     return rectRotation;
   }
   
+  protected void setImage(PImage img){
+    if(img.width == this.rectImage.width){
+      rectImage = img;
+    }
+  }
+  
   // Set method that sets the rotation of instance
   protected void setRotation(int r){
     rectRotation = radians(r);

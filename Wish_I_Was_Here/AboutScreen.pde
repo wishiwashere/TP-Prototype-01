@@ -12,6 +12,8 @@ public class AboutScreen extends Screen{
     // default values i.e. fullscreen, centered etc.
     super(appWidth/2, appHeight/2, appWidth, appHeight * 2, col);
     
+    this.addBackgroundImage(loadImage("aboutScreenBackgroundImage.png"), appWidth, appHeight, 1, 0);
+    
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
     // x, and y, based on percentages of the width and height (where icon positioning variables
@@ -22,10 +24,10 @@ public class AboutScreen extends Screen{
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
-    Icon facebookIcon = new Icon(appWidth * 0.2, iconBottomY, loadImage("placeholder.PNG"), "Facebook", false, "https://www.facebook.com/wishiwashereapp");
-    Icon twitterIcon = new Icon(appWidth * 0.5, iconBottomY, loadImage("placeholder.PNG"), "Twitter", false, "https://twitter.com/wishiwashere");
-    Icon instagramIcon = new Icon(appWidth * 0.8, iconBottomY, loadImage("placeholder.PNG"), "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
-    //Icon emailIcon = new Icon(appWidth * 0.8, iconBottomY, loadImage("placeholder.PNG"), "Email", false, "mailto:wishiwashere.thenopayholiday@gmail.com");
+    Icon facebookIcon = new Icon(appWidth * 0.2, iconBottomY, facebookAccountIconImage, "Facebook", false, "https://www.facebook.com/wishiwashereapp");
+    Icon twitterIcon = new Icon(appWidth * 0.5, iconBottomY, twitterAccountIconImage, "Twitter", false, "https://twitter.com/wishiwashere");
+    Icon instagramIcon = new Icon(appWidth * 0.8, iconBottomY, instagramAccountIconImage, "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
+    //Icon emailIcon = new Icon(appWidth * 0.8, iconBottomY, emailIconImage, "Email", false, "mailto:wishiwashere.thenopayholiday@gmail.com");
    
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
