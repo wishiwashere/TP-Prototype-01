@@ -41,6 +41,11 @@ protected class Screen extends Rectangle{
     super(col);
   }
   
+  protected Screen(float x, float y, float w, float h, PImage img){
+    super(x, y, w, h, img);
+  }
+  
+  
   protected Screen(float x, float y, float w, float h, color col){
     super(x, y, w, h, col);
   }

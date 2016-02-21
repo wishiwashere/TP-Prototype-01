@@ -5,12 +5,12 @@ public class SearchUnsuccessfulScreen extends Screen{
   
   // Creating a public constructor for the SearchFailedScreen class, so that
   // an instance of it can be declared in the main sketch
-  public SearchUnsuccessfulScreen(color col){
+  public SearchUnsuccessfulScreen(PImage bgImage){
     
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
-    super(col);
+    super(bgImage);
     
     // Initialising the page image by loading in an image
     searchUnsuccessfulScreenImage = loadImage("searchUnsuccessfulScreenImage.png");

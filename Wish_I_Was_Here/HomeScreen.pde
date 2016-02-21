@@ -2,12 +2,12 @@ public class HomeScreen extends Screen{
   
   // Creating a public constructor for the HomeScreen class, so that
   // an instance of it can be declared in the main sketch
-  public HomeScreen(color col){
+  public HomeScreen(PImage bgImage){
     
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
-    super(col);
+    super(bgImage);
        
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their

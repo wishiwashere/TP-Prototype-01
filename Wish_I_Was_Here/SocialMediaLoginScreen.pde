@@ -4,12 +4,12 @@ public class SocialMediaLoginScreen extends Screen{
   
   // Creating a public constructor for the SearchTravelScreen class, so that
   // an instance of it can be declared in the main sketch
-  public SocialMediaLoginScreen(color col){
+  public SocialMediaLoginScreen(PImage bgImage){
     
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
-    super(col);
+    super(bgImage);
     
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -20,8 +20,8 @@ public class SocialMediaLoginScreen extends Screen{
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "CameraLiveViewScreen");
-    Icon loginIcon = new Icon(appWidth * 0.7, iconBottomY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Login", true, "Middle", "CameraLiveViewScreen");
+    Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY * 1.4, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "CameraLiveViewScreen");
+    Icon loginIcon = new Icon(appWidth * 0.7, iconCenterY * 1.4, appWidth * 0.4, appHeight * 0.08, buttonImage, "Login", true, "Middle", "CameraLiveViewScreen");
     
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, loginIcon};

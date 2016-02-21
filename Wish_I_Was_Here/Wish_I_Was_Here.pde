@@ -18,7 +18,7 @@ import android.content.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "SocialMediaLoginScreen";
+String currentScreen = "FavouritesScreen";
 
 // Creating a global variable, which any icon can use to pass the name of the function
 // they link to. The value of this variable is set in the Icon class when an icon is clicked
@@ -92,6 +92,7 @@ PImage twitterAccountIconImage;
 PImage instagramAccountIconImage;
 PImage emailIconImage;
 PImage buttonImage;
+PImage placeholderBackgroundImage;
 
   /*-------------------------------------- Sizing ------------------------------------------------*/
   
@@ -236,6 +237,7 @@ void setup() {
   instagramAccountIconImage = loadImage("instagramAccountIconImage.png");
   emailIconImage = loadImage("emailIconImage.png");
   buttonImage = loadImage("buttonImage.png");
+  placeholderBackgroundImage = loadImage("placeholderBackgroundImage.png");
 
    /*-------------------------------------- Sizing ------------------------------------------------*/
    
@@ -263,24 +265,24 @@ void setup() {
   // (for testing purposes only). Note - setting a background color is optional. Depending on the
   // screen's constructor, you can pass in a background color, a background image, or nothing at
   // all if you want to default to white
-  myHomeScreen = new HomeScreen(#8CBCD8);
+  myHomeScreen = new HomeScreen(placeholderBackgroundImage);
   myCameraLiveViewScreen = new CameraLiveViewScreen();
-  myFavouritesScreen = new FavouritesScreen(#CE04BA);
-  mySettingsScreen = new SettingsScreen(#2023A5);
-  myAboutScreen = new AboutScreen (#CEBD5A);
-  mySearchScreen = new SearchScreen(#E88121);
-  mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(#F5C811);
-  myImagePreviewScreen = new ImagePreviewScreen(#E88121);
-  mySaveShareScreenA = new SaveShareScreenA(#5ACEBE);
-  mySaveShareScreenB = new SaveShareScreenB(#CEBD5A);
-  mySharingScreen = new SharingScreen(#1548EF);
-  myShareSaveSuccessfulScreen = new ShareSaveSuccessfulScreen(#CE04BA);
-  myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(#30B727);
-  myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(#2023A5);
-  mySearchingScreen = new SearchingScreen(#2023A5);
-  mySocialMediaLoginScreen = new SocialMediaLoginScreen(#E88121);
-  mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(#CEBD54);
-  myLoadingScreen = new LoadingScreen();
+  myFavouritesScreen = new FavouritesScreen(loadImage("favouritesScreenBackgroundImage.png"));
+  mySettingsScreen = new SettingsScreen(placeholderBackgroundImage);
+  myAboutScreen = new AboutScreen (loadImage("aboutScreenBackgroundImage.png"));
+  mySearchScreen = new SearchScreen(placeholderBackgroundImage);
+  mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(placeholderBackgroundImage);
+  myImagePreviewScreen = new ImagePreviewScreen(#000000);
+  mySaveShareScreenA = new SaveShareScreenA(placeholderBackgroundImage);
+  mySaveShareScreenB = new SaveShareScreenB(placeholderBackgroundImage);
+  mySharingScreen = new SharingScreen(placeholderBackgroundImage);
+  myShareSaveSuccessfulScreen = new ShareSaveSuccessfulScreen(placeholderBackgroundImage);
+  myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(placeholderBackgroundImage);
+  myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(placeholderBackgroundImage);
+  mySearchingScreen = new SearchingScreen(placeholderBackgroundImage);
+  mySocialMediaLoginScreen = new SocialMediaLoginScreen(placeholderBackgroundImage);
+  mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(placeholderBackgroundImage);
+  myLoadingScreen = new LoadingScreen(placeholderBackgroundImage);
   
    /*-------------------------------------- Saving ------------------------------------------------*/
    
@@ -302,6 +304,7 @@ void setup() {
   }
 
 void draw() {
+  background(0);
   // Calling the monitorScreens() function to display the right screen by calling
   // the showScreen() method. This function then calls the super class's drawScreen()
   // method, which not only adds the icons and backgrounds to the screen, it also
@@ -340,7 +343,7 @@ void keyPressed(){
   // Getting the current input value of this text input (i.e. so that if a user clicks between different
   // text fields, they can resume their input instead of the textfield becoming empty)
   currentTextInputValue = currentTextInput.getInputValue();
-  
+
   // Checking if the key pressed is a coded value i.e. backspace etc
   if(key == CODED){
     //println(key);
