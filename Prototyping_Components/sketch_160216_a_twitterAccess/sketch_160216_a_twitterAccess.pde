@@ -1,6 +1,3 @@
-import android.os.Environment;
-import android.content.*;
-
 import twitter4j.*;
 import twitter4j.api.*;
 import twitter4j.auth.*;
@@ -10,99 +7,136 @@ import twitter4j.management.*;
 import twitter4j.util.*;
 import twitter4j.util.function.*;
 
+import ketai.ui.*;
+
+ConfigurationBuilder cb = new ConfigurationBuilder();
 Twitter twitter;
+Query queryForTwitter;
 
-int appWidth, appHeight;
-int orientationZ = -90;
-int camNum;
-int cameraScale = -1;
-String directory = "";
+String tAccessToken;
+String tAccessSecretToken;
 
-PImage currentImage;
-
+String myText = "";
+String textWarning = "";
 
 void setup(){
-  size(displayWidth, displayHeight);
-  
-  appWidth = displayWidth;
-  appHeight = displayHeight;
-  imageMode(CENTER);
-  directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
-  background(255);
-  
-  /*----------------------------------New------------------------------------*/
-  
-  ConfigurationBuilder cb = new ConfigurationBuilder();
+
   cb.setOAuthConsumerKey("");
   cb.setOAuthConsumerSecret("");
   cb.setOAuthAccessToken("");
-  cb.setOAuthAccessTokenSecret(""); 
-    
-  TwitterFactory tf = new TwitterFactory(cb.build());
-  twitter = tf.getInstance();
+  cb.setOAuthAccessTokenSecret("");
+
+ twitter = new TwitterFactory(cb.build()).getInstance();
+ fullScreen();
+  
 }
+
+ public static void main(String args[]) throws Exception{
+   
+    // The factory instance is re-useable and thread safe.
+    if(tAccessToken == ""){
+      Twitter twitter = TwitterFactory.getSingleton();
+      twitter.setOAuthConsumer("[consumer key]", "[consumer secret]");
+      RequestToken requestToken = twitter.getOAuthRequestToken();
+      AccessToken accessToken = null;
+      BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+      while (null == accessToken) {
+        System.out.println("Open the following URL and grant access to your account:");
+        System.out.println(requestToken.getAuthorizationURL());
+        System.out.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
+        String pin = br.readLine();
+        try{
+           if(pin.length() > 0){
+             accessToken = twitter.getOAuthAccessToken(requestToken, pin);
+           }else{
+             accessToken = twitter.getOAuthAccessToken();
+           }
+        } catch (TwitterException te) {
+          if(401 == te.getStatusCode()){
+            System.out.println("Unable to get the access token.");
+          }else{
+            te.printStackTrace();
+          }
+        }
+      }
+      //persist to the accessToken for future reference.
+      storeAccessToken(twitter.verifyCredentials().getId() , accessToken);
+      }
+    
+    else{
+      TwitterFactory factory = new TwitterFactory();
+      AccessToken accessToken = loadAccessToken(Integer.parseInt(args[0]));
+      Twitter twitter = factory.getInstance();
+      twitter.setOAuthConsumerKey("[consumer key]", "[consumer secret]");
+      twitter.setOAuthAccessToken(accessToken);   
+    }
+    
+    Status status = twitter.updateStatus(args[0]);
+    System.out.println("Successfully updated the status to [" + status.getText() + "].");
+    System.exit(0);
+  }
+  private static void storeAccessToken(int useId, AccessToken accessToken){
+    tAccessToken = accessToken.getToken();
+    tAccessSecretToken = accessToken.getTokenSecret();
+  }
+  
+  private static AccessToken loadAccessToken(int useId){
+    String token =  tAccessToken; // load from a persistent store
+    String tokenSecret = tAccessSecretToken; // load from a persistent store
+    return new AccessToken(token, tokenSecret);
+  }
+
 
 void draw(){
-  pushMatrix();
-  translate(displayWidth/2, displayHeight/2);
-  popMatrix();
-}
-
-public boolean isExternalStorageWritable() {
-  String state = Environment.getExternalStorageState();
-  if (Environment.MEDIA_MOUNTED.equals(state)) {
-    println("Writable: " + state);
-    return true;
+  background(0);
+   String passwordStars = "";
+  
+    for(int i = 0; i < myText.length(); i++){
+      int lastLetter = myText.length() - 1;
+      if(i == lastLetter){
+          passwordStars += myText.charAt(lastLetter);
+    } else {
+      passwordStars += "*";
+    }
   }
-  println("Not Writable: " + state);
-  return false;
+  
+  fill(255);
+  textSize(width * 0.1);
+  textAlign(CENTER, CENTER);
+  text(myText, width/2, height * 0.2);
+  text(passwordStars, width/2, height * 0.5);
+  
 }
 
 void mousePressed()
 { 
-  // Saving the current frame of the ketaiCamera and assigning it a name, and incrementing 
-  // number to ensure images are not overwritten and to allow for multiple images
-  // Also assigning an image format so the frame is saved as a jpeg to the users phone and 
-  // can be seen in their gallery under a folder title of Wish I Was Here App
-  
-  isExternalStorageWritable();
-  
-  PImage img = createImage(66, 66, RGB);
-  img.loadPixels();
-  for (int i = 0; i < img.pixels.length; i++) {
-    img.pixels[i] = color(0, 90, 102); 
-  }
-  img.updatePixels();
-  currentImage = img;
-  image(currentImage, 17, 17);
-  
-  File thePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-  println("thePath is " + thePath.toString());
-            
-  try {
-    
-    if (!currentImage.save(directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg")){
-      println("Failed to save image");
-    }
-    
-    println("Saved to = " + directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg");
-  }catch(Exception e){
-    println("Got an exception : " + e);
-  }
-
- /* ----------------------- New -------------------- */
- println("twitter initialization works");
- tweet();
+  println("twitter initialization works");
+  // tweet();
+  KetaiKeyboard.toggle(this);
 }
 
-
+void keyPressed(){
+  if(key == CODED){
+   if(keyCode == 67)
+    {
+     if(myText.length() > 0){
+        println("BACKSPACE");
+         myText = myText.substring(0, myText.length() - 1);
+      }
+    }
+  } else {
+    myText += key;
+  }
+  println(myText);
+}
+/*
 void tweet(){
  try{
-   Status status = twitter.updateStatus("Testing sending a tweet from processing on an android app");
+   Status status = twitter.updateStatus("Testing sending a tweet from Wish I Was Here app ! :)");
    System.out.println("Status updated to [" + status.getText() + "].");
  }
  catch (TwitterException te)
  {
   System.out.println("Error: "+ te.getMessage()); 
  }
-}
+}*/
