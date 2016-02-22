@@ -523,27 +523,28 @@ void removeGreenScreen() {
       float pixelSaturation = saturation(currentFrame.pixels[i]);
       float pixelBrightness = brightness(currentFrame.pixels[i]);
 
-      
+      /*
       // Creating variables to store the hue of the pixels surrounding the current pixel.
       // Defaulting these the be equal to the current pixels hue, and only changing them if
       // the current pixel is away from the edge of the picture
-      //float pixelHueToLeft = pixelHue;
+      float pixelHueToLeft = pixelHue;
       float pixelHueToRight = pixelHue;
-      //float pixelHueAbove = pixelHue;
+      float pixelHueAbove = pixelHue;
       float pixelHueBelow = pixelHue;
 
 
       // If the current pixel is not near the edge of the image, changing the values of the variables
       // for the pixels around it to get their hue values
       if (i > cfWidth + 1 && i < cfPixelsLength - cfWidth - 1) {
-        //pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
+        pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
         pixelHueToRight = hue(currentFrame.pixels[i + 1]);
-        //pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
+        pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
         pixelHueBelow = hue(currentFrame.pixels[i + cfWidth]);
       }
+      */
       
       // If the saturation and brightness are above 30, then this is a green pixel
-      if (pixelSaturation > 30 && pixelBrightness > 30)
+      if (pixelSaturation > 30 && pixelBrightness > 20)
       {
         // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge 
         if (pixelHue > 90 && pixelHue < 100) {
@@ -553,23 +554,23 @@ void removeGreenScreen() {
         } else if (pixelHue > 155) {
           // Increasing the hue, and reducing the saturation
           keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
-        } else if (pixelHue < 115) {
+        } /*else if (pixelHue < 115) {
           // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
           // the green screeen in greenScreenImage2)
           //keyedImage.pixels[currentPixel] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
-        } else {
+        } */else {
           // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
-          if (/*pixelHueToLeft > 90 && pixelHueToLeft < 150 && */pixelHueToRight > 90 && pixelHueToRight < 150 && /*pixelHueAbove > 90 && pixelHueAbove < 150 && */pixelHueBelow > 90 && pixelHueBelow < 150) {
+          /*if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
             // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
             keyedImage.pixels[i] = color(0, 0, 0, 0);
           } else if (pixelHue > 130) {
             // This seems to be the edges around the girl
             // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
             keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
-          } else {
+          } else {*/
             // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
             keyedImage.pixels[i] = color(0, 0, 0, 0);
-          }
+          //}
         }
       } else {
         // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
