@@ -137,7 +137,7 @@ public class Icon extends ClickableElement {
             // Resetting the about screen's loaded value to false, so that the next time it is opened
             // it will reset to it's original positions
             myAboutScreen.loaded = false;
-
+            
             // Logging out what page the app will now be taken to
             println("Going to the " + this.iconLinkTo);
           }
