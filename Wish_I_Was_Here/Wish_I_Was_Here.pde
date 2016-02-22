@@ -16,7 +16,7 @@ import android.content.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "SettingsScreen";
+String currentScreen = "HomeScreen";
 
 String returnTo = "HomeScreen";
 
@@ -154,6 +154,9 @@ String directory = "";
 // This variable is set to the current frame of the camera each time a new frame is read
 // in (i.e. in the onCameraPreviewEvent() of the main sketch)
 PImage currentImage;
+
+Boolean readingImage = false;
+PImage currentFrame;
 
 /*-------------------------------------- Built In Functions ------------------------------------------------*/
 
@@ -300,6 +303,8 @@ void setup() {
     currentImage.pixels[i] = color(0);
   }
   currentImage.updatePixels();
+  
+  currentFrame = createImage(ketaiCamera.width, ketaiCamera.height, ARGB);
 }
 
 void draw() {
@@ -372,10 +377,13 @@ void keyPressed() {
 // available from the ketaiCamera.
 void onCameraPreviewEvent()
 {
-  // Reading in a new frame from the ketaiCamera.
-  ketaiCamera.read();
-  currentImage = ketaiCamera.get();
-  //manipulatePixels();
+  if(readingImage == false){
+    // Reading in a new frame from the ketaiCamera.
+    readingImage = true;
+    ketaiCamera.read();
+    currentFrame = ketaiCamera.get();
+    thread("removeGreenScreen");
+  }
 }
 
 /*-------------------------------------- Custom Functions ------------------------------------------------*/
@@ -494,21 +502,60 @@ void testingTimeoutScreen(String fadeToScreen) {
   }
 }
 
-void manipulatePixels() {
-  currentImage.loadPixels();
-  for (int x = 0; x < currentImage.width; x++)
-  {
-    for (int y = 0; y < 50; y++)
-    {
-      int currentPixel = x + y * currentImage.width;
-
-      currentImage.pixels[currentPixel] = color(#0000FF);
-    }
-  }
-  currentImage.updatePixels();
-}
-
 void addToFavourites(String place) {
   myCameraLiveViewScreen.favouriteLocation = !myCameraLiveViewScreen.favouriteLocation;
   println("Favourite location is now: " + myCameraLiveViewScreen.favouriteLocation);
+}
+
+void removeGreenScreen() {
+  println("Starting removing Green Screen at frame " + frameCount);
+
+  // Changing the colour mode to HSB, so that I can work with the hue, satruation and
+  // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
+  // and brightness to 100.
+  colorMode(HSB, 360, 100, 100);
+
+  PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
+  
+  keyedImage = currentFrame.get();
+
+  // Loading in the pixel arrays of the keyed image and the girl green screen image
+  keyedImage.loadPixels();
+  
+  for (int i = 0; i < keyedImage.pixels.length; i++) {
+
+    // Getting the hue, saturation and brightness values of the current pixel
+    float pixelHue = hue(currentFrame.pixels[i]);
+
+    // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
+    if (pixelHue > 60 && pixelHue < 180) {
+
+      float pixelSaturation = saturation(currentFrame.pixels[i]);
+      float pixelBrightness = brightness(currentFrame.pixels[i]);
+      
+      // If the saturation and brightness are above 30, then this is a green pixel
+      if (pixelSaturation > 30 && pixelBrightness > 20)
+      {
+        // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
+        keyedImage.pixels[i] = color(0, 0, 0, 0);
+      } else {
+        // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
+        // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
+        // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
+        // from this pixel.
+        keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
+      }
+    }
+  }
+
+  // Updating the pixel arrays of the ketaiCamera and the keyed image
+  keyedImage.updatePixels();
+
+  // Resetting the color mode to RGB
+  colorMode(RGB, 255, 255, 255);
+
+  currentImage = keyedImage.get();
+
+  readingImage = false;
+  println("Finished removing Green Screen at frame " + frameCount);
 }
