@@ -276,7 +276,7 @@ void setup() {
   myAboutScreen = new AboutScreen (loadImage("aboutScreenBackgroundImage.png"));
   mySearchScreen = new SearchScreen(placeholderBackgroundImage);
   mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(placeholderBackgroundImage);
-  myImagePreviewScreen = new ImagePreviewScreen(#000000);
+  myImagePreviewScreen = new ImagePreviewScreen();
   mySaveShareScreenA = new SaveShareScreenA(placeholderBackgroundImage);
   mySaveShareScreenB = new SaveShareScreenB(placeholderBackgroundImage);
   mySharingScreen = new SharingScreen(placeholderBackgroundImage);
@@ -415,10 +415,12 @@ void switchScreens() {
   } else if (currentScreen.equals("SearchUnsuccessfulScreen")) {
     mySearchUnsuccessfulScreen.showScreen();
   } else if (currentScreen.equals("ImagePreviewScreen")) {
+    /*
     if(readingImage == false && finalKeying == false){
       finalKeying = true;
       removeGreenScreen();
     }
+    */
     myImagePreviewScreen.showScreen();
   } else if (currentScreen.equals("SaveShareScreenA")) {
     returnTo = "SaveShareScreenA";
@@ -566,6 +568,7 @@ void previewGreenScreen() {
   //println("Finished removing Green Screen at frame " + frameCount);
 }
 
+/*
 void removeGreenScreen() {
   println("Starting removing Green Screen at frame " + frameCount);
 
@@ -665,3 +668,4 @@ void removeGreenScreen() {
   
   println("Finished removing Green Screen at frame " + frameCount);
 }
+*/

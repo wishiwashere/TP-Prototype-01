@@ -2,12 +2,12 @@ public class ImagePreviewScreen extends Screen {
 
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
-  public ImagePreviewScreen(color col) {
+  public ImagePreviewScreen() {
 
     // Calling the super class (Screen), which will in turn call it's super class 
     // (Rectangle) and create a rectangle with the default values i.e. fullscreen, 
     // centered etc.
-    super(col);
+    super();
 
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -42,7 +42,8 @@ public class ImagePreviewScreen extends Screen {
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
-
+    image(loadImage("pyramids.jpg"), appWidth/2, appHeight/2, appWidth, appHeight);
+    
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
