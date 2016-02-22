@@ -387,13 +387,18 @@ void keyPressed() {
 // available from the ketaiCamera.
 void onCameraPreviewEvent()
 {
+  /*
   if(readingImage == false){
     // Reading in a new frame from the ketaiCamera.
     readingImage = true;
+  */
     ketaiCamera.read();
+    currentImage = ketaiCamera.get();
+  /*
     currentFrame = ketaiCamera.get();
     thread("previewGreenScreen");
   }
+  */
 }
 
 /*-------------------------------------- Custom Functions ------------------------------------------------*/
