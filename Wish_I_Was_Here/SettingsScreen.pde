@@ -26,8 +26,8 @@ public Boolean toggleAutoSaveMode;
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
-    Icon learningModeIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.5, toggleSwitchOffIconImage, "Learning mode switch", false, "_switchLearningMode");
-    Icon autoSaveIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.8, toggleSwitchOffIconImage, "Auto-save switch", false, "_switchAutoSave");
+    Icon learningModeIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.5, smallIconSize * 1.8, smallIconSize * 0.9, toggleSwitchOffIconImage, "Learning mode switch", false, "_switchLearningMode");
+    Icon autoSaveIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.8, smallIconSize * 1.8, smallIconSize * 0.9, toggleSwitchOffIconImage, "Auto-save switch", false, "_switchAutoSave");
     Icon instagramAccountIcon = new Icon(iconCenterX * 0.55, iconCenterY * 1.2, largeIconSize, largeIconSize, instagramAccountIconImage, "Instagram", true, "Below", "SocialMediaLoginScreen");
     Icon twitterAccountIcon = new Icon(iconCenterX * 1.45, iconCenterY * 1.2, largeIconSize, largeIconSize, twitterAccountIconImage, "Home", true, "Below", "SocialMediaLoginScreen");
 

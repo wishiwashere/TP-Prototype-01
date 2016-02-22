@@ -238,14 +238,14 @@ void setup() {
   disgardIconImage = loadImage("disgardIconImage.png");
   keepIconImage = loadImage("keepIconImage.png");
   cancelIconImage = loadImage("cancelIconImage.png");
-  facebookAccountIconImage = loadImage("placeholder.PNG");
+  facebookAccountIconImage = loadImage("facebookAccountIconImage.png");
   twitterAccountIconImage = loadImage("twitterAccountIconImage.png");
   instagramAccountIconImage = loadImage("instagramAccountIconImage.png");
   emailIconImage = loadImage("emailIconImage.png");
   buttonImage = loadImage("buttonImage.png");
-  placeholderBackgroundImage = loadImage("placeholderBackgroundImage.png");
-  toggleSwitchOnIconImage = loadImage("favIconYesImage.png");
-  toggleSwitchOffIconImage = loadImage("favIconNoImage.png");
+  placeholderBackgroundImage = loadImage("generalPageBackgroundImage.png");
+  toggleSwitchOnIconImage = loadImage("toggleSwitchOnIconImage.png");
+  toggleSwitchOffIconImage = loadImage("toggleSwitchOffIconImage.png");
 
   /*-------------------------------------- Sizing ------------------------------------------------*/
 

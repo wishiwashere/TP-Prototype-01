@@ -71,7 +71,7 @@ public class AboutScreen extends Screen {
     // generate the size and background of the screen
     this.drawScreen();
 
-    this.addImage(loadImage("placeholder.PNG"), appWidth/2, this.getY() + (appHeight * -0.25), appWidth * 0.8, appHeight * 0.2);
+    this.addImage(loadImage("aboutPageTeamImage.jpg"), appWidth/2, this.getY() + (appHeight * -0.25), appWidth * 0.7, appHeight * 0.2);
 
     rectMode(CORNER);
     textAlign(LEFT);

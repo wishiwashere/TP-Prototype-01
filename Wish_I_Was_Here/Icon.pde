@@ -41,6 +41,11 @@ public class Icon extends ClickableElement {
     // full constructor of this class
     this(x, y, smallIconSize, smallIconSize, img, title, showTitle, titlePosition, linkTo);
   }   
+  
+  // Partial Constructor
+  public Icon(float x, float y, float w, float h, PImage img, String title, Boolean showTitle, String linkTo){
+    this(x, y, w, h, img, title, showTitle, "", linkTo);
+  }
 
   // Full Constructor. Both of the above constructors both pass their values to this constructor, as
   // well as other icon's in the app that want to pass arguments for all of the specified values
