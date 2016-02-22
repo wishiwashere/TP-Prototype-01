@@ -95,6 +95,8 @@ PImage instagramAccountIconImage;
 PImage emailIconImage;
 PImage buttonImage;
 PImage placeholderBackgroundImage;
+PImage toggleSwitchOnIconImage;
+PImage toggleSwitchOffIconImage;
 
 /*-------------------------------------- Sizing ------------------------------------------------*/
 
@@ -242,6 +244,8 @@ void setup() {
   emailIconImage = loadImage("emailIconImage.png");
   buttonImage = loadImage("buttonImage.png");
   placeholderBackgroundImage = loadImage("placeholderBackgroundImage.png");
+  toggleSwitchOnIconImage = loadImage("favIconYesImage.png");
+  toggleSwitchOffIconImage = loadImage("favIconNoImage.png");
 
   /*-------------------------------------- Sizing ------------------------------------------------*/
 
@@ -326,6 +330,10 @@ void draw() {
     myCameraLiveViewScreen.switchCameraView();
   } else if (callFunction.equals("_addToFavourites")) {
     addToFavourites("Favourite");
+  } else if(callFunction.equals("_switchLearningMode")){
+    switchLearningMode();
+  } else if(callFunction.equals("_switchAutoSave")){
+    switchAutoSave();
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
   }
@@ -514,6 +522,17 @@ void addToFavourites(String place) {
   myCameraLiveViewScreen.favouriteLocation = !myCameraLiveViewScreen.favouriteLocation;
   println("Favourite location is now: " + myCameraLiveViewScreen.favouriteLocation);
 }
+
+void switchLearningMode(){
+ mySettingsScreen.toggleLearningMode = !mySettingsScreen.toggleLearningMode;
+ println("Learning mode is now: " + mySettingsScreen.toggleLearningMode);
+}
+
+void switchAutoSave(){
+ mySettingsScreen.toggleAutoSaveMode = !mySettingsScreen.toggleAutoSaveMode;
+ println("Auto-save is now: " + mySettingsScreen.toggleAutoSaveMode);
+}
+
 
 void previewGreenScreen() {
   //println("Starting removing Green Screen at frame " + frameCount);

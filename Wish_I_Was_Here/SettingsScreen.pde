@@ -1,13 +1,20 @@
 public class SettingsScreen extends Screen {
+public Boolean toggleLearningMode;
+public Boolean toggleAutoSaveMode;
+
 
   // Creating a public constructor for the SettingsScreen class, so that
   // an instance of it can be declared in the main sketch
   public SettingsScreen(PImage bgImage) {
-
+    
     // Passing the color parametre to the super class (Screen), which will in
     // turn call it's super class (Rectangle) and create a rectangle with the 
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
+    
+    
+    toggleLearningMode = false;
+    toggleAutoSaveMode = false;
 
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -19,11 +26,13 @@ public class SettingsScreen extends Screen {
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
-    Icon instagramAccountIcon = new Icon(iconCenterX * 0.55, iconCenterY, largeIconSize, largeIconSize, instagramAccountIconImage, "Instagram", true, "Below", "SocialMediaLoginScreen");
-    Icon twitterAccountIcon = new Icon(iconCenterX * 1.45, iconCenterY, largeIconSize, largeIconSize, twitterAccountIconImage, "Home", true, "Below", "SocialMediaLoginScreen");
+    Icon learningModeIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.5, toggleSwitchOffIconImage, "Learning mode switch", false, "_switchLearningMode");
+    Icon autoSaveIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.8, toggleSwitchOffIconImage, "Auto-save switch", false, "_switchAutoSave");
+    Icon instagramAccountIcon = new Icon(iconCenterX * 0.55, iconCenterY * 1.2, largeIconSize, largeIconSize, instagramAccountIconImage, "Instagram", true, "Below", "SocialMediaLoginScreen");
+    Icon twitterAccountIcon = new Icon(iconCenterX * 1.45, iconCenterY * 1.2, largeIconSize, largeIconSize, twitterAccountIconImage, "Home", true, "Below", "SocialMediaLoginScreen");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
-    Icon[] allIcons = {homeIcon, instagramAccountIcon, twitterAccountIcon};
+    Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, instagramAccountIcon, twitterAccountIcon};
 
     // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
     // the temporary allIcons array to the screenIcons array of the Screen class so that they 
@@ -49,7 +58,7 @@ public class SettingsScreen extends Screen {
     // generate the size and background of the screen
     this.drawScreen();
     
-    this.addText("Learning Mode", "LEFT", iconLeftX, iconCenterY * 0.4);
-    this.addText("Autosave Image", "LEFT", iconLeftX, iconCenterY * 0.6);
+    this.addText("Learning Mode", "LEFT", iconLeftX, iconCenterY * 0.5);
+    this.addText("Autosave Image", "LEFT", iconLeftX, iconCenterY * 0.8);
   }
 }

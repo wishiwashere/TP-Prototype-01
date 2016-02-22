@@ -116,6 +116,21 @@ public class Icon extends ClickableElement {
                 this.setImage(loadImage("favIconYesImage.png"));
               }
             }
+            else if(this.iconLinkTo.equals("_switchLearningMode")){
+              if(mySettingsScreen.toggleLearningMode){
+                this.setImage(toggleSwitchOnIconImage);
+              }
+              else{
+                this.setImage(toggleSwitchOffIconImage);
+              }
+            }else if(this.iconLinkTo.equals("_switchAutoSave")){
+              if(mySettingsScreen.toggleAutoSaveMode){
+                this.setImage(toggleSwitchOnIconImage);
+              }
+              else{
+                this.setImage(toggleSwitchOffIconImage);
+              }
+            }
 
             // Logging out what page the app will now be taken to
             println("Calling the " + this.iconLinkTo + "() function");
