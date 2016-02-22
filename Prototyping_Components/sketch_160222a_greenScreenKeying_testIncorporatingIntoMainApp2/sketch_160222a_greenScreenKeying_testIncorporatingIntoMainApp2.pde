@@ -502,43 +502,45 @@ void removeGreenScreen() {
   colorMode(HSB, 360, 100, 100);
 
   PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
+  
+  keyedImage = currentFrame.get();
 
   // Loading in the pixel arrays of the keyed image and the girl green screen image
   keyedImage.loadPixels();
   currentFrame.loadPixels();
-  
-  for (int i = 0; i < currentFrame.pixels.length; i++) {
+
+  int cfPixelsLength = currentFrame.pixels.length;
+  int cfWidth = currentFrame.width;
+
+  for (int i = 0; i < cfPixelsLength; i++) {
 
     // Getting the hue, saturation and brightness values of the current pixel
     float pixelHue = hue(currentFrame.pixels[i]);
-    float pixelSaturation = saturation(currentFrame.pixels[i]);
-    float pixelBrightness = brightness(currentFrame.pixels[i]);
-
-
-    // Creating variables to store the hue of the pixels surrounding the current pixel.
-    // Defaulting these the be equal to the current pixels hue, and only changing them if
-    // the current pixel is away from the edge of the picture
-    float pixelHueToLeft = pixelHue;
-    float pixelHueToRight = pixelHue;
-    float pixelHueAbove = pixelHue;
-    float pixelHueBelow = pixelHue;
-
-
-    // If the current pixel is not near the edge of the image, changing the values of the variables
-    // for the pixels around it to get their hue values
-    if (i > currentFrame.width + 1 && i < currentFrame.pixels.length - currentFrame.width - 1) {
-      pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
-      pixelHueToRight = hue(currentFrame.pixels[i + 1]);
-      pixelHueAbove = hue(currentFrame.pixels[i - currentFrame.width]);
-      pixelHueBelow = hue(currentFrame.pixels[i + currentFrame.width]);
-    }
-
-    if (i == 0) {
-      println("Current hue is: " + pixelHue + ". Current saturation is: " + pixelSaturation + ". Current brightness is: " + pixelBrightness);
-    }
 
     // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
     if (pixelHue > 60 && pixelHue < 180) {
+
+      float pixelSaturation = saturation(currentFrame.pixels[i]);
+      float pixelBrightness = brightness(currentFrame.pixels[i]);
+
+
+      // Creating variables to store the hue of the pixels surrounding the current pixel.
+      // Defaulting these the be equal to the current pixels hue, and only changing them if
+      // the current pixel is away from the edge of the picture
+      float pixelHueToLeft = pixelHue;
+      float pixelHueToRight = pixelHue;
+      float pixelHueAbove = pixelHue;
+      float pixelHueBelow = pixelHue;
+
+
+      // If the current pixel is not near the edge of the image, changing the values of the variables
+      // for the pixels around it to get their hue values
+      if (i > cfWidth + 1 && i < cfPixelsLength - cfWidth - 1) {
+        pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
+        pixelHueToRight = hue(currentFrame.pixels[i + 1]);
+        pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
+        pixelHueBelow = hue(currentFrame.pixels[i + cfWidth]);
+      }
       // If the saturation and brightness are above 30, then this is a green pixel
       if (pixelSaturation > 30 && pixelBrightness > 30)
       {
@@ -575,11 +577,6 @@ void removeGreenScreen() {
         // from this pixel.
         keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
       }
-    } else {
-      // Since this pixel did not fall within any of the wider ranges of green in the colour spectrum,
-      // we are going to use this pixel exactly as it was read in, by setting the equilivant pixel in the 
-      // keyedImage to be equal to the equilivant pixel in the greenScreen image
-      keyedImage.pixels[i] = color(pixelHue, pixelSaturation, pixelBrightness);
     }
   }
 
