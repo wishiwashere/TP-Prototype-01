@@ -6,8 +6,8 @@
   <condition property="sdk.dir" value="${env.ANDROID_HOME}">
        <isset property="env.ANDROID_HOME" />
   </condition>
-  <property name="jdt.core" value="C:\Users\Eiren\Downloads\processing-3.0.1-windows64\processing-3.0.1\tools/../modes/java/mode/org.eclipse.jdt.core.jar" />
-  <property name="jdtCompilerAdapter" value="C:\Users\Eiren\Downloads\processing-3.0.1-windows64\processing-3.0.1\tools/../modes/java/mode/jdtCompilerAdapter.jar" />
+  <property name="jdt.core" value="C:\Users\pigot\Documents\Software\processing-3.0.1\tools/../modes/java/mode/org.eclipse.jdt.core.jar" />
+  <property name="jdtCompilerAdapter" value="C:\Users\pigot\Documents\Software\processing-3.0.1\tools/../modes/java/mode/jdtCompilerAdapter.jar" />
   <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter" />
   <mkdir dir="bin" />
   <echo message="${build.compiler}" />

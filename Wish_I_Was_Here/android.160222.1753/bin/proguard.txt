@@ -1,6 +1,0 @@
-# view res/layout/main.xml #generated:1
--keep class .Wish_I_Was_Here { <init>(...); }
-
-# view AndroidManifest.xml #generated:1
--keep class processing.test.wish_i_was_here.MainActivity { <init>(...); }
-
