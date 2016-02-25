@@ -1,6 +1,6 @@
 public class SettingsScreen extends Screen {
-public Boolean toggleLearningMode;
-public Boolean toggleAutoSaveMode;
+public Boolean learningModeOn;
+public Boolean autoSaveModeOn;
 
 
   // Creating a public constructor for the SettingsScreen class, so that
@@ -13,8 +13,8 @@ public Boolean toggleAutoSaveMode;
     super(bgImage);
     
     
-    toggleLearningMode = false;
-    toggleAutoSaveMode = false;
+    learningModeOn = false;
+    autoSaveModeOn = true;
 
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -27,7 +27,7 @@ public Boolean toggleAutoSaveMode;
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
     Icon learningModeIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.5, smallIconSize * 1.8, smallIconSize * 0.9, toggleSwitchOffIconImage, "Learning mode switch", false, "_switchLearningMode");
-    Icon autoSaveIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.8, smallIconSize * 1.8, smallIconSize * 0.9, toggleSwitchOffIconImage, "Auto-save switch", false, "_switchAutoSave");
+    Icon autoSaveIcon = new Icon(iconRightX * 0.9, iconCenterY * 0.8, smallIconSize * 1.8, smallIconSize * 0.9, toggleSwitchOnIconImage, "Auto-save switch", false, "_switchAutoSave");
     Icon instagramAccountIcon = new Icon(iconCenterX * 0.55, iconCenterY * 1.2, largeIconSize, largeIconSize, instagramAccountIconImage, "Instagram", true, "Below", "SocialMediaLoginScreen");
     Icon twitterAccountIcon = new Icon(iconCenterX * 1.45, iconCenterY * 1.2, largeIconSize, largeIconSize, twitterAccountIconImage, "Home", true, "Below", "SocialMediaLoginScreen");
 

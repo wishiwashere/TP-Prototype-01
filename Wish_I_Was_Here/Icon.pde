@@ -122,18 +122,18 @@ public class Icon extends ClickableElement {
               }
             }
             else if(this.iconLinkTo.equals("_switchLearningMode")){
-              if(mySettingsScreen.toggleLearningMode){
-                this.setImage(toggleSwitchOnIconImage);
+              if(mySettingsScreen.learningModeOn){
+                this.setImage(toggleSwitchOffIconImage);
               }
               else{
-                this.setImage(toggleSwitchOffIconImage);
+                this.setImage(toggleSwitchOnIconImage);
               }
             }else if(this.iconLinkTo.equals("_switchAutoSave")){
-              if(mySettingsScreen.toggleAutoSaveMode){
-                this.setImage(toggleSwitchOnIconImage);
+              if(mySettingsScreen.autoSaveModeOn){
+                this.setImage(toggleSwitchOffIconImage);
               }
               else{
-                this.setImage(toggleSwitchOffIconImage);
+                this.setImage(toggleSwitchOnIconImage);
               }
             }
 

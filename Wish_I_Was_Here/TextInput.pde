@@ -151,6 +151,9 @@ public class TextInput extends ClickableElement{
   public String getInputValue(){
     return this.inputValue;
   }
+  public void clearInputValue(){
+    this.inputValue = "";
+  }
   
   private String hidePassword(){
     // Creating a temporary string to store the **** for the password (i.e. we do not want
@@ -179,7 +182,7 @@ public class TextInput extends ClickableElement{
     }
     return passwordStars;
   }
-  
+
   /*
   // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
   private void addTextBox(String text){

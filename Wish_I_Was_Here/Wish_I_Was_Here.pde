@@ -3,6 +3,14 @@ import ketai.camera.*;
 import ketai.ui.*;
 import android.os.Environment;
 import android.content.*;
+import twitter4j.*;
+import twitter4j.api.*;
+import twitter4j.auth.*;
+import twitter4j.conf.*;
+import twitter4j.json.*;
+import twitter4j.management.*;
+import twitter4j.util.*;
+import twitter4j.util.function.*;
 
 /*-------------------------------------- Globally Accessed Variables ------------------------------------------------*/
 
@@ -68,6 +76,14 @@ int cameraScale = -1;
 int cameraRotation = -90;
 
 Boolean finalKeying = false;
+
+/*----------------------------------- Twitter Tweeting -----------------------------------------*/
+// Setting up the configuration for tweeting from an account on Twitter
+ConfigurationBuilder cb = new ConfigurationBuilder();
+
+// Using the twitter class for tweeting, so later I can call on the twitter factory, which in turn
+// creates a new instance of the configuration builder
+Twitter twitter;
 
 /*-------------------------------------- Images ------------------------------------------------*/
 
@@ -311,6 +327,16 @@ void setup() {
   currentImage.updatePixels();
   
   currentFrame = createImage(ketaiCamera.width, ketaiCamera.height, ARGB);
+  
+  /*----------------------------------- Twitter Tweeting -----------------------------------------*/
+  //Setting up Twitter and informing twitter of the users credentials to our application can tweet
+  // from the users twitter account and access their account
+  cb.setOAuthConsumerKey("");
+  cb.setOAuthConsumerSecret("");
+  cb.setOAuthAccessToken("");
+  cb.setOAuthAccessTokenSecret("");
+
+  twitter = new TwitterFactory(cb.build()).getInstance();
 }
 
 void draw() {
@@ -334,6 +360,8 @@ void draw() {
     switchLearningMode();
   } else if(callFunction.equals("_switchAutoSave")){
     switchAutoSave();
+  } else if(callFunction.equals("_sendTweet")){
+    sendTweet();
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
   }
@@ -524,15 +552,30 @@ void addToFavourites(String place) {
 }
 
 void switchLearningMode(){
- mySettingsScreen.toggleLearningMode = !mySettingsScreen.toggleLearningMode;
- println("Learning mode is now: " + mySettingsScreen.toggleLearningMode);
+ mySettingsScreen.learningModeOn = !mySettingsScreen.learningModeOn;
+ println("Learning mode is now: " + mySettingsScreen.learningModeOn);
 }
 
 void switchAutoSave(){
- mySettingsScreen.toggleAutoSaveMode = !mySettingsScreen.toggleAutoSaveMode;
- println("Auto-save is now: " + mySettingsScreen.toggleAutoSaveMode);
+ mySettingsScreen.autoSaveModeOn = !mySettingsScreen.autoSaveModeOn;
+ println("Auto-save is now: " + mySettingsScreen.autoSaveModeOn);
 }
 
+void sendTweet(){
+  String message = mySaveShareScreenB.messageInput.getInputValue();
+  currentScreen = "SharingScreen";
+  try {
+    Status status = twitter.updateStatus(message + " #WishIWasHere");
+    System.out.println("Status updated to [" + status.getText() + "].");
+    currentScreen = "ShareSaveSuccessfulScreen";
+    mySaveShareScreenB.messageInput.clearInputValue();
+  }
+  catch (TwitterException te)
+  {
+    System.out.println("Error: "+ te.getMessage());
+    currentScreen = "ShareUnsuccessfulScreen";
+  } 
+}
 
 void previewGreenScreen() {
   //println("Starting removing Green Screen at frame " + frameCount);

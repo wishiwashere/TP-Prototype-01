@@ -1,5 +1,5 @@
 public class SaveShareScreenB extends Screen {
-  private TextInput messageInput;
+  public TextInput messageInput;
 
   // Creating a public constructor for the TemplateScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -22,7 +22,8 @@ public class SaveShareScreenB extends Screen {
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
-    Icon shareIcon = new Icon(appWidth * 0.7, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "SharingScreen");
+    //Icon shareIcon = new Icon(appWidth * 0.7, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "SharingScreen");
+    Icon shareIcon = new Icon(appWidth * 0.7, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "_sendTweet");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, shareIcon};

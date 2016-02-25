@@ -20,7 +20,7 @@ public class ShareUnsuccessfulScreen extends Screen {
     // as the linkTo argument, are optional
 
     Icon cancelIcon = new Icon(iconCenterX * 0.55, largeIconBottomY, largeIconSize, largeIconSize, cancelIconImage, "Cancel", true, "Below", "CameraLiveViewScreen");
-    Icon retryIcon = new Icon(iconCenterX * 1.45, largeIconBottomY, largeIconSize, largeIconSize, retryIconImage, "Retry", true, "Below", "SharingScreen");
+    Icon retryIcon = new Icon(iconCenterX * 1.45, largeIconBottomY, largeIconSize, largeIconSize, retryIconImage, "Retry", true, "Below", "_sendTweet");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, retryIcon};
