@@ -561,18 +561,33 @@ void switchAutoSave() {
   println("Auto-save is now: " + mySettingsScreen.autoSaveModeOn);
 }
 
+
 void sendTweet() {
+  // Creating a string to to hold the value that is in the message input 
   String message = mySaveShareScreenB.messageInput.getInputValue();
+  
+  //making the current screen "Sharing Screen"
   currentScreen = "SharingScreen";
   try {
+    // Making a twitter status that will hold the message the user typed 
+    // and adding the Wish I Was Here tag onto the end of the message
     Status status = twitter.updateStatus(message + " #WishIWasHere");
     System.out.println("Status updated to [" + status.getText() + "].");
+    
+    //Changing the current Screen
     currentScreen = "ShareSaveSuccessfulScreen";
+    
+    //Cleaing the message input so it is empty the next time the user 
+    // arrives to send another tweet
     mySaveShareScreenB.messageInput.clearInputValue();
   }
   catch (TwitterException te)
   {
+    //If the tweet can't be sent, it will print out the reason that 
+    // is causing the problem
     System.out.println("Error: "+ te.getMessage());
+    
+    //Changing the current screen to be the unsuccessul share screen
     currentScreen = "ShareUnsuccessfulScreen";
   }
 }

@@ -1,6 +1,9 @@
 public class SettingsScreen extends Screen {
-public Boolean learningModeOn;
-public Boolean autoSaveModeOn;
+
+  // Creating Booleans for the learning mode and auto save mode, these variables will be used to 
+  // toggle between turing these settings on and off depending on the users input
+  public Boolean learningModeOn;
+  public Boolean autoSaveModeOn;
 
 
   // Creating a public constructor for the SettingsScreen class, so that
@@ -12,8 +15,10 @@ public Boolean autoSaveModeOn;
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
     
-    
+    // Setting the learning mode to off
     learningModeOn = false;
+    
+    // Setting the auto save to on
     autoSaveModeOn = true;
 
     // Creating the icon/s for this screen, using locally scoped variables, as these
@@ -58,6 +63,7 @@ public Boolean autoSaveModeOn;
     // generate the size and background of the screen
     this.drawScreen();
     
+    // Adding text to go beside the icon that will be toggled in order label each setting for the users convenience 
     this.addText("Learning Mode", "LEFT", iconLeftX, iconCenterY * 0.5);
     this.addText("Autosave Image", "LEFT", iconLeftX, iconCenterY * 0.8);
   }
