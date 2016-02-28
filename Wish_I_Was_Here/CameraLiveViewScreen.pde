@@ -23,7 +23,7 @@ public class CameraLiveViewScreen extends Screen {
     Icon homeIcon = new Icon(iconRightX, iconTopY, loadImage("homeIconWhiteImage.png"), "Home", false, "HomeScreen");
     Icon favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false, "_addToFavourites");
     Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
-    Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "ImagePreviewScreen");
+    Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "_mergeImages");
     Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_switchCameraView");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
@@ -47,6 +47,9 @@ public class CameraLiveViewScreen extends Screen {
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
+    if(compiledImage != null){
+      compiledImage = null;
+    }
     // Using the currentLocationImage as the background for the camera live view i.e. so the user
     // can feel like they are taking a picture in that location
     image(currentLocationImage, appWidth/2, appHeight/2, appWidth, appHeight);
@@ -61,11 +64,13 @@ public class CameraLiveViewScreen extends Screen {
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
-    //this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
+    this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
   }
 
   private void switchCameraView()
   {    
+    callFunction = "";
+    
     // If the camera is already running before we try and effect it
     if (ketaiCamera.isStarted())
     {

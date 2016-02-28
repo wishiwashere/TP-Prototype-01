@@ -18,7 +18,7 @@ public class ImagePreviewScreen extends Screen {
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon disgardIcon = new Icon(iconLeftX, iconBottomY, disgardIconImage, "Disgard Image", false, "CameraLiveViewScreen");
+    Icon disgardIcon = new Icon(iconLeftX, iconBottomY, disgardIconImage, "Disgard Image", false, "_disgardImage");
     Icon keepIcon = new Icon(iconRightX, iconBottomY, keepIconImage, "Keep Image", false, "_keepImage");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
@@ -42,18 +42,11 @@ public class ImagePreviewScreen extends Screen {
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
-    image(loadImage("pyramids.jpg"), appWidth/2, appHeight/2, appWidth, appHeight);
+    image(compiledImage, appWidth/2, appHeight/2, appWidth, appHeight);
     
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
-
-    // Calls super super class (Rectangle). Passing in the current frame image, the width and height
-    // which have been reversed - i.e. the width will now be equal to the height of the app, as the 
-    // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
-    // minus depending on whether you are using the front or rear camera) so the width and the height
-    // need to swap to fit with the image's new resolution
-    this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
   }
 }
