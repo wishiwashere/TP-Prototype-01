@@ -26,6 +26,11 @@ import twitter4j.util.function.*;
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
 String currentScreen = "LoadingScreen";
 
+// Creating a global variable for ourBrowserApiKey that is required to make requests
+// to the Google Street View Image API. This key will be removed before commits to
+// GitHub, for security purposes.
+String ourBrowserApiKey = "";
+
 String returnTo = "HomeScreen";
 
 // Creating a global variable, which any icon can use to pass the name of the function
@@ -50,6 +55,12 @@ String currentTextInputValue = "";
 // user first holds down the mouse). It will then be continually updated (on any pages that scroll)
 // and used to determine how much a user has scrolled, and move the contents of these page's accordingly
 float previousMouseY;
+
+// Declaring the currentLocationImage variable, which will be set within the FavouriteTab's showFavourite()
+// method. For the moment, we will be initialising this variable to a random location in the setup() method
+// of the main sketch, so that the user will always be able to see a location in the background, even if they
+// don't go through the favourites menu of the app
+PImage currentLocationImage;
 
 /*-------------------------------------- KetaiCamera ------------------------------------------------*/
 
@@ -336,7 +347,7 @@ void setup() {
   cb.setOAuthAccessToken("");
   cb.setOAuthAccessTokenSecret("");
 
-  twitter = new TwitterFactory(cb.build()).getInstance();
+  twitter = new TwitterFactory(cb.build()).getInstance();  
 }
 
 void draw() {

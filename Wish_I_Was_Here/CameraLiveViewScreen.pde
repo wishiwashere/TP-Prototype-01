@@ -47,7 +47,9 @@ public class CameraLiveViewScreen extends Screen {
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
-    image(loadImage("pyramids.jpg"), appWidth/2, appHeight/2, appWidth, appHeight);
+    // Using the currentLocationImage as the background for the camera live view i.e. so the user
+    // can feel like they are taking a picture in that location
+    image(currentLocationImage, appWidth/2, appHeight/2, appWidth, appHeight);
 
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
@@ -59,7 +61,7 @@ public class CameraLiveViewScreen extends Screen {
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
-    this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
+    //this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
   }
 
   private void switchCameraView()
