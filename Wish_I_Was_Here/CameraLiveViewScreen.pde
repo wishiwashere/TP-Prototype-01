@@ -53,18 +53,20 @@ public class CameraLiveViewScreen extends Screen {
     // Using the currentLocationImage as the background for the camera live view i.e. so the user
     // can feel like they are taking a picture in that location
     image(currentLocationImage, appWidth/2, appHeight/2, appWidth, appHeight);
-
-    // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-    // icons. This method will then in turn call it's super class's (Rectangle) method, to 
-    // generate the size and background of the screen
-    this.drawScreen();
-
+    
     // Calls super super class (Rectangle). Passing in the current frame image, the width and height
     // which have been reversed - i.e. the width will now be equal to the height of the app, as the 
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
     this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
+
+    // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
+    // icons. This method will then in turn call it's super class's (Rectangle) method, to 
+    // generate the size and background of the screen
+    this.drawScreen();
+    
+    this.addOverlay();
   }
 
   private void switchCameraView()

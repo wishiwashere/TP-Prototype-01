@@ -14,6 +14,7 @@ protected class Rectangle {
   public PImage rectBackgroundImg = null;
   private int rectBackgroundImgScaleX = 1;
   private int rectBackgroundImgRotate = 0;
+  private Boolean rectOverlay = false;
 
   /*-------------------------------------- Constructor() ------------------------------------------------*/
 
@@ -128,6 +129,10 @@ protected class Rectangle {
       // passing in the image, along with the current x, y, width and height of the instance,
       // so that the image will appear the full size of the object
       this.addImage(rectImage, rectX, rectY, rectWidth, rectHeight);
+    }
+    
+    if (rectOverlay) {
+      image(overlayImage, appWidth * 0.7, appHeight * 0.85, appWidth * 0.55, appWidth * 0.3);
     }
   }
 
@@ -324,6 +329,10 @@ protected class Rectangle {
     rectHeight = h;
     rectBackgroundImgScaleX =  scaleX;
     rectBackgroundImgRotate = rotate;
+  }
+  
+  protected void addOverlay(){
+    rectOverlay = true;
   }
 
   public PImage getBackgroundImage() {

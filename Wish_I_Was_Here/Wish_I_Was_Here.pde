@@ -126,6 +126,7 @@ PImage buttonImage;
 PImage placeholderBackgroundImage;
 PImage toggleSwitchOnIconImage;
 PImage toggleSwitchOffIconImage;
+PImage overlayImage;
 
 /*-------------------------------------- Sizing ------------------------------------------------*/
 
@@ -275,6 +276,7 @@ void setup() {
   placeholderBackgroundImage = loadImage("generalPageBackgroundImage.png");
   toggleSwitchOnIconImage = loadImage("toggleSwitchOnIconImage.png");
   toggleSwitchOffIconImage = loadImage("toggleSwitchOffIconImage.png");
+  overlayImage = loadImage("overlay.png");
 
   /*-------------------------------------- Sizing ------------------------------------------------*/
 
@@ -659,7 +661,8 @@ void mergeImages(){
   PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
   println(cameraRotation);
     mergedImage.beginDraw();
-    mergedImage.image(currentLocationImage, 0, 0);
+    mergedImage.imageMode(CENTER);
+    mergedImage.image(currentLocationImage, appWidth/2, appHeight/2);
     mergedImage.endDraw();
     
     mergedImage.beginDraw();
@@ -670,6 +673,11 @@ void mergeImages(){
     mergedImage.imageMode(CENTER);
     mergedImage.image(currentImage, 0, 0);
     mergedImage.popMatrix();
+    mergedImage.endDraw();
+    
+    mergedImage.beginDraw();
+    mergedImage.imageMode(CENTER);
+    mergedImage.image(overlayImage, appWidth * 0.7, appHeight * 0.85, appWidth * 0.55, appWidth * 0.3);
     mergedImage.endDraw();
   
   compiledImage = mergedImage.get();
