@@ -529,7 +529,6 @@ void keepImage() {
     // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
     if (compiledImage.save(directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg")) {
       println("Successfully saved image to = " + directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg");
-      compiledImage = null;
       currentScreen = "SaveShareScreenA";
     } else {
       println("Failed to save image");
@@ -677,7 +676,7 @@ void mergeImages(){
     
     mergedImage.beginDraw();
     mergedImage.imageMode(CENTER);
-    mergedImage.image(overlayImage, appWidth * 0.7, appHeight * 0.85, appWidth * 0.55, appWidth * 0.3);
+    mergedImage.image(overlayImage, appWidth * 0.7, appHeight * 0.8, appWidth * 0.55, appWidth * 0.3);
     mergedImage.endDraw();
   
   compiledImage = mergedImage.get();

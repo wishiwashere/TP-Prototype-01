@@ -51,6 +51,6 @@ public class SaveShareScreenA extends Screen {
     // generate the size and background of the screen
     this.drawScreen();
 
-    this.addImage(currentImage, iconCenterX, iconCenterY * 0.4, appWidth * 0.8, appWidth * 0.6);
+    this.addImage(compiledImage, iconCenterX, iconCenterY * 0.5, appWidth * 0.3, appHeight * 0.3);
   }
 }
