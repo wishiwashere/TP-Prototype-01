@@ -50,7 +50,7 @@ public class AboutScreen extends Screen {
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
-    if (!loaded) {
+    if (!this.loaded) {
       // Resetting the position values of the element so on the screen every time the page is opened,
       // so that if a user leaves the screen half scrolled, it will still be reset upon their return
       this.setY(appHeight/2);
@@ -62,7 +62,7 @@ public class AboutScreen extends Screen {
       // Setting loaded to true, so that this block of code will only run once (each time this page
       // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
       // when an icon that links to another page has been clicked.
-      loaded = true;
+      this.loaded = true;
       println("firstLoad");
     }
 
