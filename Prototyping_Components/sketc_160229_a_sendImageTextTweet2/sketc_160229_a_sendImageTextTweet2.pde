@@ -196,7 +196,7 @@ PImage currentFrame;
 
 void setup() {
   /*-------------------------------------- Global ------------------------------------------------*/
-
+   println("-------------------------------hello------------------------------------------------");
   // PC TESTING SETTINGS
   // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
   //size(360, 640);
@@ -345,12 +345,14 @@ void setup() {
   /*----------------------------------- Twitter Tweeting -----------------------------------------*/
   //Setting up Twitter and informing twitter of the users credentials to our application can tweet
   // from the users twitter account and access their account
-  cb.setOAuthConsumerKey("");
-  cb.setOAuthConsumerSecret("");
-  cb.setOAuthAccessToken("");
-  cb.setOAuthAccessTokenSecret("");
+  cb.setOAuthConsumerKey("huoLN2BllLtOzezay2ei07bzo");
+  cb.setOAuthConsumerSecret("k2OgK1XmjHLBMBRdM9KKyu86GS8wdIsv9Wbk9QOdzObXzHYsjb");
+  cb.setOAuthAccessToken("4833019853-PzhGbWL0lulwsER62Ly7VY7P5WQcJT52j0MSIzI");
+  cb.setOAuthAccessTokenSecret("TazSQHl662mp6GIJkzlWRI5LkjOEnQZ4ifof7V3X3t30C");
 
   twitter = new TwitterFactory(cb.build()).getInstance();
+  
+ 
 }
 
 void draw() {
@@ -375,7 +377,7 @@ void draw() {
   } else if (callFunction.equals("_switchAutoSave")) {
     switchAutoSave();
   } else if (callFunction.equals("_sendTweet")) {
-    sendTweet(imageFile,twitterMessage);
+    sendTweet();
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
   }
@@ -520,8 +522,8 @@ void keepImage() {
   // Checking if Storage is available
   if (isExternalStorageWritable()) {    
     // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
-    if (currentImage.save(directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg")) {
-      println("Successfully saved image to = " + directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg");
+    if (currentImage.save(directory + "twitterImage.jpg")){
+      println("Successfully saved image to = " + directory + "twitterImage.jpg");
       currentScreen = "SaveShareScreenA";
     } else {
       println("Failed to save image");
@@ -547,6 +549,55 @@ Boolean isExternalStorageWritable() {
   }
 
   return answer;
+}
+
+void sendTweet() {
+  // Creating a string to to hold the value that is in the message input 
+  String twitterMessage = mySaveShareScreenB.messageInput.getInputValue();
+  File twitterImage = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "twitterImage.jpg");
+  //making the current screen "Sharing Screen"
+  currentScreen = "SharingScreen";
+  try {
+   
+    // Finding out the length of the myText so that it can be checked before sending to see 
+    // does it meet with the critera for twitter
+    tweetLength = twitterMessage.length(); 
+    
+    // Testing to see if the messages character length is less than 126, if it is the message 
+    // should send but if its not it will be sent onto the esle statement. Twitter has a 140
+    // character limit but as I want to attach a # tag of WishIWasHere, the character limit
+    // must be shorten in order for the message to be able to be sent on twitter
+    if(tweetLength < 126){
+        //creating a new status that holds the text message that will be sent onto twitter 
+       StatusUpdate status = new StatusUpdate(twitterMessage + " #WishIWasHere");
+       
+       //Giving the new status a media file aka an image
+       status.setMedia(twitterImage);
+       
+       //Updating the status that will be sent on twitter so that it contains not only the next 
+       // but the media file also
+       twitter.updateStatus(status);
+ 
+      //Changing the current Screen
+      currentScreen = "ShareSaveSuccessfulScreen";
+    }
+    else{
+    //Changing the current Screen
+    currentScreen = "ShareUnsuccessfulScreen";
+    }
+    //Cleaing the message input so it is empty the next time the user 
+    // arrives to send another tweet
+    mySaveShareScreenB.messageInput.clearInputValue();
+  }
+  catch (TwitterException te)
+  {
+    //If the tweet can't be sent, it will print out the reason that 
+    // is causing the problem
+    System.out.println("Error: "+ te.getMessage());
+    
+    //Changing the current screen to be the unsuccessul share screen
+    currentScreen = "ShareUnsuccessfulScreen";
+  }
 }
 
 
@@ -577,54 +628,7 @@ void switchAutoSave() {
 }
 
 
-void sendTweet(File imageFile, String twitterMessage) {
-  // Creating a string to to hold the value that is in the message input 
-  twitterMessage = mySaveShareScreenB.messageInput.getInputValue();
-  
-  //making the current screen "Sharing Screen"
-  currentScreen = "SharingScreen";
-  try {
-   
-    // Finding out the length of the myText so that it can be checked before sending to see 
-    // does it meet with the critera for twitter
-    tweetLength = twitterMessage.length(); 
-    
-    // Testing to see if the messages character length is less than 126, if it is the message 
-    // should send but if its not it will be sent onto the esle statement. Twitter has a 140
-    // character limit but as I want to attach a # tag of WishIWasHere, the character limit
-    // must be shorten in order for the message to be able to be sent on twitter
-    if(tweetLength < 126){
-        //creating a new status that holds the text message that will be sent onto twitter 
-       StatusUpdate status = new StatusUpdate(twitterMessage + " #WishIWasHere");
-       
-       //Giving the new status a media file aka an image
-       status.setMedia(imageFile);
-       
-       //Updating the status that will be sent on twitter so that it contains not only the next 
-       // but the media file also
-       twitter.updateStatus(status);
- 
-      //Changing the current Screen
-      currentScreen = "ShareSaveSuccessfulScreen";
-    }
-    else{
-    //Changing the current Screen
-    currentScreen = "ShareUnsuccessfulScreen";
-    }
-    //Cleaing the message input so it is empty the next time the user 
-    // arrives to send another tweet
-    mySaveShareScreenB.messageInput.clearInputValue();
-  }
-  catch (TwitterException te)
-  {
-    //If the tweet can't be sent, it will print out the reason that 
-    // is causing the problem
-    System.out.println("Error: "+ te.getMessage());
-    
-    //Changing the current screen to be the unsuccessul share screen
-    currentScreen = "ShareUnsuccessfulScreen";
-  }
-}
+
 
 void previewGreenScreen() {
   //println("Starting removing Green Screen at frame " + frameCount);
