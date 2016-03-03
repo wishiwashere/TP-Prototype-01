@@ -12,15 +12,16 @@ final public static String  CALLBACK_SCHEME = "x-oauthflow-twitter";
 final public static String  CALLBACK_URL = CALLBACK_SCHEME + "://callback";
 
 // Set before running
-String ourOAuthConsumerKey = "";
-String ourOAuthConsumerSecret = "";
+String ourOAuthConsumerKey = "huoLN2BllLtOzezay2ei07bzo";
+String ourOAuthConsumerSecret = "k2OgK1XmjHLBMBRdM9KKyu86GS8wdIsv9Wbk9QOdzObXzHYsjb";
 
+Boolean twitterCalled = false;
 // The factory instance is re-useable and thread safe.
 Twitter twitter;
 RequestToken requestToken;
 
 void setup() {
-  println("Setup Called");
+  println("Setup Called. Twitter called is " + twitterCalled);
   twitter = TwitterFactory.getSingleton();
   twitter.setOAuthConsumer(ourOAuthConsumerKey, ourOAuthConsumerSecret);
 
@@ -36,13 +37,15 @@ void draw() {
 }
 
 void tweetMe(String text) throws Exception {
-  println("TweetMe Called");
+  twitterCalled = true;
+  println("TweetMe Called. TwitterCalled is " + twitterCalled);
   requestToken = twitter.getOAuthRequestToken(CALLBACK_URL);
   println(requestToken);
   AccessToken accessToken = null;
   BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
   link(requestToken.getAuthorizationURL());
   println("User has been sent to " + requestToken.getAuthorizationURL());
+  
   while (null == accessToken) {
     println("Access token is null");
     String pin = br.readLine();
