@@ -23,7 +23,7 @@ public class SearchScreen extends Screen {
 
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
     Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "HomeScreen");
-    Icon searchIcon = new Icon(appWidth * 0.7, iconCenterY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Search", true, "Middle", "SearchingScreen");
+    Icon searchIcon = new Icon(appWidth * 0.7, iconCenterY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Search", true, "Middle", "_searchForLocation");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchIcon, cancelIcon};

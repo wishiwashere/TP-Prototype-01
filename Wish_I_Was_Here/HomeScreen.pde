@@ -21,7 +21,7 @@ public class HomeScreen extends Screen {
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon searchTravelIcon = new Icon(appWidth * 0.28, appHeight * 0.2, iconSize, iconSize, searchPageIconImage, "Search", true, "Below", "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.72, appHeight * 0.2, iconSize, iconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.72, appHeight * 0.2, iconSize, iconSize, randomPageIconImage, "Random", true, "Below", "_getRandomLocation");
     Icon myFavouritesIcon = new Icon(appWidth * 0.28, appHeight * 0.5, iconSize, iconSize, favouritesPageIconImage, "My Favourites", true, "Below", "FavouritesScreen");
     Icon aboutIcon = new Icon(appWidth * 0.72, appHeight * 0.5, iconSize, iconSize, aboutPageIconImage, "About", true, "Below", "AboutScreen");
     Icon settingsIcon = new Icon(appWidth * 0.5, appHeight * 0.8, iconSize, iconSize, settingsPageIconImage, "Settings", true, "Below", "SettingsScreen");

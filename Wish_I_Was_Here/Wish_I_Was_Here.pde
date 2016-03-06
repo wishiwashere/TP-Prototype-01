@@ -56,12 +56,6 @@ String currentTextInputValue = "";
 // and used to determine how much a user has scrolled, and move the contents of these page's accordingly
 float previousMouseY;
 
-// Declaring the currentLocationImage variable, which will be set within the FavouriteTab's showFavourite()
-// method. For the moment, we will be initialising this variable to a random location in the setup() method
-// of the main sketch, so that the user will always be able to see a location in the background, even if they
-// don't go through the favourites menu of the app
-PImage currentLocationImage;
-
 PImage compiledImage;
 
 /*-------------------------------------- KetaiCamera ------------------------------------------------*/
@@ -191,6 +185,19 @@ PImage currentImage;
 
 Boolean readingImage = false;
 PImage currentFrame;
+
+/*-------------------------------------- Google Street View Images ------------------------------------------------*/
+String searchAddress;
+String compiledSearchAddress;
+String googleImageLatLng;
+String googleImagePitch;
+String googleImageHeading;
+
+// Declaring the currentLocationImage variable, which will be set within the FavouriteTab's showFavourite()
+// method. For the moment, we will be initialising this variable to a random location in the setup() method
+// of the main sketch, so that the user will always be able to see a location in the background, even if they
+// don't go through the favourites menu of the app
+PImage currentLocationImage;
 
 /*-------------------------------------- Built In Functions ------------------------------------------------*/
 
@@ -377,10 +384,14 @@ void draw() {
     switchAutoSave();
   } else if (callFunction.equals("_sendTweet")) {
     sendTweet();
-  } else if(callFunction.equals("_mergeImages")){
+  } else if (callFunction.equals("_mergeImages")) {
     mergeImages();
-  } else if(callFunction.equals("_disgardImage")){
+  } else if (callFunction.equals("_disgardImage")) {
     disgardImage();
+  } else if (callFunction.equals("_searchForLocation")) {
+    searchForLocation();
+  } else if (callFunction.equals("_getRandomLocation")){
+    getRandomLocation();
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
   }
@@ -523,7 +534,7 @@ void switchScreens() {
 
 void keepImage() {
   callFunction = "";
-  
+
   // Checking if Storage is available
   if (isExternalStorageWritable()) {    
     // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
@@ -590,7 +601,7 @@ void sendTweet() {
   callFunction = "";
   // Creating a string to to hold the value that is in the message input 
   String message = mySaveShareScreenB.messageInput.getInputValue();
-  
+
   //making the current screen "Sharing Screen"
   currentScreen = "SharingScreen";
   try {
@@ -598,10 +609,10 @@ void sendTweet() {
     // and adding the Wish I Was Here tag onto the end of the message
     Status status = twitter.updateStatus(message + " #WishIWasHere");
     System.out.println("Status updated to [" + status.getText() + "].");
-    
+
     //Changing the current Screen
     currentScreen = "ShareSaveSuccessfulScreen";
-    
+
     //Cleaing the message input so it is empty the next time the user 
     // arrives to send another tweet
     mySaveShareScreenB.messageInput.clearInputValue();
@@ -611,7 +622,7 @@ void sendTweet() {
     //If the tweet can't be sent, it will print out the reason that 
     // is causing the problem
     System.out.println("Error: "+ te.getMessage());
-    
+
     //Changing the current screen to be the unsuccessul share screen
     currentScreen = "ShareUnsuccessfulScreen";
   }
@@ -670,135 +681,176 @@ void previewGreenScreen() {
   //println("Finished removing Green Screen at frame " + frameCount);
 }
 
-void mergeImages(){
+void mergeImages() {
   callFunction = "";
   PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
   println(cameraRotation);
-    mergedImage.beginDraw();
-    mergedImage.imageMode(CENTER);
-    mergedImage.image(currentLocationImage, appWidth/2, appHeight/2);
-    mergedImage.endDraw();
-    
-    mergedImage.beginDraw();
-    mergedImage.pushMatrix();
-    mergedImage.translate(appWidth/2, appHeight/2);
-    mergedImage.scale(cameraScale, 1);
-    mergedImage.rotate(radians(cameraRotation));
-    mergedImage.imageMode(CENTER);
-    mergedImage.image(currentImage, 0, 0);
-    mergedImage.popMatrix();
-    mergedImage.endDraw();
-    
-    mergedImage.beginDraw();
-    mergedImage.imageMode(CENTER);
-    mergedImage.image(overlayImage, appWidth * 0.7, appHeight * 0.8, appWidth * 0.55, appWidth * 0.3);
-    mergedImage.endDraw();
-  
+  mergedImage.beginDraw();
+  mergedImage.imageMode(CENTER);
+  mergedImage.image(currentLocationImage, appWidth/2, appHeight/2);
+  mergedImage.endDraw();
+
+  mergedImage.beginDraw();
+  mergedImage.pushMatrix();
+  mergedImage.translate(appWidth/2, appHeight/2);
+  mergedImage.scale(cameraScale, 1);
+  mergedImage.rotate(radians(cameraRotation));
+  mergedImage.imageMode(CENTER);
+  mergedImage.image(currentImage, 0, 0);
+  mergedImage.popMatrix();
+  mergedImage.endDraw();
+
+  mergedImage.beginDraw();
+  mergedImage.imageMode(CENTER);
+  mergedImage.image(overlayImage, appWidth * 0.7, appHeight * 0.8, appWidth * 0.55, appWidth * 0.3);
+  mergedImage.endDraw();
+
   compiledImage = mergedImage.get();
   currentScreen = "ImagePreviewScreen";
 }
 
-void disgardImage(){
+void disgardImage() {
   compiledImage = null;
   currentScreen = "CameraLiveViewScreen";
 }
 
+void searchForLocation() {
+  currentScreen = "SearchingScreen";
+  // Getting the current input value of this text input (i.e. the most recent text input will have been the search box)
+  searchAddress = currentTextInputValue;
+  compiledSearchAddress = searchAddress.replace(" ", "+");
+  
+  println("Searching for " + searchAddress);
+
+  googleImageLatLng = "0";
+  googleImagePitch = "0";
+
+  // Using the Google Maps Geocoding API to query the address the user has specified, and return the relevant XML containing
+  // the location data of the place - https://developers.google.com/maps/documentation/geocoding/intro
+  XML locationXML = loadXML("https://maps.googleapis.com/maps/api/geocode/xml?address=" + compiledSearchAddress + "&key=" + ourBrowserApiKey);
+
+  String latitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lat").getContent();
+  String longitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lng").getContent();
+  googleImageLatLng = latitude + "," + longitude;
+  
+  println("Latitude, Longitude = " + googleImageLatLng);
+  loadGoogleImage();
+}
+
+void getRandomLocation(){
+  currentScreen = "SearchingScreen";
+  println("Getting a random location");
+  String randomLocationURLData = myFavouritesScreen.getRandomLocation();
+  googleImageLatLng = randomLocationURLData.split("&")[0]; 
+  println("Latitude, Longitude = " + googleImageLatLng);
+  loadGoogleImage();
+}
+
+void loadGoogleImage(){
+  println("Loading in image from Google");
+  currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
+  println("Image successfully loaded");
+  
+  if(!currentScreen.equals("CameraLiveViewScreen")){
+    currentScreen = "CameraLiveViewScreen";
+  }
+}
 /*
 void removeGreenScreen() {
-  println("Starting removing Green Screen at frame " + frameCount);
-
-  // Changing the colour mode to HSB, so that I can work with the hue, satruation and
-  // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
-  // and brightness to 100.
-  colorMode(HSB, 360, 100, 100);
-
-  PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
-
-  keyedImage = currentFrame.get();
-
-  // Loading in the pixel arrays of the keyed image and the girl green screen image
-  keyedImage.loadPixels();
-  currentFrame.loadPixels();
-
-  int cfPixelsLength = currentFrame.pixels.length;
-  int cfWidth = currentFrame.width;
-
-  for (int i = 0; i < cfPixelsLength; i++) {
-
-    // Getting the hue, saturation and brightness values of the current pixel
-    float pixelHue = hue(currentFrame.pixels[i]);
-
-    // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
-    if (pixelHue > 60 && pixelHue < 180) {
-
-      float pixelSaturation = saturation(currentFrame.pixels[i]);
-      float pixelBrightness = brightness(currentFrame.pixels[i]);
-
-
-      // Creating variables to store the hue of the pixels surrounding the current pixel.
-      // Defaulting these the be equal to the current pixels hue, and only changing them if
-      // the current pixel is away from the edge of the picture
-      float pixelHueToLeft = pixelHue;
-      float pixelHueToRight = pixelHue;
-      float pixelHueAbove = pixelHue;
-      float pixelHueBelow = pixelHue;
-
-
-      // If the current pixel is not near the edge of the image, changing the values of the variables
-      // for the pixels around it to get their hue values
-      if (i > cfWidth + 1 && i < cfPixelsLength - cfWidth - 1) {
-        pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
-        pixelHueToRight = hue(currentFrame.pixels[i + 1]);
-        pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
-        pixelHueBelow = hue(currentFrame.pixels[i + cfWidth]);
-      }
-
-      // If the saturation and brightness are above 30, then this is a green pixel
-      if (pixelSaturation > 30 && pixelBrightness > 30)
-      {
-        // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge 
-        if (pixelHue > 90 && pixelHue < 100) {
-          // This seems to effect the girl's hair on the left
-          // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
-          keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
-        } else if (pixelHue > 155) {
-          // Increasing the hue, and reducing the saturation
-          keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
-        } else if (pixelHue < 115) {
-          // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
-          // the green screeen in greenScreenImage2)
-          keyedImage.pixels[i] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
-        } else {
-          // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
-          if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
-            // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-            keyedImage.pixels[i] = color(0, 0, 0, 0);
-          } else if (pixelHue > 130) {
-            // This seems to be the edges around the girl
-            // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
-            keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
-          } else {
-            // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-            keyedImage.pixels[i] = color(0, 0, 0, 0);
-          }
-        }
-      } else {
-        // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
-        // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
-        // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
-        // from this pixel.
-        keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
-      }
-    }
-  }
-
-  // Updating the pixel arrays of the ketaiCamera and the keyed image
-  currentFrame.updatePixels();
-  keyedImage.updatePixels();
-  
-  // Resetting the color mode to RGB
-  colorMode(RGB, 255, 255, 255);
-  
-  println("Finished removing Green Screen and merging images at frame " + frameCount);
-}
-*/
+ println("Starting removing Green Screen at frame " + frameCount);
+ 
+ // Changing the colour mode to HSB, so that I can work with the hue, satruation and
+ // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
+ // and brightness to 100.
+ colorMode(HSB, 360, 100, 100);
+ 
+ PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
+ 
+ keyedImage = currentFrame.get();
+ 
+ // Loading in the pixel arrays of the keyed image and the girl green screen image
+ keyedImage.loadPixels();
+ currentFrame.loadPixels();
+ 
+ int cfPixelsLength = currentFrame.pixels.length;
+ int cfWidth = currentFrame.width;
+ 
+ for (int i = 0; i < cfPixelsLength; i++) {
+ 
+ // Getting the hue, saturation and brightness values of the current pixel
+ float pixelHue = hue(currentFrame.pixels[i]);
+ 
+ // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
+ if (pixelHue > 60 && pixelHue < 180) {
+ 
+ float pixelSaturation = saturation(currentFrame.pixels[i]);
+ float pixelBrightness = brightness(currentFrame.pixels[i]);
+ 
+ 
+ // Creating variables to store the hue of the pixels surrounding the current pixel.
+ // Defaulting these the be equal to the current pixels hue, and only changing them if
+ // the current pixel is away from the edge of the picture
+ float pixelHueToLeft = pixelHue;
+ float pixelHueToRight = pixelHue;
+ float pixelHueAbove = pixelHue;
+ float pixelHueBelow = pixelHue;
+ 
+ 
+ // If the current pixel is not near the edge of the image, changing the values of the variables
+ // for the pixels around it to get their hue values
+ if (i > cfWidth + 1 && i < cfPixelsLength - cfWidth - 1) {
+ pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
+ pixelHueToRight = hue(currentFrame.pixels[i + 1]);
+ pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
+ pixelHueBelow = hue(currentFrame.pixels[i + cfWidth]);
+ }
+ 
+ // If the saturation and brightness are above 30, then this is a green pixel
+ if (pixelSaturation > 30 && pixelBrightness > 30)
+ {
+ // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge 
+ if (pixelHue > 90 && pixelHue < 100) {
+ // This seems to effect the girl's hair on the left
+ // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
+ keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
+ } else if (pixelHue > 155) {
+ // Increasing the hue, and reducing the saturation
+ keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
+ } else if (pixelHue < 115) {
+ // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
+ // the green screeen in greenScreenImage2)
+ keyedImage.pixels[i] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
+ } else {
+ // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
+ if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
+ // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
+ keyedImage.pixels[i] = color(0, 0, 0, 0);
+ } else if (pixelHue > 130) {
+ // This seems to be the edges around the girl
+ // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
+ keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
+ } else {
+ // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
+ keyedImage.pixels[i] = color(0, 0, 0, 0);
+ }
+ }
+ } else {
+ // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
+ // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
+ // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
+ // from this pixel.
+ keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
+ }
+ }
+ }
+ 
+ // Updating the pixel arrays of the ketaiCamera and the keyed image
+ currentFrame.updatePixels();
+ keyedImage.updatePixels();
+ 
+ // Resetting the color mode to RGB
+ colorMode(RGB, 255, 255, 255);
+ 
+ println("Finished removing Green Screen and merging images at frame " + frameCount);
+ }
+ */

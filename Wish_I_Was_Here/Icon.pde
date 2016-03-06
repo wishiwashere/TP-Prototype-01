@@ -145,8 +145,6 @@ public class Icon extends ClickableElement {
             println("Returning to the " + this.iconLinkTo + "screen");
           } else {
             if(this.iconTitle.indexOf("Random") == 0){
-              String randomLocationURLData = myFavouritesScreen.getRandomLocation();
-              currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + randomLocationURLData + "&key=" + ourBrowserApiKey + "&size=" + appWidth + "x" + appHeight);
             }
             // This is an INTERNAL link
             // Setting the global currentScreen variable to be equal to the link
