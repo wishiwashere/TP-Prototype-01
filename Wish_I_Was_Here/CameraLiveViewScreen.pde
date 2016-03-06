@@ -47,13 +47,27 @@ public class CameraLiveViewScreen extends Screen {
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
-    if(compiledImage != null){
+    // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
+    if (mousePressed) {
+      // Setting the heading of the image to be equal to a value between 0 and 360, by mapping
+      // the current x position of the mouse. The heading refers to left/right view of the image
+      // of the viewer
+      googleImageHeading = str(map(mouseX, 0, appWidth, 0, 359));
+
+      // Setting the pitch of the image to be equal to a balue between 90 and -90, by mapping
+      // the current y position of the mouse. The pitch refers to the up/down view of the image
+      googleImagePitch = str(map(mouseY, 0, appHeight, 90, -90));
+      
+      loadGoogleImage();
+    }
+    
+    if (compiledImage != null) {
       compiledImage = null;
     }
     // Using the currentLocationImage as the background for the camera live view i.e. so the user
     // can feel like they are taking a picture in that location
     image(currentLocationImage, appWidth/2, appHeight/2, appWidth, appHeight);
-    
+
     // Calls super super class (Rectangle). Passing in the current frame image, the width and height
     // which have been reversed - i.e. the width will now be equal to the height of the app, as the 
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
@@ -65,14 +79,14 @@ public class CameraLiveViewScreen extends Screen {
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
-    
+
     this.addOverlay();
   }
 
   private void switchCameraView()
   {    
     callFunction = "";
-    
+
     // If the camera is already running before we try and effect it
     if (ketaiCamera.isStarted())
     {

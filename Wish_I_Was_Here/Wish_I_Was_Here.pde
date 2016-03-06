@@ -390,7 +390,7 @@ void draw() {
     disgardImage();
   } else if (callFunction.equals("_searchForLocation")) {
     searchForLocation();
-  } else if (callFunction.equals("_getRandomLocation")){
+  } else if (callFunction.equals("_getRandomLocation")) {
     getRandomLocation();
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
@@ -505,7 +505,6 @@ void switchScreens() {
     myShareSaveUnsuccessfulScreen.showScreen();
   } else if (currentScreen.equals("SearchingScreen")) {
     mySearchingScreen.showScreen();
-    testingTimeoutScreen("CameraLiveViewScreen");
   } else if (currentScreen.equals("SocialMediaLoginScreen")) {
     mySocialMediaLoginScreen.showScreen();
   } else if (currentScreen.equals("SocialMediaLogoutScreen")) {
@@ -719,7 +718,7 @@ void searchForLocation() {
   // Getting the current input value of this text input (i.e. the most recent text input will have been the search box)
   searchAddress = currentTextInputValue;
   compiledSearchAddress = searchAddress.replace(" ", "+");
-  
+
   println("Searching for " + searchAddress);
 
   googleImageLatLng = "0";
@@ -732,26 +731,33 @@ void searchForLocation() {
   String latitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lat").getContent();
   String longitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lng").getContent();
   googleImageLatLng = latitude + "," + longitude;
-  
+
+  currentTextInput.clearInputValue();
+
   println("Latitude, Longitude = " + googleImageLatLng);
   loadGoogleImage();
 }
 
-void getRandomLocation(){
+void getRandomLocation() {
   currentScreen = "SearchingScreen";
   println("Getting a random location");
   String randomLocationURLData = myFavouritesScreen.getRandomLocation();
   googleImageLatLng = randomLocationURLData.split("&")[0]; 
-  println("Latitude, Longitude = " + googleImageLatLng);
+  googleImageHeading = randomLocationURLData.split("heading=")[1].split("&")[0];
+  googleImagePitch = randomLocationURLData.split("pitch=")[1];
+
   loadGoogleImage();
 }
 
-void loadGoogleImage(){
-  println("Loading in image from Google");
+void loadGoogleImage() {
+  println("Loading in a new image from Google");
+  println("LatLng = " + googleImageLatLng);
+  println("Heading = " + googleImageHeading);
+  println("Pitch = " + googleImagePitch);
   currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
   println("Image successfully loaded");
-  
-  if(!currentScreen.equals("CameraLiveViewScreen")){
+
+  if (!currentScreen.equals("CameraLiveViewScreen")) {
     currentScreen = "CameraLiveViewScreen";
   }
 }
