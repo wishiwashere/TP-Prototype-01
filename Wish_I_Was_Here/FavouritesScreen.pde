@@ -233,7 +233,7 @@ public class FavouritesScreen extends Screen {
     // require to request this specific location (longitude, latitude, heading and pitch). 
     // Getting a random location by generating a random index value within the length of the
     // favourites array (rounding it off so that it will always equal an int)
-    String locationURLData = split(favourites[round(random(favourites.length-1))], "@")[1];
+    String locationURLData = favourites[round(random(favourites.length-1))];
     return locationURLData;
   }
 }

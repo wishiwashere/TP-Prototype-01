@@ -55,6 +55,7 @@ String currentTextInputValue = "";
 // user first holds down the mouse). It will then be continually updated (on any pages that scroll)
 // and used to determine how much a user has scrolled, and move the contents of these page's accordingly
 float previousMouseY;
+float previousMouseX;
 
 PImage compiledImage;
 
@@ -190,14 +191,15 @@ PImage currentFrame;
 String searchAddress;
 String compiledSearchAddress;
 String googleImageLatLng;
-String googleImagePitch;
-String googleImageHeading;
+float googleImagePitch;
+float googleImageHeading;
+String currentLocationName = "";
 
 // Declaring the currentLocationImage variable, which will be set within the FavouriteTab's showFavourite()
 // method. For the moment, we will be initialising this variable to a random location in the setup() method
 // of the main sketch, so that the user will always be able to see a location in the background, even if they
 // don't go through the favourites menu of the app
-PImage currentLocationImage;
+PImage currentLocationImage = null;
 
 /*-------------------------------------- Built In Functions ------------------------------------------------*/
 
@@ -409,6 +411,7 @@ void draw() {
 void mousePressed() {
   keyboardRequired = false;
   previousMouseY = mouseY;
+  previousMouseX = mouseX;
 }
 
 void keyPressed() {
@@ -721,8 +724,8 @@ void searchForLocation() {
 
   println("Searching for " + searchAddress);
 
-  googleImageLatLng = "0";
-  googleImagePitch = "0";
+  googleImageLatLng = "0,0";
+  googleImagePitch = 0;
 
   // Using the Google Maps Geocoding API to query the address the user has specified, and return the relevant XML containing
   // the location data of the place - https://developers.google.com/maps/documentation/geocoding/intro
@@ -730,6 +733,8 @@ void searchForLocation() {
 
   String latitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lat").getContent();
   String longitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lng").getContent();
+  currentLocationName = locationXML.getChildren("result")[0].getChildren("address_component")[0].getChild("long_name").getContent();
+  
   googleImageLatLng = latitude + "," + longitude;
 
   currentTextInput.clearInputValue();
@@ -742,9 +747,10 @@ void getRandomLocation() {
   currentScreen = "SearchingScreen";
   println("Getting a random location");
   String randomLocationURLData = myFavouritesScreen.getRandomLocation();
-  googleImageLatLng = randomLocationURLData.split("&")[0]; 
-  googleImageHeading = randomLocationURLData.split("heading=")[1].split("&")[0];
-  googleImagePitch = randomLocationURLData.split("pitch=")[1];
+  googleImageLatLng = randomLocationURLData.split("@")[1].split("&")[0]; 
+  googleImageHeading = float(randomLocationURLData.split("heading=")[1].split("&")[0]);
+  googleImagePitch = float(randomLocationURLData.split("pitch=")[1]);
+  currentLocationName = randomLocationURLData.split("@")[0];
 
   loadGoogleImage();
 }
@@ -754,7 +760,7 @@ void loadGoogleImage() {
   println("LatLng = " + googleImageLatLng);
   println("Heading = " + googleImageHeading);
   println("Pitch = " + googleImagePitch);
-  currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
+  currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
   println("Image successfully loaded");
 
   if (!currentScreen.equals("CameraLiveViewScreen")) {

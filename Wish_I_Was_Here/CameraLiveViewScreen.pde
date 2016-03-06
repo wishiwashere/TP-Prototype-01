@@ -36,31 +36,77 @@ public class CameraLiveViewScreen extends Screen {
     // This reduces the need for each screen to have to loop through it's icons, or call the 
     // same method on multiple icons.
     this.setScreenIcons(allIcons);
-
-    // Setting the title of this screen. The screenTitle variable was also declared in this
-    // class's super class (Screen), so that it can be accessed when showing the screen 
-    // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-    // then no header text will appear on this page
-    this.setScreenTitle("");
   }
 
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
+    // Setting the title of this screen. The screenTitle variable was also declared in this
+    // class's super class (Screen), so that it can be accessed when showing the screen 
+    // (i.e can be displayed as the header text of the page). If no screenTitle were set,
+    // then no header text will appear on this page
+    this.setScreenTitle(currentLocationName);
+    
     // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
     if (mousePressed) {
-      // Setting the heading of the image to be equal to a value between 0 and 360, by mapping
-      // the current x position of the mouse. The heading refers to left/right view of the image
-      // of the viewer
-      googleImageHeading = str(map(mouseX, 0, appWidth, 0, 359));
+      // Calculating the amount scolled, based on the distance between the previous y position, 
+      // and the current y position. When the mouse is first pressed, the previous y position
+      // is initialised (in the main sketch) but then while the mouse is held down, the previous
+      // y position gets updated each time this function runs (so that the scrolling can occur
+      // while the person is still moving their hand (and not just after they release the screen)
+      float amountScrolledX = dist(0, previousMouseX, 0, mouseX);
+      float amountScrolledY = dist(0, previousMouseY, 0, mouseY);
 
-      // Setting the pitch of the image to be equal to a balue between 90 and -90, by mapping
-      // the current y position of the mouse. The pitch refers to the up/down view of the image
-      googleImagePitch = str(map(mouseY, 0, appHeight, 90, -90));
+      if (previousMouseX > mouseX) {
+        // The user has scrolled RIGHT
+        
+        // Decrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
+        // operator to check that this will not result in a value less than 0 (the minimum
+        // value allowed for the heading. If it does, then resetting the heading to 359 i.e. so the 
+        // user can continue turn around in that direction, otherwise allowing it to equal to the
+        // current heading value minus the amount scrolled on the X
+        googleImageHeading = (googleImageHeading - amountScrolledX) < 0 ? 359 : googleImageHeading - amountScrolledX;
+        println("scrolled right. heading is now " + googleImageHeading);
+      } else {
+        // The user has scrolled LEFT
+
+        // Incrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
+        // operator to check that this will not result in a value greater than 359 (the maximum
+        // value allowed for the heading. If it does, then resetting the heading to 0 i.e. so the 
+        // user can continue turn around in that direction, otherwise allowing it to equal to the
+        // current heading value plus the amount scrolled on the X
+        googleImageHeading = (googleImageHeading + amountScrolledX) > 359 ? 0 : googleImageHeading + amountScrolledX;
+        println("scrolled left. heading is now " + googleImageHeading);
+      }
       
+      println("amountScrolledY = " + amountScrolledY);
+      if (previousMouseY > mouseY) {
+        // The user has scrolled UP
+
+        // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+        // operator to check that this will not result in a value greater than 90 (the maximum
+        // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
+        // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
+        // value plus the amount scrolled on the Y
+        googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
+        println("scrolled up. pitch is now " + googleImagePitch);
+      } else {
+        // The user has scrolled DOWN
+        
+        // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+        // operator to check that this will not result in a value less than -90 (the minimum
+        // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
+        // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
+        // value minus the amount scrolled on the Y
+        googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
+        println("scrolled down. pitch is now " + googleImagePitch);
+      }
+
       loadGoogleImage();
+      previousMouseX = mouseX;
+      previousMouseY = mouseY;
     }
-    
+
     if (compiledImage != null) {
       compiledImage = null;
     }
@@ -74,7 +120,7 @@ public class CameraLiveViewScreen extends Screen {
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
     this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
-
+    
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen

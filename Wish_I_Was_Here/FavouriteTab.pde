@@ -41,8 +41,8 @@ public class FavouriteTab extends ClickableElement {
       if (this.checkMouseOver()) {
         
         googleImageLatLng = this.favLocation.split("&")[0]; 
-        googleImageHeading = this.favLocation.split("heading=")[1].split("&")[0];
-        googleImagePitch = this.favLocation.split("pitch=")[1];
+        googleImageHeading = float(this.favLocation.split("heading=")[1].split("&")[0]);
+        googleImagePitch = float(this.favLocation.split("pitch=")[1]);
         
         loadGoogleImage();
       }
