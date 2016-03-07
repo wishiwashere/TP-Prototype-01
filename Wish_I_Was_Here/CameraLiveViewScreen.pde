@@ -65,7 +65,7 @@ public class CameraLiveViewScreen extends Screen {
         // value allowed for the heading. If it does, then resetting the heading to 359 i.e. so the 
         // user can continue turn around in that direction, otherwise allowing it to equal to the
         // current heading value minus the amount scrolled on the X
-        googleImageHeading = (googleImageHeading - amountScrolledX) < 0 ? 359 : googleImageHeading - amountScrolledX;
+        googleImageHeading = (googleImageHeading + amountScrolledX) > 359 ? 0 : googleImageHeading + amountScrolledX;
         println("scrolled right. heading is now " + googleImageHeading);
       } else {
         // The user has scrolled LEFT
@@ -75,7 +75,7 @@ public class CameraLiveViewScreen extends Screen {
         // value allowed for the heading. If it does, then resetting the heading to 0 i.e. so the 
         // user can continue turn around in that direction, otherwise allowing it to equal to the
         // current heading value plus the amount scrolled on the X
-        googleImageHeading = (googleImageHeading + amountScrolledX) > 359 ? 0 : googleImageHeading + amountScrolledX;
+        googleImageHeading = (googleImageHeading - amountScrolledX) < 0 ? 359 : googleImageHeading - amountScrolledX;
         println("scrolled left. heading is now " + googleImageHeading);
       }
       
@@ -88,7 +88,7 @@ public class CameraLiveViewScreen extends Screen {
         // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
         // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
         // value plus the amount scrolled on the Y
-        googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
+        googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
         println("scrolled up. pitch is now " + googleImagePitch);
       } else {
         // The user has scrolled DOWN
@@ -98,7 +98,7 @@ public class CameraLiveViewScreen extends Screen {
         // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
         // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
         // value minus the amount scrolled on the Y
-        googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
+        googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
         println("scrolled down. pitch is now " + googleImagePitch);
       }
 
@@ -119,14 +119,12 @@ public class CameraLiveViewScreen extends Screen {
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
-    this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
+    //this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
     
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
-
-    this.addOverlay();
   }
 
   private void switchCameraView()

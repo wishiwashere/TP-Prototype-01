@@ -29,7 +29,7 @@ String currentScreen = "LoadingScreen";
 // Creating a global variable for ourBrowserApiKey that is required to make requests
 // to the Google Street View Image API. This key will be removed before commits to
 // GitHub, for security purposes.
-String ourBrowserApiKey = "";
+String ourBrowserApiKey = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
 
 String returnTo = "HomeScreen";
 
@@ -483,6 +483,7 @@ void switchScreens() {
     mySearchScreen.showScreen();
   } else if (currentScreen.equals("SearchUnsuccessfulScreen")) {
     mySearchUnsuccessfulScreen.showScreen();
+    testingTimeoutScreen("SearchUnsuccessfulScreen");
   } else if (currentScreen.equals("ImagePreviewScreen")) {
     /*
     if(readingImage == false && finalKeying == false){
@@ -717,7 +718,9 @@ void disgardImage() {
 }
 
 void searchForLocation() {
+  mySearchingScreen.showScreen();
   currentScreen = "SearchingScreen";
+
   // Getting the current input value of this text input (i.e. the most recent text input will have been the search box)
   searchAddress = currentTextInputValue;
   compiledSearchAddress = searchAddress.replace(" ", "+");
@@ -731,20 +734,24 @@ void searchForLocation() {
   // the location data of the place - https://developers.google.com/maps/documentation/geocoding/intro
   XML locationXML = loadXML("https://maps.googleapis.com/maps/api/geocode/xml?address=" + compiledSearchAddress + "&key=" + ourBrowserApiKey);
 
-  String latitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lat").getContent();
-  String longitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lng").getContent();
-  currentLocationName = locationXML.getChildren("result")[0].getChildren("address_component")[0].getChild("long_name").getContent();
-  
-  googleImageLatLng = latitude + "," + longitude;
+  if (locationXML.getChild("status").getContent().equals("OK")) {
+    String latitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lat").getContent();
+    String longitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lng").getContent();
+    currentLocationName = locationXML.getChildren("result")[0].getChildren("address_component")[0].getChild("long_name").getContent();
 
-  currentTextInput.clearInputValue();
-
-  println("Latitude, Longitude = " + googleImageLatLng);
-  loadGoogleImage();
+    googleImageLatLng = latitude + "," + longitude;
+    println("Latitude, Longitude = " + googleImageLatLng);
+    loadGoogleImage();
+    currentTextInput.clearInputValue(); 
+  } else {
+    currentScreen = "SearchUnsuccessfulScreen";
+  } 
 }
 
 void getRandomLocation() {
+  mySearchingScreen.showScreen();
   currentScreen = "SearchingScreen";
+
   println("Getting a random location");
   String randomLocationURLData = myFavouritesScreen.getRandomLocation();
   googleImageLatLng = randomLocationURLData.split("@")[1].split("&")[0]; 

@@ -20,7 +20,7 @@ public class SearchUnsuccessfulScreen extends Screen {
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
     Icon searchTravelIcon = new Icon(appWidth * 0.3, largeIconBottomY, largeIconSize, largeIconSize, searchPageIconImage, "Search Again", true, "Below", "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.7, largeIconBottomY, largeIconSize, largeIconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.7, largeIconBottomY, largeIconSize, largeIconSize, randomPageIconImage, "Random", true, "Below", "_getRandomLocation");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchTravelIcon, randomTravelIcon};
