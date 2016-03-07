@@ -55,10 +55,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("Username = ", username);
                 textView.setText("Hi " + username);
 
-
-
-
-
             }
 
             @Override

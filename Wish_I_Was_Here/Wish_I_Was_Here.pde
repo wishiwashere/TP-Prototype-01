@@ -29,7 +29,7 @@ String currentScreen = "LoadingScreen";
 // Creating a global variable for ourBrowserApiKey that is required to make requests
 // to the Google Street View Image API. This key will be removed before commits to
 // GitHub, for security purposes.
-String ourBrowserApiKey = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
+String ourBrowserApiKey = "";
 
 String returnTo = "HomeScreen";
 
