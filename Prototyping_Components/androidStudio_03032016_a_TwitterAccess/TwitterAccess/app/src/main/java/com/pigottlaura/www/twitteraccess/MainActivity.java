@@ -32,28 +32,26 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        textView = (TextView) findViewById(R.id.tv_username);
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
 
 
-        textView = (TextView) findViewById(R.id.tv_username);
 
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
 
         loginButton.setCallback(new Callback<TwitterSession>() {
             @Override
             public void success(Result<TwitterSession> result) {
-
-
-
                 session = result.data;
 
                 String username = session.getUserName();
                 Long  userid = session.getUserId();
 
-                Log.d("Username = ", username);
                 textView.setText("Hi " + username);
+
+                Log.d("Username = ", username);
 
             }
 
