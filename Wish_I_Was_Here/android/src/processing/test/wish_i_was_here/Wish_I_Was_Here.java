@@ -72,6 +72,10 @@ String currentScreen = "LoadingScreen";
 // to the Google Street View Image API. This key will be removed before commits to
 // GitHub, for security purposes.
 String ourBrowserApiKey = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
+String ourOAuthConsumerKey = "huoLN2BllLtOzezay2ei07bzo";
+String ourOAuthConsumerSecret = "k2OgK1XmjHLBMBRdM9KKyu86GS8wdIsv9Wbk9QOdzObXzHYsjb";
+String ourOAuthAccessToken = "4833019853-PzhGbWL0lulwsER62Ly7VY7P5WQcJT52j0MSIzI";
+String ourOAuthAccessTokenSecret = "TazSQHl662mp6GIJkzlWRI5LkjOEnQZ4ifof7V3X3t30C";
 
 String returnTo = "HomeScreen";
 
@@ -134,6 +138,8 @@ ConfigurationBuilder cb = new ConfigurationBuilder();
 // Using the twitter class for tweeting, so later I can call on the twitter factory, which in turn
 // creates a new instance of the configuration builder
 Twitter twitter;
+
+String saveToPath;
 
 /*-------------------------------------- Images ------------------------------------------------*/
 
@@ -397,24 +403,24 @@ public void setup() {
   /*----------------------------------- Twitter Tweeting -----------------------------------------*/
   //Setting up Twitter and informing twitter of the users credentials to our application can tweet
   // from the users twitter account and access their account
-  cb.setOAuthConsumerKey("");
-  cb.setOAuthConsumerSecret("");
-  cb.setOAuthAccessToken("");
-  cb.setOAuthAccessTokenSecret("");
+  cb.setOAuthConsumerKey(ourOAuthConsumerKey);
+  cb.setOAuthConsumerSecret(ourOAuthConsumerSecret);
+  cb.setOAuthAccessToken(ourOAuthAccessToken);
+  cb.setOAuthAccessTokenSecret(ourOAuthAccessTokenSecret);
 
   twitter = new TwitterFactory(cb.build()).getInstance();
 }
 
 public void draw() {
   background(0);
+  
   // Calling the monitorScreens() function to display the right screen by calling
   // the showScreen() method. This function then calls the super class's drawScreen()
   // method, which not only adds the icons and backgrounds to the screen, it also
   // asks the icons on the screen to call their checkMouseOver() method (inherited from
   // the Icon class) to see if they were clicked on when a mouse event occurs
   switchScreens();
-
-
+ 
   // Checking if any screen's icons are trying to trigger any functions
   if (callFunction.equals("_keepImage")) {
     keepImage();
@@ -427,14 +433,20 @@ public void draw() {
   } else if (callFunction.equals("_switchAutoSave")) {
     switchAutoSave();
   } else if (callFunction.equals("_sendTweet")) {
+    currentScreen = "SharingScreen";
+    mySharingScreen.showScreen();
     sendTweet();
   } else if (callFunction.equals("_mergeImages")) {
     mergeImages();
   } else if (callFunction.equals("_disgardImage")) {
     disgardImage();
   } else if (callFunction.equals("_searchForLocation")) {
+    currentScreen = "SearchingScreen";
+    mySearchingScreen.showScreen();
     searchForLocation();
   } else if (callFunction.equals("_getRandomLocation")) {
+    currentScreen = "SearchingScreen";
+    mySearchingScreen.showScreen();
     getRandomLocation();
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
@@ -579,12 +591,13 @@ public void switchScreens() {
 
 public void keepImage() {
   callFunction = "";
-
   // Checking if Storage is available
-  if (isExternalStorageWritable()) {    
+  if (isExternalStorageWritable()) {   
+    saveToPath = directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg";
     // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
-    if (compiledImage.save(directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg")) {
-      println("Successfully saved image to = " + directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg");
+    if (compiledImage.save(saveToPath)) {
+      println("Successfully saved image to = " + saveToPath);
+      println(saveToPath);
       currentScreen = "SaveShareScreenA";
     } else {
       println("Failed to save image");
@@ -643,17 +656,24 @@ public void switchAutoSave() {
 
 
 public void sendTweet() {
+ // getShareableImage();
   callFunction = "";
+  
+  File twitterImage = new File(saveToPath);
   // Creating a string to to hold the value that is in the message input 
   String message = mySaveShareScreenB.messageInput.getInputValue();
 
   //making the current screen "Sharing Screen"
   currentScreen = "SharingScreen";
   try {
+    StatusUpdate status = new StatusUpdate(message + " #WishIWasHere");
+    //System.out.println("Status updated to [" + status.getText() + "].");
+    status.setMedia(twitterImage);
+    twitter.updateStatus(status);
     // Making a twitter status that will hold the message the user typed 
     // and adding the Wish I Was Here tag onto the end of the message
-    Status status = twitter.updateStatus(message + " #WishIWasHere");
-    System.out.println("Status updated to [" + status.getText() + "].");
+    
+    
 
     //Changing the current Screen
     currentScreen = "ShareSaveSuccessfulScreen";
@@ -672,6 +692,14 @@ public void sendTweet() {
     currentScreen = "ShareUnsuccessfulScreen";
   }
 }
+/*
+void getShareableImage(File latestImage){
+  File getImage = new File(currentImage);
+  if(latestImage == null || getImage.lastModified().after(latestImage.lastModified())){
+      latestImage = getImage;
+      latestImage.getPath();
+  }
+}*/
 
 public void previewGreenScreen() {
   //println("Starting removing Green Screen at frame " + frameCount);
@@ -732,7 +760,7 @@ public void mergeImages() {
   println(cameraRotation);
   mergedImage.beginDraw();
   mergedImage.imageMode(CENTER);
-  mergedImage.image(currentLocationImage, appWidth/2, appHeight/2);
+  mergedImage.image(currentLocationImage, appWidth/2, appHeight/2, appWidth, appHeight);
   mergedImage.endDraw();
 
   mergedImage.beginDraw();
@@ -741,13 +769,13 @@ public void mergeImages() {
   mergedImage.scale(cameraScale, 1);
   mergedImage.rotate(radians(cameraRotation));
   mergedImage.imageMode(CENTER);
-  mergedImage.image(currentImage, 0, 0);
+  mergedImage.image(currentImage, 0, 0, appHeight, appWidth);
   mergedImage.popMatrix();
   mergedImage.endDraw();
 
   mergedImage.beginDraw();
   mergedImage.imageMode(CENTER);
-  mergedImage.image(overlayImage, appWidth * 0.7f, appHeight * 0.8f, appWidth * 0.55f, appWidth * 0.3f);
+  mergedImage.image(overlayImage, appWidth * 0.7f, appHeight * 0.9f, appWidth * 0.55f, appWidth * 0.3f);
   mergedImage.endDraw();
 
   compiledImage = mergedImage.get();
@@ -760,9 +788,6 @@ public void disgardImage() {
 }
 
 public void searchForLocation() {
-  mySearchingScreen.showScreen();
-  currentScreen = "SearchingScreen";
-
   // Getting the current input value of this text input (i.e. the most recent text input will have been the search box)
   searchAddress = currentTextInputValue;
   compiledSearchAddress = searchAddress.replace(" ", "+");
@@ -791,9 +816,6 @@ public void searchForLocation() {
 }
 
 public void getRandomLocation() {
-  mySearchingScreen.showScreen();
-  currentScreen = "SearchingScreen";
-
   println("Getting a random location");
   String randomLocationURLData = myFavouritesScreen.getRandomLocation();
   googleImageLatLng = randomLocationURLData.split("@")[1].split("&")[0]; 
@@ -2295,7 +2317,7 @@ public class SaveShareScreenB extends Screen {
     // generate the size and background of the screen
     this.drawScreen();
 
-    this.addImage(currentImage, iconCenterX, iconCenterY * 0.4f, appWidth * 0.8f, appWidth * 0.6f);
+    this.addImage(compiledImage, iconCenterX, iconCenterY * 0.4f, appWidth * 0.8f, appWidth * 0.6f);
 
     messageInput.showTextInput();
   }
