@@ -39,18 +39,20 @@ public void loginToTwitter() throws Exception {
   Twitter twitter = tf.getInstance();
 
   //sending a request
-  RequestToken requestToken = twitter.getOAuthRequestToken();
+  RequestToken requestToken = twitter.getOAuthRequestToken("oob");
   AccessToken accessToken = null;
   BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-  System.out.println("Open the following URL and grant access to your account:");
-  System.out.println(requestToken.getAuthorizationURL());
-  link(requestToken.getAuthorizationURL());
   while (null == accessToken) {
     System.out.print("Enter the PIN(if aviailable) or just hit enter.[PIN]:");
+    System.out.println("Open the following URL and grant access to your account:");
+    System.out.println(requestToken.getAuthorizationURL());
+    link(requestToken.getAuthorizationURL());
     String pin = br.readLine();
     try {
+      println("trying- " + frameCount);
       if (pin.length() > 0) {
         accessToken = twitter.getOAuthAccessToken(requestToken, pin);
+        println(accessToken);
       } else {
         accessToken = twitter.getOAuthAccessToken();
       }
