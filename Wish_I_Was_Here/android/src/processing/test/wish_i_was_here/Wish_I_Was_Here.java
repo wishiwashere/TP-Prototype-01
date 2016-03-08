@@ -71,7 +71,7 @@ String currentScreen = "LoadingScreen";
 // Creating a global variable for ourBrowserApiKey that is required to make requests
 // to the Google Street View Image API. This key will be removed before commits to
 // GitHub, for security purposes.
-String ourBrowserApiKey = "";
+String ourBrowserApiKey = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
 
 String returnTo = "HomeScreen";
 
@@ -90,19 +90,14 @@ String callFunction = "";
 Boolean keyboardRequired = false;
 
 TextInput currentTextInput = null;
-String currentTextInputValue = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
+String currentTextInputValue = "";
 
 // Creating a global variable which will contain the value of the most recent y position of the 
 // mouse. This variable gets it's first value each time a mousePressed event occurs (i.e. when the 
 // user first holds down the mouse). It will then be continually updated (on any pages that scroll)
 // and used to determine how much a user has scrolled, and move the contents of these page's accordingly
 float previousMouseY;
-
-// Declaring the currentLocationImage variable, which will be set within the FavouriteTab's showFavourite()
-// method. For the moment, we will be initialising this variable to a random location in the setup() method
-// of the main sketch, so that the user will always be able to see a location in the background, even if they
-// don't go through the favourites menu of the app
-PImage currentLocationImage;
+float previousMouseX;
 
 PImage compiledImage;
 
@@ -233,6 +228,20 @@ PImage currentImage;
 
 Boolean readingImage = false;
 PImage currentFrame;
+
+/*-------------------------------------- Google Street View Images ------------------------------------------------*/
+String searchAddress;
+String compiledSearchAddress;
+String googleImageLatLng;
+float googleImagePitch;
+float googleImageHeading;
+String currentLocationName = "";
+
+// Declaring the currentLocationImage variable, which will be set within the FavouriteTab's showFavourite()
+// method. For the moment, we will be initialising this variable to a random location in the setup() method
+// of the main sketch, so that the user will always be able to see a location in the background, even if they
+// don't go through the favourites menu of the app
+PImage currentLocationImage = null;
 
 /*-------------------------------------- Built In Functions ------------------------------------------------*/
 
@@ -419,10 +428,14 @@ public void draw() {
     switchAutoSave();
   } else if (callFunction.equals("_sendTweet")) {
     sendTweet();
-  } else if(callFunction.equals("_mergeImages")){
+  } else if (callFunction.equals("_mergeImages")) {
     mergeImages();
-  } else if(callFunction.equals("_disgardImage")){
+  } else if (callFunction.equals("_disgardImage")) {
     disgardImage();
+  } else if (callFunction.equals("_searchForLocation")) {
+    searchForLocation();
+  } else if (callFunction.equals("_getRandomLocation")) {
+    getRandomLocation();
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
   }
@@ -440,6 +453,7 @@ public void draw() {
 public void mousePressed() {
   keyboardRequired = false;
   previousMouseY = mouseY;
+  previousMouseX = mouseX;
 }
 
 public void keyPressed() {
@@ -511,6 +525,7 @@ public void switchScreens() {
     mySearchScreen.showScreen();
   } else if (currentScreen.equals("SearchUnsuccessfulScreen")) {
     mySearchUnsuccessfulScreen.showScreen();
+    testingTimeoutScreen("SearchUnsuccessfulScreen");
   } else if (currentScreen.equals("ImagePreviewScreen")) {
     /*
     if(readingImage == false && finalKeying == false){
@@ -536,7 +551,6 @@ public void switchScreens() {
     myShareSaveUnsuccessfulScreen.showScreen();
   } else if (currentScreen.equals("SearchingScreen")) {
     mySearchingScreen.showScreen();
-    testingTimeoutScreen("CameraLiveViewScreen");
   } else if (currentScreen.equals("SocialMediaLoginScreen")) {
     mySocialMediaLoginScreen.showScreen();
   } else if (currentScreen.equals("SocialMediaLogoutScreen")) {
@@ -565,7 +579,7 @@ public void switchScreens() {
 
 public void keepImage() {
   callFunction = "";
-  
+
   // Checking if Storage is available
   if (isExternalStorageWritable()) {    
     // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
@@ -627,19 +641,34 @@ public void switchAutoSave() {
   println("Auto-save is now: " + mySettingsScreen.autoSaveModeOn);
 }
 
+
 public void sendTweet() {
   callFunction = "";
+  // Creating a string to to hold the value that is in the message input 
   String message = mySaveShareScreenB.messageInput.getInputValue();
+
+  //making the current screen "Sharing Screen"
   currentScreen = "SharingScreen";
   try {
+    // Making a twitter status that will hold the message the user typed 
+    // and adding the Wish I Was Here tag onto the end of the message
     Status status = twitter.updateStatus(message + " #WishIWasHere");
     System.out.println("Status updated to [" + status.getText() + "].");
+
+    //Changing the current Screen
     currentScreen = "ShareSaveSuccessfulScreen";
+
+    //Cleaing the message input so it is empty the next time the user 
+    // arrives to send another tweet
     mySaveShareScreenB.messageInput.clearInputValue();
   }
   catch (TwitterException te)
   {
+    //If the tweet can't be sent, it will print out the reason that 
+    // is causing the problem
     System.out.println("Error: "+ te.getMessage());
+
+    //Changing the current screen to be the unsuccessul share screen
     currentScreen = "ShareUnsuccessfulScreen";
   }
 }
@@ -697,138 +726,195 @@ public void previewGreenScreen() {
   //println("Finished removing Green Screen at frame " + frameCount);
 }
 
-public void mergeImages(){
+public void mergeImages() {
   callFunction = "";
   PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
   println(cameraRotation);
-    mergedImage.beginDraw();
-    mergedImage.imageMode(CENTER);
-    mergedImage.image(currentLocationImage, appWidth/2, appHeight/2);
-    mergedImage.endDraw();
-    
-    mergedImage.beginDraw();
-    mergedImage.pushMatrix();
-    mergedImage.translate(appWidth/2, appHeight/2);
-    mergedImage.scale(cameraScale, 1);
-    mergedImage.rotate(radians(cameraRotation));
-    mergedImage.imageMode(CENTER);
-    mergedImage.image(currentImage, 0, 0);
-    mergedImage.popMatrix();
-    mergedImage.endDraw();
-    
-    mergedImage.beginDraw();
-    mergedImage.imageMode(CENTER);
-    mergedImage.image(overlayImage, appWidth * 0.7f, appHeight * 0.8f, appWidth * 0.55f, appWidth * 0.3f);
-    mergedImage.endDraw();
-  
+  mergedImage.beginDraw();
+  mergedImage.imageMode(CENTER);
+  mergedImage.image(currentLocationImage, appWidth/2, appHeight/2);
+  mergedImage.endDraw();
+
+  mergedImage.beginDraw();
+  mergedImage.pushMatrix();
+  mergedImage.translate(appWidth/2, appHeight/2);
+  mergedImage.scale(cameraScale, 1);
+  mergedImage.rotate(radians(cameraRotation));
+  mergedImage.imageMode(CENTER);
+  mergedImage.image(currentImage, 0, 0);
+  mergedImage.popMatrix();
+  mergedImage.endDraw();
+
+  mergedImage.beginDraw();
+  mergedImage.imageMode(CENTER);
+  mergedImage.image(overlayImage, appWidth * 0.7f, appHeight * 0.8f, appWidth * 0.55f, appWidth * 0.3f);
+  mergedImage.endDraw();
+
   compiledImage = mergedImage.get();
   currentScreen = "ImagePreviewScreen";
 }
 
-public void disgardImage(){
+public void disgardImage() {
   compiledImage = null;
   currentScreen = "CameraLiveViewScreen";
 }
 
+public void searchForLocation() {
+  mySearchingScreen.showScreen();
+  currentScreen = "SearchingScreen";
+
+  // Getting the current input value of this text input (i.e. the most recent text input will have been the search box)
+  searchAddress = currentTextInputValue;
+  compiledSearchAddress = searchAddress.replace(" ", "+");
+
+  println("Searching for " + searchAddress);
+
+  googleImageLatLng = "0,0";
+  googleImagePitch = 0;
+
+  // Using the Google Maps Geocoding API to query the address the user has specified, and return the relevant XML containing
+  // the location data of the place - https://developers.google.com/maps/documentation/geocoding/intro
+  XML locationXML = loadXML("https://maps.googleapis.com/maps/api/geocode/xml?address=" + compiledSearchAddress + "&key=" + ourBrowserApiKey);
+
+  if (locationXML.getChild("status").getContent().equals("OK")) {
+    String latitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lat").getContent();
+    String longitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lng").getContent();
+    currentLocationName = locationXML.getChildren("result")[0].getChildren("address_component")[0].getChild("long_name").getContent();
+
+    googleImageLatLng = latitude + "," + longitude;
+    println("Latitude, Longitude = " + googleImageLatLng);
+    loadGoogleImage();
+    currentTextInput.clearInputValue(); 
+  } else {
+    currentScreen = "SearchUnsuccessfulScreen";
+  } 
+}
+
+public void getRandomLocation() {
+  mySearchingScreen.showScreen();
+  currentScreen = "SearchingScreen";
+
+  println("Getting a random location");
+  String randomLocationURLData = myFavouritesScreen.getRandomLocation();
+  googleImageLatLng = randomLocationURLData.split("@")[1].split("&")[0]; 
+  googleImageHeading = PApplet.parseFloat(randomLocationURLData.split("heading=")[1].split("&")[0]);
+  googleImagePitch = PApplet.parseFloat(randomLocationURLData.split("pitch=")[1]);
+  currentLocationName = randomLocationURLData.split("@")[0];
+
+  loadGoogleImage();
+}
+
+public void loadGoogleImage() {
+  println("Loading in a new image from Google");
+  println("LatLng = " + googleImageLatLng);
+  println("Heading = " + googleImageHeading);
+  println("Pitch = " + googleImagePitch);
+  currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
+  println("Image successfully loaded");
+
+  if (!currentScreen.equals("CameraLiveViewScreen")) {
+    currentScreen = "CameraLiveViewScreen";
+  }
+}
 /*
 void removeGreenScreen() {
-  println("Starting removing Green Screen at frame " + frameCount);
-
-  // Changing the colour mode to HSB, so that I can work with the hue, satruation and
-  // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
-  // and brightness to 100.
-  colorMode(HSB, 360, 100, 100);
-
-  PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
-
-  keyedImage = currentFrame.get();
-
-  // Loading in the pixel arrays of the keyed image and the girl green screen image
-  keyedImage.loadPixels();
-  currentFrame.loadPixels();
-
-  int cfPixelsLength = currentFrame.pixels.length;
-  int cfWidth = currentFrame.width;
-
-  for (int i = 0; i < cfPixelsLength; i++) {
-
-    // Getting the hue, saturation and brightness values of the current pixel
-    float pixelHue = hue(currentFrame.pixels[i]);
-
-    // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
-    if (pixelHue > 60 && pixelHue < 180) {
-
-      float pixelSaturation = saturation(currentFrame.pixels[i]);
-      float pixelBrightness = brightness(currentFrame.pixels[i]);
-
-
-      // Creating variables to store the hue of the pixels surrounding the current pixel.
-      // Defaulting these the be equal to the current pixels hue, and only changing them if
-      // the current pixel is away from the edge of the picture
-      float pixelHueToLeft = pixelHue;
-      float pixelHueToRight = pixelHue;
-      float pixelHueAbove = pixelHue;
-      float pixelHueBelow = pixelHue;
-
-
-      // If the current pixel is not near the edge of the image, changing the values of the variables
-      // for the pixels around it to get their hue values
-      if (i > cfWidth + 1 && i < cfPixelsLength - cfWidth - 1) {
-        pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
-        pixelHueToRight = hue(currentFrame.pixels[i + 1]);
-        pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
-        pixelHueBelow = hue(currentFrame.pixels[i + cfWidth]);
-      }
-
-      // If the saturation and brightness are above 30, then this is a green pixel
-      if (pixelSaturation > 30 && pixelBrightness > 30)
-      {
-        // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge 
-        if (pixelHue > 90 && pixelHue < 100) {
-          // This seems to effect the girl's hair on the left
-          // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
-          keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
-        } else if (pixelHue > 155) {
-          // Increasing the hue, and reducing the saturation
-          keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
-        } else if (pixelHue < 115) {
-          // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
-          // the green screeen in greenScreenImage2)
-          keyedImage.pixels[i] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
-        } else {
-          // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
-          if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
-            // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-            keyedImage.pixels[i] = color(0, 0, 0, 0);
-          } else if (pixelHue > 130) {
-            // This seems to be the edges around the girl
-            // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
-            keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
-          } else {
-            // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-            keyedImage.pixels[i] = color(0, 0, 0, 0);
-          }
-        }
-      } else {
-        // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
-        // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
-        // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
-        // from this pixel.
-        keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
-      }
-    }
-  }
-
-  // Updating the pixel arrays of the ketaiCamera and the keyed image
-  currentFrame.updatePixels();
-  keyedImage.updatePixels();
-  
-  // Resetting the color mode to RGB
-  colorMode(RGB, 255, 255, 255);
-  
-  println("Finished removing Green Screen and merging images at frame " + frameCount);
-}
-*/
+ println("Starting removing Green Screen at frame " + frameCount);
+ 
+ // Changing the colour mode to HSB, so that I can work with the hue, satruation and
+ // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
+ // and brightness to 100.
+ colorMode(HSB, 360, 100, 100);
+ 
+ PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
+ 
+ keyedImage = currentFrame.get();
+ 
+ // Loading in the pixel arrays of the keyed image and the girl green screen image
+ keyedImage.loadPixels();
+ currentFrame.loadPixels();
+ 
+ int cfPixelsLength = currentFrame.pixels.length;
+ int cfWidth = currentFrame.width;
+ 
+ for (int i = 0; i < cfPixelsLength; i++) {
+ 
+ // Getting the hue, saturation and brightness values of the current pixel
+ float pixelHue = hue(currentFrame.pixels[i]);
+ 
+ // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
+ if (pixelHue > 60 && pixelHue < 180) {
+ 
+ float pixelSaturation = saturation(currentFrame.pixels[i]);
+ float pixelBrightness = brightness(currentFrame.pixels[i]);
+ 
+ 
+ // Creating variables to store the hue of the pixels surrounding the current pixel.
+ // Defaulting these the be equal to the current pixels hue, and only changing them if
+ // the current pixel is away from the edge of the picture
+ float pixelHueToLeft = pixelHue;
+ float pixelHueToRight = pixelHue;
+ float pixelHueAbove = pixelHue;
+ float pixelHueBelow = pixelHue;
+ 
+ 
+ // If the current pixel is not near the edge of the image, changing the values of the variables
+ // for the pixels around it to get their hue values
+ if (i > cfWidth + 1 && i < cfPixelsLength - cfWidth - 1) {
+ pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
+ pixelHueToRight = hue(currentFrame.pixels[i + 1]);
+ pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
+ pixelHueBelow = hue(currentFrame.pixels[i + cfWidth]);
+ }
+ 
+ // If the saturation and brightness are above 30, then this is a green pixel
+ if (pixelSaturation > 30 && pixelBrightness > 30)
+ {
+ // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge 
+ if (pixelHue > 90 && pixelHue < 100) {
+ // This seems to effect the girl's hair on the left
+ // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
+ keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
+ } else if (pixelHue > 155) {
+ // Increasing the hue, and reducing the saturation
+ keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
+ } else if (pixelHue < 115) {
+ // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
+ // the green screeen in greenScreenImage2)
+ keyedImage.pixels[i] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
+ } else {
+ // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
+ if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
+ // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
+ keyedImage.pixels[i] = color(0, 0, 0, 0);
+ } else if (pixelHue > 130) {
+ // This seems to be the edges around the girl
+ // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
+ keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
+ } else {
+ // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
+ keyedImage.pixels[i] = color(0, 0, 0, 0);
+ }
+ }
+ } else {
+ // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
+ // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
+ // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
+ // from this pixel.
+ keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
+ }
+ }
+ }
+ 
+ // Updating the pixel arrays of the ketaiCamera and the keyed image
+ currentFrame.updatePixels();
+ keyedImage.updatePixels();
+ 
+ // Resetting the color mode to RGB
+ colorMode(RGB, 255, 255, 255);
+ 
+ println("Finished removing Green Screen and merging images at frame " + frameCount);
+ }
+ */
 public class AboutScreen extends Screen {
   private String aboutText = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent maximus, turpis sit amet condimentum gravida, est quam bibendum purus, ac efficitur lectus justo in tortor. Phasellus et interdum mi.";
   private Icon[] pageIcons;
@@ -1015,43 +1101,101 @@ public class CameraLiveViewScreen extends Screen {
     // This reduces the need for each screen to have to loop through it's icons, or call the 
     // same method on multiple icons.
     this.setScreenIcons(allIcons);
-
-    // Setting the title of this screen. The screenTitle variable was also declared in this
-    // class's super class (Screen), so that it can be accessed when showing the screen 
-    // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-    // then no header text will appear on this page
-    this.setScreenTitle("");
   }
 
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
-    if(compiledImage != null){
+    // Setting the title of this screen. The screenTitle variable was also declared in this
+    // class's super class (Screen), so that it can be accessed when showing the screen 
+    // (i.e can be displayed as the header text of the page). If no screenTitle were set,
+    // then no header text will appear on this page
+    this.setScreenTitle(currentLocationName);
+    
+    // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
+    if (mousePressed) {
+      // Calculating the amount scolled, based on the distance between the previous y position, 
+      // and the current y position. When the mouse is first pressed, the previous y position
+      // is initialised (in the main sketch) but then while the mouse is held down, the previous
+      // y position gets updated each time this function runs (so that the scrolling can occur
+      // while the person is still moving their hand (and not just after they release the screen)
+      float amountScrolledX = dist(0, previousMouseX, 0, mouseX);
+      float amountScrolledY = dist(0, previousMouseY, 0, mouseY);
+
+      if (previousMouseX > mouseX) {
+        // The user has scrolled RIGHT
+        
+        // Decrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
+        // operator to check that this will not result in a value less than 0 (the minimum
+        // value allowed for the heading. If it does, then resetting the heading to 359 i.e. so the 
+        // user can continue turn around in that direction, otherwise allowing it to equal to the
+        // current heading value minus the amount scrolled on the X
+        googleImageHeading = (googleImageHeading + amountScrolledX) > 359 ? 0 : googleImageHeading + amountScrolledX;
+        println("scrolled right. heading is now " + googleImageHeading);
+      } else {
+        // The user has scrolled LEFT
+
+        // Incrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
+        // operator to check that this will not result in a value greater than 359 (the maximum
+        // value allowed for the heading. If it does, then resetting the heading to 0 i.e. so the 
+        // user can continue turn around in that direction, otherwise allowing it to equal to the
+        // current heading value plus the amount scrolled on the X
+        googleImageHeading = (googleImageHeading - amountScrolledX) < 0 ? 359 : googleImageHeading - amountScrolledX;
+        println("scrolled left. heading is now " + googleImageHeading);
+      }
+      
+      println("amountScrolledY = " + amountScrolledY);
+      if (previousMouseY > mouseY) {
+        // The user has scrolled UP
+
+        // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+        // operator to check that this will not result in a value greater than 90 (the maximum
+        // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
+        // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
+        // value plus the amount scrolled on the Y
+        googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
+        println("scrolled up. pitch is now " + googleImagePitch);
+      } else {
+        // The user has scrolled DOWN
+        
+        // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+        // operator to check that this will not result in a value less than -90 (the minimum
+        // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
+        // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
+        // value minus the amount scrolled on the Y
+        googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
+        println("scrolled down. pitch is now " + googleImagePitch);
+      }
+
+      loadGoogleImage();
+      previousMouseX = mouseX;
+      previousMouseY = mouseY;
+    }
+
+    if (compiledImage != null) {
       compiledImage = null;
     }
     // Using the currentLocationImage as the background for the camera live view i.e. so the user
     // can feel like they are taking a picture in that location
     image(currentLocationImage, appWidth/2, appHeight/2, appWidth, appHeight);
-    
+
     // Calls super super class (Rectangle). Passing in the current frame image, the width and height
     // which have been reversed - i.e. the width will now be equal to the height of the app, as the 
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
     this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
-
+    
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
     // generate the size and background of the screen
     this.drawScreen();
-    
-    this.addOverlay();
   }
 
   private void switchCameraView()
   {    
     callFunction = "";
-    
+
     // If the camera is already running before we try and effect it
     if (ketaiCamera.isStarted())
     {
@@ -1142,7 +1286,7 @@ public class FavouriteTab extends ClickableElement {
     // Rectangle class), and the title of the location (for printing to the console to 
     // let us know which tab was clicked on - if one has been clicked).
     super(iconCenterX, (y + 1) * appHeight * 0.25f, appWidth * 0.7f, appHeight * 0.2f, color(255, 255, 249, 149), title);
-    
+
     // Initialising the two private strings, one to hold the favourite title, and the other to hold
     // the location URL data of the favourite. The title will be used as text on the tab
     // to show what location it links to. The favLocation will be passing in as part of the
@@ -1155,32 +1299,22 @@ public class FavouriteTab extends ClickableElement {
   public void showFavourite() {
     // Showing this tab (Using the super Rectangle class's method show())
     this.show();
-    
+
     // Adding the title text to this tab (as specified in the tab's constructor)
     this.addText(favTitle, this.getX(), this.getY(), this.getWidth() * 0.1f);
-    
+
     // If the mouse is currently pressed, checking if the mouse was over this
     // tab when the press/click occurred
     if (mousePressed) {
       // Checking the mouse was over this by using the super class ClickableElement's
       // checkMouseOver() method
-      if(this.checkMouseOver()){
-        // Using Google Street View Image API to get a static Street View Image 
-        // (https://developers.google.com/maps/documentation/streetview/intro#url_parameters)
-        // based on the location parametres passed into the current favourite tab's constructor
-        // (i.e. the favLocation value). Requesting the resulting image to equal to the width
-        // and height of the app. Passing the browser API key as a variable, so that we can 
-        // remove it between commits (security issues) and remember where it is supposed to go.
-        // Works, but only gives back a static image (i.e. it cannot be interacted with).
-        String googleStreetViewImageApiURL = "https://maps.googleapis.com/maps/api/streetview?location=" + this.favLocation + "&key=" + ourBrowserApiKey + "&size=" + appWidth + "x" + appHeight;
+      if (this.checkMouseOver()) {
         
-        // Loading the Static Street View image through a request to the above URL (Note - when
-        // running in Java mode, I was able to pass in a second argument to this method - the 
-        // filetype of the resulting image i.e. loadImage(googleStreetViewImageApiURL, "png")
-        // but in Android mode you cannot specify this additional argument, so I am just passing
-        // the URL string, and allowing the PImage class to deal with the filetype.
-        currentLocationImage = loadImage(googleStreetViewImageApiURL);
-        currentScreen = "CameraLiveViewScreen";
+        googleImageLatLng = this.favLocation.split("&")[0]; 
+        googleImageHeading = PApplet.parseFloat(this.favLocation.split("heading=")[1].split("&")[0]);
+        googleImagePitch = PApplet.parseFloat(this.favLocation.split("pitch=")[1]);
+        
+        loadGoogleImage();
       }
     }
   }
@@ -1420,7 +1554,7 @@ public class FavouritesScreen extends Screen {
     // require to request this specific location (longitude, latitude, heading and pitch). 
     // Getting a random location by generating a random index value within the length of the
     // favourites array (rounding it off so that it will always equal an int)
-    String locationURLData = split(favourites[round(random(favourites.length-1))], "@")[1];
+    String locationURLData = favourites[round(random(favourites.length-1))];
     return locationURLData;
   }
 }
@@ -1447,7 +1581,7 @@ public class HomeScreen extends Screen {
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon searchTravelIcon = new Icon(appWidth * 0.28f, appHeight * 0.2f, iconSize, iconSize, searchPageIconImage, "Search", true, "Below", "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.72f, appHeight * 0.2f, iconSize, iconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.72f, appHeight * 0.2f, iconSize, iconSize, randomPageIconImage, "Random", true, "Below", "_getRandomLocation");
     Icon myFavouritesIcon = new Icon(appWidth * 0.28f, appHeight * 0.5f, iconSize, iconSize, favouritesPageIconImage, "My Favourites", true, "Below", "FavouritesScreen");
     Icon aboutIcon = new Icon(appWidth * 0.72f, appHeight * 0.5f, iconSize, iconSize, aboutPageIconImage, "About", true, "Below", "AboutScreen");
     Icon settingsIcon = new Icon(appWidth * 0.5f, appHeight * 0.8f, iconSize, iconSize, settingsPageIconImage, "Settings", true, "Below", "SettingsScreen");
@@ -1621,8 +1755,6 @@ public class Icon extends ClickableElement {
             println("Returning to the " + this.iconLinkTo + "screen");
           } else {
             if(this.iconTitle.indexOf("Random") == 0){
-              String randomLocationURLData = myFavouritesScreen.getRandomLocation();
-              currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + randomLocationURLData + "&key=" + ourBrowserApiKey + "&size=" + appWidth + "x" + appHeight);
             }
             // This is an INTERNAL link
             // Setting the global currentScreen variable to be equal to the link
@@ -1737,7 +1869,6 @@ protected class Rectangle {
   public PImage rectBackgroundImg = null;
   private int rectBackgroundImgScaleX = 1;
   private int rectBackgroundImgRotate = 0;
-  private Boolean rectOverlay = false;
 
   /*-------------------------------------- Constructor() ------------------------------------------------*/
 
@@ -1852,10 +1983,6 @@ protected class Rectangle {
       // passing in the image, along with the current x, y, width and height of the instance,
       // so that the image will appear the full size of the object
       this.addImage(rectImage, rectX, rectY, rectWidth, rectHeight);
-    }
-    
-    if (rectOverlay) {
-      image(overlayImage, appWidth * 0.7f, appHeight * 0.85f, appWidth * 0.55f, appWidth * 0.3f);
     }
   }
 
@@ -2052,10 +2179,6 @@ protected class Rectangle {
     rectHeight = h;
     rectBackgroundImgScaleX =  scaleX;
     rectBackgroundImgRotate = rotate;
-  }
-  
-  protected void addOverlay(){
-    rectOverlay = true;
   }
 
   public PImage getBackgroundImage() {
@@ -2311,7 +2434,7 @@ public class SearchScreen extends Screen {
 
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
     Icon cancelIcon = new Icon(appWidth * 0.3f, iconCenterY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle", "HomeScreen");
-    Icon searchIcon = new Icon(appWidth * 0.7f, iconCenterY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Search", true, "Middle", "SearchingScreen");
+    Icon searchIcon = new Icon(appWidth * 0.7f, iconCenterY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Search", true, "Middle", "_searchForLocation");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchIcon, cancelIcon};
@@ -2365,7 +2488,7 @@ public class SearchUnsuccessfulScreen extends Screen {
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
     Icon searchTravelIcon = new Icon(appWidth * 0.3f, largeIconBottomY, largeIconSize, largeIconSize, searchPageIconImage, "Search Again", true, "Below", "SearchScreen");
-    Icon randomTravelIcon = new Icon(appWidth * 0.7f, largeIconBottomY, largeIconSize, largeIconSize, randomPageIconImage, "Random", true, "Below", "CameraLiveViewScreen");
+    Icon randomTravelIcon = new Icon(appWidth * 0.7f, largeIconBottomY, largeIconSize, largeIconSize, randomPageIconImage, "Random", true, "Below", "_getRandomLocation");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchTravelIcon, randomTravelIcon};
@@ -2439,8 +2562,11 @@ public class SearchingScreen extends Screen {
   }
 }
 public class SettingsScreen extends Screen {
-public Boolean learningModeOn;
-public Boolean autoSaveModeOn;
+
+  // Creating Booleans for the learning mode and auto save mode, these variables will be used to 
+  // toggle between turing these settings on and off depending on the users input
+  public Boolean learningModeOn;
+  public Boolean autoSaveModeOn;
 
 
   // Creating a public constructor for the SettingsScreen class, so that
@@ -2452,8 +2578,10 @@ public Boolean autoSaveModeOn;
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
     
-    
+    // Setting the learning mode to off
     learningModeOn = false;
+    
+    // Setting the auto save to on
     autoSaveModeOn = true;
 
     // Creating the icon/s for this screen, using locally scoped variables, as these
@@ -2498,6 +2626,7 @@ public Boolean autoSaveModeOn;
     // generate the size and background of the screen
     this.drawScreen();
     
+    // Adding text to go beside the icon that will be toggled in order label each setting for the users convenience 
     this.addText("Learning Mode", "LEFT", iconLeftX, iconCenterY * 0.5f);
     this.addText("Autosave Image", "LEFT", iconLeftX, iconCenterY * 0.8f);
   }
