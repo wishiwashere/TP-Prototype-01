@@ -11,7 +11,7 @@ public class SearchingScreen extends Screen {
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
 
-    searchingImage = loadImage("placeholder.PNG");
+    searchingImage = loadImage("searchingImage.png");
 
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
@@ -29,6 +29,6 @@ public class SearchingScreen extends Screen {
     // generate the size and background of the screen
     this.drawScreen();
 
-    this.addImage(searchingImage, appWidth/2, appHeight/2, appWidth * 0.8, appWidth * 0.4);
+    this.addImage(searchingImage, appWidth/2, appHeight/2, appWidth * 0.4, appWidth * 0.4);
   }
 }
