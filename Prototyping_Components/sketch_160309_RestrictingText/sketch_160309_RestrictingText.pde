@@ -24,7 +24,7 @@ import twitter4j.util.function.*;
 // screen should be displayed). 
 // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
 // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-String currentScreen = "LoadingScreen";
+String currentScreen = "SearchScreen";
 
 // Creating a global variable for ourBrowserApiKey that is required to make requests
 // to the Google Street View Image API. This key will be removed before commits to
