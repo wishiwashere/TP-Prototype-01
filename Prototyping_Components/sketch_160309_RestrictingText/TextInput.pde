@@ -58,10 +58,10 @@ public class TextInput extends ClickableElement {
 
     inputTextAlign = align;
     
-    textX1 = x - (w/2);
-    textY1 = y - (h/2);
-    textX2 = x + (w/2);
-    textY2 = y + (h/2);
+    textX1 = x - (w * 0.48);
+    textY1 = y - (h * 0.45);
+    textX2 = x + (w * 0.48);
+    textY2 = y + (h * 0.45);
     
     if (inputTextAlign.equals("LEFT")) {
       textVertAlign = CENTER;
