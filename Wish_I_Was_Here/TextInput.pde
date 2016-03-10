@@ -68,7 +68,6 @@ public class TextInput extends ClickableElement {
     } else if (inputTextAlign.equals("LEFT-TOP")) {
       textVertAlign = TOP;
     }
-    println("Text x1 = " + textX1 + " textY1 = " + textY1 + " X = " + x + " Y = " + y);
   }
 
   /*-------------------------------------- showTextInput() ------------------------------------------------*/
