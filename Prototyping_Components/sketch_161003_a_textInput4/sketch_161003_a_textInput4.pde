@@ -1,5 +1,4 @@
 String myText = "";
-String textWarning = "";
 
 float x = width/2;
 float y = height/2;
