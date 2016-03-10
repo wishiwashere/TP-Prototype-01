@@ -20,8 +20,8 @@ public class SocialMediaLoginScreen extends Screen {
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY * 1.4, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "-returnTo");
-    Icon loginIcon = new Icon(appWidth * 0.7, iconCenterY * 1.4, appWidth * 0.4, appHeight * 0.08, buttonImage, "Login", true, "Middle", "-returnTo");
+    Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY * 1.2, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "-returnTo");
+    Icon loginIcon = new Icon(appWidth * 0.7, iconCenterY * 1.2, appWidth * 0.4, appHeight * 0.08, buttonImage, "Login", true, "Middle", "-returnTo");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, loginIcon};
@@ -40,8 +40,8 @@ public class SocialMediaLoginScreen extends Screen {
     // then no header text will appear on this page
     this.setScreenTitle("Social Media Login Screen");
 
-    usernameInput = new TextInput(iconCenterX, iconCenterY * 0.65, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "usernameInput");
-    passwordInput = new TextInput(iconCenterX, iconCenterY * 1.15, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "passwordInput", true);
+    usernameInput = new TextInput(iconCenterX, iconCenterY * 0.55, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "usernameInput");
+    passwordInput = new TextInput(iconCenterX, iconCenterY * 0.95, appWidth * 0.8, appHeight * 0.08, #FFFFFE, "passwordInput", true);
   }
 
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -53,8 +53,8 @@ public class SocialMediaLoginScreen extends Screen {
     // generate the size and background of the screen
     this.drawScreen();
 
-    this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.5);
-    this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 1);
+    this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.4);
+    this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 0.8);
     usernameInput.showTextInput();
     passwordInput.showTextInput();
   }

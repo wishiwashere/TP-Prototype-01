@@ -9,7 +9,7 @@ public class SearchScreen extends Screen {
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
 
-    searchInput = new TextInput(iconCenterX, iconCenterY * 0.7, appWidth * 0.8, appHeight * 0.2, #FFFFFE, "searchInput", "LEFT-TOP");
+    searchInput = new TextInput(iconCenterX, iconCenterY * 0.7, appWidth * 0.8, appHeight * 0.3, #FFFFFE, "searchInput", "LEFT-TOP");
 
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -22,8 +22,8 @@ public class SearchScreen extends Screen {
     // as the linkTo argument, are optional
 
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
-    Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "HomeScreen");
-    Icon searchIcon = new Icon(appWidth * 0.7, iconCenterY, appWidth * 0.4, appHeight * 0.08, buttonImage, "Search", true, "Middle", "_searchForLocation");
+    Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY * 1.1, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "HomeScreen");
+    Icon searchIcon = new Icon(appWidth * 0.7, iconCenterY * 1.1, appWidth * 0.4, appHeight * 0.08, buttonImage, "Search", true, "Middle", "_searchForLocation");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchIcon, cancelIcon};
