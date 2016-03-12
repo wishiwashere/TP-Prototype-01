@@ -1,5 +1,8 @@
 package com.pigottlaura.www.wishiwashere;
 
+import com.pigottlaura.www.wishiwashere.Sketch;
+import processing.core.*;
+
 public class MyClass extends Sketch {
 
     public String addText;
