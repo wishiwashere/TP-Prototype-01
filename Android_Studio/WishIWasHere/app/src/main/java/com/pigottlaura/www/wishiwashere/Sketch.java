@@ -1,8 +1,10 @@
 package com.pigottlaura.www.wishiwashere;
 
+import processing.opengl.*;
 import processing.core.*;
 
 public class Sketch extends PApplet {
+
     MyClass instanceOfMyClass;
 
     @Override
@@ -16,7 +18,7 @@ public class Sketch extends PApplet {
     public void setup() {
         background(255);
         println("Processing setup function called");
-        instanceOfMyClass = new MyClass("Hello from Sketch Class");
+        instanceOfMyClass = new MyClass(this, "Hello from Sketch Class");
 
     }
 
@@ -29,6 +31,6 @@ public class Sketch extends PApplet {
         fill(0);
         textSize(30);
         textAlign(CENTER, CENTER);
-        text("Hello World", width/2, height/2);
+        text("Hello World", width/2, height/2 - 100);
     }
 }
