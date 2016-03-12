@@ -4,8 +4,8 @@ import processing.opengl.*;
 import processing.core.*;
 
 public class Sketch extends PApplet {
-    float myNum1;
-    float myNum2 = (float)(5.8);
+    float myNum1 = (float)(5.8);
+    float myNum2;
     MyClass instanceOfMyClass;
 
     @Override
