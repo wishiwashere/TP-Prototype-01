@@ -423,7 +423,7 @@ public class Sketch extends PApplet {
             mySearchingScreen.showScreen();
             getRandomLocation();
         } else {
-            //println("This function does not exist / cannot be triggered by this icon");
+            println("This function does not exist / cannot be triggered by this icon");
         }
 
         // Checking if the keyboard is required i.e. if an input field is currently in focus
@@ -433,6 +433,12 @@ public class Sketch extends PApplet {
         } else {
             KetaiKeyboard.hide(this);
             callFunction = "";
+        }
+
+        // Forcing the onCameraPreviewEvent() to be called, as ketaiCamera does not seem to be
+        // calling it implicitly (as it would have done in Processing).
+        if(ketaiCamera.isStarted()){
+            onCameraPreviewEvent();
         }
     }
 
@@ -476,10 +482,12 @@ public class Sketch extends PApplet {
 
     // ketaiCamera event which is automatically called everytime a new frame becomes
     // available from the ketaiCamera.
-    void onCameraPreviewEvent()
+    public void onCameraPreviewEvent()
     {
+        println("CAM - New frame available " + readingImage);
         if (readingImage == false && callFunction != "_mergeImages") {
             // Reading in a new frame from the ketaiCamera.
+            println("CAM - New frame about to be read");
             readingImage = true;
             ketaiCamera.read();
             currentFrame = ketaiCamera.get();
@@ -559,9 +567,11 @@ public class Sketch extends PApplet {
         if (currentScreen.equals("CameraLiveViewScreen")) {
             if (!ketaiCamera.isStarted()) {
                 ketaiCamera.start();
+                println("CAM - Starting Ketai Camera");
             }
         } else if (ketaiCamera.isStarted()) {
             ketaiCamera.stop();
+                println("CAM - Stopping Ketai Camera");
         }
     }
 
@@ -677,8 +687,8 @@ public class Sketch extends PApplet {
     }
     }*/
 
-    void previewGreenScreen() {
-        //println("Starting removing Green Screen at frame " + frameCount);
+    public void previewGreenScreen() {
+        println("Starting removing Green Screen at frame " + frameCount);
 
         // Changing the colour mode to HSB, so that I can work with the hue, satruation and
         // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
@@ -727,7 +737,7 @@ public class Sketch extends PApplet {
         currentImage = keyedImage.get();
 
         readingImage = false;
-        //println("Finished removing Green Screen at frame " + frameCount);
+        println("Finished removing Green Screen at frame " + frameCount);
     }
 
     void mergeImages() {

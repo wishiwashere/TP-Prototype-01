@@ -85,7 +85,6 @@ public class Rectangle extends Sketch {
         this.rectHeight = (float)(h);
         this.rectCol = col;
         this.rectImage = img;
-        sketch.println("homeIconSize now :) in Rectangle = " + homeIconSize);
     }
 
   /*-------------------------------------- show() ------------------------------------------------*/
@@ -136,8 +135,6 @@ public class Rectangle extends Sketch {
             // so that the image will appear the full size of the object
             this.addImage(this.rectImage, this.rectX, this.rectY, this.rectWidth, this.rectHeight);
         }
-
-        sketch.println("Completed showing the rectangle");
     }
 
   /*-------------------------------------- addText() ------------------------------------------------*/

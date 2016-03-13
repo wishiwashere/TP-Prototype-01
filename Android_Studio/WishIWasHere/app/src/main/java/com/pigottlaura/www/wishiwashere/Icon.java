@@ -62,8 +62,6 @@ public class Icon extends ClickableElement {
 
         sketch = _sketch;
 
-        sketch.println("icon width = " + w + "; " + title);
-
         // Initialising the iconLinkTo to be equal to the requested link
         // specified in the object's constructor. This link will be passed to the global
         // currentScreen variable if the link is clicked on, so that in the draw function,
@@ -89,7 +87,6 @@ public class Icon extends ClickableElement {
     // Creating a public showIcon function, which can be called anywhere in the code
     // to display the icon, and add any text that has been specified
     public void showIcon() {
-        sketch.println("About to show rectangle of screen icon");
 
         // Calling the show() method (which was inherited from the Rectangle class)
         // so that this icon will be displayed on screen
@@ -98,7 +95,6 @@ public class Icon extends ClickableElement {
         // Checking if this icon's title should be displayed as a header on the screen
         if (this.showIconTitle)
         {
-            sketch.println("About to add text to screen icon");
             // Calling the super class's (Rectangle) addText method, to add the title to
             // the icon. Passing in the String containing the title for the icon, the current
             // x and y positions of the icon itself, and the font size (which is relative
