@@ -34,8 +34,6 @@ public class MainActivity extends AppCompatActivity {
         Fabric.with(this, new Twitter(authConfig));
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
         status = (TextView) findViewById(R.id.status);
         status.setText("Status: Ready");
@@ -45,12 +43,10 @@ public class MainActivity extends AppCompatActivity {
             public void success(Result<TwitterSession> twitterSessionResult) {
                 Log.d("TWITTER", "Result Successfull 1");
                 // The TwitterSession is also available through:
-                // Twitter.getInstance().core.getSessionManager().getActiveSession()
-                // TwitterSession session = result.data;
-                // Remove toast and use the TwitterSession's userID
-                // with your app's user model
+                //Twitter.getInstance().core.getSessionManager().getActiveSession()
+                TwitterSession session = twitterSessionResult.data;
 
-                TwitterSession session = Twitter.getSessionManager().getActiveSession();
+                //TwitterSession session = Twitter.getSessionManager().getActiveSession();
                 TwitterAuthToken authToken = session.getAuthToken();
                 String token = authToken.token;
                 String secret = authToken.secret;
@@ -77,27 +73,5 @@ public class MainActivity extends AppCompatActivity {
                 status.setText("Status: Login Failed");
             }
         });
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 }
