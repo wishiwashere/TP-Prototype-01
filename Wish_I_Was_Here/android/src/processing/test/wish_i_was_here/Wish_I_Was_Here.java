@@ -413,21 +413,21 @@ public void setup() {
 
 public void draw() {
   background(0);
-  
+
   // Calling the monitorScreens() function to display the right screen by calling
   // the showScreen() method. This function then calls the super class's drawScreen()
   // method, which not only adds the icons and backgrounds to the screen, it also
   // asks the icons on the screen to call their checkMouseOver() method (inherited from
   // the Icon class) to see if they were clicked on when a mouse event occurs
   switchScreens();
- 
+
   // Checking if any screen's icons are trying to trigger any functions
   if (callFunction.equals("_keepImage")) {
     keepImage();
   } else if (callFunction.equals("_switchCameraView")) {
     myCameraLiveViewScreen.switchCameraView();
   } else if (callFunction.equals("_addToFavourites")) {
-    addToFavourites("Favourite");
+    thread("addToFavourites");
   } else if (callFunction.equals("_switchLearningMode")) {
     switchLearningMode();
   } else if (callFunction.equals("_switchAutoSave")) {
@@ -636,9 +636,21 @@ public void testingTimeoutScreen(String fadeToScreen) {
   }
 }
 
-public void addToFavourites(String place) {
+public void addToFavourites() {
   callFunction = "";
-  myCameraLiveViewScreen.favouriteLocation = !myCameraLiveViewScreen.favouriteLocation;
+  int favLocationIndex = checkIfFavourite(currentLocationName);
+
+  if (favLocationIndex > -1) {
+    myFavouritesScreen.favTabs.remove(favLocationIndex);
+    myCameraLiveViewScreen.favouriteLocation = false;
+  } else {
+    FavouriteTab newFavTab = new FavouriteTab(currentLocationName, googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch, myFavouritesScreen.favTabs.size() - 1);
+    myFavouritesScreen.favTabs.add(newFavTab);
+    myCameraLiveViewScreen.favouriteLocation = true;
+  }
+
+  checkFavIcon();
+
   println("Favourite location is now: " + myCameraLiveViewScreen.favouriteLocation);
 }
 
@@ -656,9 +668,9 @@ public void switchAutoSave() {
 
 
 public void sendTweet() {
- // getShareableImage();
+  // getShareableImage();
   callFunction = "";
-  
+
   File twitterImage = new File(saveToPath);
   // Creating a string to to hold the value that is in the message input 
   String message = mySaveShareScreenB.messageInput.getInputValue();
@@ -672,8 +684,8 @@ public void sendTweet() {
     twitter.updateStatus(status);
     // Making a twitter status that will hold the message the user typed 
     // and adding the Wish I Was Here tag onto the end of the message
-    
-    
+
+
 
     //Changing the current Screen
     currentScreen = "ShareSaveSuccessfulScreen";
@@ -694,12 +706,12 @@ public void sendTweet() {
 }
 /*
 void getShareableImage(File latestImage){
-  File getImage = new File(currentImage);
-  if(latestImage == null || getImage.lastModified().after(latestImage.lastModified())){
-      latestImage = getImage;
-      latestImage.getPath();
-  }
-}*/
+ File getImage = new File(currentImage);
+ if(latestImage == null || getImage.lastModified().after(latestImage.lastModified())){
+ latestImage = getImage;
+ latestImage.getPath();
+ }
+ }*/
 
 public void previewGreenScreen() {
   //println("Starting removing Green Screen at frame " + frameCount);
@@ -809,10 +821,10 @@ public void searchForLocation() {
     googleImageLatLng = latitude + "," + longitude;
     println("Latitude, Longitude = " + googleImageLatLng);
     loadGoogleImage();
-    currentTextInput.clearInputValue(); 
+    currentTextInput.clearInputValue();
   } else {
     currentScreen = "SearchUnsuccessfulScreen";
-  } 
+  }
 }
 
 public void getRandomLocation() {
@@ -834,8 +846,32 @@ public void loadGoogleImage() {
   currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
   println("Image successfully loaded");
 
+  checkFavIcon();
+
   if (!currentScreen.equals("CameraLiveViewScreen")) {
     currentScreen = "CameraLiveViewScreen";
+  }
+}
+
+public int checkIfFavourite(String currentFavTitle) {
+  int favIndex = -1;
+
+  ArrayList<FavouriteTab> favouriteTabs = myFavouritesScreen.getFavTabs();
+
+  for (int i = 0; i < favouriteTabs.size(); i++) {
+    if (favouriteTabs.get(i).getFavTitle().equals(currentFavTitle)) {
+      favIndex = i;
+    }
+  }
+
+  return favIndex;
+}
+
+public void checkFavIcon() {
+  if (checkIfFavourite(currentLocationName) > -1) {
+    myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconYesImage.png"));
+  } else {
+    myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconNoImage.png"));
   }
 }
 /*
@@ -1087,6 +1123,8 @@ public class AboutScreen extends Screen {
 }
 public class CameraLiveViewScreen extends Screen {
   public Boolean favouriteLocation;
+  
+  public Icon favIcon;
 
   // Creating a public constructor for the CameraLiveViewScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -1108,7 +1146,7 @@ public class CameraLiveViewScreen extends Screen {
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, loadImage("homeIconWhiteImage.png"), "Home", false, "HomeScreen");
-    Icon favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false, "_addToFavourites");
+    favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false, "_addToFavourites");
     Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
     Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "_mergeImages");
     Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_switchCameraView");
@@ -1128,11 +1166,6 @@ public class CameraLiveViewScreen extends Screen {
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
-    // Setting the title of this screen. The screenTitle variable was also declared in this
-    // class's super class (Screen), so that it can be accessed when showing the screen 
-    // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-    // then no header text will appear on this page
-    this.setScreenTitle(currentLocationName);
     
     // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
     if (mousePressed) {
@@ -1307,7 +1340,7 @@ public class FavouriteTab extends ClickableElement {
     // almost white colour (as pure white will not be shown - previous work around in the 
     // Rectangle class), and the title of the location (for printing to the console to 
     // let us know which tab was clicked on - if one has been clicked).
-    super(iconCenterX, (y + 1) * appHeight * 0.25f, appWidth * 0.7f, appHeight * 0.2f, color(255, 255, 249, 149), title);
+    super(iconCenterX, (y + 1) * appHeight * 0.25f, appWidth * 0.7f, appHeight * 0.2f, color(255, 255, 255, 149), title);
 
     // Initialising the two private strings, one to hold the favourite title, and the other to hold
     // the location URL data of the favourite. The title will be used as text on the tab
@@ -1331,14 +1364,18 @@ public class FavouriteTab extends ClickableElement {
       // Checking the mouse was over this by using the super class ClickableElement's
       // checkMouseOver() method
       if (this.checkMouseOver()) {
-        
         googleImageLatLng = this.favLocation.split("&")[0]; 
         googleImageHeading = PApplet.parseFloat(this.favLocation.split("heading=")[1].split("&")[0]);
         googleImagePitch = PApplet.parseFloat(this.favLocation.split("pitch=")[1]);
+        currentLocationName = favTitle;
         
         loadGoogleImage();
       }
     }
+  }
+  
+  public String getFavTitle(){
+    return favTitle;
   }
 }
 public class FavouritesScreen extends Screen {
@@ -1347,7 +1384,7 @@ public class FavouritesScreen extends Screen {
   // while the data after is used to generate a URL to request this location's Google
   // Street View Image (in this class's showScreen() method). (Note - this is a naming
   // convention that we have created, so that the favourite title and location details
-  // can all be stored in the one string). The values from these strings will be split and
+  // can all be stored in the one string). The values from these strings will be split yand
   // passed into the relevant constructor of each favTab (in the constructor of this class).
   // The first two numbers after the "@" represent the latitude and longitude of the location
   // The heading represents the left/right positioning of the view (between 0 and 360)
@@ -1373,7 +1410,7 @@ public class FavouritesScreen extends Screen {
   // Declaring a private favTabs array, to store each of the favourite tabs we create,
   // so that they can be looped through in this class's showScreen() method, to display
   // the tabs, as well as checking if they are being clicked on.
-  private FavouriteTab[] favTabs;
+  public ArrayList<FavouriteTab> favTabs;
 
   // Creating a public constructor for the FavouriteScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -1387,7 +1424,7 @@ public class FavouritesScreen extends Screen {
     // Creating the favTabs array to be long enough to contain each of the favourite
     // places we have declared in the favourites array above i.e. so that we will have
     // enough tabs to display each of the favourites
-    favTabs = new FavouriteTab[favourites.length];
+    favTabs = new ArrayList<FavouriteTab>();
     
     // Looping through the favourites array, so that we can create a new tab for
     // each favourite place
@@ -1418,7 +1455,7 @@ public class FavouritesScreen extends Screen {
       // Adding the new FavTab to this class's favTabs array, so that we can loop through them
       // in the showScreen() method, to display them, as well as checking if they are being
       // clicked on.
-      favTabs[f] = newFavTab;
+      favTabs.add(newFavTab);
     }
 
     // Creating the icon/s for this screen, using locally scoped variables, as these
@@ -1460,8 +1497,8 @@ public class FavouritesScreen extends Screen {
       this.setY(appHeight/2);
       this.getScreenIcons()[0].setY(iconTopY);
       
-      for (int i = 0; i < favTabs.length; i++) {
-        favTabs[i].setY((i + 1) * appHeight * 0.25f);
+      for (int i = 0; i < favTabs.size(); i++) {
+        favTabs.get(i).setY((i + 1) * appHeight * 0.25f);
       }
 
       // Setting loaded to true, so that this block of code will only run once (each time this page
@@ -1478,8 +1515,8 @@ public class FavouritesScreen extends Screen {
 
     // Looping through our array of favourite tabs, and calling the showFavourite() method (of
     // the FavouriteTab class) to display the tab on screen
-    for (int f = 0; f < favourites.length; f++) {
-      favTabs[f].showFavourite();
+    for (int f = 0; f < favTabs.size(); f++) {
+      favTabs.get(f).showFavourite();
     }
 
     if (mousePressed) {
@@ -1519,13 +1556,13 @@ public class FavouritesScreen extends Screen {
       // this class so that they can be looped through to be repositioned (i.e. in every other
       // screen, these icons would be stored only in the super class, and not directly accessible
       // within the individual screen classes
-      for (int i = 0; i < favTabs.length; i++) {
+      for (int i = 0; i < favTabs.size(); i++) {
         // Checking which direction the user scrolled
         if (previousMouseY > mouseY) {
           // The user has scrolled UP
           // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
           // moving the icon up the screen
-          favTabs[i].setY(favTabs[i].getY() - amountScrolled);
+          favTabs.get(i).setY(favTabs.get(i).getY() - amountScrolled);
         } else {
           // The user has scrolled DOWN
           // Checking if the screen's y position is less than or equal to half of the height i.e. is 
@@ -1533,7 +1570,7 @@ public class FavouritesScreen extends Screen {
           if (this.getY() <= appHeight/2) {
             // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
             // moving the icon down the screen
-            favTabs[i].setY(favTabs[i].getY() + amountScrolled);
+            favTabs.get(i).setY(favTabs.get(i).getY() + amountScrolled);
           }
         }
       }
@@ -1578,6 +1615,10 @@ public class FavouritesScreen extends Screen {
     // favourites array (rounding it off so that it will always equal an int)
     String locationURLData = favourites[round(random(favourites.length-1))];
     return locationURLData;
+  }
+  
+  public ArrayList<FavouriteTab> getFavTabs(){
+    return favTabs;
   }
 }
 public class HomeScreen extends Screen {
@@ -1746,14 +1787,7 @@ public class Icon extends ClickableElement {
             println("Going to " + this.iconLinkTo);
           } else if (this.iconLinkTo.indexOf("_") == 0) {
             callFunction = this.iconLinkTo;
-            if (this.iconLinkTo.equals("_addToFavourites")) {
-              if (myCameraLiveViewScreen.favouriteLocation) {
-                this.setImage(loadImage("favIconNoImage.png"));
-              } else {
-                this.setImage(loadImage("favIconYesImage.png"));
-              }
-            }
-            else if(this.iconLinkTo.equals("_switchLearningMode")){
+            if(this.iconLinkTo.equals("_switchLearningMode")){
               if(mySettingsScreen.learningModeOn){
                 this.setImage(toggleSwitchOffIconImage);
               }
@@ -1788,6 +1822,7 @@ public class Icon extends ClickableElement {
             // Resetting teh screenTitleY position to it's original value (as it may have been
             // incremented if the about screen was scrolled
             screenTitleY = appHeight * 0.08f;
+            
             // Resetting the about screen's loaded value to false, so that the next time it is opened
             // it will reset to it's original positions
             myAboutScreen.loaded = false;
@@ -2442,7 +2477,7 @@ public class SearchScreen extends Screen {
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
 
-    searchInput = new TextInput(iconCenterX, iconCenterY * 0.7f, appWidth * 0.8f, appHeight * 0.2f, 0xffFFFFFE, "searchInput", "LEFT-TOP");
+    searchInput = new TextInput(iconCenterX, iconCenterY * 0.7f, appWidth * 0.8f, appHeight * 0.3f, 0xffFFFFFE, "searchInput", "LEFT-TOP");
 
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
@@ -2455,8 +2490,8 @@ public class SearchScreen extends Screen {
     // as the linkTo argument, are optional
 
     Icon homeIcon = new Icon(iconRightX, iconTopY, homeIconImage, "Home", false, "HomeScreen");
-    Icon cancelIcon = new Icon(appWidth * 0.3f, iconCenterY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle", "HomeScreen");
-    Icon searchIcon = new Icon(appWidth * 0.7f, iconCenterY, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Search", true, "Middle", "_searchForLocation");
+    Icon cancelIcon = new Icon(appWidth * 0.3f, iconCenterY * 1.1f, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle", "HomeScreen");
+    Icon searchIcon = new Icon(appWidth * 0.7f, iconCenterY * 1.1f, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Search", true, "Middle", "_searchForLocation");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {homeIcon, searchIcon, cancelIcon};
@@ -2562,7 +2597,7 @@ public class SearchingScreen extends Screen {
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
 
-    searchingImage = loadImage("placeholder.PNG");
+    searchingImage = loadImage("searchingImage.png");
 
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
@@ -2580,7 +2615,7 @@ public class SearchingScreen extends Screen {
     // generate the size and background of the screen
     this.drawScreen();
 
-    this.addImage(searchingImage, appWidth/2, appHeight/2, appWidth * 0.8f, appWidth * 0.4f);
+    this.addImage(searchingImage, appWidth/2, appHeight/2, appWidth * 0.4f, appWidth * 0.4f);
   }
 }
 public class SettingsScreen extends Screen {
@@ -2859,8 +2894,8 @@ public class SocialMediaLoginScreen extends Screen {
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3f, iconCenterY * 1.4f, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle", "-returnTo");
-    Icon loginIcon = new Icon(appWidth * 0.7f, iconCenterY * 1.4f, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Login", true, "Middle", "-returnTo");
+    Icon cancelIcon = new Icon(appWidth * 0.3f, iconCenterY * 1.2f, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Cancel", true, "Middle", "-returnTo");
+    Icon loginIcon = new Icon(appWidth * 0.7f, iconCenterY * 1.2f, appWidth * 0.4f, appHeight * 0.08f, buttonImage, "Login", true, "Middle", "-returnTo");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, loginIcon};
@@ -2879,8 +2914,8 @@ public class SocialMediaLoginScreen extends Screen {
     // then no header text will appear on this page
     this.setScreenTitle("Social Media Login Screen");
 
-    usernameInput = new TextInput(iconCenterX, iconCenterY * 0.65f, appWidth * 0.8f, appHeight * 0.08f, 0xffFFFFFE, "usernameInput");
-    passwordInput = new TextInput(iconCenterX, iconCenterY * 1.15f, appWidth * 0.8f, appHeight * 0.08f, 0xffFFFFFE, "passwordInput", true);
+    usernameInput = new TextInput(iconCenterX, iconCenterY * 0.55f, appWidth * 0.8f, appHeight * 0.08f, 0xffFFFFFE, "usernameInput");
+    passwordInput = new TextInput(iconCenterX, iconCenterY * 0.95f, appWidth * 0.8f, appHeight * 0.08f, 0xffFFFFFE, "passwordInput", true);
   }
 
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -2892,8 +2927,8 @@ public class SocialMediaLoginScreen extends Screen {
     // generate the size and background of the screen
     this.drawScreen();
 
-    this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.5f);
-    this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 1);
+    this.addText("Username:", "LEFT", iconLeftX, iconCenterY * 0.4f);
+    this.addText("Password:", "LEFT", iconLeftX, iconCenterY * 0.8f);
     usernameInput.showTextInput();
     passwordInput.showTextInput();
   }
@@ -2955,144 +2990,114 @@ public class SocialMediaLogoutScreen extends Screen{
     this.addText("our app?", iconCenterX, appHeight * 0.62f);
   }
 }
-public class TextInput extends ClickableElement{
-  
+public class TextInput extends ClickableElement {
+
   // Creating private variables to store the TextInput's title and value
   // properties, so that they can only be accessed within this class
   private String inputTitle = "";
   private String inputValue = "";
   private String inputTextAlign = "";
   private Boolean passwordInput;
-  private float textX;
-  private float textY;
-  
-  /*
-  // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
-  private int textAlignX;
-  private int textAlignY;
-  private int textBoxMode;
-  private float textWidth;
-  private float textHeight;
-  */
-  
+
+  private float textX1;
+  private float textY1;
+  private float textX2;
+  private float textY2;
+  private int textVertAlign;
+
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   // This partial constructor is used by text inputs that do not require their contents
   // to be blocked out i.e. any text input that is not a password
-  public TextInput(float x, float y, float w, float h, int col, String title){
+  public TextInput(float x, float y, float w, float h, int col, String title) {
 
     // Passing the relevant parametres to the main constructor. Since a password value
     // has not been included, passing false for this argument (i.e. assuming this in not
     // a password textInput
     this(x, y, w, h, col, title, false, "LEFT");
   }
-  
+
   // This partial constructor is used by text inputs that do not require their contents
   // to be blocked out i.e. any text input that is not a password
-  public TextInput(float x, float y, float w, float h, int col, String title, String align){
+  public TextInput(float x, float y, float w, float h, int col, String title, String align) {
 
-    // Passing the relevant parametres to the main constructor. Since a password value
+    // Passing the relevant parametres to the main constructor. Since a password value  
     // has not been included, passing false for this argument (i.e. assuming this in not
     // a password textInput
     this(x, y, w, h, col, title, false, align);
   }
-  
+
   // This partial constructor is used by text inputs that do not require their contents
   // to be blocked out i.e. any text input that is not a password
-  public TextInput(float x, float y, float w, float h, int col, String title, Boolean password){
+  public TextInput(float x, float y, float w, float h, int col, String title, Boolean password) {
 
     // Passing the relevant parametres to the main constructor. Since a password value
     // has not been included, passing false for this argument (i.e. assuming this in not
     // a password textInput
     this(x, y, w, h, col, title, password, "LEFT");
   }
-  
+
   // This constructor is used by all text inputs
-  public TextInput(float x, float y, float w, float h, int col, String title, Boolean password, String align){
+  public TextInput(float x, float y, float w, float h, int col, String title, Boolean password, String align) {
 
     // Passing the relevant parametres from the constructor into the constructor 
     // of the super class (ClickableElement)
     super(x, y, w, h, col, title);
-    
+
     // Initialising the inputTitle to be equal to the requested title
     inputTitle = title;
-    
+
     passwordInput = password;
-    
+
     inputTextAlign = align;
     
-    if(inputTextAlign.equals("LEFT")){
-      textX = x - (w * 0.45f);
-      textY = y;
-    } else if(inputTextAlign.equals("LEFT-TOP")){
-      textX = x - (w * 0.45f);
-      textY = y - (h * 0.45f);
-    } else {
-      textX = x;
-      textY = y;
-    }
+    textX1 = x - (w * 0.48f);
+    textY1 = y - (h * 0.45f);
+    textX2 = x + (w * 0.48f);
+    textY2 = y + (h * 0.45f);
     
-    /*
-    // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
-    if(inputTextAlign.equals("LEFT")){
-      textX = this.getX() - (w * 0.45);
-      textY = this.getY();
-      textAlignX = LEFT;
-      textAlignY = CENTER;
-    } else if(inputTextAlign.equals("LEFT-TOP")){
-      textX = this.getX()  - (w * 0.45);
-      textY = this.getY() * 1.1;
-      textAlignX = LEFT;
-      textAlignY = TOP;
-    } else {
-      textX = this.getX();
-      textY = this.getY();
-      textAlignX = CENTER;
-      textAlignY = CENTER;
+    if (inputTextAlign.equals("LEFT")) {
+      textVertAlign = CENTER;
+    } else if (inputTextAlign.equals("LEFT-TOP")) {
+      textVertAlign = TOP;
     }
-    
-    textWidth = textX + (this.getWidth() * 0.9);
-    textHeight = textY + (this.getHeight() * 0.9);
-    */
   }
-  
+
   /*-------------------------------------- showTextInput() ------------------------------------------------*/
-  
+
   // Creating a public showTextInput function, which can be called anywhere in the code
   // to display the icon, and add any text that has been specified
-  public void showTextInput(){
+  public void showTextInput() {
     // Calling the show() method (which was inherited from the Rectangle class)
     // so that this icon will be displayed on screen
     this.show();
-    
+
     // Checking if the length of the value is greater than 0 i.e. 
-    if(this.inputValue.length() > 0){
+    if (this.inputValue.length() > 0) {
       // Creating a temporary varaible to store the string we are going to display in the text input.
       // This string will either contain the value of the text input, or in the case of a password,
       // stars which represent the value's length (along with the last letter of the password)
       String displayText = "";
-      
+
       // Checking if this textInput is a password field
-      if(passwordInput){
+      if (passwordInput) {
         // Setting display text to be equal to the value returned from the hidePassword() method
         // i.e. starred out (asides fromt the last letter)
         displayText = hidePassword();
         /*
         // Code to only display last letter of password for a specified period of time. Currently
-        // not using, but keeping for future reference
-        delay(500);
-        displayText = displayText.substring(0, displayText.length() -1) + "*";
-        */
+         // not using, but keeping for future reference
+         delay(500);
+         displayText = displayText.substring(0, displayText.length() -1) + "*";
+         */
       } else {
         // Since this field does not contain a password, set the display text to the value of the input
         // field
         displayText = this.inputValue;
       }
-      this.addText(displayText, inputTextAlign, textX, textY, this.getWidth() * 0.1f);
-      // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
-      //this.addTextBox(displayText);
+      this.addTextBox(displayText);
     }
-    if(mousePressed){
-      if(this.checkMouseOver()){
+    if (mousePressed) {
+      if (this.checkMouseOver()) {
         keyboardRequired = true;
         currentTextInput = this;
         currentTextInputValue = "";
@@ -3100,34 +3105,34 @@ public class TextInput extends ClickableElement{
       }
     }
   }
-  
-  public void setInputValue(String val){
+
+  public void setInputValue(String val) {
     this.inputValue = val;
   }
-  
-  public String getInputValue(){
+
+  public String getInputValue() {
     return this.inputValue;
   }
-  public void clearInputValue(){
+  public void clearInputValue() {
     this.inputValue = "";
   }
-  
-  private String hidePassword(){
+
+  private String hidePassword() {
     // Creating a temporary string to store the **** for the password (i.e. we do not want
     // to display the user's password, we just want to reflect the length of it in terms
     // of * stars *
     String passwordStars = "";
-    
+
     // Looping through the length of the myText string, to determine how many stars should
     // be displayed for the current password length, and allowing just the last letter to be
     // displayed
-    for(int i = 0; i < this.inputValue.length(); i++){
+    for (int i = 0; i < this.inputValue.length(); i++) {
       // Creating a temporary variable for the index position of the last character in myText
       // string
       int lastLetter = this.inputValue.length() - 1;
-      
+
       // Checking if the current loop has reached the last letter in the myText string
-      if(i == lastLetter){
+      if (i == lastLetter) {
         // Since this is the last letter in the string, we want to display it with the 
         // preceeing stars i.e. so the user can always see the most recent character
         // they have entered
@@ -3140,18 +3145,12 @@ public class TextInput extends ClickableElement{
     return passwordStars;
   }
 
-  /*
-  // Working on creating text boxes (to restrain the text to within the bounds of the TextInput area
-  private void addTextBox(String text){
+  private void addTextBox(String displayText) {
     rectMode(CORNERS);
-    textAlign(textAlignX, textAlignY);
-    fill(255, 0, 0);
-    rect(textX, textY, textWidth, textHeight); 
     fill(0);
-    text(text, textX, textY, textWidth, textHeight);
-    rectMode(CORNER);
+    textAlign(LEFT, textVertAlign);
+    text(displayText, textX1, textY1, textX2, textY2);
   }
-  */
 }
   public void settings() {  fullScreen(); }
   static public void main(String[] passedArgs) {
