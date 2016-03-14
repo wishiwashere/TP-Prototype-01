@@ -1,5 +1,7 @@
 public class CameraLiveViewScreen extends Screen {
   public Boolean favouriteLocation;
+  
+  public Icon favIcon;
 
   // Creating a public constructor for the CameraLiveViewScreen class, so that
   // an instance of it can be declared in the main sketch
@@ -21,7 +23,7 @@ public class CameraLiveViewScreen extends Screen {
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, loadImage("homeIconWhiteImage.png"), "Home", false, "HomeScreen");
-    Icon favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false, "_addToFavourites");
+    favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false, "_addToFavourites");
     Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
     Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "_mergeImages");
     Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_switchCameraView");
@@ -41,6 +43,7 @@ public class CameraLiveViewScreen extends Screen {
   // Creating a public showScreen method, which is called by the draw() funciton whenever this
   // screen needs to be displayed
   public void showScreen() {
+    
     // Setting the title of this screen. The screenTitle variable was also declared in this
     // class's super class (Screen), so that it can be accessed when showing the screen 
     // (i.e can be displayed as the header text of the page). If no screenTitle were set,

@@ -371,21 +371,21 @@ void setup() {
 
 void draw() {
   background(0);
-  
+
   // Calling the monitorScreens() function to display the right screen by calling
   // the showScreen() method. This function then calls the super class's drawScreen()
   // method, which not only adds the icons and backgrounds to the screen, it also
   // asks the icons on the screen to call their checkMouseOver() method (inherited from
   // the Icon class) to see if they were clicked on when a mouse event occurs
   switchScreens();
- 
+
   // Checking if any screen's icons are trying to trigger any functions
   if (callFunction.equals("_keepImage")) {
     keepImage();
   } else if (callFunction.equals("_switchCameraView")) {
     myCameraLiveViewScreen.switchCameraView();
   } else if (callFunction.equals("_addToFavourites")) {
-    addToFavourites("Favourite");
+    thread("addToFavourites");
   } else if (callFunction.equals("_switchLearningMode")) {
     switchLearningMode();
   } else if (callFunction.equals("_switchAutoSave")) {
@@ -594,9 +594,21 @@ void testingTimeoutScreen(String fadeToScreen) {
   }
 }
 
-void addToFavourites(String place) {
+void addToFavourites() {
   callFunction = "";
-  myCameraLiveViewScreen.favouriteLocation = !myCameraLiveViewScreen.favouriteLocation;
+  int favLocationIndex = checkIfFavourite(currentLocationName);
+
+  if (favLocationIndex > -1) {
+    myFavouritesScreen.favTabs.remove(favLocationIndex);
+    myCameraLiveViewScreen.favouriteLocation = false;
+  } else {
+    FavouriteTab newFavTab = new FavouriteTab(currentLocationName, googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch, myFavouritesScreen.favTabs.size() - 1);
+    myFavouritesScreen.favTabs.add(newFavTab);
+    myCameraLiveViewScreen.favouriteLocation = true;
+  }
+
+  checkFavIcon();
+
   println("Favourite location is now: " + myCameraLiveViewScreen.favouriteLocation);
 }
 
@@ -614,9 +626,9 @@ void switchAutoSave() {
 
 
 void sendTweet() {
- // getShareableImage();
+  // getShareableImage();
   callFunction = "";
-  
+
   File twitterImage = new File(saveToPath);
   // Creating a string to to hold the value that is in the message input 
   String message = mySaveShareScreenB.messageInput.getInputValue();
@@ -630,8 +642,8 @@ void sendTweet() {
     twitter.updateStatus(status);
     // Making a twitter status that will hold the message the user typed 
     // and adding the Wish I Was Here tag onto the end of the message
-    
-    
+
+
 
     //Changing the current Screen
     currentScreen = "ShareSaveSuccessfulScreen";
@@ -652,12 +664,12 @@ void sendTweet() {
 }
 /*
 void getShareableImage(File latestImage){
-  File getImage = new File(currentImage);
-  if(latestImage == null || getImage.lastModified().after(latestImage.lastModified())){
-      latestImage = getImage;
-      latestImage.getPath();
-  }
-}*/
+ File getImage = new File(currentImage);
+ if(latestImage == null || getImage.lastModified().after(latestImage.lastModified())){
+ latestImage = getImage;
+ latestImage.getPath();
+ }
+ }*/
 
 void previewGreenScreen() {
   //println("Starting removing Green Screen at frame " + frameCount);
@@ -767,10 +779,10 @@ void searchForLocation() {
     googleImageLatLng = latitude + "," + longitude;
     println("Latitude, Longitude = " + googleImageLatLng);
     loadGoogleImage();
-    currentTextInput.clearInputValue(); 
+    currentTextInput.clearInputValue();
   } else {
     currentScreen = "SearchUnsuccessfulScreen";
-  } 
+  }
 }
 
 void getRandomLocation() {
@@ -792,8 +804,32 @@ void loadGoogleImage() {
   currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
   println("Image successfully loaded");
 
+  checkFavIcon();
+
   if (!currentScreen.equals("CameraLiveViewScreen")) {
     currentScreen = "CameraLiveViewScreen";
+  }
+}
+
+int checkIfFavourite(String currentFavTitle) {
+  int favIndex = -1;
+
+  ArrayList<FavouriteTab> favouriteTabs = myFavouritesScreen.getFavTabs();
+
+  for (int i = 0; i < favouriteTabs.size(); i++) {
+    if (favouriteTabs.get(i).getFavTitle().equals(currentFavTitle)) {
+      favIndex = i;
+    }
+  }
+
+  return favIndex;
+}
+
+void checkFavIcon() {
+  if (checkIfFavourite(currentLocationName) > -1) {
+    myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconYesImage.png"));
+  } else {
+    myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconNoImage.png"));
   }
 }
 /*

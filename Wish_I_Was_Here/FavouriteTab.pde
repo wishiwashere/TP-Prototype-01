@@ -15,7 +15,7 @@ public class FavouriteTab extends ClickableElement {
     // almost white colour (as pure white will not be shown - previous work around in the 
     // Rectangle class), and the title of the location (for printing to the console to 
     // let us know which tab was clicked on - if one has been clicked).
-    super(iconCenterX, (y + 1) * appHeight * 0.25, appWidth * 0.7, appHeight * 0.2, color(255, 255, 249, 149), title);
+    super(iconCenterX, (y + 1) * appHeight * 0.25, appWidth * 0.7, appHeight * 0.2, color(255, 255, 255, 149), title);
 
     // Initialising the two private strings, one to hold the favourite title, and the other to hold
     // the location URL data of the favourite. The title will be used as text on the tab
@@ -39,13 +39,17 @@ public class FavouriteTab extends ClickableElement {
       // Checking the mouse was over this by using the super class ClickableElement's
       // checkMouseOver() method
       if (this.checkMouseOver()) {
-        
         googleImageLatLng = this.favLocation.split("&")[0]; 
         googleImageHeading = float(this.favLocation.split("heading=")[1].split("&")[0]);
         googleImagePitch = float(this.favLocation.split("pitch=")[1]);
+        currentLocationName = favTitle;
         
         loadGoogleImage();
       }
     }
+  }
+  
+  public String getFavTitle(){
+    return favTitle;
   }
 }

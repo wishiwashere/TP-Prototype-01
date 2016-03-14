@@ -114,14 +114,7 @@ public class Icon extends ClickableElement {
             println("Going to " + this.iconLinkTo);
           } else if (this.iconLinkTo.indexOf("_") == 0) {
             callFunction = this.iconLinkTo;
-            if (this.iconLinkTo.equals("_addToFavourites")) {
-              if (myCameraLiveViewScreen.favouriteLocation) {
-                this.setImage(loadImage("favIconNoImage.png"));
-              } else {
-                this.setImage(loadImage("favIconYesImage.png"));
-              }
-            }
-            else if(this.iconLinkTo.equals("_switchLearningMode")){
+            if(this.iconLinkTo.equals("_switchLearningMode")){
               if(mySettingsScreen.learningModeOn){
                 this.setImage(toggleSwitchOffIconImage);
               }
@@ -156,6 +149,7 @@ public class Icon extends ClickableElement {
             // Resetting teh screenTitleY position to it's original value (as it may have been
             // incremented if the about screen was scrolled
             screenTitleY = appHeight * 0.08;
+            
             // Resetting the about screen's loaded value to false, so that the next time it is opened
             // it will reset to it's original positions
             myAboutScreen.loaded = false;
