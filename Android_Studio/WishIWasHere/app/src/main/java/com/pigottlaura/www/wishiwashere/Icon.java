@@ -124,14 +124,7 @@ public class Icon extends ClickableElement {
 
                         sketch.callFunction = this.iconLinkTo;
 
-                        if (this.iconLinkTo.equals("_addToFavourites")) {
-                            if (sketch.myCameraLiveViewScreen.favouriteLocation) {
-                                this.setImage(sketch.loadImage("favIconNoImage.png"));
-                            } else {
-                                this.setImage(sketch.loadImage("favIconYesImage.png"));
-                            }
-                        }
-                        else if(this.iconLinkTo.equals("_switchLearningMode")){
+                        if(this.iconLinkTo.equals("_switchLearningMode")){
                             if(sketch.mySettingsScreen.learningModeOn){
                                 this.setImage(sketch.toggleSwitchOffIconImage);
                             }

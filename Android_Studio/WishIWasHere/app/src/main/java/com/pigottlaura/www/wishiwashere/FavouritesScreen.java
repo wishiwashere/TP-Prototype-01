@@ -1,5 +1,7 @@
 package com.pigottlaura.www.wishiwashere;
 
+import java.util.ArrayList;
+
 import processing.core.*;
 
 public class FavouritesScreen extends Screen {
@@ -36,7 +38,7 @@ public class FavouritesScreen extends Screen {
     // Declaring a private favTabs array, to store each of the favourite tabs we create,
     // so that they can be looped through in this class's showScreen() method, to display
     // the tabs, as well as checking if they are being clicked on.
-    private FavouriteTab[] favTabs;
+    public ArrayList<FavouriteTab> favTabs;
 
     // Creating a public constructor for the FavouriteScreen class, so that
     // an instance of it can be declared in the main sketch
@@ -52,7 +54,7 @@ public class FavouritesScreen extends Screen {
         // Creating the favTabs array to be long enough to contain each of the favourite
         // places we have declared in the favourites array above i.e. so that we will have
         // enough tabs to display each of the favourites
-        this.favTabs = new FavouriteTab[favourites.length];
+        this.favTabs = new ArrayList<FavouriteTab>();
 
         // Looping through the favourites array, so that we can create a new tab for
         // each favourite place
@@ -83,7 +85,7 @@ public class FavouritesScreen extends Screen {
             // Adding the new FavTab to this class's favTabs array, so that we can loop through them
             // in the showScreen() method, to display them, as well as checking if they are being
             // clicked on.
-            favTabs[f] = newFavTab;
+            favTabs.add(newFavTab);
         }
 
         // Creating the icon/s for this screen, using locally scoped variables, as these
@@ -125,8 +127,8 @@ public class FavouritesScreen extends Screen {
             this.setY(sketch.appHeight/2);
             this.getScreenIcons()[0].setY(sketch.iconTopY);
 
-            for (int i = 0; i < favTabs.length; i++) {
-                favTabs[i].setY((float)((i + 1) * sketch.appHeight * 0.25));
+            for (int i = 0; i < favTabs.size(); i++) {
+                favTabs.get(i).setY((float) ((i + 1) * sketch.appHeight * 0.25));
             }
 
             // Setting loaded to true, so that this block of code will only run once (each time this page
@@ -143,8 +145,8 @@ public class FavouritesScreen extends Screen {
 
         // Looping through our array of favourite tabs, and calling the showFavourite() method (of
         // the FavouriteTab class) to display the tab on screen
-        for (int f = 0; f < this.favourites.length; f++) {
-            this.favTabs[f].showFavourite();
+        for (int f = 0; f < this.favTabs.size(); f++) {
+            this.favTabs.get(f).showFavourite();
         }
 
         if (sketch.mousePressed) {
@@ -184,13 +186,13 @@ public class FavouritesScreen extends Screen {
             // this class so that they can be looped through to be repositioned (i.e. in every other
             // screen, these icons would be stored only in the super class, and not directly accessible
             // within the individual screen classes
-            for (int i = 0; i < favTabs.length; i++) {
+            for (int i = 0; i < favTabs.size(); i++) {
                 // Checking which direction the user scrolled
                 if (sketch.previousMouseY > sketch.mouseY) {
                     // The user has scrolled UP
                     // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
                     // moving the icon up the screen
-                    this.favTabs[i].setY(this.favTabs[i].getY() - amountScrolled);
+                    this.favTabs.get(i).setY(this.favTabs.get(i).getY() - amountScrolled);
                 } else {
                     // The user has scrolled DOWN
                     // Checking if the screen's y position is less than or equal to half of the height i.e. is
@@ -198,7 +200,7 @@ public class FavouritesScreen extends Screen {
                     if (this.getY() <= sketch.appHeight/2) {
                         // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
                         // moving the icon down the screen
-                        this.favTabs[i].setY(this.favTabs[i].getY() + amountScrolled);
+                        this.favTabs.get(i).setY(this.favTabs.get(i).getY() + amountScrolled);
                     }
                 }
             }
@@ -243,5 +245,9 @@ public class FavouritesScreen extends Screen {
         // favourites array (rounding it off so that it will always equal an int)
         String locationURLData = this.favourites[round(random(this.favourites.length-1))];
         return locationURLData;
+    }
+
+    public ArrayList<FavouriteTab> getFavTabs(){
+        return favTabs;
     }
 }

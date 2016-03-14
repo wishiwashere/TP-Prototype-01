@@ -51,8 +51,14 @@ public class FavouriteTab extends ClickableElement {
                 sketch.googleImageHeading = Float.parseFloat(this.favLocation.split("heading=")[1].split("&")[0]);
                 sketch.googleImagePitch = Float.parseFloat(this.favLocation.split("pitch=")[1]);
 
+                sketch.currentLocationName = this.getFavTitle();
+
                 sketch.loadGoogleImage();
             }
         }
+    }
+
+    public String getFavTitle(){
+        return favTitle;
     }
 }

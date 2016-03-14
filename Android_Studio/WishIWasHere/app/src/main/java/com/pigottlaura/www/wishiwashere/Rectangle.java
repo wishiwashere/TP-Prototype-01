@@ -102,6 +102,7 @@ public class Rectangle extends Sketch {
         // Rotating the matrix by the specified rotation value of the object (which has been
         // stored as a radian value)
         sketch.rotate(this.rectRotation);
+
         // Setting the fill colour of the object to the value specified
         sketch.fill(this.rectCol);
 

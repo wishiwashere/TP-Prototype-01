@@ -5,6 +5,8 @@ import processing.core.*;
 public class CameraLiveViewScreen extends Screen {
     private Sketch sketch;
 
+    public Icon favIcon;
+
     public Boolean favouriteLocation;
 
     // Creating a public constructor for the CameraLiveViewScreen class, so that
@@ -30,7 +32,7 @@ public class CameraLiveViewScreen extends Screen {
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImageWhite, "Home", false, "HomeScreen");
-        Icon favIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconTopY, sketch.favIconImage, "Add to Favourites", false, "_addToFavourites");
+        favIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconTopY, sketch.favIconImage, "Add to Favourites", false, "_addToFavourites");
         Icon shakeIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.shakeIconImage, "Turn on/off Shake", false);
         Icon shutterIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconBottomY, sketch.shutterIconImage, "Take a Picture", false, "_mergeImages");
         Icon switchViewIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, sketch.switchViewIconImage, "Switch View", false, "_switchCameraView");
@@ -54,7 +56,8 @@ public class CameraLiveViewScreen extends Screen {
         // class's super class (Screen), so that it can be accessed when showing the screen
         // (i.e can be displayed as the header text of the page). If no screenTitle were set,
         // then no header text will appear on this page
-        this.setScreenTitle(currentLocationName);
+        this.setScreenTitle(sketch.currentLocationName);
+        println("FAV - Current location = " + sketch.currentLocationName);
 
         // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
         if (sketch.mousePressed) {

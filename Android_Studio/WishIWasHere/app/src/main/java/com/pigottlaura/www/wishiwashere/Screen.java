@@ -88,7 +88,6 @@ public class Screen extends Rectangle {
             // Looping through each of the screen's icons
             for (int i = 0; i < this.screenIcons.length; i++) {
 
-                sketch.println("About to display icon number " + i + " on screen ");
                 // Calling the showIcon() method (as inherited from the Icon class)
                 // to display the icon on screen
                 this.screenIcons[i].showIcon();
@@ -108,6 +107,7 @@ public class Screen extends Rectangle {
   /*-------------------------------------- get() and set() ------------------------------------------------*/
 
     protected void setScreenTitle(String title) {
+        sketch.println("FAV - Setting Screen Title to " + title);
         // Setting the screenTitle to the title passed in by each screen. If no
         // title is passed, this variable has already been initialised to an
         // empty string above

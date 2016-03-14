@@ -8,6 +8,7 @@ import ketai.ui.*;
 import android.os.Environment;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import twitter4j.*;
 import twitter4j.conf.*;
@@ -401,7 +402,7 @@ public class Sketch extends PApplet {
         } else if (callFunction.equals("_switchCameraView")) {
             myCameraLiveViewScreen.switchCameraView();
         } else if (callFunction.equals("_addToFavourites")) {
-            addToFavourites("Favourite");
+            thread("addToFavourites");
         } else if (callFunction.equals("_switchLearningMode")) {
             switchLearningMode();
         } else if (callFunction.equals("_switchAutoSave")) {
@@ -622,10 +623,22 @@ public class Sketch extends PApplet {
         }
     }
 
-    void addToFavourites(String place) {
+    public void addToFavourites() {
         callFunction = "";
-        myCameraLiveViewScreen.favouriteLocation = !myCameraLiveViewScreen.favouriteLocation;
-        println("Favourite location is now: " + myCameraLiveViewScreen.favouriteLocation);
+        int favLocationIndex = checkIfFavourite(currentLocationName);
+
+        if (favLocationIndex > -1) {
+            myFavouritesScreen.favTabs.remove(favLocationIndex);
+            myCameraLiveViewScreen.favouriteLocation = false;
+        } else {
+            FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch, myFavouritesScreen.favTabs.size() - 1);
+            myFavouritesScreen.favTabs.add(newFavTab);
+            myCameraLiveViewScreen.favouriteLocation = true;
+            println("FAV - adding a new favourite: " + currentLocationName + "@" + googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch);
+        }
+
+        checkFavIcon();
+        println("FAV - Favourite location " + currentLocationName + " is now: " + myCameraLiveViewScreen.favouriteLocation);
     }
 
     void switchLearningMode() {
@@ -821,8 +834,35 @@ public class Sketch extends PApplet {
         currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
         println("Image successfully loaded");
 
+        checkFavIcon();
+
         if (!currentScreen.equals("CameraLiveViewScreen")) {
             currentScreen = "CameraLiveViewScreen";
+        }
+    }
+
+    int checkIfFavourite(String currentFavTitle) {
+
+        println("FAV - Checking if " + currentFavTitle + " is a favourite location");
+        int favIndex = -1;
+
+        ArrayList<FavouriteTab> favouriteTabs = myFavouritesScreen.getFavTabs();
+
+        for (int i = 0; i < favouriteTabs.size(); i++) {
+            if (favouriteTabs.get(i).getFavTitle().equals(currentFavTitle)) {
+                favIndex = i;
+            }
+        }
+
+        return favIndex;
+    }
+
+    void checkFavIcon() {
+        println("FAV - Switching favicon image");
+        if (checkIfFavourite(currentLocationName) > -1) {
+            myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconYesImage.png"));
+        } else {
+            myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconNoImage.png"));
         }
     }
     /*
