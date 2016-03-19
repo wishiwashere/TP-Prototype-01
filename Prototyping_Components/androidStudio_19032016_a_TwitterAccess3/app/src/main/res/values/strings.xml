@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Wish I Was Here</string>
+    <string name="main_activity_label">MainApp</string>
+    <string name="twitter_activity_label">Twitter Login</string>
+</resources>
