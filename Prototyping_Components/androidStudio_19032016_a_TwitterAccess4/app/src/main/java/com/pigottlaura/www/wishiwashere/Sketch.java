@@ -878,7 +878,7 @@ public class Sketch extends PApplet {
             println("Creating intent");
             // Creating a new intent to switch from the MainActivity to the TwitterLoginActivity
             Intent intent = new Intent(getActivity(), TwitterLoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         } else {
             println("Twitter already logged in");

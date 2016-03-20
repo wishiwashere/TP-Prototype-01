@@ -23,6 +23,14 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume(){
         super.onResume();
+        Log.d("Main Activity", "resumed");
+
         Log.d("Main Activity", "Main Activity resumed. twitterLogged in = " + TwitterLoginActivity.twitterLoggedIn);
+        /*
+        Log.d("Main Activity", "Twitter username = " + TwitterLoginActivity.twitterUserUsername);
+        Log.d("Main Activity", "userid = " + TwitterLoginActivity.twitterUserUserId);
+        Log.d("Main Activity", "Twitter access token = " + TwitterLoginActivity.twitterUserAccessToken);
+        Log.d("Main Activity", "Twitter secret token = " + TwitterLoginActivity.twitterUserSecretToken);
+        */
     }
 }

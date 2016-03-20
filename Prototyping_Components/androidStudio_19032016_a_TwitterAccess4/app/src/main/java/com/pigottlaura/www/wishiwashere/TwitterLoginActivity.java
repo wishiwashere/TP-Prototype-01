@@ -86,7 +86,7 @@ public class TwitterLoginActivity extends Activity {
         Log.d("Twitter Login", "On Resume - twitterLoggedIn = " + twitterLoggedIn);
         if(twitterLoggedIn) {
             Intent intent = new Intent(this, MainActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+            //intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
             startActivity(intent);
         }
     }
