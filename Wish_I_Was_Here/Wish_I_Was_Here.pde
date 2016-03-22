@@ -344,7 +344,15 @@ void setup() {
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
   directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
-
+  
+  // Checking if the directory already exists. If not, then creating it.
+  File dir = new File(directory);
+  if(!dir.isDirectory()){
+    File newDir = new File(directory);
+    newDir.mkdirs();
+    println("New directory created - " + directory);
+  }
+  
   // Initialising the currentImage to be equal to a plain black image. This is so that if the 
   // currentImage get's referred to before the camera has started, it will just contain a plain
   // black screen. Creating this black image by using createImage to make it the full size

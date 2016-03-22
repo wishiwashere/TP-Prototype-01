@@ -5,6 +5,8 @@ import processing.core.*;
 import processing.core.PApplet;
 import ketai.camera.*;
 import ketai.ui.*;
+
+import android.content.Intent;
 import android.os.Environment;
 
 import java.io.File;
@@ -32,11 +34,11 @@ public class Sketch extends PApplet {
     // Creating a global variable for ourBrowserApiKey that is required to make requests
     // to the Google Street View Image API. This key will be removed before commits to
     // GitHub, for security purposes.
-    String ourBrowserApiKey = "";
-    String ourOAuthConsumerKey = "";
-    String ourOAuthConsumerSecret = "";
-    String ourOAuthAccessToken = "";
-    String ourOAuthAccessTokenSecret = "";
+    String ourBrowserApiKey = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
+    String ourOAuthConsumerKey = "huoLN2BllLtOzezay2ei07bzo";
+    String ourOAuthConsumerSecret = "k2OgK1XmjHLBMBRdM9KKyu86GS8wdIsv9Wbk9QOdzObXzHYsjb";
+    String ourOAuthAccessToken = TwitterLoginActivity.twitterUserAccessToken;
+    String ourOAuthAccessTokenSecret = TwitterLoginActivity.twitterUserSecretToken;
 
     String returnTo = "HomeScreen";
 
@@ -242,7 +244,7 @@ public class Sketch extends PApplet {
 
     @Override
     public void setup(){
-
+        println("Main Sketch is being reset");
     /*-------------------------------------- Ketai ------------------------------------------------*/
 
         // Calling the ketaiCamera constructor to initialise the camera with the same
@@ -397,7 +399,9 @@ public class Sketch extends PApplet {
         switchScreens();
 
         // Checking if any screen's icons are trying to trigger any functions
-        if (callFunction.equals("_keepImage")) {
+        if (callFunction.equals("")) {
+            // No function needs to be called
+        } else if (callFunction.equals("_keepImage")) {
             keepImage();
         } else if (callFunction.equals("_switchCameraView")) {
             myCameraLiveViewScreen.switchCameraView();
@@ -423,8 +427,10 @@ public class Sketch extends PApplet {
             currentScreen = "SearchingScreen";
             mySearchingScreen.showScreen();
             getRandomLocation();
+        } else if (callFunction.equals("_checkTwitterLogin")) {
+            checkTwitterLogin();
         } else {
-            println("This function does not exist / cannot be triggered by this icon");
+            println(callFunction + " - This function does not exist / cannot be triggered by this icon");
         }
 
         // Checking if the keyboard is required i.e. if an input field is currently in focus
@@ -774,7 +780,7 @@ public class Sketch extends PApplet {
 
         mergedImage.beginDraw();
         mergedImage.imageMode(CENTER);
-        mergedImage.image(overlayImage, (float)(appWidth * 0.7), (float)(appHeight * 0.9), (float)(appWidth * 0.55), (float)(appWidth * 0.3));
+        mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float) (appHeight * 0.9), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
         mergedImage.endDraw();
 
         compiledImage = mergedImage.get();
@@ -831,7 +837,7 @@ public class Sketch extends PApplet {
         println("LatLng = " + googleImageLatLng);
         println("Heading = " + googleImageHeading);
         println("Pitch = " + googleImagePitch);
-        currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
+        currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth / 2 + "x" + appHeight / 2);
         println("Image successfully loaded");
 
         checkFavIcon();
@@ -863,6 +869,17 @@ public class Sketch extends PApplet {
             myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconYesImage.png"));
         } else {
             myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconNoImage.png"));
+        }
+    }
+
+    void checkTwitterLogin(){
+        println("Checking if Twitter logged in");
+        if(TwitterLoginActivity.twitterLoggedIn) {
+            println("Twitter already logged in");
+            println("In SKETCH - Twitter username = " + TwitterLoginActivity.twitterUserUsername);
+            println("In SKETCH - Twitter userid = " + TwitterLoginActivity.twitterUserUserId);
+            println("In SKETCH - Twitter access token = " + TwitterLoginActivity.twitterUserAccessToken);
+            println("In SKETCH - Twitter secret token = " + TwitterLoginActivity.twitterUserSecretToken);
         }
     }
     /*
