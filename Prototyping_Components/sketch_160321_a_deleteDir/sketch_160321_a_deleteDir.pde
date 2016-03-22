@@ -343,7 +343,7 @@ void setup() {
   // Storing a string that tells the app where to store the images, by default 
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
-  directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereAppTempTwitter/";  
+  directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereAppTwitterTemp/";  
 
   // Initialising the currentImage to be equal to a plain black image. This is so that if the 
   // currentImage get's referred to before the camera has started, it will just contain a plain
@@ -648,8 +648,6 @@ void sendTweet() {
     //Changing the current Screen
     currentScreen = "ShareSaveSuccessfulScreen";
    // twitterImage.delete();
-   // directory.delete();
-
     //Cleaing the message input so it is empty the next time the user 
     // arrives to send another tweet
     mySaveShareScreenB.messageInput.clearInputValue();
@@ -932,4 +930,4 @@ void removeGreenScreen() {
  
  println("Finished removing Green Screen and merging images at frame " + frameCount);
  }
- */
+*/
