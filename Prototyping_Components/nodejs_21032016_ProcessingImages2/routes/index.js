@@ -33,7 +33,11 @@ Jimp.read("./girlGreenScreen.jpg", function(err, cameraImage){
     //console.log(Jimp.intToRGBA(image.getPixelColor(1, 1)));
 });
 
-//router.get('/:cameraImage', function(req, res, next) {
+router.get('/:message', function(req, res, next) {
+    console.log(req.params.message);
+    res.send("Thank you :)");
+});
+
 router.get('/', function(req, res, next) {
     /*
     fs.readFile("./girlGreenScreen.jpg", function(err, data){
