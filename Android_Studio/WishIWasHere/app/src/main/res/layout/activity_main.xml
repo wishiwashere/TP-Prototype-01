@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/none"
     android:paddingRight="@dimen/none"
     android:paddingTop="@dimen/none"
-    tools:context="com.pigottlaura.www.wishiwashere.MainActivity">
+    tools:context="processing.test.wish_i_was_here.MainActivity">
 
     <FrameLayout android:id="@+id/processingSketch"
         android:layout_width="match_parent"

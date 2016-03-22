@@ -1,4 +1,4 @@
-package com.pigottlaura.www.wishiwashere;
+package com.pigottlaura.www.wish_i_was_here;
 
 import org.junit.Test;
 
