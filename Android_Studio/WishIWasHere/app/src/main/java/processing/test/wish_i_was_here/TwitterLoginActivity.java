@@ -69,7 +69,7 @@ public class TwitterLoginActivity extends Activity {
         // Triggering a click on the login button as soon as this activity is created
         // so that the user never actually sees this activity's screen, and is instead
         // taken directly to the Twitter login page
-        loginButton.performClick();
+        //loginButton.performClick();
     }
 
     @Override

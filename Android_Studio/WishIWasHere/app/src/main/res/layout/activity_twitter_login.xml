@@ -1,11 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/twitterloginbackground">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="100px"
+        android:textSize="20pt"
+        android:text="Wish I Was Here"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="225px"
+        android:padding="15pt"
+        android:text="Welcome to the Wish I Was Here App. If you would like to tweet images from your adventures, please login with twitter"
+        android:textSize="10pt"
+        android:textAlignment="center"/>
+
+<!--
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+    android:id="@+id/twitter_login_button"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerHorizontal="true"
+    android:layout_marginTop="550px" />
+-->
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="                 Cancel                  "
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="590px"
+        android:padding="25px"
+        android:paddingLeft="300px"
+        android:paddingRight="300px"/>
 
     <com.twitter.sdk.android.core.identity.TwitterLoginButton
         android:id="@+id/twitter_login_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"/>
-
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="500px" />
 </RelativeLayout>

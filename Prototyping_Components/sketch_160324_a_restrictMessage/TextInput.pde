@@ -13,8 +13,11 @@ public class TextInput extends ClickableElement {
   private float textY2;
   private int textVertAlign;
   
-  private int textLength = 400;
-  private int twittertTextLength = 126;
+ // private int textLength = 400;
+  //private int twittertTextLength = 125;
+ // private String generalMessage = "generalText";
+  //private String twitterMessage = "twitterText
+  //private int messageLength;
 
   /*-------------------------------------- Constructor() ------------------------------------------------*/
   // This partial constructor is used by text inputs that do not require their contents
@@ -29,12 +32,12 @@ public class TextInput extends ClickableElement {
 
   // This partial constructor is used by text inputs that do not require their contents
   // to be blocked out i.e. any text input that is not a password
-  public TextInput(float x, float y, float w, float h, color col, String title, String align) {
+  public TextInput(float x, float y, float w, float h, color col, String title, String align, int messageLength) {
 
     // Passing the relevant parametres to the main constructor. Since a password value  
     // has not been included, passing false for this argument (i.e. assuming this in not
     // a password textInput
-    this(x, y, w, h, col, title, false, align);
+    this(x, y, w, h, col, title, false, align, messageLength);
   }
 
   // This partial constructor is used by text inputs that do not require their contents
