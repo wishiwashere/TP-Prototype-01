@@ -310,7 +310,7 @@ void setup() {
   screenTitleY = appHeight * 0.08;
 
   // Initialising the defaultTextSize to be equal to a percentage of the app's current height
-  defaultTextSize = appHeight * 0.04;
+  defaultTextSize = appHeight * 0.035;
 
   /*-------------------------------------- Screens ------------------------------------------------*/
 
@@ -455,8 +455,13 @@ void keyPressed() {
       }
     }
   } else {
+    println("Text Length is currently " + currentTextInputValue.length());
     // If the key is not a coded value, adding the character to currentTextInputValue string
-    currentTextInputValue += key;
+    if(currentTextInputValue.length() < currentTextInput.getMaxTextLength() - 1){
+      currentTextInputValue += key;
+    } else {
+      println("This text is too long");
+    }
   }
   // Passing the currentTextInputValue string into the setInputValue of the currentTextInput field
   currentTextInput.setInputValue(currentTextInputValue);
@@ -643,7 +648,7 @@ void sendTweet() {
  
   //making the current screen "Sharing Screen"
   currentScreen = "SharingScreen";
-  if(message.length > 126){
+  if(message.length() > 126){
     try {
       StatusUpdate status = new StatusUpdate(message + " #WishIWasHere");
       //System.out.println("Status updated to [" + status.getText() + "].");

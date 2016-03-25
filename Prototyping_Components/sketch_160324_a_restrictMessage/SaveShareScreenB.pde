@@ -10,8 +10,10 @@ public class SaveShareScreenB extends Screen {
     // default values i.e. fullscreen, centered etc.
     super(bgImage);
 
-    messageInput = new TextInput(iconCenterX, iconCenterY * 0.98, appWidth * 0.8, appHeight * 0.2, #FFFFFE, "messageInput", "LEFT-TOP");
+    messageInput = new TextInput(iconCenterX, iconCenterY * 1.07, appWidth * 0.8, appHeight * 0.3, #FFFFFE, "messageInput", "LEFT-TOP");
 
+    messageInput.setMaxTextLength(126);
+    
     // Creating the icon/s for this screen, using locally scoped variables, as these
     // icons will be only ever be referred to from the allIcons array. Setting their
     // x, and y, based on percentages of the width and height (where icon positioning variables
@@ -21,9 +23,8 @@ public class SaveShareScreenB extends Screen {
     // whether this name should be displayed on the icon or not. Finally, passing in a linkTo 
     // value of the name of the screen they will later link to. The title arguments, as well
     // as the linkTo argument, are optional
-    Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
-    //Icon shareIcon = new Icon(appWidth * 0.7, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "SharingScreen");
-    Icon shareIcon = new Icon(appWidth * 0.7, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "_sendTweet");
+    Icon cancelIcon = new Icon(appWidth * 0.3, iconCenterY * 1.45, appWidth * 0.4, appHeight * 0.08, buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
+    Icon shareIcon = new Icon(appWidth * 0.7, iconCenterY * 1.45, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "_sendTweet");
 
     // Creating a temporary allIcons array to store the icon/s we have created above.
     Icon[] allIcons = {cancelIcon, shareIcon};

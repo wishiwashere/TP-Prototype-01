@@ -13,9 +13,11 @@ public class TextInput extends ClickableElement {
   private float textY2;
   private int textVertAlign;
   
- // private int textLength = 400;
+  private int maxTextLength = 400;
+
+  // private int textLength = 400;
   //private int twittertTextLength = 125;
- // private String generalMessage = "generalText";
+  // private String generalMessage = "generalText";
   //private String twitterMessage = "twitterText
   //private int messageLength;
 
@@ -32,12 +34,12 @@ public class TextInput extends ClickableElement {
 
   // This partial constructor is used by text inputs that do not require their contents
   // to be blocked out i.e. any text input that is not a password
-  public TextInput(float x, float y, float w, float h, color col, String title, String align, int messageLength) {
+  public TextInput(float x, float y, float w, float h, color col, String title, String align) {
 
     // Passing the relevant parametres to the main constructor. Since a password value  
     // has not been included, passing false for this argument (i.e. assuming this in not
     // a password textInput
-    this(x, y, w, h, col, title, false, align, messageLength);
+    this(x, y, w, h, col, title, false, align);
   }
 
   // This partial constructor is used by text inputs that do not require their contents
@@ -63,12 +65,12 @@ public class TextInput extends ClickableElement {
     passwordInput = password;
 
     inputTextAlign = align;
-    
+
     textX1 = x - (w * 0.48);
     textY1 = y - (h * 0.45);
     textX2 = x + (w * 0.48);
     textY2 = y + (h * 0.45);
-    
+
     if (inputTextAlign.equals("LEFT")) {
       textVertAlign = CENTER;
     } else if (inputTextAlign.equals("LEFT-TOP")) {
@@ -106,6 +108,7 @@ public class TextInput extends ClickableElement {
       } else {
         // Since this field does not contain a password, set the display text to the value of the input
         // field
+        
         displayText = this.inputValue;
       }
       this.addTextBox(displayText);
@@ -163,6 +166,15 @@ public class TextInput extends ClickableElement {
     rectMode(CORNERS);
     fill(0);
     textAlign(LEFT, textVertAlign);
+    textSize(defaultTextSize);
     text(displayText, textX1, textY1, textX2, textY2);
+  }
+  
+  public int getMaxTextLength(){
+    return maxTextLength;
+  }
+  
+  public void setMaxTextLength(int maxLength){
+    maxTextLength = maxLength;
   }
 }
