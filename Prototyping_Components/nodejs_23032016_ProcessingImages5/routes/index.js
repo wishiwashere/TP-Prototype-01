@@ -19,7 +19,7 @@ router.get('/', function (req, res, next) {
     RemoveGreenScreen.HD("./girlGreenScreen.jpg");
     
     // Sending the resulting image back to the user in the response
-    res.download("./finalImage.png");
+    res.download("./KeyedImage-HD.png");
 });
 
 module.exports = router;
