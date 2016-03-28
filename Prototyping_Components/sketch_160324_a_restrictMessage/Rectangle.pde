@@ -213,7 +213,7 @@ protected class Rectangle {
   protected void addImage(PImage img, int scaleX, int rotate) {
     // If no x, y, width or height passed in, defaulting the width and height to be
     // equal to that of the image (i.e. it's default resolution). Passing these
-    // default values to the full addImage() method
+    // default values to 3the full addImage() method
     this.addImage(img, appWidth/2, appHeight/2, img.width, img.height, scaleX, rotate);
   }
 
