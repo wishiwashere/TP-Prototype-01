@@ -122,7 +122,7 @@ void draw() {
   // Re-mapping the numbers of the googleImageHeading and the googleImagePitch
   // 
   googleImageHeading = map(accelerometerX, 0, 359, 0, 359); 
-  googleImagePitch = map(accelerometerY, -90, 90, 0, displayWidth); 
+  googleImagePitch = map(accelerometerY, -90, 90, -90, 90); 
   googleImagePitch = map(accelerometerZ, 0, 359, 0, 359); 
   loadGoogleImage();
 }
@@ -141,8 +141,8 @@ void loadGoogleImage(){
 }
 
 void onAccelerometerEvent(float x, float y, float z) { 
-  accelerometerX = (x * 4); 
-  accelerometerY = (y * -(-2)); 
+  accelerometerX = (x * 70); 
+  accelerometerY = y * -y; 
   println("The value of Y is " + y);
-  accelerometerZ = (z * 4);
+  accelerometerZ = z * 2;
 } 
