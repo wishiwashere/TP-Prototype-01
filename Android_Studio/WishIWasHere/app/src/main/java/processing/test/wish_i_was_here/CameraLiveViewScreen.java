@@ -31,7 +31,7 @@ public class CameraLiveViewScreen extends Screen {
         // as the linkTo argument, are optional
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImageWhite, "Home", false, "HomeScreen");
         favIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconTopY, sketch.favIconImage, "Add to Favourites", false, "_addToFavourites");
-        Icon shakeIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.shakeIconImage, "Turn on/off Shake", false);
+        Icon shakeIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.shakeIconImage, "Turn on/off Shake", false, "_switchShakeMovement");
         Icon shutterIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconBottomY, sketch.shutterIconImage, "Take a Picture", false, "_mergeImages");
         Icon switchViewIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, sketch.switchViewIconImage, "Switch View", false, "_switchCameraView");
 
@@ -83,30 +83,33 @@ public class CameraLiveViewScreen extends Screen {
                 sketch.println("scrolled left. heading is now " + sketch.googleImageHeading);
             }
 
-            sketch.println("amountScrolledY = " + amountScrolledY);
-            if (sketch.previousMouseY > sketch.mouseY) {
-                // The user has scrolled UP
+            if(sketch.shakeMovementOn == false) {
 
-                // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-                // operator to check that this will not result in a value greater than 90 (the maximum
-                // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the
-                // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch
-                // value plus the amount scrolled on the Y
-                sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledY) < -90 ? -90 : sketch.googleImagePitch - amountScrolledY;
-                sketch.println("scrolled up. pitch is now " + sketch.googleImagePitch);
-            } else {
-                // The user has scrolled DOWN
+                sketch.println("amountScrolledY = " + amountScrolledY);
+                if (sketch.previousMouseY > sketch.mouseY) {
+                    // The user has scrolled UP
 
-                // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-                // operator to check that this will not result in a value less than -90 (the minimum
-                // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the
-                // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch
-                // value minus the amount scrolled on the Y
-                sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledY) > 90 ? 90 : sketch.googleImagePitch + amountScrolledY;
-                sketch.println("scrolled down. pitch is now " + sketch.googleImagePitch);
+                    // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+                    // operator to check that this will not result in a value greater than 90 (the maximum
+                    // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the
+                    // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch
+                    // value plus the amount scrolled on the Y
+                    sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledY) < -90 ? -90 : sketch.googleImagePitch - amountScrolledY;
+                    sketch.println("scrolled up. pitch is now " + sketch.googleImagePitch);
+                } else {
+                    // The user has scrolled DOWN
+
+                    // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+                    // operator to check that this will not result in a value less than -90 (the minimum
+                    // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the
+                    // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch
+                    // value minus the amount scrolled on the Y
+                    sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledY) > 90 ? 90 : sketch.googleImagePitch + amountScrolledY;
+                    sketch.println("scrolled down. pitch is now " + sketch.googleImagePitch);
+                }
+
+                sketch.loadGoogleImage();
             }
-
-            sketch.loadGoogleImage();
             sketch.previousMouseX = sketch.mouseX;
             sketch.previousMouseY = sketch.mouseY;
         }

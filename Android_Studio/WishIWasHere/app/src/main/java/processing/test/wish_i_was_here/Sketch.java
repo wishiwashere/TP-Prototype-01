@@ -1,10 +1,12 @@
 package processing.test.wish_i_was_here;
 
+import ketai.sensors.KetaiSensor;
 import processing.data.XML;
 import processing.core.*;
 import processing.core.PApplet;
 import ketai.camera.*;
 import ketai.ui.*;
+
 
 import android.os.Environment;
 
@@ -224,6 +226,11 @@ public class Sketch extends PApplet {
     // don't go through the favourites menu of the app
     PImage currentLocationImage = null;
 
+    /*-------------------------------------- Ketai Sensor ------------------------------------------------*/
+
+    KetaiSensor sensor;
+    Boolean shakeMovementOn = false;
+
     /*-------------------------------------- Built In Functions ------------------------------------------------*/
     @Override
     public void settings() {
@@ -396,6 +403,11 @@ public class Sketch extends PApplet {
         cb.setOAuthAccessTokenSecret(ourOAuthAccessTokenSecret);
 
         twitter = new TwitterFactory(cb.build()).getInstance();
+
+    /*----------------------------------- Ketai Sensor -----------------------------------------*/
+        sensor = new KetaiSensor(this);
+        sensor.enableAccelerometer();
+        sensor.start();
     }
 
     @Override
@@ -440,7 +452,9 @@ public class Sketch extends PApplet {
             getRandomLocation();
         } else if (callFunction.equals("_checkTwitterLogin")) {
             checkTwitterLogin();
-        } else {
+        } else if(callFunction.equals("_switchShakeMovement")){
+            switchShakeMovement();
+        }else {
             println(callFunction + " - This function does not exist / cannot be triggered by this icon");
         }
 
@@ -515,6 +529,16 @@ public class Sketch extends PApplet {
             ketaiCamera.read();
             currentFrame = ketaiCamera.get();
             thread("previewGreenScreen");
+        }
+    }
+
+    public void onAccelerometerEvent(float accelerometerX, float accelerometerY, float accelerometerZ){
+        if(shakeMovementOn){
+            if(frameCount % 4 == 0){
+                println("accel - z = " + accelerometerZ);
+                googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
+                thread("loadGoogleImage");
+            }
         }
     }
 
@@ -725,6 +749,10 @@ public class Sketch extends PApplet {
         println("Auto-save is now: " + autoSaveModeOn);
     }
 
+    void switchShakeMovement(){
+        shakeMovementOn = !shakeMovementOn;
+    }
+
 
     void sendTweet() {
         // getShareableImage();
@@ -902,7 +930,7 @@ public class Sketch extends PApplet {
         loadGoogleImage();
     }
 
-    void loadGoogleImage() {
+    public void loadGoogleImage() {
         println("Loading in a new image from Google");
         println("LatLng = " + googleImageLatLng);
         println("Heading = " + googleImageHeading);
