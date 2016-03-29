@@ -76,30 +76,33 @@ public class CameraLiveViewScreen extends Screen {
         println("scrolled left. heading is now " + googleImageHeading);
       }
       
-      println("amountScrolledY = " + amountScrolledY);
-      if (previousMouseY > mouseY) {
-        // The user has scrolled UP
-
-        // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-        // operator to check that this will not result in a value greater than 90 (the maximum
-        // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
-        // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
-        // value plus the amount scrolled on the Y
-        googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
-        println("scrolled up. pitch is now " + googleImagePitch);
-      } else {
-        // The user has scrolled DOWN
-        
-        // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-        // operator to check that this will not result in a value less than -90 (the minimum
-        // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
-        // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
-        // value minus the amount scrolled on the Y
-        googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
-        println("scrolled down. pitch is now " + googleImagePitch);
+      if(shakeMovementOn == false){
+        println("amountScrolledY = " + amountScrolledY);
+        if (previousMouseY > mouseY) {
+          // The user has scrolled UP
+  
+          // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+          // operator to check that this will not result in a value greater than 90 (the maximum
+          // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
+          // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
+          // value plus the amount scrolled on the Y
+          googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
+          println("scrolled up. pitch is now " + googleImagePitch);
+        } else {
+          // The user has scrolled DOWN
+          
+          // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+          // operator to check that this will not result in a value less than -90 (the minimum
+          // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
+          // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
+          // value minus the amount scrolled on the Y
+          googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
+          println("scrolled down. pitch is now " + googleImagePitch);
+        }
       }
-
-      loadGoogleImage();
+      if(shakeMovementOn == false){
+        loadGoogleImage();
+      }
       previousMouseX = mouseX;
       previousMouseY = mouseY;
     }

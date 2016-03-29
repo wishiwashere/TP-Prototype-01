@@ -214,12 +214,6 @@ PImage currentLocationImage = null;
 // Using the ketai sensor class for accessing the accelerometer of an android device.
 KetaiSensor sensor;
 
-// Varaible used for assigning values to the accelerometer values x, y, z
-float accelerometerX;
-float accelerometerY;
-float accelerometerZ;
-
-
 
 /*-------------------------------------- Built In Functions ------------------------------------------------*/
 
@@ -278,6 +272,7 @@ void setup() {
 
   //Creating a new Ketai sensor for the accelerometer event
   sensor = new KetaiSensor(this);
+  sensor.enableGyroscope();
   sensor.start();
 
   /*-------------------------------------- Images ------------------------------------------------*/
@@ -827,20 +822,17 @@ void shakeMovement() {
   shakeMovementOn = !shakeMovementOn;
 }
 
-void onAccelerometerEvent(float x, float y, float z) { 
-  if(shakeMovementOn){
-    if (frameCount % 12 == 0) {
-      accelerometerX = Float.parseFloat(nfp(x, 2, 3)); 
-      accelerometerY = Float.parseFloat(nfp(y, 2, 3)); 
-      println("The value of Y is " + y);
-      //accelerometerZ = z ;
-      googleImageHeading = map(accelerometerX, -10, 10, 0, 359); 
-      googleImagePitch = map(accelerometerY, -10, 10, -90, 90); 
-      //googleImagePitch = map(accelerometerZ, 0, 359, 0, 720);
+
+void onAccelerometerEvent(float accelerometerX, float accelerometerY, float accelerometerZ) { 
+  if (shakeMovementOn) {
+    if(frameCount % 4 == 0){
+      println("The value of X is " + (accelerometerX));
+      googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
       thread("loadGoogleImage");
     }
   }
 }
+
 
 void loadGoogleImage() {
   println("Loading in a new image from Google");
