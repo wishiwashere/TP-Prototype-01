@@ -95,6 +95,9 @@ public class Sketch extends PApplet {
     int cameraRotation = -90;
 
     Boolean finalKeying = false;
+    Boolean imageShared = false;
+    Boolean imageSaved = false;
+
 
     /*----------------------------------- Twitter Tweeting -----------------------------------------*/
     // Setting up the configuration for tweeting from an account on Twitter
@@ -526,6 +529,8 @@ public class Sketch extends PApplet {
             myHomeScreen.showScreen();
         } else if (currentScreen.equals("CameraLiveViewScreen")) {
             finalKeying = false;
+            imageSaved = false;
+            imageShared = false;
             myCameraLiveViewScreen.showScreen();
         } else if (currentScreen.equals("FavouritesScreen")) {
             myFavouritesScreen.showScreen();
@@ -594,18 +599,46 @@ public class Sketch extends PApplet {
 
     void keepImage() {
         callFunction = "";
-        // Checking if Storage is available
+        if(mySettingsScreen.autoSaveModeOn) {
+            saveImageToPhotoGallery();
+            // Checking if Storage is available
+            if (isExternalStorageWritable()) {
+                if (saveImageToPhotoGallery()) {
+                    this.imageSaved = true;
+                    currentScreen = "SaveShareScreenA";
+                } else {
+                    println("Failed to save image");
+                }
+            }
+        } else {
+            currentScreen = "SaveShareScreenA";
+        }
+    }
+
+    Boolean saveImageToPhotoGallery(){
+        Boolean successfull = false;
         if (isExternalStorageWritable()) {
             saveToPath = directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg";
             // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
             if (compiledImage.save(saveToPath)) {
-                println("Successfully saved image to = " + saveToPath);
-                println(saveToPath);
-                currentScreen = "SaveShareScreenA";
+                println("Successfully saved image to - " + saveToPath);
+                successfull = true;
             } else {
                 println("Failed to save image");
             }
         }
+        return successfull;
+    }
+
+    Boolean saveImageLocally(){
+        Boolean successfull = false;
+        if (compiledImage.save(sketchPath("twitterImage.jpg"))) {
+            println("Successfully saved image locally - " + sketchPath("twitterImage.jpg"));
+            successfull = true;
+        } else {
+            println("Failed to save image locally - " + sketchPath("twitterImage.jpg"));
+        }
+        return successfull;
     }
 
     Boolean isExternalStorageWritable() {
@@ -685,38 +718,42 @@ public class Sketch extends PApplet {
     void sendTweet() {
         // getShareableImage();
         callFunction = "";
+        if(TwitterLoginActivity.twitterLoggedIn) {
+            // Creating a string to to hold the value that is in the message input
+            String message = mySaveShareScreenB.messageInput.getInputValue();
 
-        File twitterImage = new File(saveToPath);
-        // Creating a string to to hold the value that is in the message input
-        String message = mySaveShareScreenB.messageInput.getInputValue();
+            //making the current screen "Sharing Screen"
+            currentScreen = "SharingScreen";
+            try {
+                StatusUpdate status = new StatusUpdate(message + " #WishIWasHere");
+                //System.out.println("Status updated to [" + status.getText() + "].");
+                if (saveImageLocally()) {
+                    File twitterImage = new File(sketchPath("twitterImage.jpg"));
+                    status.setMedia(twitterImage);
+                }
+                twitter.updateStatus(status);
+                // Making a twitter status that will hold the message the user typed
+                // and adding the Wish I Was Here tag onto the end of the message
 
-        //making the current screen "Sharing Screen"
-        currentScreen = "SharingScreen";
-        try {
-            StatusUpdate status = new StatusUpdate(message + " #WishIWasHere");
-            //System.out.println("Status updated to [" + status.getText() + "].");
-            status.setMedia(twitterImage);
-            twitter.updateStatus(status);
-            // Making a twitter status that will hold the message the user typed
-            // and adding the Wish I Was Here tag onto the end of the message
+                this.imageShared = true;
 
+                //Changing the current Screen
+                currentScreen = "ShareSaveSuccessfulScreen";
 
+                //Cleaing the message input so it is empty the next time the user
+                // arrives to send another tweet
+                mySaveShareScreenB.messageInput.clearInputValue();
+            } catch (TwitterException te) {
+                //If the tweet can't be sent, it will print out the reason that
+                // is causing the problem
+                System.out.println("Error: " + te.getMessage());
 
-            //Changing the current Screen
+                //Changing the current screen to be the unsuccessul share screen
+                currentScreen = "ShareUnsuccessfulScreen";
+            }
+        } else {
             currentScreen = "ShareSaveSuccessfulScreen";
-
-            //Cleaing the message input so it is empty the next time the user
-            // arrives to send another tweet
-            mySaveShareScreenB.messageInput.clearInputValue();
-        }
-        catch (TwitterException te)
-        {
-            //If the tweet can't be sent, it will print out the reason that
-            // is causing the problem
-            System.out.println("Error: "+ te.getMessage());
-
-            //Changing the current screen to be the unsuccessul share screen
-            currentScreen = "ShareUnsuccessfulScreen";
+            println("Twitter - No twitter account logged in");
         }
     }
     /*

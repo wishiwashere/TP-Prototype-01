@@ -5,6 +5,8 @@ import processing.core.*;
 public class ShareSaveSuccessfulScreen extends Screen {
     private Sketch sketch;
 
+    private String methodUsed = "";
+
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
     public ShareSaveSuccessfulScreen(Sketch _sketch, PImage bgImage) {
@@ -27,6 +29,14 @@ public class ShareSaveSuccessfulScreen extends Screen {
     // screen needs to be displayed
     public void showScreen() {
 
+        if(sketch.imageSaved && sketch.imageShared){
+            methodUsed = "shared & saved";
+        } else if (this.imageSaved){
+            methodUsed = "saved";
+        } else if (this.imageShared){
+            methodUsed = "shared";
+        }
+
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
         // icons. This method will then in turn call it's super class's (Rectangle) method, to
         // generate the size and background of the screen
@@ -34,7 +44,7 @@ public class ShareSaveSuccessfulScreen extends Screen {
         this.addText("Your postcard", sketch.iconCenterX, sketch.appHeight * 0.1);
         this.addText("has been", sketch.iconCenterX, sketch.appHeight * 0.18);
         this.addText("successfully", sketch.iconCenterX, sketch.appHeight * 0.26);
-        this.addText("shared & saved", sketch.iconCenterX, sketch.appHeight * 0.34);
+        this.addText(methodUsed, sketch.iconCenterX, sketch.appHeight * 0.34);
         this.addImage(sketch.loadImage("sharingScreenImage.png"), sketch.appWidth/2, sketch.appHeight * 0.6, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
     }
 }
