@@ -24,7 +24,7 @@ public class CameraLiveViewScreen extends Screen {
     // as the linkTo argument, are optional
     Icon homeIcon = new Icon(iconRightX, iconTopY, loadImage("homeIconWhiteImage.png"), "Home", false, "HomeScreen");
     favIcon = new Icon(iconLeftX, iconTopY, favIconImage, "Add to Favourites", false, "_addToFavourites");
-    Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false);
+    Icon shakeIcon = new Icon(iconLeftX, iconBottomY, shakeIconImage, "Turn on/off Shake", false, "_shakeMovement");
     Icon shutterIcon = new Icon(iconCenterX, iconBottomY, shutterIconImage, "Take a Picture", false, "_mergeImages");
     Icon switchViewIcon = new Icon(iconRightX, iconBottomY, switchViewIconImage, "Switch View", false, "_switchCameraView");
 
@@ -76,30 +76,33 @@ public class CameraLiveViewScreen extends Screen {
         println("scrolled left. heading is now " + googleImageHeading);
       }
       
-      println("amountScrolledY = " + amountScrolledY);
-      if (previousMouseY > mouseY) {
-        // The user has scrolled UP
-
-        // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-        // operator to check that this will not result in a value greater than 90 (the maximum
-        // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
-        // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
-        // value plus the amount scrolled on the Y
-        googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
-        println("scrolled up. pitch is now " + googleImagePitch);
-      } else {
-        // The user has scrolled DOWN
-        
-        // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-        // operator to check that this will not result in a value less than -90 (the minimum
-        // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
-        // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
-        // value minus the amount scrolled on the Y
-        googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
-        println("scrolled down. pitch is now " + googleImagePitch);
+      if(shakeMovementOn == false){
+        println("amountScrolledY = " + amountScrolledY);
+        if (previousMouseY > mouseY) {
+          // The user has scrolled UP
+  
+          // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+          // operator to check that this will not result in a value greater than 90 (the maximum
+          // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
+          // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
+          // value plus the amount scrolled on the Y
+          googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
+          println("scrolled up. pitch is now " + googleImagePitch);
+        } else {
+          // The user has scrolled DOWN
+          
+          // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+          // operator to check that this will not result in a value less than -90 (the minimum
+          // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
+          // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
+          // value minus the amount scrolled on the Y
+          googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
+          println("scrolled down. pitch is now " + googleImagePitch);
+        }
       }
-
-      loadGoogleImage();
+      if(shakeMovementOn == false){
+        loadGoogleImage();
+      }
       previousMouseX = mouseX;
       previousMouseY = mouseY;
     }
@@ -116,7 +119,7 @@ public class CameraLiveViewScreen extends Screen {
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
-    this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
+   // this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
     
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 
