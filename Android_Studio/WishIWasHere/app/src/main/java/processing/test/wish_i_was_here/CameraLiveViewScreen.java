@@ -50,12 +50,6 @@ public class CameraLiveViewScreen extends Screen {
     // Creating a public showScreen method, which is called by the draw() funciton whenever this
     // screen needs to be displayed
     public void showScreen() {
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
-        this.setScreenTitle(sketch.currentLocationName);
-        println("FAV - Current location = " + sketch.currentLocationName);
 
         // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
         if (sketch.mousePressed) {

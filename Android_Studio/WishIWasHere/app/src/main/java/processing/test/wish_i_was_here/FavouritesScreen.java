@@ -58,7 +58,7 @@ public class FavouritesScreen extends Screen {
 
         // Looping through the favourites array, so that we can create a new tab for
         // each favourite place
-        for (int f = 0; f < this.favourites.length; f++) {
+        for (int f = 0; f < sketch.favouriteLocationsData.length; f++) {
 
             // Getting the title of the favourite location by splitting the value stored for
             // the favourite at the "@" symbol (Note - this is a naming convention that we have
@@ -66,13 +66,15 @@ public class FavouritesScreen extends Screen {
             // the one string). Once the string has been split, it results in a new array that
             // contains the two half's, the first being the title of the favourite, so in this
             // instance we want to get the portion of the string at index 0
-            String favTitle = split(this.favourites[f], "@")[0];
+            String favTitle = sketch.favouriteLocationsData[f].getString("name");
 
             // As with the favTitle, we are splitting the favourite string at the "@", except
             // this time it is the portion of the string at index 1 we want (i.e. the second
             // half of the string which contains the URL data we require to request this
             // specific location (longitude, latitude, heading and pitch).
-            String favLocation = split(favourites[f], "@")[1];
+            String favLocation = sketch.favouriteLocationsData[f].getString("latLng")
+                    + "&heading=" + sketch.favouriteLocationsData[f].getString("heading")
+                    + "&pitch=" + sketch.favouriteLocationsData[f].getString("pitch");
 
             // Creating a temporary variable to hold the new Favourite Tab, passing in the title
             // and location URL data for the current favourite, as well as the increment variable,
@@ -243,7 +245,9 @@ public class FavouritesScreen extends Screen {
         // require to request this specific location (longitude, latitude, heading and pitch).
         // Getting a random location by generating a random index value within the length of the
         // favourites array (rounding it off so that it will always equal an int)
-        String locationURLData = this.favourites[round(random(this.favourites.length-1))];
+        int randomIndex = round(random(this.favTabs.size() - 1));
+
+        String locationURLData = this.favTabs.get(randomIndex).favTitle + "@" + this.favTabs.get(randomIndex).favLocation;
         return locationURLData;
     }
 

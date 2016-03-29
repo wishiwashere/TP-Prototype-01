@@ -67,6 +67,9 @@ public class Sketch extends PApplet {
 
     PImage compiledImage;
 
+    XML favouriteLocationsXML;
+    XML[] favouriteLocationsData;
+
     /*-------------------------------------- KetaiCamera ------------------------------------------------*/
 
     // Creating a global variable to store the ketaiCamera object, so that it can be
@@ -273,6 +276,9 @@ public class Sketch extends PApplet {
 
         // Setting the camera to default to the front camera
         ketaiCamera.setCameraID(camNum);
+
+    /*---------------------------------- Favourite Locations ---------------------------------------*/
+        loadFavouriteLocationsXML();
 
     /*-------------------------------------- Images ------------------------------------------------*/
 
@@ -632,14 +638,26 @@ public class Sketch extends PApplet {
         callFunction = "";
         int favLocationIndex = checkIfFavourite(currentLocationName);
 
-        if (favLocationIndex > -1) {
-            myFavouritesScreen.favTabs.remove(favLocationIndex);
-            myCameraLiveViewScreen.favouriteLocation = false;
+        if(favLocationIndex > -1){
+            for(int i = 0; i < favouriteLocationsData.length; i++){
+                if(favouriteLocationsData[i].getString("name").equals(currentLocationName)){
+                    favouriteLocationsXML.removeChild(favouriteLocationsData[i]);
+                    myFavouritesScreen.favTabs.remove(favLocationIndex);
+                    myCameraLiveViewScreen.favouriteLocation = false;
+                    saveFavouriteLocationXML();
+                }
+            }
         } else {
+            XML newChild = favouriteLocationsXML.addChild("location");
+            newChild.setString("name", currentLocationName);
+            newChild.setString("latLng", googleImageLatLng);
+            newChild.setString("heading", String.valueOf(googleImageHeading));
+            newChild.setString("pitch", String.valueOf(googleImagePitch));
+            saveFavouriteLocationXML();
+
             FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch, myFavouritesScreen.favTabs.size() - 1);
             myFavouritesScreen.favTabs.add(newFavTab);
             myCameraLiveViewScreen.favouriteLocation = true;
-            println("FAV - adding a new favourite: " + currentLocationName + "@" + googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch);
         }
 
         checkFavIcon();
@@ -880,6 +898,23 @@ public class Sketch extends PApplet {
             println("In SKETCH - Twitter access token = " + TwitterLoginActivity.twitterUserAccessToken);
             println("In SKETCH - Twitter secret token = " + TwitterLoginActivity.twitterUserSecretToken);
         }
+    }
+
+    public void loadFavouriteLocationsXML(){
+        File localFavouritesPath = new File(sketchPath("favourite_locations.xml"));
+        if(localFavouritesPath.exists()){
+            favouriteLocationsXML = loadXML(sketchPath("favourite_locations.xml"));
+        } else {
+            favouriteLocationsXML = loadXML("favourite_locations.xml");
+        }
+
+        println("FAV = " + favouriteLocationsXML);
+        favouriteLocationsData = favouriteLocationsXML.getChildren("location");
+    }
+
+    public void saveFavouriteLocationXML(){
+        saveXML(favouriteLocationsXML, sketchPath("favourite_locations.xml"));
+        loadFavouriteLocationsXML();
     }
     /*
     void removeGreenScreen() {

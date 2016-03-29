@@ -8,8 +8,8 @@ public class FavouriteTab extends ClickableElement {
     // to show what location it links to. The favLocation will be passing in as part of the
     // googleStreetViewImageApiURL in this class's showFavourite() method, if this tab
     // is clicked on
-    private String favTitle;
-    private String favLocation;
+    public String favTitle;
+    public String favLocation;
 
     public FavouriteTab(Sketch _sketch, String title, String location, float y) {
         // Calling the super class (ClickableElement) constructor, passing in the required
