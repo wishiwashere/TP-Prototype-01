@@ -67,6 +67,8 @@ public class Sketch extends PApplet {
 
     PImage compiledImage;
 
+    XML[] favouriteLocationsData;
+
     /*-------------------------------------- KetaiCamera ------------------------------------------------*/
 
     // Creating a global variable to store the ketaiCamera object, so that it can be
@@ -273,6 +275,9 @@ public class Sketch extends PApplet {
 
         // Setting the camera to default to the front camera
         ketaiCamera.setCameraID(camNum);
+
+    /*---------------------------------- Favourite Locations ---------------------------------------*/
+        loadFavouriteLocationsXML();
 
     /*-------------------------------------- Images ------------------------------------------------*/
 
@@ -880,6 +885,12 @@ public class Sketch extends PApplet {
             println("In SKETCH - Twitter access token = " + TwitterLoginActivity.twitterUserAccessToken);
             println("In SKETCH - Twitter secret token = " + TwitterLoginActivity.twitterUserSecretToken);
         }
+    }
+
+    public void loadFavouriteLocationsXML(){
+        XML favouriteLocationsXML = loadXML("favourite_locations.xml");
+        println("FAV = " + favouriteLocationsXML);
+        favouriteLocationsData = favouriteLocationsXML.getChildren("location");
     }
     /*
     void removeGreenScreen() {

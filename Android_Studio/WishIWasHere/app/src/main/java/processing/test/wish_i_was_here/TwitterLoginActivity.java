@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -17,6 +19,7 @@ import io.fabric.sdk.android.Fabric;
 public class TwitterLoginActivity extends Activity {
 
     private TwitterLoginButton loginButton;
+    private Button cancelLoginButton;
 
     public static Boolean twitterLoggedIn = false;
 
@@ -34,12 +37,20 @@ public class TwitterLoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Main View
+        setContentView(R.layout.activity_twitter_login);
+
+        cancelLoginButton = (Button) findViewById(R.id.cancel_login_button);
+        cancelLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToMainActivity();
+            }
+        });
+
         // Fabric.io - Twitter
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new com.twitter.sdk.android.Twitter(authConfig));
-
-        // Main View
-        setContentView(R.layout.activity_twitter_login);
 
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
         loginButton.setCallback(new Callback<TwitterSession>() {
@@ -85,11 +96,15 @@ public class TwitterLoginActivity extends Activity {
         super.onResume();
         Log.d("Twitter Login", "On Resume - twitterLoggedIn = " + twitterLoggedIn);
         if(twitterLoggedIn) {
-            Intent intent = new Intent(this, MainActivity.class);
-            //intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-            startActivity(intent);
-            finish();
+            goToMainActivity();
         }
+    }
+
+    protected void goToMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        //intent.setFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(intent);
+        finish();
     }
 
 }
