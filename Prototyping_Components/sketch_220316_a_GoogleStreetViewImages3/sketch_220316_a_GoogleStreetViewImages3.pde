@@ -40,15 +40,15 @@ float accelerometerZ;
 
 void setup() {
   fullScreen();
-  
+
   //Creating a new Ketai sensor for the accelerometer event
   sensor = new KetaiSensor(this);
   //Starting the sensor
   sensor.start();
-  
+
   googleImagePitch = 0;
   googleImageHeading = 0;
-  
+
   currentLocation = locationTimesSquare;
 
   loadGoogleImage();
@@ -59,90 +59,105 @@ void draw() {
   imageMode(CENTER);
   image(googleImage, width/2, height/2);
   
+  
+    // Re-mapping the numbers of the googleImageHeading and the googleImagePitch
+  // 
+  if(sensor.isAccelerometerAvailable() == true){
+    googleImageHeading = map(accelerometerX, 0, 359, 0, 359); 
+    googleImagePitch = map(accelerometerY, -90, 90, -90, 90); 
+    googleImagePitch = map(accelerometerZ, 0, 359, 0, 720); 
+    loadAccGoogleImage();
+  }
+
   // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
-   /* if (mousePressed) {
-      // Calculating the amount scolled, based on the distance between the previous y position, 
-      // and the current y position. When the mouse is first pressed, the previous y position
-      // is initialised (in the main sketch) but then while the mouse is held down, the previous
-      // y position gets updated each time this function runs (so that the scrolling can occur
-      // while the person is still moving their hand (and not just after they release the screen)
-      float amountScrolledX = dist(0, previousMouseX, 0, mouseX);
-      float amountScrolledY = dist(0, previousMouseY, 0, mouseY);
+  if (mousePressed) {
+    // Calculating the amount scolled, based on the distance between the previous y position, 
+    // and the current y position. When the mouse is first pressed, the previous y position
+    // is initialised (in the main sketch) but then while the mouse is held down, the previous
+    // y position gets updated each time this function runs (so that the scrolling can occur
+    // while the person is still moving their hand (and not just after they release the screen)
+    float amountScrolledX = dist(0, accelerometerX, 0, mouseX);
+    float amountScrolledY = dist(0, previousMouseY, 0, mouseY);
 
-      if (previousMouseX > mouseX) {
-        // The user has scrolled RIGHT
-        
-        // Decrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
-        // operator to check that this will not result in a value less than 0 (the minimum
-        // value allowed for the heading. If it does, then resetting the heading to 359 i.e. so the 
-        // user can continue turn around in that direction, otherwise allowing it to equal to the
-        // current heading value minus the amount scrolled on the X
-        googleImageHeading = (googleImageHeading + amountScrolledX) > 359 ? 0 : googleImageHeading + amountScrolledX;
-        println("scrolled right. heading is now " + googleImageHeading);
-      } else {
-        // The user has scrolled LEFT
+    if (accelerometerX > mouseX) {
+      // The user has scrolled RIGHT
 
-        // Incrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
-        // operator to check that this will not result in a value greater than 359 (the maximum
-        // value allowed for the heading. If it does, then resetting the heading to 0 i.e. so the 
-        // user can continue turn around in that direction, otherwise allowing it to equal to the
-        // current heading value plus the amount scrolled on the X
-        googleImageHeading = (googleImageHeading - amountScrolledX) < 0 ? 359 : googleImageHeading - amountScrolledX;
-        println("scrolled left. heading is now " + googleImageHeading);
-      }
-      
-      println("amountScrolledY = " + amountScrolledY);
-      if (previousMouseY > mouseY) {
-        // The user has scrolled UP
+      // Decrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
+      // operator to check that this will not result in a value less than 0 (the minimum
+      // value allowed for the heading. If it does, then resetting the heading to 359 i.e. so the 
+      // user can continue turn around in that direction, otherwise allowing it to equal to the
+      // current heading value minus the amount scrolled on the X
+      googleImageHeading = (googleImageHeading + amountScrolledX) > 359 ? 0 : googleImageHeading + amountScrolledX;
+      println("scrolled right. heading is now " + googleImageHeading);
+    } else {
+      // The user has scrolled LEFT
 
-        // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-        // operator to check that this will not result in a value greater than 90 (the maximum
-        // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
-        // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
-        // value plus the amount scrolled on the Y
-        googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
-        println("scrolled up. pitch is now " + googleImagePitch);
-      } else {
-        // The user has scrolled DOWN
-        
-        // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-        // operator to check that this will not result in a value less than -90 (the minimum
-        // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
-        // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
-        // value minus the amount scrolled on the Y
-        googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
-        println("scrolled down. pitch is now " + googleImagePitch);
-      }
+      // Incrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
+      // operator to check that this will not result in a value greater than 359 (the maximum
+      // value allowed for the heading. If it does, then resetting the heading to 0 i.e. so the 
+      // user can continue turn around in that direction, otherwise allowing it to equal to the
+      // current heading value plus the amount scrolled on the X
+      googleImageHeading = (googleImageHeading - amountScrolledX) < 0 ? 359 : googleImageHeading - amountScrolledX;
+      println("scrolled left. heading is now " + googleImageHeading);
+    }
 
-      loadGoogleImage();
+    println("amountScrolledY = " + amountScrolledY);
+    if (previousMouseY > mouseY) {
+      // The user has scrolled UP
+
+      // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+      // operator to check that this will not result in a value greater than 90 (the maximum
+      // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the 
+      // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch 
+      // value plus the amount scrolled on the Y
+      googleImagePitch = (googleImagePitch - amountScrolledY) < -90 ? -90 : googleImagePitch - amountScrolledY;
+      println("scrolled up. pitch is now " + googleImagePitch);
+    } else {
+      // The user has scrolled DOWN
+
+      // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
+      // operator to check that this will not result in a value less than -90 (the minimum
+      // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the 
+      // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch 
+      // value minus the amount scrolled on the Y
+      googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
+      println("scrolled down. pitch is now " + googleImagePitch);
+    }
+
+      loadAccGoogleImage();
       previousMouseX = mouseX;
       previousMouseY = mouseY;
-    }*/
-   
-  // Re-mapping the numbers of the googleImageHeading and the googleImagePitch
-  // 
-  googleImageHeading = map(accelerometerX, 0, 359, 0, 359); 
-  googleImagePitch = map(accelerometerY, -90, 90, -90, 90); 
-  googleImagePitch = map(accelerometerZ, 0, 359, 0, 359); 
-  loadGoogleImage();
+  }
+
+
 }
 
-void mousePressed(){
+void mousePressed() {
   previousMouseX = mouseX;
   previousMouseY = mouseY;
 }
 
-void loadGoogleImage(){
+void loadGoogleImage() {
   /* Using Google Street View Image API to get a static Street View Image (https://developers.google.com/maps/documentation/streetview/intro#url_parameters)
-     Works, but only gives back a static image */
+   Works, but only gives back a static image */
+  googleMapsURL = "https://maps.googleapis.com/maps/api/streetview?location=" + currentLocation + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch + "&key=" + ourBrowserApiKey + "&size=" + width + "x" + height;
+
+  googleImage = loadImage(googleMapsURL);
+}
+
+void loadAccGoogleImage() {
+  /* Using Google Street View Image API to get a static Street View Image (https://developers.google.com/maps/documentation/streetview/intro#url_parameters)
+   Works, but only gives back a static image */
   googleMapsURL = "https://maps.googleapis.com/maps/api/streetview?location=" + currentLocation + "&heading=" + googleImageHeading + "&pitch=" + (-googleImagePitch) + "&key=" + ourBrowserApiKey + "&size=" + width + "x" + height;
-  
+
   googleImage = loadImage(googleMapsURL);
 }
 
 void onAccelerometerEvent(float x, float y, float z) { 
-  accelerometerX = (x * 70); 
-  accelerometerY = y * -y; 
-  println("The value of Y is " + y);
-  accelerometerZ = z * 2;
-} 
+  if (frameCount % 12 == 0) {
+    accelerometerX = (x * 30); 
+    accelerometerY = (y * 30); 
+    println("The value of Y is " + y);
+    accelerometerZ = z ;
+  }
+}
