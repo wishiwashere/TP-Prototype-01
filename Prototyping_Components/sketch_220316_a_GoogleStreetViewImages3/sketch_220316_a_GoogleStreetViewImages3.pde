@@ -62,14 +62,14 @@ void draw() {
   
     // Re-mapping the numbers of the googleImageHeading and the googleImagePitch
   // 
-  if(sensor.isAccelerometerAvailable() == true){
+ /* if(sensor.isAccelerometerAvailable() == true){
     googleImageHeading = map(accelerometerX, 0, 359, 0, 359); 
     googleImagePitch = map(accelerometerY, -90, 90, -90, 90); 
     googleImagePitch = map(accelerometerZ, 0, 359, 0, 720); 
     loadAccGoogleImage();
-  }
+  }*/
 
-  // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
+ /* // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
   if (mousePressed) {
     // Calculating the amount scolled, based on the distance between the previous y position, 
     // and the current y position. When the mouse is first pressed, the previous y position
@@ -122,13 +122,17 @@ void draw() {
       // value minus the amount scrolled on the Y
       googleImagePitch = (googleImagePitch + amountScrolledY) > 90 ? 90 : googleImagePitch + amountScrolledY;
       println("scrolled down. pitch is now " + googleImagePitch);
-    }
+    }*/
 
-      loadAccGoogleImage();
+    /*  loadAccGoogleImage();
       previousMouseX = mouseX;
       previousMouseY = mouseY;
-  }
-
+  }*/
+  
+    googleImageHeading = map(accelerometerX, 0, 359, 0, 359); 
+    googleImagePitch = map(accelerometerY, -90, 90, -90, 90); 
+    googleImagePitch = map(accelerometerZ, 0, 359, 0, 720); 
+    loadAccGoogleImage();
 
 }
 
@@ -136,14 +140,14 @@ void mousePressed() {
   previousMouseX = mouseX;
   previousMouseY = mouseY;
 }
-
+ /*
 void loadGoogleImage() {
   /* Using Google Street View Image API to get a static Street View Image (https://developers.google.com/maps/documentation/streetview/intro#url_parameters)
    Works, but only gives back a static image */
-  googleMapsURL = "https://maps.googleapis.com/maps/api/streetview?location=" + currentLocation + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch + "&key=" + ourBrowserApiKey + "&size=" + width + "x" + height;
+/*  googleMapsURL = "https://maps.googleapis.com/maps/api/streetview?location=" + currentLocation + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch + "&key=" + ourBrowserApiKey + "&size=" + width + "x" + height;
 
   googleImage = loadImage(googleMapsURL);
-}
+}*/
 
 void loadAccGoogleImage() {
   /* Using Google Street View Image API to get a static Street View Image (https://developers.google.com/maps/documentation/streetview/intro#url_parameters)
