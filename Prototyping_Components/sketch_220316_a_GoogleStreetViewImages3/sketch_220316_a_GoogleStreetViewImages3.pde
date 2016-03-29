@@ -36,15 +36,14 @@ float previousMouseY;
 float accelerometerX;
 float accelerometerY;
 float accelerometerZ; 
-float lastX;
-float lastY;
-float lastZ;
 
 
 void setup() {
   fullScreen();
   
+  //Creating a new Ketai sensor for the accelerometer event
   sensor = new KetaiSensor(this);
+  //Starting the sensor
   sensor.start();
   
   googleImagePitch = 0;
@@ -119,10 +118,12 @@ void draw() {
       previousMouseX = mouseX;
       previousMouseY = mouseY;
     }*/
-    
-  googleImageHeading = map(accelerometerX, 0, 359, 0, displayWidth); 
+   
+  // Re-mapping the numbers of the googleImageHeading and the googleImagePitch
+  // 
+  googleImageHeading = map(accelerometerX, 0, 359, 0, 359); 
   googleImagePitch = map(accelerometerY, -90, 90, 0, displayWidth); 
-  googleImagePitch = map(accelerometerZ, 0, 359, 0, displayWidth); 
+  googleImagePitch = map(accelerometerZ, 0, 359, 0, 359); 
   loadGoogleImage();
 }
 
@@ -140,7 +141,8 @@ void loadGoogleImage(){
 }
 
 void onAccelerometerEvent(float x, float y, float z) { 
-  accelerometerX = (x * 2); 
-  accelerometerY = (y * 2); 
-  accelerometerZ = (z * 2);
+  accelerometerX = (x * 4); 
+  accelerometerY = (y * -(-2)); 
+  println("The value of Y is " + y);
+  accelerometerZ = (z * 4);
 } 
