@@ -644,6 +644,7 @@ public class Sketch extends PApplet {
                     favouriteLocationsXML.removeChild(favouriteLocationsData[i]);
                     myFavouritesScreen.favTabs.remove(favLocationIndex);
                     myCameraLiveViewScreen.favouriteLocation = false;
+                    saveFavouriteLocationXML();
                 }
             }
         } else {
@@ -652,7 +653,7 @@ public class Sketch extends PApplet {
             newChild.setString("latLng", googleImageLatLng);
             newChild.setString("heading", String.valueOf(googleImageHeading));
             newChild.setString("pitch", String.valueOf(googleImagePitch));
-            saveXML(favouriteLocationsXML, sketchPath("favourite_locations.xml"));
+            saveFavouriteLocationXML();
 
             FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch, myFavouritesScreen.favTabs.size() - 1);
             myFavouritesScreen.favTabs.add(newFavTab);
@@ -909,6 +910,11 @@ public class Sketch extends PApplet {
 
         println("FAV = " + favouriteLocationsXML);
         favouriteLocationsData = favouriteLocationsXML.getChildren("location");
+    }
+
+    public void saveFavouriteLocationXML(){
+        saveXML(favouriteLocationsXML, sketchPath("favourite_locations.xml"));
+        loadFavouriteLocationsXML();
     }
     /*
     void removeGreenScreen() {
