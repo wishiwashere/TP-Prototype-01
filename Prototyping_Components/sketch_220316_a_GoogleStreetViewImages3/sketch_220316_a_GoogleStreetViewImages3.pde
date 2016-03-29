@@ -135,7 +135,7 @@ void mousePressed(){
 void loadGoogleImage(){
   /* Using Google Street View Image API to get a static Street View Image (https://developers.google.com/maps/documentation/streetview/intro#url_parameters)
      Works, but only gives back a static image */
-  googleMapsURL = "https://maps.googleapis.com/maps/api/streetview?location=" + currentLocation + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch + "&key=" + ourBrowserApiKey + "&size=" + width + "x" + height;
+  googleMapsURL = "https://maps.googleapis.com/maps/api/streetview?location=" + currentLocation + "&heading=" + googleImageHeading + "&pitch=" + (-googleImagePitch) + "&key=" + ourBrowserApiKey + "&size=" + width + "x" + height;
   
   googleImage = loadImage(googleMapsURL);
 }
