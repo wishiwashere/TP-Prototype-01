@@ -67,8 +67,11 @@ public class Sketch extends PApplet {
 
     PImage compiledImage;
 
-    XML favouriteLocationsXML;
+    XML userPreferencesXML;
     XML[] favouriteLocationsData;
+    XML[] settingsData;
+    Boolean autoSaveModeOn = true;
+    Boolean learningModeOn = false;
 
     /*-------------------------------------- KetaiCamera ------------------------------------------------*/
 
@@ -280,8 +283,8 @@ public class Sketch extends PApplet {
         // Setting the camera to default to the front camera
         ketaiCamera.setCameraID(camNum);
 
-    /*---------------------------------- Favourite Locations ---------------------------------------*/
-        loadFavouriteLocationsXML();
+    /*---------------------------------- User Preferences XML ---------------------------------------*/
+        loadUserPreferencesXML();
 
     /*-------------------------------------- Images ------------------------------------------------*/
 
@@ -599,7 +602,7 @@ public class Sketch extends PApplet {
 
     void keepImage() {
         callFunction = "";
-        if(mySettingsScreen.autoSaveModeOn) {
+        if(autoSaveModeOn) {
             saveImageToPhotoGallery();
             // Checking if Storage is available
             if (isExternalStorageWritable()) {
@@ -679,19 +682,19 @@ public class Sketch extends PApplet {
         if(favLocationIndex > -1){
             for(int i = 0; i < favouriteLocationsData.length; i++){
                 if(favouriteLocationsData[i].getString("name").equals(currentLocationName)){
-                    favouriteLocationsXML.removeChild(favouriteLocationsData[i]);
+                    userPreferencesXML.removeChild(favouriteLocationsData[i]);
                     myFavouritesScreen.favTabs.remove(favLocationIndex);
                     myCameraLiveViewScreen.favouriteLocation = false;
-                    saveFavouriteLocationXML();
+                    saveUserPreferencesXML();
                 }
             }
         } else {
-            XML newChild = favouriteLocationsXML.addChild("location");
+            XML newChild = userPreferencesXML.addChild("location");
             newChild.setString("name", currentLocationName);
             newChild.setString("latLng", googleImageLatLng);
             newChild.setString("heading", String.valueOf(googleImageHeading));
             newChild.setString("pitch", String.valueOf(googleImagePitch));
-            saveFavouriteLocationXML();
+            saveUserPreferencesXML();
 
             FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch, myFavouritesScreen.favTabs.size() - 1);
             myFavouritesScreen.favTabs.add(newFavTab);
@@ -710,8 +713,16 @@ public class Sketch extends PApplet {
 
     void switchAutoSave() {
         callFunction = "";
-        mySettingsScreen.autoSaveModeOn = !mySettingsScreen.autoSaveModeOn;
-        println("Auto-save is now: " + mySettingsScreen.autoSaveModeOn);
+        autoSaveModeOn = !autoSaveModeOn;
+
+        for(int i = 0; i < settingsData.length; i++){
+            if(settingsData[i].getString("name").equals("autoSaveMode")){
+                settingsData[i].setString("turnedOn", autoSaveModeOn.toString());
+                saveUserPreferencesXML();
+            }
+        }
+
+        println("Auto-save is now: " + autoSaveModeOn);
     }
 
 
@@ -942,21 +953,28 @@ public class Sketch extends PApplet {
         }
     }
 
-    public void loadFavouriteLocationsXML(){
-        File localFavouritesPath = new File(sketchPath("favourite_locations.xml"));
-        if(localFavouritesPath.exists()){
-            favouriteLocationsXML = loadXML(sketchPath("favourite_locations.xml"));
+    public void loadUserPreferencesXML(){
+        File localUserPreferencesPath = new File(sketchPath("user_preferences.xml"));
+        if(localUserPreferencesPath.exists()){
+            userPreferencesXML = loadXML(sketchPath("user_preferences.xml"));
         } else {
-            favouriteLocationsXML = loadXML("favourite_locations.xml");
+            userPreferencesXML = loadXML("user_preferences.xml");
         }
 
-        println("FAV = " + favouriteLocationsXML);
-        favouriteLocationsData = favouriteLocationsXML.getChildren("location");
+        println("USER PREFERENCES = " + userPreferencesXML);
+        favouriteLocationsData = userPreferencesXML.getChildren("location");
+
+        settingsData = userPreferencesXML.getChildren("setting");
+        for(int i = 0; i < settingsData.length; i++){
+            if(settingsData[i].getString("name").equals("autoSaveMode")){
+                autoSaveModeOn = Boolean.parseBoolean(settingsData[i].getString("turnedOn"));
+            }
+        }
     }
 
-    public void saveFavouriteLocationXML(){
-        saveXML(favouriteLocationsXML, sketchPath("favourite_locations.xml"));
-        loadFavouriteLocationsXML();
+    public void saveUserPreferencesXML(){
+        saveXML(userPreferencesXML, sketchPath("user_preferences.xml"));
+        loadUserPreferencesXML();
     }
     /*
     void removeGreenScreen() {

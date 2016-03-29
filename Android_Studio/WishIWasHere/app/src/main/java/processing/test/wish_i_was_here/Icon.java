@@ -125,14 +125,14 @@ public class Icon extends ClickableElement {
                         sketch.callFunction = this.iconLinkTo;
 
                         if(this.iconLinkTo.equals("_switchLearningMode")){
-                            if(sketch.mySettingsScreen.learningModeOn){
+                            if(sketch.learningModeOn){
                                 this.setImage(sketch.toggleSwitchOffIconImage);
                             }
                             else{
                                 this.setImage(sketch.toggleSwitchOnIconImage);
                             }
                         }else if(this.iconLinkTo.equals("_switchAutoSave")){
-                            if(sketch.mySettingsScreen.autoSaveModeOn){
+                            if(sketch.autoSaveModeOn){
                                 this.setImage(sketch.toggleSwitchOffIconImage);
                             }
                             else{
