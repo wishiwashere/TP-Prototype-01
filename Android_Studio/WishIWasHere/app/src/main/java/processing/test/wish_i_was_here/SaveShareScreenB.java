@@ -18,7 +18,8 @@ public class SaveShareScreenB extends Screen {
 
         sketch = _sketch;
 
-        messageInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 0.98, sketch.appWidth * 0.8, sketch.appHeight * 0.2, _sketch.color(255, 255, 255), "messageInput", "LEFT-TOP");
+        messageInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.07, sketch.appWidth * 0.8, sketch.appHeight * 0.3, _sketch.color(255, 255, 255), "messageInput", "LEFT-TOP");
+        messageInput.setMaxTextLength(126);
 
         // Creating the icon/s for this screen, using locally scoped variables, as these
         // icons will be only ever be referred to from the allIcons array. Setting their
@@ -29,9 +30,8 @@ public class SaveShareScreenB extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconCenterY * 1.3, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
-        //Icon shareIcon = new Icon(p, appWidth * 0.7, iconCenterY * 1.3, appWidth * 0.4, appHeight * 0.08, buttonImage, "Share", true, "Middle", "SharingScreen");
-        Icon shareIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconCenterY * 1.3, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Share", true, "Middle", "_sendTweet");
+        Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconCenterY * 1.45, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
+        Icon shareIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconCenterY * 1.45, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Share", true, "Middle", "_sendTweet");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {cancelIcon, shareIcon};

@@ -333,7 +333,7 @@ public class Sketch extends PApplet {
 
         println("TEST - ScreenTitleY = " + screenTitleY);
         // Initialising the defaultTextSize to be equal to a percentage of the app's current height
-        defaultTextSize = (float)(appHeight * 0.04);
+        defaultTextSize = (float)(appHeight * 0.035);
 
     /*-------------------------------------- Screens ------------------------------------------------*/
         // Creating the screens which will be used in this application. Setting a random background
@@ -483,8 +483,13 @@ public class Sketch extends PApplet {
                 }
             }
         } else {
-            // If the key is not a coded value, adding the character to currentTextInputValue string
-            currentTextInputValue += key;
+            if(currentTextInputValue.length() < currentTextInput.getMaxTextLength() - 1){
+                // If the key is not a coded value, adding the character to currentTextInputValue string
+                currentTextInputValue += key;
+            }else{
+                println("This text is too long");
+            }
+
         }
         // Passing the currentTextInputValue string into the setInputValue of the currentTextInput field
         currentTextInput.setInputValue(currentTextInputValue);

@@ -15,6 +15,7 @@ public class TextInput extends ClickableElement {
     private float textX2;
     private float textY2;
     private int textVertAlign;
+    private int maxTextLength = 400;
 
     /*-------------------------------------- Constructor() ------------------------------------------------*/
     // This partial constructor is used by text inputs that do not require their contents
@@ -162,6 +163,15 @@ public class TextInput extends ClickableElement {
         sketch.rectMode(sketch.CORNERS);
         sketch.fill(0);
         sketch.textAlign(sketch.LEFT, this.textVertAlign);
+        sketch.textSize(sketch.defaultTextSize);
         sketch.text(displayText, this.textX1, this.textY1, this.textX2, this.textY2);
+    }
+
+    public int getMaxTextLength(){
+        return maxTextLength;
+    }
+
+    public void setMaxTextLength(int maxLength){
+        maxTextLength = maxLength;
     }
 }
