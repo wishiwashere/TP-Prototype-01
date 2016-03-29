@@ -140,7 +140,7 @@ void loadGoogleImage(){
 }
 
 void onAccelerometerEvent(float x, float y, float z) { 
-  accelerometerX = x; 
-  accelerometerY = y; 
-  accelerometerZ = z;
+  accelerometerX = (x * 2); 
+  accelerometerY = (y * 2); 
+  accelerometerZ = (z * 2);
 } 
