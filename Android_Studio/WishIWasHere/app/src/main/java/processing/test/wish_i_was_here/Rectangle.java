@@ -15,7 +15,7 @@ public class Rectangle extends Sketch {
     private float rectWidth;
     private float rectHeight;
     private int rectCol;
-    private float rectRotation;
+    private float rectRotation = 0;
     private PImage rectImage = null;
     public PImage rectBackgroundImg = null;
     private int rectBackgroundImgScaleX = 1;
@@ -118,15 +118,12 @@ public class Rectangle extends Sketch {
         // the object is drawn
         sketch.rect(0, 0, this.rectWidth, this.rectHeight);
 
-        // Restoring the matrix to it's previous state
-        sketch.popMatrix();
-
         // Checking if a Background Image has been passed in
         if (this.rectBackgroundImg != null) {
             // Calling the addImage() method of the this class, to add the background image to the screen,
             // passing in the image, along with the current x, y, width and height of the instance,
             // so that the image will appear the full size of the object
-            this.addImage(this.rectBackgroundImg, this.rectX, this.rectY, this.rectWidth, this.rectHeight, this.rectBackgroundImgScaleX, this.rectBackgroundImgRotate);
+            this.addImage(this.rectBackgroundImg, 0, 0, this.rectWidth, this.rectHeight, this.rectBackgroundImgScaleX, this.rectBackgroundImgRotate);
         }
 
         // Checking if an image has been passed in
@@ -134,8 +131,10 @@ public class Rectangle extends Sketch {
             // Calling the addImage() method of the this class, to add the image to the screen,
             // passing in the image, along with the current x, y, width and height of the instance,
             // so that the image will appear the full size of the object
-            this.addImage(this.rectImage, this.rectX, this.rectY, this.rectWidth, this.rectHeight);
+            this.addImage(this.rectImage, 0, 0, this.rectWidth, this.rectHeight);
         }
+        // Restoring the matrix to it's previous state
+        sketch.popMatrix();
     }
 
   /*-------------------------------------- addText() ------------------------------------------------*/

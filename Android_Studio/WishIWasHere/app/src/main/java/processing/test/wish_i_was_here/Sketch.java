@@ -230,6 +230,7 @@ public class Sketch extends PApplet {
 
     KetaiSensor sensor;
     Boolean shakeMovementOn = false;
+    Boolean orientationDetect = true;
 
     /*-------------------------------------- Built In Functions ------------------------------------------------*/
     @Override
@@ -533,12 +534,31 @@ public class Sketch extends PApplet {
     }
 
     public void onAccelerometerEvent(float accelerometerX, float accelerometerY, float accelerometerZ){
-        if(shakeMovementOn){
-            if(frameCount % 4 == 0){
-                println("accel - z = " + accelerometerZ);
-                googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
-                thread("loadGoogleImage");
+        if (currentScreen.equals("CameraLiveViewScreen")) {
+            if (shakeMovementOn) {
+                if (frameCount % 4 == 0) {
+                    println("The value of X is " + (accelerometerX));
+                    googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
+                    thread("loadGoogleImage");
+                }
             }
+            Icon[] alteredIcons = myCameraLiveViewScreen.getScreenIcons();
+            for (int i = 0; i < alteredIcons.length; i++) {
+                println(i);
+                if (accelerometerX > 7) {
+                    println("Device is being turned to the left");
+                    alteredIcons[i].setRotation(90);
+                }else if (accelerometerX < -7) {
+                    println("Device is being turned to the right");
+                    alteredIcons[i].setRotation(-90);
+                }else {
+                    println("Device standing straight");
+                    alteredIcons[i].setRotation(0);
+                }
+
+            }
+        }else {
+            shakeMovementOn = false;
         }
     }
 
