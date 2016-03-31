@@ -9,7 +9,7 @@ protected class Rectangle {
   private float rectWidth;
   private float rectHeight;
   private color rectCol = #FFFFFF;
-  private float rectRotation;
+  private float rectRotation = 0;
   private PImage rectImage = null;
   public PImage rectBackgroundImg = null;
   private int rectBackgroundImgScaleX = 1;
@@ -85,16 +85,17 @@ protected class Rectangle {
   // descendants of this class can access
   protected void show() {
 
+    // Storing the current state of the matrix
+    pushMatrix();
+
+    // Translating the position of the matrix to the specified x and y of the object
+    translate(rectX, rectY);
+
+    // Rotating the matrix by the specified rotation value of the object (which has been
+    // stored as a radian value)
+    rotate(rectRotation);
+    
     if (rectCol != #FFFFFF) {
-      // Storing the current state of the matrix
-      pushMatrix();
-
-      // Translating the position of the matrix to the specified x and y of the object
-      translate(rectX, rectY);
-
-      // Rotating the matrix by the specified rotation value of the object (which has been
-      // stored as a radian value)
-      rotate(rectRotation);
       // Setting the fill colour of the object to the value specified
       fill(rectCol);
 
@@ -109,9 +110,6 @@ protected class Rectangle {
       // on the screen will depend on the matrix's translation, as this will control where 
       // the object is drawn
       rect(0, 0, rectWidth, rectHeight);
-
-      // Restoring the matrix to it's previous state
-      popMatrix();
     }
 
     // Checking if a Background Image has been passed in
@@ -119,7 +117,7 @@ protected class Rectangle {
       // Calling the addImage() method of the this class, to add the background image to the screen,
       // passing in the image, along with the current x, y, width and height of the instance,
       // so that the image will appear the full size of the object
-      this.addImage(rectBackgroundImg, rectX, rectY, rectWidth, rectHeight, rectBackgroundImgScaleX, rectBackgroundImgRotate);
+      this.addImage(rectBackgroundImg, 0, 0, rectWidth, rectHeight, rectBackgroundImgScaleX, rectBackgroundImgRotate);
     }
 
     // Checking if an image has been passed in
@@ -127,8 +125,11 @@ protected class Rectangle {
       // Calling the addImage() method of the this class, to add the image to the screen,
       // passing in the image, along with the current x, y, width and height of the instance,
       // so that the image will appear the full size of the object
-      this.addImage(rectImage, rectX, rectY, rectWidth, rectHeight);
+      this.addImage(rectImage, 0, 0, rectWidth, rectHeight);
     }
+
+    // Restoring the matrix to it's previous state
+    popMatrix();
   }
 
   /*-------------------------------------- addText() ------------------------------------------------*/

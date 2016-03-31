@@ -1,6 +1,7 @@
 import ketai.*;
 import ketai.camera.*;
 import ketai.ui.*;
+import ketai.sensors.*;
 import android.os.Environment;
 import android.content.*;
 import twitter4j.*;
@@ -11,6 +12,8 @@ import twitter4j.json.*;
 import twitter4j.management.*;
 import twitter4j.util.*;
 import twitter4j.util.function.*;
+
+Boolean shakeMovementOn = false;
 
 /*-------------------------------------- Globally Accessed Variables ------------------------------------------------*/
 
@@ -29,7 +32,7 @@ String currentScreen = "LoadingScreen";
 // Creating a global variable for ourBrowserApiKey that is required to make requests
 // to the Google Street View Image API. This key will be removed before commits to
 // GitHub, for security purposes.
-String ourBrowserApiKey = "";
+String ourBrowserApiKey = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
 String ourOAuthConsumerKey = "";
 String ourOAuthConsumerSecret = "";
 String ourOAuthAccessToken = "";
@@ -207,6 +210,11 @@ String currentLocationName = "";
 // don't go through the favourites menu of the app
 PImage currentLocationImage = null;
 
+/*----------------------------------- Ketai Sensor ---------------------------------------------*/
+// Using the ketai sensor class for accessing the accelerometer of an android device.
+KetaiSensor sensor;
+Boolean orientationDetect = true;
+
 /*-------------------------------------- Built In Functions ------------------------------------------------*/
 
 void setup() {
@@ -261,6 +269,11 @@ void setup() {
 
   // Setting the camera to default to the front camera
   ketaiCamera.setCameraID(camNum);
+
+  //Creating a new Ketai sensor for the accelerometer event
+  sensor = new KetaiSensor(this);
+  //sensor.enableGyroscope();
+  sensor.start();
 
   /*-------------------------------------- Images ------------------------------------------------*/
 
@@ -344,15 +357,15 @@ void setup() {
   // it goes to the pictures folder and this string as it has WishIWasHereApp 
   // it is creating a folder in the picture folder of the device
   directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";  
-  
+
   // Checking if the directory already exists. If not, then creating it.
   File dir = new File(directory);
-  if(!dir.isDirectory()){
+  if (!dir.isDirectory()) {
     File newDir = new File(directory);
     newDir.mkdirs();
     println("New directory created - " + directory);
   }
-  
+
   // Initialising the currentImage to be equal to a plain black image. This is so that if the 
   // currentImage get's referred to before the camera has started, it will just contain a plain
   // black screen. Creating this black image by using createImage to make it the full size
@@ -414,6 +427,8 @@ void draw() {
     currentScreen = "SearchingScreen";
     mySearchingScreen.showScreen();
     getRandomLocation();
+  } else if (callFunction.equals("_shakeMovement")) {
+    shakeMovement();
   } else {
     //println("This function does not exist / cannot be triggered by this icon");
   }
@@ -474,6 +489,36 @@ void onCameraPreviewEvent()
     ketaiCamera.read();
     currentFrame = ketaiCamera.get();
     thread("previewGreenScreen");
+  }
+}
+
+void onAccelerometerEvent(float accelerometerX, float accelerometerY, float accelerometerZ) { 
+  if (currentScreen.equals("CameraLiveViewScreen")) {
+
+    if (shakeMovementOn) {
+      if (frameCount % 4 == 0) {
+        println("The value of X is " + (accelerometerX));
+        googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
+        thread("loadGoogleImage");
+      }
+    }
+
+    Icon[] alteredIcons = myCameraLiveViewScreen.getScreenIcons();
+    for (int i = 0; i < alteredIcons.length; i++) {
+      println(i);
+      if (accelerometerX > 7) {
+        println("Device is being turned to the left");
+        alteredIcons[i].setRotation(90);
+      } else if (accelerometerX < -7) {
+        println("Device is being turned to the right");
+        alteredIcons[i].setRotation(-90);
+      } else {
+        println("Device standing straight");
+        alteredIcons[i].setRotation(0);
+      }
+    }
+  } else {
+    shakeMovementOn = false;
   }
 }
 
@@ -589,7 +634,6 @@ Boolean isExternalStorageWritable() {
 
   return answer;
 }
-
 
 // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
 // eeded a way to clear it from the screen until the
@@ -804,11 +848,16 @@ void getRandomLocation() {
   loadGoogleImage();
 }
 
+void shakeMovement() {  
+  shakeMovementOn = !shakeMovementOn;
+}
+
 void loadGoogleImage() {
   println("Loading in a new image from Google");
   println("LatLng = " + googleImageLatLng);
   println("Heading = " + googleImageHeading);
   println("Pitch = " + googleImagePitch);
+
   currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
   println("Image successfully loaded");
 
