@@ -7,6 +7,11 @@ router.get('/:message', function (req, res, next) {
     res.send("Thank you :)");
 });
 
+router.post("/", function(req, res, next){
+    console.log("Post request received from " + req.body.name);
+    res.send("Thank you :)");
+});
+
 router.get('/', function (req, res, next) {
     // Increasing the default timeout to 15 seconds, as the greenscreening can take alot of time
     // and I don't want the request to timeout while it is processing
