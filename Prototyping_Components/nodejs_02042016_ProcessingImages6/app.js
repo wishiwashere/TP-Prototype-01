@@ -4,11 +4,26 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var multer = require('multer');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 
 var app = express();
+
+var multerStorage = multer.diskStorage({
+    destination: "./images",
+    filename: function (req, file, cb) {
+        console.log("File received " + file.originalName);
+        cb(null, Date.now() + "_" + file.originalname);
+    }
+});
+
+var multerUpload = multer({
+    storage: multerStorage
+});
+app.use("/", multerUpload.any());
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
