@@ -29,9 +29,9 @@ void setup() {
   post.send();
   println("Reponse Content: " + post.getContent());
   //println("Reponse Content-Length Header: " + post.getHeader("Content-Length"));
-  //serverImage = loadImage("http://localhost:3000/", "jpg");
+  serverImage = loadImage(post.getContent(), "jpg");
 }
 
 void draw() {
-  //image(serverImage, 0, 0);
+  image(serverImage, 0, 0);
 }

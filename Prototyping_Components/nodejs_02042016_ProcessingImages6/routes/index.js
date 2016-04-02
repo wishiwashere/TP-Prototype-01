@@ -9,7 +9,7 @@ router.get('/:message', function (req, res, next) {
 
 router.post("/", function(req, res, next){
     console.log("Post request received from " + req.body.name);
-    res.send("Thank you :)");
+    res.send("http://localhost:3000/1459603100455_girlGreenScreen.jpg");
 });
 
 router.get('/', function (req, res, next) {
