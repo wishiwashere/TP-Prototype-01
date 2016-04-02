@@ -29,7 +29,7 @@ void setup() {
   post.send();
   println("Reponse Content: " + post.getContent());
   println("Reponse Content-Type Header: " + post.getHeader("Content-type"));
-  serverImage = loadImage(post.getContent(), "jpg");
+  serverImage = loadImage(post.getContent(), "jpeg");
 }
 
 void draw() {

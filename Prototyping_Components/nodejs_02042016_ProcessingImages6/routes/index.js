@@ -10,7 +10,9 @@ router.get('/:message', function (req, res, next) {
 
 router.post("/", function(req, res, next){
     console.log("Post request received from " + req.body.name);
-    res.sendFile(path.join(__dirname, "../images/1459603100455_girlGreenScreen.jpg"));
+    console.log("Sending file - " + "./images/1459603100455_girlGreenScreen.jpg");
+    res.attachment("./images/1459603100455_girlGreenScreen.jpg");
+    res.send();
 });
 
 router.get('/', function (req, res, next) {
