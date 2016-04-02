@@ -1,4 +1,8 @@
+// This sketch requires the "HTTP Requests for Processing" library
+// which can be installed from the Processing contribution manager
+// within Processing
 import http.requests.*;
+
 import java.io.File;
 
 PImage serverImage;
