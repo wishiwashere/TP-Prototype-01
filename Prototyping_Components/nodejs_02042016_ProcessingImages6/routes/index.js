@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var path = require("path");
 var RemoveGreenScreen = require("../custom_modules/RemoveGreenScreen");
 
 router.get('/:message', function (req, res, next) {
@@ -9,7 +10,7 @@ router.get('/:message', function (req, res, next) {
 
 router.post("/", function(req, res, next){
     console.log("Post request received from " + req.body.name);
-    res.send("http://localhost:3000/1459603100455_girlGreenScreen.jpg");
+    res.sendFile(path.join(__dirname, "../images/1459603100455_girlGreenScreen.jpg"));
 });
 
 router.get('/', function (req, res, next) {

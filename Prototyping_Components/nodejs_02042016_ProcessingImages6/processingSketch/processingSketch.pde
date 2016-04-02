@@ -28,7 +28,7 @@ void setup() {
   post.addData("name", "laura");
   post.send();
   println("Reponse Content: " + post.getContent());
-  //println("Reponse Content-Length Header: " + post.getHeader("Content-Length"));
+  println("Reponse Content-Type Header: " + post.getHeader("Content-type"));
   serverImage = loadImage(post.getContent(), "jpg");
 }
 
