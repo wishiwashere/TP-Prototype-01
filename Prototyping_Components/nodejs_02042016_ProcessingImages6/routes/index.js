@@ -11,8 +11,14 @@ router.get('/:message', function (req, res, next) {
 router.post("/", function(req, res, next){
     console.log("Post request received from " + req.body.name);
     console.log("Sending file - " + "./images/1459603100455_girlGreenScreen.jpg");
-    res.attachment("./images/1459603100455_girlGreenScreen.jpg");
+    //res.attachment("./images/1459603100455_girlGreenScreen.jpg");
     res.send();
+});
+
+router.post("/customReq", function(req, res, next){
+    var name = req.headers.name;
+    console.log("Post request received from " + name);
+    res.send("Thank you " + name + " :)");
 });
 
 router.get('/', function (req, res, next) {

@@ -39,6 +39,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'images')));
 
 app.use('/', routes);
+app.use('/customReq', routes);
 app.use('/users', users);
 
 // catch 404 and forward to error handler
