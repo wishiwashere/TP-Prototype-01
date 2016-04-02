@@ -11,8 +11,7 @@ router.get('/:message', function (req, res, next) {
 router.post("/", function(req, res, next){
     console.log("Post request received from " + req.body.name);
     console.log("Sending file - " + "./images/1459603100455_girlGreenScreen.jpg");
-    //res.attachment("./images/1459603100455_girlGreenScreen.jpg");
-    res.send();
+    res.send("http://localhost:3000/1459603100455_girlGreenScreen.jpg");
 });
 
 router.post("/customReq", function(req, res, next){
