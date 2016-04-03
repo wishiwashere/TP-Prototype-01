@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/twitterloginbackground">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="Wish I Was Here"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="110dp"
+        android:padding="35dp"
+        android:text="Welcome to the Wish I Was Here App. If you would like to tweet images from your adventures, please login with twitter"
+        android:textSize="15sp"
+        android:textAlignment="center"/>
+
+<!--
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+    android:id="@+id/twitter_login_button"
+    android:layout_width="wrap_content" -->
+
+    <Button
+        android:id="@+id/cancel_login_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:text="Cancel"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="320dp"/>
+
+    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+        android:id="@+id/twitter_login_button"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="270dp"/>
+</RelativeLayout>
