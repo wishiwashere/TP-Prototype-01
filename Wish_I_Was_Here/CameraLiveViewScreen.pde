@@ -119,7 +119,7 @@ public class CameraLiveViewScreen extends Screen {
     // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the 
     // minus depending on whether you are using the front or rear camera) so the width and the height
     // need to swap to fit with the image's new resolution
-   // this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
+    this.addBackgroundImage(currentImage, appHeight, appWidth, cameraScale, cameraRotation);
     
     // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
     // icons. This method will then in turn call it's super class's (Rectangle) method, to 

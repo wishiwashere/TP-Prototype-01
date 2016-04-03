@@ -1,3 +1,12 @@
+
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.HttpResponse;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.entity.mime.content.FileBody;
+import java.io.ByteArrayOutputStream;
+
 import ketai.*;
 import ketai.camera.*;
 import ketai.ui.*;
@@ -5,13 +14,7 @@ import ketai.sensors.*;
 import android.os.Environment;
 import android.content.*;
 import twitter4j.*;
-import twitter4j.api.*;
-import twitter4j.auth.*;
 import twitter4j.conf.*;
-import twitter4j.json.*;
-import twitter4j.management.*;
-import twitter4j.util.*;
-import twitter4j.util.function.*;
 
 Boolean shakeMovementOn = false;
 
@@ -245,6 +248,7 @@ void setup() {
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
   ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
+  ketaiCamera.setSaveDirectory(sketchPath(""));
 
   // Printing out the list of available cameras i.e. front/rear facing
   println(ketaiCamera.list());
@@ -483,12 +487,15 @@ void keyPressed() {
 // available from the ketaiCamera.
 void onCameraPreviewEvent()
 {
+  println("CameraPreviewEvent - readingImage = " + readingImage);
   if (readingImage == false && callFunction != "_mergeImages") {
     // Reading in a new frame from the ketaiCamera.
     readingImage = true;
     ketaiCamera.read();
-    currentFrame = ketaiCamera.get();
-    thread("previewGreenScreen");
+    //currentFrame = ketaiCamera.get();
+    //thread("previewGreenScreen");
+    println("About to call sendCameraImageToServer");
+    thread("sendCameraImageToServer");
   }
 }
 
@@ -504,16 +511,17 @@ void onAccelerometerEvent(float accelerometerX, float accelerometerY, float acce
     }
 
     Icon[] alteredIcons = myCameraLiveViewScreen.getScreenIcons();
+    
     for (int i = 0; i < alteredIcons.length; i++) {
-      println(i);
+      //println(i);
       if (accelerometerX > 7) {
-        println("Device is being turned to the left");
+        //println("Device is being turned to the left");
         alteredIcons[i].setRotation(90);
       } else if (accelerometerX < -7) {
-        println("Device is being turned to the right");
+        //println("Device is being turned to the right");
         alteredIcons[i].setRotation(-90);
       } else {
-        println("Device standing straight");
+        //println("Device standing straight");
         alteredIcons[i].setRotation(0);
       }
     }
@@ -723,58 +731,6 @@ void getShareableImage(File latestImage){
  }
  }*/
 
-void previewGreenScreen() {
-  //println("Starting removing Green Screen at frame " + frameCount);
-
-  // Changing the colour mode to HSB, so that I can work with the hue, satruation and
-  // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
-  // and brightness to 100.
-  colorMode(HSB, 360, 100, 100);
-
-  PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
-
-  keyedImage = currentFrame.get();
-
-  // Loading in the pixel arrays of the keyed image and the girl green screen image
-  keyedImage.loadPixels();
-
-  for (int i = 0; i < keyedImage.pixels.length; i++) {
-
-    // Getting the hue, saturation and brightness values of the current pixel
-    float pixelHue = hue(currentFrame.pixels[i]);
-
-    // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
-    if (pixelHue > 60 && pixelHue < 180) {
-
-      float pixelSaturation = saturation(currentFrame.pixels[i]);
-      float pixelBrightness = brightness(currentFrame.pixels[i]);
-
-      // If the saturation and brightness are above 30, then this is a green pixel
-      if (pixelSaturation > 30 && pixelBrightness > 20)
-      {
-        // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-        keyedImage.pixels[i] = color(0, 0, 0, 0);
-      } else {
-        // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
-        // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
-        // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
-        // from this pixel.
-        keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
-      }
-    }
-  }
-
-  // Updating the pixel arrays of the ketaiCamera and the keyed image
-  keyedImage.updatePixels();
-
-  // Resetting the color mode to RGB
-  colorMode(RGB, 255, 255, 255);
-
-  currentImage = keyedImage.get();
-
-  readingImage = false;
-  //println("Finished removing Green Screen at frame " + frameCount);
-}
 
 void mergeImages() {
   callFunction = "";
@@ -858,8 +814,12 @@ void loadGoogleImage() {
   println("Heading = " + googleImageHeading);
   println("Pitch = " + googleImagePitch);
 
-  currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
-  println("Image successfully loaded");
+  try{
+    currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth/2 + "x" + appHeight/2);
+    println("Google image successfully loaded");  
+} catch(Exception e){
+    println("Google image could not be loaded loaded - " + e);
+  }
 
   checkFavIcon();
 
@@ -889,102 +849,47 @@ void checkFavIcon() {
     myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconNoImage.png"));
   }
 }
-/*
-void removeGreenScreen() {
- println("Starting removing Green Screen at frame " + frameCount);
- 
- // Changing the colour mode to HSB, so that I can work with the hue, satruation and
- // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
- // and brightness to 100.
- colorMode(HSB, 360, 100, 100);
- 
- PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
- 
- keyedImage = currentFrame.get();
- 
- // Loading in the pixel arrays of the keyed image and the girl green screen image
- keyedImage.loadPixels();
- currentFrame.loadPixels();
- 
- int cfPixelsLength = currentFrame.pixels.length;
- int cfWidth = currentFrame.width;
- 
- for (int i = 0; i < cfPixelsLength; i++) {
- 
- // Getting the hue, saturation and brightness values of the current pixel
- float pixelHue = hue(currentFrame.pixels[i]);
- 
- // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
- if (pixelHue > 60 && pixelHue < 180) {
- 
- float pixelSaturation = saturation(currentFrame.pixels[i]);
- float pixelBrightness = brightness(currentFrame.pixels[i]);
- 
- 
- // Creating variables to store the hue of the pixels surrounding the current pixel.
- // Defaulting these the be equal to the current pixels hue, and only changing them if
- // the current pixel is away from the edge of the picture
- float pixelHueToLeft = pixelHue;
- float pixelHueToRight = pixelHue;
- float pixelHueAbove = pixelHue;
- float pixelHueBelow = pixelHue;
- 
- 
- // If the current pixel is not near the edge of the image, changing the values of the variables
- // for the pixels around it to get their hue values
- if (i > cfWidth + 1 && i < cfPixelsLength - cfWidth - 1) {
- pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
- pixelHueToRight = hue(currentFrame.pixels[i + 1]);
- pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
- pixelHueBelow = hue(currentFrame.pixels[i + cfWidth]);
- }
- 
- // If the saturation and brightness are above 30, then this is a green pixel
- if (pixelSaturation > 30 && pixelBrightness > 30)
- {
- // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge 
- if (pixelHue > 90 && pixelHue < 100) {
- // This seems to effect the girl's hair on the left
- // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
- keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
- } else if (pixelHue > 155) {
- // Increasing the hue, and reducing the saturation
- keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
- } else if (pixelHue < 115) {
- // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
- // the green screeen in greenScreenImage2)
- keyedImage.pixels[i] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
- } else {
- // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
- if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
- // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
- keyedImage.pixels[i] = color(0, 0, 0, 0);
- } else if (pixelHue > 130) {
- // This seems to be the edges around the girl
- // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
- keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
- } else {
- // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
- keyedImage.pixels[i] = color(0, 0, 0, 0);
- }
- }
- } else {
- // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
- // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
- // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge 
- // from this pixel.
- keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
- }
- }
- }
- 
- // Updating the pixel arrays of the ketaiCamera and the keyed image
- currentFrame.updatePixels();
- keyedImage.updatePixels();
- 
- // Resetting the color mode to RGB
- colorMode(RGB, 255, 255, 255);
- 
- println("Finished removing Green Screen and merging images at frame " + frameCount);
- }
- */
+
+void sendCameraImageToServer() {
+  println("IMG2SERVER - About to save current camera image");
+  if (ketaiCamera.savePhoto(sketchPath("serverImage.jpg"))) {
+    println("IMG2SERVER - Current image saved");
+  } else {
+    println("IMG2SERVER - Failed to save current image");
+  }
+
+  println("IMG2SERVER - About to load image back in as a File");
+  File serverImage = new File(sketchPath("serverImage.jpg"));
+
+  println("IMG2SERVER - New file exists - " + serverImage.exists());
+  println("IMG2SERVER - Creating post request");
+  try {
+    DefaultHttpClient httpClient = new DefaultHttpClient();
+    HttpPost postReq = new HttpPost("http://wishiwashere.azurewebsites.net/");
+    MultipartEntity multipartEntity = new MultipartEntity();  
+    multipartEntity.addPart("GreenImage", new FileBody(serverImage));
+    multipartEntity.addPart("name", new StringBody("Laura"));
+    println("IMG2SERVER - About to send server request");
+    postReq.setEntity(multipartEntity);
+    println("IMG2SERVER - Post request sent");
+    
+    HttpResponse postRes = httpClient.execute(postReq);
+    
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+
+    postRes.getEntity().writeTo(bytes);
+    
+    String content = bytes.toString();
+
+    println("IMG2SERVER - Response - " + content);
+    
+    currentImage = loadImage(content);
+    println("IMG2SERVER - currentImage set to loaded image");    
+  } 
+  catch(Exception e) {
+    println("IMG2SERVER - unable to send post request - " + e);
+  }
+  
+  readingImage = false;
+  println("Reading image is now - " + readingImage);
+}
