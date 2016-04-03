@@ -16,49 +16,49 @@ public class Icon extends ClickableElement {
 
     // This constructor is used by icons in the CameraLiveView Screen, that want to accept the
     // default width and height of an icon, but do not link to another page
-    public Icon(Sketch _sketch, double x, double y, PImage img, String title, Boolean showTitle) {
+    public Icon(Sketch _sketch, double x, double y, String imgURL, String title, Boolean showTitle) {
 
         // If no width or height specified, defaulting these to 15% of the screen width.
         // If no link is specified, then defaulting this to an empty string.
         // Then passing this default, along with the specified parametres, into the
         // full constructor of this class
-        this(_sketch, x, y, _sketch.width * 0.15, _sketch.width * 0.15, img, title, showTitle, "Middle", "");
+        this(_sketch, x, y, _sketch.width * 0.15, _sketch.width * 0.15, imgURL, title, showTitle, "Middle", "");
     }
 
     // This constructor is used by icons such as the homeIcon, that want to accept the default
     // width and height of an icon, and also link to another page
-    public Icon(Sketch _sketch, double x, double y, PImage img, String title, Boolean showTitle, String linkTo) {
+    public Icon(Sketch _sketch, double x, double y, String imgURL, String title, Boolean showTitle, String linkTo) {
 
         // If no width or height specified, defaulting these to 15% of the screen width.
         // If no link is specified, then defaulting this to an empty string.
         // Then passing this default, along with the specified parametres, into the
         // full constructor of this class
-        this(_sketch, x, y, _sketch.width * 0.15, _sketch.width * 0.15, img, title, showTitle, "Middle", linkTo);
+        this(_sketch, x, y, _sketch.width * 0.15, _sketch.width * 0.15, imgURL, title, showTitle, "Middle", linkTo);
     }
 
     // This constructor is used by icons such as the homeIcon, that want to accept the default
     // width and height of an icon, and also link to another page
-    public Icon(Sketch _sketch, double x, double y, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo) {
+    public Icon(Sketch _sketch, double x, double y, String imgURL, String title, Boolean showTitle, String titlePosition, String linkTo) {
 
         // If no width or height specified, defaulting these to 15% of the screen width.
         // If no link is specified, then defaulting this to an empty string.
         // Then passing this default, along with the specified parametres, into the
         // full constructor of this class
-        this(_sketch, x, y, _sketch.width * 0.15, _sketch.width * 0.15, img, title, showTitle, titlePosition, linkTo);
+        this(_sketch, x, y, _sketch.width * 0.15, _sketch.width * 0.15, imgURL, title, showTitle, titlePosition, linkTo);
     }
 
     // Partial Constructor
-    public Icon(Sketch _sketch, double x, double y, double w, double h, PImage img, String title, Boolean showTitle, String linkTo){
-        this(_sketch, x, y, w, h, img, title, showTitle, "Middle", linkTo);
+    public Icon(Sketch _sketch, double x, double y, double w, double h, String imgURL, String title, Boolean showTitle, String linkTo){
+        this(_sketch, x, y, w, h, imgURL, title, showTitle, "Middle", linkTo);
     }
 
     // Full Constructor. Both of the above constructors both pass their values to this constructor, as
     // well as other icon's in the app that want to pass arguments for all of the specified values
-    public Icon(Sketch _sketch, double x, double y, double w, double h, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo) {
+    public Icon(Sketch _sketch, double x, double y, double w, double h, String imgURL, String title, Boolean showTitle, String titlePosition, String linkTo) {
 
         // Passing the relevant parametres from the constructor into the constructor
         // of the super class (Rectangle)
-        super(_sketch, x, y, w, h, img, title);
+        super(_sketch, x, y, w, h, imgURL, title);
 
         sketch = _sketch;
 
@@ -126,17 +126,17 @@ public class Icon extends ClickableElement {
 
                         if(this.iconLinkTo.equals("_switchLearningMode")){
                             if(sketch.learningModeOn){
-                                this.setImage(sketch.toggleSwitchOffIconImage);
+                                this.setImage("toggleSwitchOffIconImage");
                             }
                             else{
-                                this.setImage(sketch.toggleSwitchOnIconImage);
+                                this.setImage("toggleSwitchOnIconImage");
                             }
                         }else if(this.iconLinkTo.equals("_switchAutoSave")){
                             if(sketch.autoSaveModeOn){
-                                this.setImage(sketch.toggleSwitchOffIconImage);
+                                this.setImage("toggleSwitchOffIconImage");
                             }
                             else{
-                                this.setImage(sketch.toggleSwitchOnIconImage);
+                                this.setImage("toggleSwitchOnIconImage");
                             }
                         }
 

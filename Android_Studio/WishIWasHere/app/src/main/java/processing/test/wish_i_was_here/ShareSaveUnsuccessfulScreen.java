@@ -7,12 +7,12 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
-    public ShareSaveUnsuccessfulScreen(Sketch _sketch, PImage bgImage) {
+    public ShareSaveUnsuccessfulScreen(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImage);
+        super(_sketch);
 
         sketch = _sketch;
 
@@ -25,9 +25,9 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon retryIcon = new Icon(sketch, sketch.iconCenterX, sketch.largeIconBottomY * 0.75, sketch.largeIconSize, sketch.largeIconSize, sketch.retryIconImage, "Retry", true, "Below", "_sendTweet");
-        Icon deleteIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.deleteIconImage, "Delete", true, "Below", "CameraLiveViewScreen");
-        Icon saveIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.saveIconImage, "Save", true, "Below", "ShareSaveSuccessfulScreen");
+        Icon retryIcon = new Icon(sketch, sketch.iconCenterX, sketch.largeIconBottomY * 0.75, sketch.largeIconSize, sketch.largeIconSize, "retryIconImage.png", "Retry", true, "Below", "_sendTweet");
+        Icon deleteIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, "deleteIconImage.png", "Delete", true, "Below", "CameraLiveViewScreen");
+        Icon saveIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, "saveIconImage.png", "Save", true, "Below", "ShareSaveSuccessfulScreen");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {retryIcon, deleteIcon, saveIcon};
@@ -59,6 +59,6 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
         this.addText("We're sorry :(", sketch.iconCenterX, sketch.appHeight * 0.1);
         this.addText("Your postcard", sketch.iconCenterX, sketch.appHeight * 0.18);
         this.addText("was not sent", sketch.iconCenterX, sketch.appHeight * 0.26);
-        this.addImage(sketch.loadImage("shareSaveUnsuccessfulScreenImage.png"), sketch.iconCenterX, sketch.appHeight * 0.4, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
+        this.addImage("shareSaveUnsuccessfulScreenImage.png", sketch.iconCenterX, sketch.appHeight * 0.4, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
     }
 }

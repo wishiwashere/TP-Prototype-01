@@ -7,12 +7,12 @@ public class SaveShareScreenA extends Screen {
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
-    public SaveShareScreenA(Sketch _sketch, PImage bgImage) {
+    public SaveShareScreenA(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImage);
+        super(_sketch);
 
         sketch = _sketch;
 
@@ -25,14 +25,13 @@ public class SaveShareScreenA extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon instagramIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.iconCenterY, sketch.largeIconSize, sketch.largeIconSize, sketch.instagramAccountIconImage, "Instagram", true, "Below", "SocialMediaLoginScreen");
-        Icon twitterIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY, sketch.largeIconSize, sketch.largeIconSize, sketch.twitterAccountIconImage, "Twitter", true, "Below", "_checkTwitterLogin");
-        Icon saveIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.5, sketch.largeIconSize, sketch.largeIconSize, sketch.saveIconImage, "Save", true, "Below", "_keepImage");
-        Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Cancel", true, "Middle", "CameraLiveViewScreen");
-        Icon nextIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Next", true, "Middle", "SaveShareScreenB");
+        Icon twitterIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY, sketch.largeIconSize, sketch.largeIconSize, "twitterAccountIconImage.png", "Twitter", true, "Below", "_checkTwitterLogin");
+        Icon saveIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.5, sketch.largeIconSize, sketch.largeIconSize, "saveIconImage.png", "Save", true, "Below", "_keepImage");
+        Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "buttonImage.png", "Cancel", true, "Middle", "CameraLiveViewScreen");
+        Icon nextIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "buttonImage.png", "Next", true, "Middle", "SaveShareScreenB");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
-        Icon[] allIcons = {instagramIcon, twitterIcon, saveIcon, cancelIcon, nextIcon};
+        Icon[] allIcons = {twitterIcon, saveIcon, cancelIcon, nextIcon};
 
         // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
         // the temporary allIcons array to the screenIcons array of the Screen class so that they
@@ -58,6 +57,6 @@ public class SaveShareScreenA extends Screen {
         // generate the size and background of the screen
         this.drawScreen();
 
-        this.addImage(sketch.compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.5, sketch.appWidth * 0.3, sketch.appHeight * 0.3);
+        this.addPImage(compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.5, sketch.appWidth * 0.3, sketch.appHeight * 0.3);
     }
 }

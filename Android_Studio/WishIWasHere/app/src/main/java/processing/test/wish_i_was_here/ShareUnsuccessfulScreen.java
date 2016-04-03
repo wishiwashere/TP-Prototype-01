@@ -7,12 +7,12 @@ public class ShareUnsuccessfulScreen extends Screen {
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
-    public ShareUnsuccessfulScreen(Sketch _sketch, PImage bgImage) {
+    public ShareUnsuccessfulScreen(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImage);
+        super(_sketch);
 
         sketch = _sketch;
 
@@ -26,8 +26,8 @@ public class ShareUnsuccessfulScreen extends Screen {
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
 
-        Icon cancelIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.cancelIconImage, "Cancel", true, "Below", "CameraLiveViewScreen");
-        Icon retryIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.retryIconImage, "Retry", true, "Below", "_sendTweet");
+        Icon cancelIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, "cancelIconImage.png", "Cancel", true, "Below", "CameraLiveViewScreen");
+        Icon retryIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, "retryIconImage.png", "Retry", true, "Below", "_sendTweet");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {cancelIcon, retryIcon};
@@ -59,7 +59,7 @@ public class ShareUnsuccessfulScreen extends Screen {
         this.addText("We're sorry :(", sketch.iconCenterX, sketch.appHeight * 0.1);
         this.addText("Your postcard", sketch.iconCenterX, sketch.appHeight * 0.18);
         this.addText("was not sent", sketch.iconCenterX, sketch.appHeight * 0.26);
-        this.addImage(sketch.loadImage("sharingScreenImage.png"), sketch.iconCenterX, sketch.appHeight * 0.4, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
+        this.addImage("sharingScreenImage.png", sketch.iconCenterX, sketch.appHeight * 0.4, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
         this.addText("But good news :)", sketch.iconCenterX, sketch.appHeight * 0.54);
         this.addText("We have still", sketch.iconCenterX, sketch.appHeight * 0.62);
         this.addText("saved it for you!", sketch.iconCenterX, sketch.appHeight * 0.7);

@@ -23,8 +23,8 @@ public class ImagePreviewScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon disgardIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.disgardIconImage, "Disgard Image", false, "_disgardImage");
-        Icon keepIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, sketch.keepIconImage, "Keep Image", false, "_keepImage");
+        Icon disgardIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, "disgardIconImage.png", "Disgard Image", false, "_disgardImage");
+        Icon keepIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, "keepIconImage.png", "Keep Image", false, "_keepImage");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {disgardIcon, keepIcon};

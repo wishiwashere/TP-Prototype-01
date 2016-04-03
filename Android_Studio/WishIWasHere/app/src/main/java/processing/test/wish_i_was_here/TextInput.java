@@ -20,40 +20,40 @@ public class TextInput extends ClickableElement {
     /*-------------------------------------- Constructor() ------------------------------------------------*/
     // This partial constructor is used by text inputs that do not require their contents
     // to be blocked out i.e. any text input that is not a password
-    public TextInput(Sketch _sketch, double x, double y, double w, double h, int col, String title) {
+    public TextInput(Sketch _sketch, double x, double y, double w, double h, String title) {
 
         // Passing the relevant parametres to the main constructor. Since a password value
         // has not been included, passing false for this argument (i.e. assuming this in not
         // a password textInput
-        this(_sketch, x, y, w, h, col, title, false, "LEFT");
+        this(_sketch, x, y, w, h, title, false, "LEFT");
     }
 
     // This partial constructor is used by text inputs that do not require their contents
     // to be blocked out i.e. any text input that is not a password
-    public TextInput(Sketch _sketch, double x, double y, double w, double h, int col, String title, String align) {
+    public TextInput(Sketch _sketch, double x, double y, double w, double h, String title, String align) {
 
         // Passing the relevant parametres to the main constructor. Since a password value
         // has not been included, passing false for this argument (i.e. assuming this in not
         // a password textInput
-        this(_sketch, x, y, w, h, col, title, false, align);
+        this(_sketch, x, y, w, h, title, false, align);
     }
 
     // This partial constructor is used by text inputs that do not require their contents
     // to be blocked out i.e. any text input that is not a password
-    public TextInput(Sketch _sketch, double x, double y, double w, double h, int col, String title, Boolean password) {
+    public TextInput(Sketch _sketch, double x, double y, double w, double h, String title, Boolean password) {
 
         // Passing the relevant parametres to the main constructor. Since a password value
         // has not been included, passing false for this argument (i.e. assuming this in not
         // a password textInput
-        this(_sketch, x, y, w, h, col, title, password, "LEFT");
+        this(_sketch, x, y, w, h, title, password, "LEFT");
     }
 
     // This constructor is used by all text inputs
-    public TextInput(Sketch _sketch, double x, double y, double w, double h, int col, String title, Boolean password, String align) {
+    public TextInput(Sketch _sketch, double x, double y, double w, double h, String title, Boolean password, String align) {
 
         // Passing the relevant parametres from the constructor into the constructor
         // of the super class (ClickableElement)
-        super(_sketch, x, y, w, h, col, title);
+        super(_sketch, x, y, w, h, title);
 
         sketch = _sketch;
 

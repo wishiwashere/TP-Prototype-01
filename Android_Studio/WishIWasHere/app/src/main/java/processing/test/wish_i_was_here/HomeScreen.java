@@ -7,12 +7,12 @@ public class HomeScreen extends Screen {
 
     // Creating a public constructor for the HomeScreen class, so that
     // an instance of it can be declared in the main sketch
-    public HomeScreen(Sketch _sketch, PImage bgImage) {
+    public HomeScreen(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImage);
+        super(_sketch);
 
         sketch = _sketch;
 
@@ -26,11 +26,11 @@ public class HomeScreen extends Screen {
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
 
-        Icon searchTravelIcon = new Icon(sketch, sketch.appWidth * 0.28, sketch.appHeight * 0.2, sketch.homeIconSize, sketch.homeIconSize, sketch.searchPageIconImage, "Search", true, "Below", "SearchScreen");
-        Icon randomTravelIcon = new Icon(sketch, sketch.appWidth * 0.72, sketch.appHeight * 0.2, sketch.homeIconSize, sketch.homeIconSize, sketch.randomPageIconImage, "Random", true, "Below", "_getRandomLocation");
-        Icon myFavouritesIcon = new Icon(sketch, sketch.appWidth * 0.28, sketch.appHeight * 0.5, sketch.homeIconSize, sketch.homeIconSize, sketch.favouritesPageIconImage, "My Favourites", true, "Below", "FavouritesScreen");
-        Icon aboutIcon = new Icon(sketch, sketch.appWidth * 0.72, sketch.appHeight * 0.5, sketch.homeIconSize, sketch.homeIconSize, sketch.aboutPageIconImage, "About", true, "Below", "AboutScreen");
-        Icon settingsIcon = new Icon(sketch, sketch.appWidth * 0.5, sketch.appHeight * 0.8, sketch.homeIconSize, sketch.homeIconSize, sketch.settingsPageIconImage, "Settings", true, "Below", "SettingsScreen");
+        Icon searchTravelIcon = new Icon(sketch, sketch.appWidth * 0.28, sketch.appHeight * 0.2, sketch.homeIconSize, sketch.homeIconSize, "searchPageIconImage.png", "Search", true, "Below", "SearchScreen");
+        Icon randomTravelIcon = new Icon(sketch, sketch.appWidth * 0.72, sketch.appHeight * 0.2, sketch.homeIconSize, sketch.homeIconSize, "randomPageIconImage.png", "Random", true, "Below", "_getRandomLocation");
+        Icon myFavouritesIcon = new Icon(sketch, sketch.appWidth * 0.28, sketch.appHeight * 0.5, sketch.homeIconSize, sketch.homeIconSize, "favouritesPageIconImage.png", "My Favourites", true, "Below", "FavouritesScreen");
+        Icon aboutIcon = new Icon(sketch, sketch.appWidth * 0.72, sketch.appHeight * 0.5, sketch.homeIconSize, sketch.homeIconSize, "aboutPageIconImage.png", "About", true, "Below", "AboutScreen");
+        Icon settingsIcon = new Icon(sketch, sketch.appWidth * 0.5, sketch.appHeight * 0.8, sketch.homeIconSize, sketch.homeIconSize, "settingsPageIconImage.png", "Settings", true, "Below", "SettingsScreen");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {randomTravelIcon, searchTravelIcon, myFavouritesIcon, aboutIcon, settingsIcon};

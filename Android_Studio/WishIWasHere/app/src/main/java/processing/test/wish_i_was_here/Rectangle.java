@@ -14,10 +14,9 @@ public class Rectangle extends Sketch {
     private float rectY;
     private float rectWidth;
     private float rectHeight;
-    private int rectCol;
     private float rectRotation = 0;
-    private PImage rectImage = null;
-    public PImage rectBackgroundImg = null;
+    private String rectImageURL = null;
+    private PImage rectBackgroundImg = null;
     private int rectBackgroundImgScaleX = 1;
     private int rectBackgroundImgRotate = 0;
 
@@ -30,48 +29,28 @@ public class Rectangle extends Sketch {
         // and height are passed in, defaulting these to the current width and height of
         // the sketch. If no rotation value is specified, defaulting this value to 0, and
         // finally, if no color is specified, defaulting this to white
-        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, _sketch.color(255, 255, 255, 0), null);
-    }
-
-    // This constructor is used by screens that want to accept all the defaults, as well
-    // as setting a background image
-    protected Rectangle(Sketch _sketch, PImage img) {
-        // If no x, y passed in, defaulting these to half of the sketch's width and height
-        // (i.e. so that the rectangle will appear centered). If no width and height are
-        // passed in, defaulting these to the current width and height of the sketch. If
-        // no color is specified, defaulting this to white. Passing these default values,
-        // along with the image that was passed in, to the main constructor of this class
-        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, _sketch.color(255, 255, 255, 0), img);
+        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, null);
     }
 
     // This constructor is used by screens that want to accept all the defaults, as well
     // as setting a background color
-    protected Rectangle(Sketch _sketch, int col) {
+    protected Rectangle(Sketch _sketch, String imgURL) {
         // If no x, y passed in, defaulting these to half of the sketch's width and height
         // (i.e. so that the rectangle will appear centered). If no width and height are
         // passed in, defaulting these to the current width and height of the sketch. If
         // no image is specified, defaulting this null. Passing these default values, along
         // with the color that was passed in, to the main constructor of this class
-        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, col, null);
-    }
-
-    // This constructor is used by icons that do not link to anything, and that
-    // want to have an image as their background
-    protected Rectangle(Sketch _sketch, double x, double y, double w, double h, PImage img) {
-        // If no color passed in, defaulting it to white and then passing this default value,
-        // along with the x, y, width, height and image that was passed in, to the main
-        // constructor of this class
-        this(_sketch, x, y, w, h, _sketch.color(255, 255, 255, 0), img);
+        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, imgURL);
     }
 
     // This constructor is used by text input boxes (TEMPORARILY)
-    protected Rectangle(Sketch _sketch, double x, double y, double w, double h, int col) {
-        this(_sketch, x, y, w, h, col, null);
+    protected Rectangle(Sketch _sketch, double x, double y, double w, double h) {
+        this(_sketch, x, y, w, h, null);
     }
 
     // This is the main constructor of this class, to which all other constructors pass
     // their values to be stored as the instance's properties
-    protected Rectangle(Sketch _sketch, double x, double y, double w, double h, int col, PImage img) {
+    protected Rectangle(Sketch _sketch, double x, double y, double w, double h, String imgURL) {
         sketch = _sketch;
 
         // Storing the values that are passed into the constructor in the private
@@ -83,8 +62,7 @@ public class Rectangle extends Sketch {
         this.rectY = (float)(y);
         this.rectWidth = (float)(w);
         this.rectHeight = (float)(h);
-        this.rectCol = col;
-        this.rectImage = img;
+        this.rectImageURL = imgURL;
     }
 
   /*-------------------------------------- show() ------------------------------------------------*/
@@ -99,39 +77,39 @@ public class Rectangle extends Sketch {
         // Translating the position of the matrix to the specified x and y of the object
         sketch.translate(this.rectX, this.rectY);
 
-        // Rotating the matrix by the specified rotation value of the object (which has been
-        // stored as a radian value)
-        sketch.rotate(this.rectRotation);
+        if(this.rectRotation != 0) {
+            // Rotating the matrix by the specified rotation value of the object (which has been
+            // stored as a radian value)
+            sketch.rotate(this.rectRotation);
+        }
 
-        // Setting the fill colour of the object to the value specified
-        sketch.fill(this.rectCol);
-
-        sketch.noStroke();
-
-        // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
-        // been applied to the rectangle, it will pivot around it's center point
-        sketch.rectMode(sketch.CENTER);
-
-        // Drawing the rectangle with x and y values based on half of the width and height of
-        // the object, so that it appears centered on it's point of origin. The actual position
-        // on the screen will depend on the matrix's translation, as this will control where
-        // the object is drawn
-        sketch.rect(0, 0, this.rectWidth, this.rectHeight);
 
         // Checking if a Background Image has been passed in
         if (this.rectBackgroundImg != null) {
             // Calling the addImage() method of the this class, to add the background image to the screen,
             // passing in the image, along with the current x, y, width and height of the instance,
             // so that the image will appear the full size of the object
-            this.addImage(this.rectBackgroundImg, 0, 0, this.rectWidth, this.rectHeight, this.rectBackgroundImgScaleX, this.rectBackgroundImgRotate);
+            this.addPImage(this.rectBackgroundImg, 0, 0, this.rectWidth, this.rectHeight, this.rectBackgroundImgScaleX, this.rectBackgroundImgRotate);
         }
 
-        // Checking if an image has been passed in
-        if (this.rectImage != null) {
+        // Checking if no image has been passed in
+        if (this.rectImageURL == null) {
+            sketch.fill(255);
+
+            // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
+            // been applied to the rectangle, it will pivot around it's center point
+            sketch.rectMode(sketch.CENTER);
+
+            // Drawing the rectangle with x and y values based on half of the width and height of
+            // the object, so that it appears centered on it's point of origin. The actual position
+            // on the screen will depend on the matrix's translation, as this will control where
+            // the object is drawn
+            sketch.rect(0, 0, this.rectWidth, this.rectHeight);
+        } else {
             // Calling the addImage() method of the this class, to add the image to the screen,
             // passing in the image, along with the current x, y, width and height of the instance,
             // so that the image will appear the full size of the object
-            this.addImage(this.rectImage, 0, 0, this.rectWidth, this.rectHeight);
+            this.addImage(rectImageURL, 0, 0, this.rectWidth, this.rectHeight);
         }
         // Restoring the matrix to it's previous state
         sketch.popMatrix();
@@ -216,40 +194,80 @@ public class Rectangle extends Sketch {
 
     // Partial addImage() method which is used by images that need to be displayed
     // centered in full resolution of the screen
-    protected void addImage(PImage img, int scaleX, int rotate) {
+    protected void addImage(String imgURL, int scaleX, int rotate) {
         // If no x, y, width or height passed in, defaulting the width and height to be
         // equal to that of the image (i.e. it's default resolution). Passing these
         // default values to the full addImage() method
-        this.addImage(img, sketch.appWidth/2, sketch.appHeight/2, img.width, img.height, scaleX, rotate);
+        this.addImage(imgURL, sketch.appWidth / 2, sketch.appHeight / 2, 0, 0, scaleX, rotate);
     }
 
     // Partial addImage() method which is used by images that need to be displayed
     // at their default resolution
-    protected void addImage(PImage img, double imgX, double imgY) {
+    protected void addImage(String imgURL, double imgX, double imgY) {
         // If no image width or height passed in, defaulting the width and height to be
         // equal to that of the image (i.e. it's default resolution). Passing these
         // default values, along with the image, x and y to the full addImage() method
-        this.addImage(img, imgX, imgY, img.width, img.height, 1, (int) (this.getRotation()));
+        this.addImage(imgURL, imgX, imgY, 0, 0, 1, (int) (this.getRotation()));
     }
 
     // Partial addImage() method which is used by images that require a specific width and height
     // (Some of these values may have been defaulted by the partial addImage() method)
-    protected void addImage(PImage img, double imgX, double imgY, double imgWidth, double imgHeight) {
+    protected void addImage(String imgURL, double imgX, double imgY, double imgWidth, double imgHeight) {
         // If no image width or height passed in, defaulting the width and height to be
         // equal to that of the image (i.e. it's default resolution). Passing these
         // default values, along with the image, x and y to the full addImage() method
-        this.addImage(img, imgX, imgY, imgWidth, imgHeight, 1, (int)(this.getRotation()));
+        this.addImage(imgURL, imgX, imgY, imgWidth, imgHeight, 1, (int)(this.getRotation()));
     }
 
     // Full addImage() method which is used by images that require a specific width and height
     // (Some of these values may have been defaulted by the partial addImage() method)
-    protected void addImage(PImage img, double imgX, double imgY, double imgWidth, double imgHeight, int scaleX, int rotate) {
+    protected void addImage(String imgURL, double imgX, double imgY, double imgWidth, double imgHeight, int scaleX, int rotate) {
         // Storing the current state of the matrix
         sketch.pushMatrix();
 
         // Translating the position of the matrix be equal to the x and y positions
         // passed into the function
-        sketch.translate((float)(imgX), (float)(imgY));
+        sketch.translate((float) (imgX), (float) (imgY));
+
+        // Flipping the image so that it better represents the camera it is using i.e.
+        // on front facing cameras, the image will be flipped horizontally, so that things
+        // don't appear in reverse.
+        sketch.scale(scaleX, 1);
+
+        // Rotating the matrix by the current rotation value of this screen (which has been
+        // stored as a radian value)
+        sketch.rotate(sketch.radians(rotate));
+
+        // Setting the imageMode to center so that the image will be drawn from the center
+        // point of it's position on the page
+        sketch.imageMode(sketch.CENTER);
+
+        PImage tempImage = sketch.loadImage(imgURL);
+
+        imgWidth = imgWidth == 0 ? tempImage.width : imgWidth;
+        imgHeight = imgHeight == 0 ? tempImage.height : imgHeight;
+
+        // Adding the image to the screen, setting the x and y positions to 0,
+        // as the actual position on the screen will depend on the matrix's translation,
+        // as this will control where the text is drawn. Setting the width and height of the image
+        // to be equal to the values passed into the function
+        sketch.image(tempImage, 0, 0, (float)(imgWidth), (float)(imgHeight));
+
+        // Restoring the matrix to it's previous state
+        sketch.popMatrix();
+    }
+
+    protected void addPImage(PImage img, double imgX, double imgY, double imgWidth, double imgHeight) {
+        this.addPImage(img, imgX, imgY, imgWidth, imgHeight, 1, 0);
+    }
+
+    protected void addPImage(PImage img, double imgX, double imgY, double imgWidth, double imgHeight, int scaleX, int rotate) {
+        // Storing the current state of the matrix
+        sketch.pushMatrix();
+
+        // Translating the position of the matrix be equal to the x and y positions
+        // passed into the function
+        sketch.translate((float) (imgX), (float) (imgY));
 
         // Flipping the image so that it better represents the camera it is using i.e.
         // on front facing cameras, the image will be flipped horizontally, so that things
@@ -307,10 +325,8 @@ public class Rectangle extends Sketch {
         return this.rectRotation;
     }
 
-    protected void setImage(PImage img) {
-        if (img.width == this.rectImage.width) {
-            this.rectImage = img;
-        }
+    protected void setImage(String imgURL) {
+        this.rectImageURL = imgURL;
     }
 
     // Set method that sets the rotation of instance

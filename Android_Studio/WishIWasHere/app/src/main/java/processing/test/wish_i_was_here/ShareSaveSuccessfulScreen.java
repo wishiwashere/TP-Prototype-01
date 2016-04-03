@@ -9,12 +9,12 @@ public class ShareSaveSuccessfulScreen extends Screen {
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
-    public ShareSaveSuccessfulScreen(Sketch _sketch, PImage bgImage) {
+    public ShareSaveSuccessfulScreen(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImage);
+        super(_sketch);
 
         sketch = _sketch;
 
@@ -45,6 +45,6 @@ public class ShareSaveSuccessfulScreen extends Screen {
         this.addText("has been", sketch.iconCenterX, sketch.appHeight * 0.18);
         this.addText("successfully", sketch.iconCenterX, sketch.appHeight * 0.26);
         this.addText(methodUsed, sketch.iconCenterX, sketch.appHeight * 0.34);
-        this.addImage(sketch.loadImage("sharingScreenImage.png"), sketch.appWidth/2, sketch.appHeight * 0.6, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
+        this.addImage("sharingScreenImage.png", sketch.appWidth/2, sketch.appHeight * 0.6, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
     }
 }
