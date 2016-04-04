@@ -7,12 +7,12 @@ public class SharingScreen extends Screen {
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
-    public SharingScreen(Sketch _sketch) {
+    public SharingScreen(Sketch _sketch, PImage bgImage) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch);
+        super(_sketch, bgImage);
 
         sketch = _sketch;
 
@@ -32,6 +32,6 @@ public class SharingScreen extends Screen {
         // generate the size and background of the screen
         this.drawScreen();
 
-        this.addImage("sharingScreenImage.png", sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
+        this.addImage(sketch.sharingScreenImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
     }
 }

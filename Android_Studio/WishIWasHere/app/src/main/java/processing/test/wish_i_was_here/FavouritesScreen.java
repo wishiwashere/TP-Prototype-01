@@ -42,12 +42,12 @@ public class FavouritesScreen extends Screen {
 
     // Creating a public constructor for the FavouriteScreen class, so that
     // an instance of it can be declared in the main sketch
-    public FavouritesScreen(Sketch _sketch, String bgImageURL) {
+    public FavouritesScreen(Sketch _sketch, PImage bgImage) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImageURL);
+        super(_sketch, bgImage);
 
         sketch = _sketch;
 
@@ -99,7 +99,7 @@ public class FavouritesScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, "homeIconImage.png", "Home", false, "HomeScreen");
+        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImage, "Home", false, "HomeScreen");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {homeIcon};

@@ -29,11 +29,11 @@ public class CameraLiveViewScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, "homeIconWhiteImage.png", "Home", false, "HomeScreen");
-        favIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconTopY, "favIconNoImage.png", "Add to Favourites", false, "_addToFavourites");
-        Icon shakeIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, "shakeIconImage.png", "Turn on/off Shake", false, "_switchShakeMovement");
-        Icon shutterIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconBottomY, "shutterIconImage.png", "Take a Picture", false, "_mergeImages");
-        Icon switchViewIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, "switchViewIconImage.png", "Switch View", false, "_switchCameraView");
+        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImageWhite, "Home", false, "HomeScreen");
+        favIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconTopY, sketch.favIconImage, "Add to Favourites", false, "_addToFavourites");
+        Icon shakeIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.shakeIconImage, "Turn on/off Shake", false, "_switchShakeMovement");
+        Icon shutterIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconBottomY, sketch.shutterIconImage, "Take a Picture", false, "_mergeImages");
+        Icon switchViewIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, sketch.switchViewIconImage, "Switch View", false, "_switchCameraView");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {homeIcon, favIcon, shakeIcon, shutterIcon, switchViewIcon};

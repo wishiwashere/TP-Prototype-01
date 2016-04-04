@@ -7,12 +7,12 @@ public class LoadingScreen extends Screen {
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
-    public LoadingScreen(Sketch _sketch, String bgImageURL) {
+    public LoadingScreen(Sketch _sketch, PImage bgImage) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImageURL);
+        super(_sketch, bgImage);
 
         sketch = _sketch;
     }

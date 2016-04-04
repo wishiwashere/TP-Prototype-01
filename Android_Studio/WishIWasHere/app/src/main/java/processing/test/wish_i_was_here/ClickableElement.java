@@ -8,14 +8,17 @@ public class ClickableElement extends Rectangle {
     String elementTitle = "";
 
   /*-------------------------------------- Constructor() ------------------------------------------------*/
-    // This partial constructor is used by text inputs
-    public ClickableElement(Sketch _sketch, double x, double y, double w, double h, String title) {
-        this(_sketch, x, y, w, h, null, title);
-    }
 
     // This constructor is used by icons
-    public ClickableElement(Sketch _sketch, double x, double y, double w, double h, String imgURL, String title) {
-        super(_sketch, x, y, w, h, imgURL);
+    public ClickableElement(Sketch _sketch, double x, double y, double w, double h, PImage img, String title) {
+        super(_sketch, x, y, w, h, img);
+        this.elementTitle = title;
+        sketch = _sketch;
+    }
+
+    // This constructor is used by textInputs
+    public ClickableElement(Sketch _sketch, double x, double y, double w, double h, int col, String title) {
+        super(_sketch, x, y, w, h, col);
         this.elementTitle = title;
         sketch = _sketch;
     }

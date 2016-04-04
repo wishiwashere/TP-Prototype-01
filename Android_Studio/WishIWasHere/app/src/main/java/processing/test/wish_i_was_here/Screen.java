@@ -36,16 +36,31 @@ public class Screen extends Rectangle {
         sketch = _sketch;
     }
 
-    protected Screen(Sketch _sketch, String imgURL) {
+    protected Screen(Sketch _sketch, PImage img) {
         // Calling this class's super class (Screen) to create a screen using
-        // the default settings, along with setting the colour as specified
-        super(_sketch, imgURL);
+        // the default settings along with a background image
+        super(_sketch, img);
 
         sketch = _sketch;
     }
 
-    protected Screen(Sketch _sketch, double x, double y, double w, double h, String imgURL) {
-        super(_sketch, x, y, w, h, imgURL);
+    protected Screen(Sketch _sketch, int col) {
+        // Calling this class's super class (Screen) to create a screen using
+        // the default settings, along with setting the colour as specified
+        super(_sketch, col);
+
+        sketch = _sketch;
+    }
+
+    protected Screen(Sketch _sketch, double x, double y, double w, double h, PImage img) {
+        super(_sketch, x, y, w, h, img);
+
+        sketch = _sketch;
+    }
+
+
+    protected Screen(Sketch _sketch, double x, double y, double w, double h, int col) {
+        super(_sketch, x, y, w, h, col);
 
         sketch = _sketch;
     }

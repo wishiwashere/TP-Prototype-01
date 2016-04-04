@@ -7,12 +7,12 @@ public class SocialMediaLogoutScreen extends Screen{
 
     // Creating a public constructor for the SearchTravelScreen class, so that
     // an instance of it can be declared in the main sketch
-    public SocialMediaLogoutScreen(Sketch _sketch){
+    public SocialMediaLogoutScreen(Sketch _sketch, PImage bgImage){
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch);
+        super(_sketch, bgImage);
 
         sketch = _sketch;
 
@@ -25,8 +25,8 @@ public class SocialMediaLogoutScreen extends Screen{
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon noIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "buttonImage.png", "No", true, "Middle", "SettingsScreen");
-        Icon yesIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "buttonImage.png", "Yes", true, "Middle", "SettingsScreen");
+        Icon noIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "No", true, "Middle", "SettingsScreen");
+        Icon yesIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Yes", true, "Middle", "SettingsScreen");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {noIcon, yesIcon};

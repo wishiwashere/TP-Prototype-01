@@ -9,16 +9,16 @@ public class SaveShareScreenB extends Screen {
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
-    public SaveShareScreenB(Sketch _sketch) {
+    public SaveShareScreenB(Sketch _sketch, PImage bgImage) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch);
+        super(_sketch, bgImage);
 
         sketch = _sketch;
 
-        messageInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.07, sketch.appWidth * 0.8, sketch.appHeight * 0.3, "messageInput", "LEFT-TOP");
+        messageInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.07, sketch.appWidth * 0.8, sketch.appHeight * 0.3, _sketch.color(255, 255, 255), "messageInput", "LEFT-TOP");
         messageInput.setMaxTextLength(126);
 
         // Creating the icon/s for this screen, using locally scoped variables, as these
@@ -30,8 +30,8 @@ public class SaveShareScreenB extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconCenterY * 1.45, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "buttonImage.png", "Cancel", true, "Middle", "SaveShareScreenA");
-        Icon shareIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconCenterY * 1.45, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "buttonImage.png", "Share", true, "Middle", "_sendTweet");
+        Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconCenterY * 1.45, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Cancel", true, "Middle", "SaveShareScreenA");
+        Icon shareIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconCenterY * 1.45, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Share", true, "Middle", "_sendTweet");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {cancelIcon, shareIcon};
@@ -60,7 +60,7 @@ public class SaveShareScreenB extends Screen {
         // generate the size and background of the screen
         this.drawScreen();
 
-        this.addPImage(sketch.compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.4, sketch.appWidth * 0.8, sketch.appWidth * 0.6);
+        this.addImage(sketch.compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.4, sketch.appWidth * 0.8, sketch.appWidth * 0.6);
 
         messageInput.showTextInput();
     }

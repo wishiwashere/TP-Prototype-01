@@ -7,30 +7,29 @@ public class SettingsScreen extends Screen {
 
     // Creating a public constructor for the SettingsScreen class, so that
     // an instance of it can be declared in the main sketch
-    public SettingsScreen(Sketch _sketch) {
+    public SettingsScreen(Sketch _sketch, PImage bgImage) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch);
+        super(_sketch, bgImage);
 
         sketch = _sketch;
 
-        String autoSaveToggleSwitchImageURL;
-
+        PImage autoSaveToggleSwitchImage;
         if(sketch.autoSaveModeOn){
-            autoSaveToggleSwitchImageURL = "toggleSwitchOnIconImage.png";
+            autoSaveToggleSwitchImage = sketch.toggleSwitchOnIconImage;
         }
         else{
-            autoSaveToggleSwitchImageURL = "toggleSwitchOffIconImage.png";
+            autoSaveToggleSwitchImage = sketch.toggleSwitchOffIconImage;
         }
 
-        String learningModeToggleSwitchImageURL;
+        PImage learningModeToggleSwitchImage;
         if(sketch.learningModeOn){
-            learningModeToggleSwitchImageURL = "toggleSwitchOnIconImage.png";
+            learningModeToggleSwitchImage = sketch.toggleSwitchOnIconImage;
         }
         else{
-            learningModeToggleSwitchImageURL = "toggleSwitchOffIconImage.png";
+            learningModeToggleSwitchImage = sketch.toggleSwitchOffIconImage;
         }
         // Creating the icon/s for this screen, using locally scoped variables, as these
         // icons will be only ever be referred to from the allIcons array. Setting their
@@ -41,13 +40,14 @@ public class SettingsScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, "homeIconImage.png", "Home", false, "HomeScreen");
-        Icon learningModeIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.5, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, learningModeToggleSwitchImageURL, "Learning mode switch", false, "_switchLearningMode");
-        Icon autoSaveIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.8, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, autoSaveToggleSwitchImageURL, "Auto-save switch", false, "_switchAutoSave");
-        Icon twitterAccountIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, "twitterAccountIconImage.png", "Twitter", true, "Below", "_checkTwitterLogin");
+        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImage, "Home", false, "HomeScreen");
+        Icon learningModeIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.5, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, learningModeToggleSwitchImage, "Learning mode switch", false, "_switchLearningMode");
+        Icon autoSaveIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.8, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, autoSaveToggleSwitchImage, "Auto-save switch", false, "_switchAutoSave");
+        Icon instagramAccountIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.instagramAccountIconImage, "Instagram", true, "Below", "SocialMediaLoginScreen");
+        Icon twitterAccountIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.twitterAccountIconImage, "Twitter", true, "Below", "_checkTwitterLogin");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
-        Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, twitterAccountIcon};
+        Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, instagramAccountIcon, twitterAccountIcon};
 
         // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
         // the temporary allIcons array to the screenIcons array of the Screen class so that they

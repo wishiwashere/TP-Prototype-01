@@ -7,12 +7,12 @@ public class SearchUnsuccessfulScreen extends Screen {
 
     // Creating a public constructor for the SearchFailedScreen class, so that
     // an instance of it can be declared in the main sketch
-    public SearchUnsuccessfulScreen(Sketch _sketch) {
+    public SearchUnsuccessfulScreen(Sketch _sketch, PImage bgImage) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch);
+        super(_sketch, bgImage);
 
         sketch = _sketch;
 
@@ -25,9 +25,9 @@ public class SearchUnsuccessfulScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, "homeIconImage.png", "Home", false, "HomeScreen");
-        Icon searchTravelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, "searchPageIconImage.png", "Search Again", true, "Below", "SearchScreen");
-        Icon randomTravelIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, "randomPageIconImage.png", "Random", true, "Below", "_getRandomLocation");
+        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImage, "Home", false, "HomeScreen");
+        Icon searchTravelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.searchPageIconImage, "Search Again", true, "Below", "SearchScreen");
+        Icon randomTravelIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.randomPageIconImage, "Random", true, "Below", "_getRandomLocation");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {homeIcon, searchTravelIcon, randomTravelIcon};
@@ -63,6 +63,6 @@ public class SearchUnsuccessfulScreen extends Screen {
 
         // Calling the super class's super class (Rectangle) to add an image to the screen, passing
         // in the image, x, y, width and height
-        this.addImage("searchUnsuccessfulScreenImage.png", sketch.iconCenterX, sketch.appHeight * 0.55, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
+        this.addImage(sketch.loadImage("searchUnsuccessfulScreenImage.png"), sketch.iconCenterX, sketch.appHeight * 0.55, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
     }
 }
