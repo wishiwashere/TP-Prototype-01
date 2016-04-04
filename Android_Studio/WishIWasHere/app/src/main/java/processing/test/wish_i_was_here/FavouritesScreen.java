@@ -176,7 +176,7 @@ public class FavouritesScreen extends Screen {
                     // The user has scrolled DOWN
                     // Checking if the screen's y position is less than or equal to half of the height i.e. is
                     // so that the screen cannot be down any further once you reach the top
-                    if (this.getY() <= sketch.appHeight/2) {
+                    if (this.getY() <= (sketch.appHeight/2) - amountScrolled) {
                         // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
                         // moving the icon down the screen
                         icons[i].setY(icons[i].getY() + amountScrolled);
@@ -199,7 +199,7 @@ public class FavouritesScreen extends Screen {
                     // The user has scrolled DOWN
                     // Checking if the screen's y position is less than or equal to half of the height i.e. is
                     // so that the screen cannot be down any further once you reach the top
-                    if (this.getY() <= sketch.appHeight/2) {
+                    if (this.getY() <= (sketch.appHeight/2) - amountScrolled) {
                         // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
                         // moving the icon down the screen
                         this.favTabs.get(i).setY(this.favTabs.get(i).getY() + amountScrolled);
@@ -222,7 +222,7 @@ public class FavouritesScreen extends Screen {
                 // The user has scrolled DOWN
                 // Checking if the screen's y position is less than or equal to half of the height i.e. is
                 // so that the screen cannot be down any further once you reach the top
-                if (this.getY() <= appHeight/2) {
+                if (this.getY() <= (sketch.appHeight/2) - amountScrolled) {
                     // Setting the screen's y postion to it's current y position, plus the amount scrolled
                     this.setY(this.getY() + amountScrolled);
                     // Setting the global positioning variable screenTitleY to be incremented by the amount scrolled. Note:

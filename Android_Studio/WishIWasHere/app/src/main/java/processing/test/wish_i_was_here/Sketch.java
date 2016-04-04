@@ -150,6 +150,9 @@ public class Sketch extends PApplet {
     PImage searchingImage;
     PImage shareImageToDeviceAppsImage;
 
+
+    Boolean mouseClicked = false;
+
     /*-------------------------------------- Sizing ------------------------------------------------*/
 
     // Declaring global variables, which will contain the width and height of the device's
@@ -481,6 +484,12 @@ public class Sketch extends PApplet {
         keyboardRequired = false;
         previousMouseY = mouseY;
         previousMouseX = mouseX;
+    }
+
+    @Override
+    public void mouseReleased(){
+        mouseClicked = true;
+        println("MOUSE CLICKED - function - " + mouseClicked);
     }
 
     @Override

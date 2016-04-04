@@ -105,7 +105,7 @@ public class Icon extends ClickableElement {
                 this.addText(this.iconTitle, this.getX(), this.getY() + (this.getHeight() * 0.6), this.getWidth() * 0.20);
             }
         }
-        if (sketch.mousePressed) {
+        if (sketch.mouseClicked) {
             if (this.checkMouseOver()) {
                 // Checking if this icon has a link associated with it
                 if (this.iconLinkTo.length() > 0)
@@ -171,6 +171,7 @@ public class Icon extends ClickableElement {
                     }
                 }
             }
+            mouseClicked = false;
         }
     }
 }
