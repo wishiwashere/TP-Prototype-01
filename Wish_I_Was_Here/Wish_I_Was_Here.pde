@@ -248,7 +248,6 @@ void setup() {
   // Calling the ketaiCamera constructor to initialise the camera with the same
   // width/height of the device, with a frame rate of 24.
   ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
-  ketaiCamera.setSaveDirectory(sketchPath(""));
 
   // Printing out the list of available cameras i.e. front/rear facing
   println(ketaiCamera.list());
@@ -487,7 +486,7 @@ void keyPressed() {
 // available from the ketaiCamera.
 void onCameraPreviewEvent()
 {
-  println("CameraPreviewEvent - readingImage = " + readingImage);
+  //println("CameraPreviewEvent - readingImage = " + readingImage);
   if (readingImage == false && callFunction != "_mergeImages") {
     // Reading in a new frame from the ketaiCamera.
     readingImage = true;
@@ -851,8 +850,9 @@ void checkFavIcon() {
 }
 
 void sendCameraImageToServer() {
+  currentFrame = ketaiCamera.get();
   println("IMG2SERVER - About to save current camera image");
-  if (ketaiCamera.savePhoto(sketchPath("serverImage.jpg"))) {
+  if (currentFrame.save(sketchPath("serverImage.jpg"))) {
     println("IMG2SERVER - Current image saved");
   } else {
     println("IMG2SERVER - Failed to save current image");
