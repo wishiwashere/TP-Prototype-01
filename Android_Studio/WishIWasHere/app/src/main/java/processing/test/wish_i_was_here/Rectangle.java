@@ -15,6 +15,7 @@ public class Rectangle extends Sketch {
     private float rectWidth;
     private float rectHeight;
     private float rectRotation = 0;
+    private int rectBackgroundCol = 1234567;
     private String rectImageURL = null;
     private PImage rectBackgroundImg = null;
     private int rectBackgroundImgScaleX = 1;
@@ -83,7 +84,6 @@ public class Rectangle extends Sketch {
             sketch.rotate(this.rectRotation);
         }
 
-
         // Checking if a Background Image has been passed in
         if (this.rectBackgroundImg != null) {
             // Calling the addImage() method of the this class, to add the background image to the screen,
@@ -93,8 +93,8 @@ public class Rectangle extends Sketch {
         }
 
         // Checking if no image has been passed in
-        if (this.rectImageURL == null) {
-            sketch.fill(255);
+        if (this.rectBackgroundCol != 1234567) {
+            sketch.fill(rectBackgroundCol);
 
             // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
             // been applied to the rectangle, it will pivot around it's center point
@@ -105,7 +105,9 @@ public class Rectangle extends Sketch {
             // on the screen will depend on the matrix's translation, as this will control where
             // the object is drawn
             sketch.rect(0, 0, this.rectWidth, this.rectHeight);
-        } else {
+        }
+
+        if(this.rectImageURL != null){
             // Calling the addImage() method of the this class, to add the image to the screen,
             // passing in the image, along with the current x, y, width and height of the instance,
             // so that the image will appear the full size of the object
@@ -244,14 +246,14 @@ public class Rectangle extends Sketch {
 
         PImage tempImage = sketch.loadImage(imgURL);
 
-        imgWidth = imgWidth == 0 ? tempImage.width : imgWidth;
-        imgHeight = imgHeight == 0 ? tempImage.height : imgHeight;
+        double imgW = imgWidth == 0 ? tempImage.width : imgWidth;
+        double imgH = imgHeight == 0 ? tempImage.height : imgHeight;
 
         // Adding the image to the screen, setting the x and y positions to 0,
         // as the actual position on the screen will depend on the matrix's translation,
         // as this will control where the text is drawn. Setting the width and height of the image
         // to be equal to the values passed into the function
-        sketch.image(tempImage, 0, 0, (float)(imgWidth), (float)(imgHeight));
+        sketch.image(tempImage, 0, 0, (float)(imgW), (float)(imgH));
 
         // Restoring the matrix to it's previous state
         sketch.popMatrix();
@@ -350,5 +352,9 @@ public class Rectangle extends Sketch {
 
     public PImage getBackgroundImage() {
         return this.rectBackgroundImg;
+    }
+
+    public void setBackgroundColor(int col){
+        rectBackgroundCol = col;
     }
 }

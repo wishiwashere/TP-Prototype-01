@@ -164,6 +164,36 @@ public class Sketch extends PApplet {
     SocialMediaLogoutScreen mySocialMediaLogoutScreen;
     LoadingScreen myLoadingScreen;
 
+    /*-------------------------------------- Images ------------------------------------------------*/
+
+    // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
+    // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
+    // reused on multiple pages
+    PImage randomPageIconImage;
+    PImage searchPageIconImage;
+    PImage aboutPageIconImage;
+    PImage favouritesPageIconImage;
+    PImage settingsPageIconImage;
+    PImage homeIconImage;
+    PImage homeIconImageWhite;
+    PImage favIconImage;
+    PImage shakeIconImage;
+    PImage shutterIconImage;
+    PImage switchViewIconImage;
+    PImage retryIconImage;
+    PImage deleteIconImage;
+    PImage saveIconImage;
+    PImage disgardIconImage;
+    PImage keepIconImage;
+    PImage cancelIconImage;
+    PImage facebookAccountIconImage;
+    PImage twitterAccountIconImage;
+    PImage instagramAccountIconImage;
+    PImage emailIconImage;
+    PImage buttonImage;
+    PImage toggleSwitchOnIconImage;
+    PImage toggleSwitchOffIconImage;
+
     /*-------------------------------------- Saving ------------------------------------------------*/
     // Creating a string that will hold the directory path of where the images will be saved to
     String directory = "";
@@ -304,6 +334,32 @@ public class Sketch extends PApplet {
         mySearchingScreen = new SearchingScreen(this);
         mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this);
         myLoadingScreen = new LoadingScreen(this, "loadingScreenImage.png");
+
+    /*-------------------------------------- Images ------------------------------------------------*/
+        randomPageIconImage = loadImage("randomPageIconImage.png");
+        searchPageIconImage = loadImage("searchPageIconImage.png");
+        aboutPageIconImage = loadImage("aboutPageIconImage.png");
+        favouritesPageIconImage = loadImage("favouritesPageIconImage.png");
+        settingsPageIconImage = loadImage("settingsPageIconImage.png");
+        homeIconImage = loadImage("homeIconImage.png");
+        homeIconImageWhite = loadImage("homeIconWhiteImage.png");
+        favIconImage = loadImage("favIconNoImage.png");
+        shakeIconImage = loadImage("shakeIconImage.png");
+        shutterIconImage = loadImage("shutterIconImage.png");
+        switchViewIconImage = loadImage("switchViewIconImage.png");
+        retryIconImage = loadImage("retryIconImage.png");
+        deleteIconImage = loadImage("deleteIconImage.png");
+        saveIconImage = loadImage("saveIconImage.png");
+        disgardIconImage = loadImage("disgardIconImage.png");
+        keepIconImage = loadImage("keepIconImage.png");
+        cancelIconImage = loadImage("cancelIconImage.png");
+        facebookAccountIconImage = loadImage("facebookAccountIconImage.png");
+        twitterAccountIconImage = loadImage("twitterAccountIconImage.png");
+        instagramAccountIconImage = loadImage("instagramAccountIconImage.png");
+        emailIconImage = loadImage("emailIconImage.png");
+        buttonImage = loadImage("buttonImage.png");
+        toggleSwitchOnIconImage = loadImage("toggleSwitchOnIconImage.png");
+        toggleSwitchOffIconImage = loadImage("toggleSwitchOffIconImage.png");
 
     /*-------------------------------------- Saving ------------------------------------------------*/
 
