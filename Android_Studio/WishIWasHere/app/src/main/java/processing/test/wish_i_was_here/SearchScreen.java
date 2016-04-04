@@ -9,16 +9,16 @@ public class SearchScreen extends Screen {
 
     // Creating a public constructor for the SearchTravelScreen class, so that
     // an instance of it can be declared in the main sketch
-    public SearchScreen(Sketch _sketch, PImage bgImage) {
+    public SearchScreen(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImage);
+        super(_sketch);
 
         sketch = _sketch;
 
-        this.searchInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 0.7, sketch.appWidth * 0.8, sketch.appHeight * 0.3, _sketch.color(255, 255, 255), "searchInput", "LEFT-TOP");
+        this.searchInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 0.7, sketch.appWidth * 0.8, sketch.appHeight * 0.3, "searchInput", "LEFT-TOP");
 
         // Creating the icon/s for this screen, using locally scoped variables, as these
         // icons will be only ever be referred to from the allIcons array. Setting their

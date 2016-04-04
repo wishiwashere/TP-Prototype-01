@@ -119,7 +119,7 @@ public class Icon extends ClickableElement {
                         sketch.link(this.iconLinkTo);
 
                         // Logging out what site the app will now be taken to
-                        sketch.println("Going to " + this.iconLinkTo);
+                        println("Going to " + this.iconLinkTo);
                     } else if (this.iconLinkTo.indexOf("_") == 0) {
 
                         sketch.callFunction = this.iconLinkTo;
@@ -141,12 +141,12 @@ public class Icon extends ClickableElement {
                         }
 
                         // Logging out what page the app will now be taken to
-                        sketch.println("Calling the " + this.iconLinkTo + "() function");
+                        println("Calling the " + this.iconLinkTo + "() function");
 
                     } else if (this.iconLinkTo.indexOf("-") == 0) {
                         sketch.currentScreen = sketch.returnTo;
                         // Logging out what page the app will now be taken to
-                        sketch.println("Returning to the " + this.iconLinkTo + "screen");
+                        println("Returning to the " + this.iconLinkTo + "screen");
                     } else {
                         if(this.iconTitle.indexOf("Random") == 0){
                         }
@@ -167,7 +167,7 @@ public class Icon extends ClickableElement {
                         sketch.myFavouritesScreen.loaded = false;
 
                         // Logging out what page the app will now be taken to
-                        sketch.println("Going to the " + this.iconLinkTo);
+                        println("Going to the " + this.iconLinkTo);
                     }
                 }
             }

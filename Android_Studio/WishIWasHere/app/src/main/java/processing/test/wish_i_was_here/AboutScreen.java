@@ -24,12 +24,12 @@ public class AboutScreen extends Screen {
 
     // Creating a public constructor for the AboutScreen class, so that
     // an instance of it can be declared in the main sketch
-    public AboutScreen(Sketch _sketch, PImage bgImage) {
+    public AboutScreen(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, _sketch.width / 2, _sketch.height / 2, _sketch.width, _sketch.height * 2, _sketch.loadImage("aboutScreenBackgroundImage.png"));
+        super(_sketch, _sketch.width / 2, _sketch.height / 2, _sketch.width, _sketch.height * 2, null);
 
         sketch = _sketch;
 
@@ -84,7 +84,7 @@ public class AboutScreen extends Screen {
             // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
             // when an icon that links to another page has been clicked.
             this.loaded = true;
-            sketch.println("firstLoad");
+            println("firstLoad");
         }
 
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
@@ -94,8 +94,8 @@ public class AboutScreen extends Screen {
 
         this.addImage(sketch.loadImage("aboutPageTeamImage.jpg"), sketch.appWidth / 2, this.getY() + (sketch.appHeight * -0.25), sketch.appWidth * 0.7, sketch.appHeight * 0.2);
 
-        sketch.rectMode(sketch.CORNER);
-        sketch.textAlign(sketch.LEFT);
+        sketch.rectMode(CORNER);
+        sketch.textAlign(LEFT);
         sketch.textSize((float) (sketch.appWidth * 0.05));
         sketch.fill(0);
         sketch.text(aboutText, (float) (sketch.appWidth * 0.1), (float) (this.getY() + (sketch.appHeight * -0.1)), (float) (sketch.appWidth * 0.8), (float) (sketch.appHeight * 0.9));

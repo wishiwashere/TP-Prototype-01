@@ -42,12 +42,12 @@ public class FavouritesScreen extends Screen {
 
     // Creating a public constructor for the FavouriteScreen class, so that
     // an instance of it can be declared in the main sketch
-    public FavouritesScreen(Sketch _sketch, PImage bgImage) {
+    public FavouritesScreen(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImage);
+        super(_sketch);
 
         sketch = _sketch;
 
@@ -137,7 +137,7 @@ public class FavouritesScreen extends Screen {
             // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
             // when an icon that links to another page has been clicked.
             this.loaded = true;
-            sketch.println("firstLoad");
+            println("firstLoad");
         }
 
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's

@@ -1,5 +1,8 @@
 package processing.test.wish_i_was_here;
 
+import processing.core.PApplet;
+import processing.core.PConstants;
+
 public class TextInput extends ClickableElement {
     private Sketch sketch;
 
@@ -20,42 +23,44 @@ public class TextInput extends ClickableElement {
     /*-------------------------------------- Constructor() ------------------------------------------------*/
     // This partial constructor is used by text inputs that do not require their contents
     // to be blocked out i.e. any text input that is not a password
-    public TextInput(Sketch _sketch, double x, double y, double w, double h, int col, String title) {
+    public TextInput(Sketch _sketch, double x, double y, double w, double h, String title) {
 
         // Passing the relevant parametres to the main constructor. Since a password value
         // has not been included, passing false for this argument (i.e. assuming this in not
         // a password textInput
-        this(_sketch, x, y, w, h, col, title, false, "LEFT");
+        this(_sketch, x, y, w, h, title, false, "LEFT");
     }
 
     // This partial constructor is used by text inputs that do not require their contents
     // to be blocked out i.e. any text input that is not a password
-    public TextInput(Sketch _sketch, double x, double y, double w, double h, int col, String title, String align) {
+    public TextInput(Sketch _sketch, double x, double y, double w, double h, String title, String align) {
 
         // Passing the relevant parametres to the main constructor. Since a password value
         // has not been included, passing false for this argument (i.e. assuming this in not
         // a password textInput
-        this(_sketch, x, y, w, h, col, title, false, align);
+        this(_sketch, x, y, w, h, title, false, align);
     }
 
     // This partial constructor is used by text inputs that do not require their contents
     // to be blocked out i.e. any text input that is not a password
-    public TextInput(Sketch _sketch, double x, double y, double w, double h, int col, String title, Boolean password) {
+    public TextInput(Sketch _sketch, double x, double y, double w, double h, String title, Boolean password) {
 
         // Passing the relevant parametres to the main constructor. Since a password value
         // has not been included, passing false for this argument (i.e. assuming this in not
         // a password textInput
-        this(_sketch, x, y, w, h, col, title, password, "LEFT");
+        this(_sketch, x, y, w, h, title, password, "LEFT");
     }
 
     // This constructor is used by all text inputs
-    public TextInput(Sketch _sketch, double x, double y, double w, double h, int col, String title, Boolean password, String align) {
+    public TextInput(Sketch _sketch, double x, double y, double w, double h, String title, Boolean password, String align) {
 
         // Passing the relevant parametres from the constructor into the constructor
         // of the super class (ClickableElement)
-        super(_sketch, x, y, w, h, col, title);
+        super(_sketch, x, y, w, h, title);
 
         sketch = _sketch;
+
+        super.setBackgroundColor(sketch.color(255, 255, 255, 0));
 
         // Initialising the inputTitle to be equal to the requested title
         this.inputTitle = title;
@@ -70,9 +75,9 @@ public class TextInput extends ClickableElement {
         this.textY2 = (float)(y + (h * 0.45));
 
         if (this.inputTextAlign.equals("LEFT")) {
-            this.textVertAlign = sketch.CENTER;
+            this.textVertAlign = CENTER;
         } else if (inputTextAlign.equals("LEFT-TOP")) {
-            this.textVertAlign = sketch.TOP;
+            this.textVertAlign = TOP;
         }
     }
 
@@ -115,7 +120,7 @@ public class TextInput extends ClickableElement {
                 sketch.keyboardRequired = true;
                 sketch.currentTextInput = this;
                 sketch.currentTextInputValue = "";
-                sketch.println("The " + this.inputTitle + " text input was clicked on");
+                println("The " + this.inputTitle + " text input was clicked on");
             }
         }
     }
@@ -160,9 +165,9 @@ public class TextInput extends ClickableElement {
     }
 
     private void addTextBox(String displayText) {
-        sketch.rectMode(sketch.CORNERS);
+        sketch.rectMode(CORNERS);
         sketch.fill(0);
-        sketch.textAlign(sketch.LEFT, this.textVertAlign);
+        sketch.textAlign(LEFT, this.textVertAlign);
         sketch.textSize(sketch.defaultTextSize);
         sketch.text(displayText, this.textX1, this.textY1, this.textX2, this.textY2);
     }

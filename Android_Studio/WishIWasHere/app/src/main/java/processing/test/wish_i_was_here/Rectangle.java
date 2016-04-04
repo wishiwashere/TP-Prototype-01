@@ -14,7 +14,7 @@ public class Rectangle extends Sketch {
     private float rectY;
     private float rectWidth;
     private float rectHeight;
-    private int rectCol;
+    private int rectCol = 1234567;
     private float rectRotation = 0;
     private PImage rectImage = null;
     public PImage rectBackgroundImg = null;
@@ -30,7 +30,7 @@ public class Rectangle extends Sketch {
         // and height are passed in, defaulting these to the current width and height of
         // the sketch. If no rotation value is specified, defaulting this value to 0, and
         // finally, if no color is specified, defaulting this to white
-        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, _sketch.color(255, 255, 255, 0), null);
+        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, null);
     }
 
     // This constructor is used by screens that want to accept all the defaults, as well
@@ -41,37 +41,17 @@ public class Rectangle extends Sketch {
         // passed in, defaulting these to the current width and height of the sketch. If
         // no color is specified, defaulting this to white. Passing these default values,
         // along with the image that was passed in, to the main constructor of this class
-        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, _sketch.color(255, 255, 255, 0), img);
-    }
-
-    // This constructor is used by screens that want to accept all the defaults, as well
-    // as setting a background color
-    protected Rectangle(Sketch _sketch, int col) {
-        // If no x, y passed in, defaulting these to half of the sketch's width and height
-        // (i.e. so that the rectangle will appear centered). If no width and height are
-        // passed in, defaulting these to the current width and height of the sketch. If
-        // no image is specified, defaulting this null. Passing these default values, along
-        // with the color that was passed in, to the main constructor of this class
-        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, col, null);
-    }
-
-    // This constructor is used by icons that do not link to anything, and that
-    // want to have an image as their background
-    protected Rectangle(Sketch _sketch, double x, double y, double w, double h, PImage img) {
-        // If no color passed in, defaulting it to white and then passing this default value,
-        // along with the x, y, width, height and image that was passed in, to the main
-        // constructor of this class
-        this(_sketch, x, y, w, h, _sketch.color(255, 255, 255, 0), img);
+        this(_sketch, _sketch.appWidth/2, _sketch.appHeight/2, _sketch.appWidth, _sketch.appHeight, img);
     }
 
     // This constructor is used by text input boxes (TEMPORARILY)
-    protected Rectangle(Sketch _sketch, double x, double y, double w, double h, int col) {
-        this(_sketch, x, y, w, h, col, null);
+    protected Rectangle(Sketch _sketch, double x, double y, double w, double h) {
+        this(_sketch, x, y, w, h, null);
     }
 
     // This is the main constructor of this class, to which all other constructors pass
     // their values to be stored as the instance's properties
-    protected Rectangle(Sketch _sketch, double x, double y, double w, double h, int col, PImage img) {
+    protected Rectangle(Sketch _sketch, double x, double y, double w, double h, PImage img) {
         sketch = _sketch;
 
         // Storing the values that are passed into the constructor in the private
@@ -83,7 +63,6 @@ public class Rectangle extends Sketch {
         this.rectY = (float)(y);
         this.rectWidth = (float)(w);
         this.rectHeight = (float)(h);
-        this.rectCol = col;
         this.rectImage = img;
     }
 
@@ -103,20 +82,23 @@ public class Rectangle extends Sketch {
         // stored as a radian value)
         sketch.rotate(this.rectRotation);
 
-        // Setting the fill colour of the object to the value specified
-        sketch.fill(this.rectCol);
+        if(this.rectCol != 1234567){
 
-        sketch.noStroke();
+            // Setting the fill colour of the object to the value specified
+            sketch.fill(this.rectCol);
 
-        // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
-        // been applied to the rectangle, it will pivot around it's center point
-        sketch.rectMode(sketch.CENTER);
+            sketch.noStroke();
 
-        // Drawing the rectangle with x and y values based on half of the width and height of
-        // the object, so that it appears centered on it's point of origin. The actual position
-        // on the screen will depend on the matrix's translation, as this will control where
-        // the object is drawn
-        sketch.rect(0, 0, this.rectWidth, this.rectHeight);
+            // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
+            // been applied to the rectangle, it will pivot around it's center point
+            sketch.rectMode(CENTER);
+
+            // Drawing the rectangle with x and y values based on half of the width and height of
+            // the object, so that it appears centered on it's point of origin. The actual position
+            // on the screen will depend on the matrix's translation, as this will control where
+            // the object is drawn
+            sketch.rect(0, 0, this.rectWidth, this.rectHeight);
+        }
 
         // Checking if a Background Image has been passed in
         if (this.rectBackgroundImg != null) {
@@ -184,17 +166,17 @@ public class Rectangle extends Sketch {
             // Setting the text align to Left on the x axis, and Center on the y so that
             // the text will be drawn from the center point of it's position on the left of
             // the page
-            sketch.textAlign(sketch.LEFT, sketch.CENTER);
+            sketch.textAlign(LEFT, CENTER);
         } else if (align.equals("LEFT-TOP")) {
             // Setting the text align to center (on both the x and the y) so that
             // the text will be drawn from the center point of it's position on
             // the page
-            sketch.textAlign(sketch.LEFT, sketch.TOP);
+            sketch.textAlign(LEFT, TOP);
         } else {
             // Setting the text align to center (on both the x and the y) so that
             // the text will be drawn from the center point of it's position on
             // the page
-            sketch.textAlign(sketch.CENTER, sketch.CENTER);
+            sketch.textAlign(CENTER, CENTER);
         }
 
         // Setting the text size to be responsive to the height of the app
@@ -258,11 +240,11 @@ public class Rectangle extends Sketch {
 
         // Rotating the matrix by the current rotation value of this screen (which has been
         // stored as a radian value)
-        sketch.rotate(sketch.radians(rotate));
+        sketch.rotate(radians(rotate));
 
         // Setting the imageMode to center so that the image will be drawn from the center
         // point of it's position on the page
-        sketch.imageMode(sketch.CENTER);
+        sketch.imageMode(CENTER);
 
         // Adding the image to the screen, setting the x and y positions to 0,
         // as the actual position on the screen will depend on the matrix's translation,
@@ -315,7 +297,7 @@ public class Rectangle extends Sketch {
 
     // Set method that sets the rotation of instance
     protected void setRotation(int r) {
-        rectRotation = sketch.radians(r);
+        rectRotation = radians(r);
     }
 
     protected void setBackgroundImgScaleX(int sX) {
@@ -334,5 +316,9 @@ public class Rectangle extends Sketch {
 
     public PImage getBackgroundImage() {
         return this.rectBackgroundImg;
+    }
+
+    public void setBackgroundColor(int col){
+        this.rectCol = col;
     }
 }

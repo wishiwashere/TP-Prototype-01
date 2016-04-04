@@ -17,8 +17,8 @@ public class ClickableElement extends Rectangle {
     }
 
     // This constructor is used by textInputs
-    public ClickableElement(Sketch _sketch, double x, double y, double w, double h, int col, String title) {
-        super(_sketch, x, y, w, h, col);
+    public ClickableElement(Sketch _sketch, double x, double y, double w, double h, String title) {
+        super(_sketch, x, y, w, h);
         this.elementTitle = title;
         sketch = _sketch;
     }
@@ -41,7 +41,7 @@ public class ClickableElement extends Rectangle {
                 (sketch.pmouseY < (this.getY() + (this.getHeight()/2)))) {
 
             // Logging out the name of the element that was clicked on
-            sketch.println(this.elementTitle + " was clicked");
+            println(this.elementTitle + " was clicked");
 
             // Setting mousePressed back to false, so that if the user still has their
             // mouse pressed after the screen changes, this will not be considered

@@ -59,6 +59,8 @@ public class Sketch extends PApplet {
     // will automatically close
     Boolean keyboardRequired = false;
 
+    Boolean imageMerging = false;
+
     TextInput currentTextInput = null;
     String currentTextInputValue = "";
 
@@ -142,7 +144,7 @@ public class Sketch extends PApplet {
     PImage instagramAccountIconImage;
     PImage emailIconImage;
     PImage buttonImage;
-    PImage placeholderBackgroundImage;
+    PImage generalPageBackgroundImage;
     PImage toggleSwitchOnIconImage;
     PImage toggleSwitchOffIconImage;
     PImage overlayImage;
@@ -316,7 +318,6 @@ public class Sketch extends PApplet {
         shutterIconImage = loadImage("shutterIconImage.png");
         switchViewIconImage = loadImage("switchViewIconImage.png");
         retryIconImage = loadImage("retryIconImage.png");
-        deleteIconImage = loadImage("deleteIconImage.png");
         saveIconImage = loadImage("saveIconImage.png");
         disgardIconImage = loadImage("disgardIconImage.png");
         keepIconImage = loadImage("keepIconImage.png");
@@ -324,9 +325,8 @@ public class Sketch extends PApplet {
         facebookAccountIconImage = loadImage("facebookAccountIconImage.png");
         twitterAccountIconImage = loadImage("twitterAccountIconImage.png");
         instagramAccountIconImage = loadImage("instagramAccountIconImage.png");
-        emailIconImage = loadImage("emailIconImage.png");
         buttonImage = loadImage("buttonImage.png");
-        placeholderBackgroundImage = loadImage("generalPageBackgroundImage.png");
+        generalPageBackgroundImage = loadImage("generalPageBackgroundImage.png");
         toggleSwitchOnIconImage = loadImage("toggleSwitchOnIconImage.png");
         toggleSwitchOffIconImage = loadImage("toggleSwitchOffIconImage.png");
         overlayImage = loadImage("overlay.png");
@@ -348,7 +348,7 @@ public class Sketch extends PApplet {
         largeIconSize = (float)(appWidth * 0.25);
         smallIconSize = (float)(appWidth * 0.15);
         homeIconSize = (float)(largeIconSize * 1.3);
-        largeIconBottomY = (float)(iconBottomY - (largeIconSize/2));
+        largeIconBottomY = iconBottomY - (largeIconSize/2);
         screenTitleY = iconTopY;
 
         // Initialising the defaultTextSize to be equal to a percentage of the app's current height
@@ -360,23 +360,22 @@ public class Sketch extends PApplet {
         // (for testing purposes only). Note - setting a background color is optional. Depending on the
         // screen's constructor, you can pass in a background color, a background image, or nothing at
         // all if you want to default to white
-        println("homeIconSize now :) in Main Setup = " + homeIconSize);
-        myHomeScreen = new HomeScreen(this, placeholderBackgroundImage);
+        myHomeScreen = new HomeScreen(this);
         myCameraLiveViewScreen = new CameraLiveViewScreen(this);
-        myFavouritesScreen = new FavouritesScreen(this, loadImage("favouritesScreenBackgroundImage.png"));
-        mySettingsScreen = new SettingsScreen(this, placeholderBackgroundImage);
-        myAboutScreen = new AboutScreen (this, loadImage("aboutScreenBackgroundImage.png"));
-        mySearchScreen = new SearchScreen(this, placeholderBackgroundImage);
-        mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(this, placeholderBackgroundImage);
+        myFavouritesScreen = new FavouritesScreen(this);
+        mySettingsScreen = new SettingsScreen(this);
+        myAboutScreen = new AboutScreen (this);
+        mySearchScreen = new SearchScreen(this);
+        mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(this);
         myImagePreviewScreen = new ImagePreviewScreen(this);
-        mySaveShareScreenA = new SaveShareScreenA(this, placeholderBackgroundImage);
-        mySaveShareScreenB = new SaveShareScreenB(this, placeholderBackgroundImage);
-        mySharingScreen = new SharingScreen(this, placeholderBackgroundImage);
-        myShareSaveSuccessfulScreen = new ShareSaveSuccessfulScreen(this, placeholderBackgroundImage);
-        myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(this, placeholderBackgroundImage);
-        myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(this, placeholderBackgroundImage);
-        mySearchingScreen = new SearchingScreen(this, placeholderBackgroundImage);
-        mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this, placeholderBackgroundImage);
+        mySaveShareScreenA = new SaveShareScreenA(this);
+        mySaveShareScreenB = new SaveShareScreenB(this);
+        mySharingScreen = new SharingScreen(this);
+        myShareSaveSuccessfulScreen = new ShareSaveSuccessfulScreen(this);
+        myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(this);
+        myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(this);
+        mySearchingScreen = new SearchingScreen(this);
+        mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this);
         myLoadingScreen = new LoadingScreen(this, loadImage("loadingScreenImage.png"));
 
     /*-------------------------------------- Saving ------------------------------------------------*/
@@ -385,6 +384,16 @@ public class Sketch extends PApplet {
         // it goes to the pictures folder and this string as it has WishIWasHereApp
         // it is creating a folder in the picture folder of the device
         directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";
+
+        // Checking if the directory already exists. If not, then creating it.
+        File dir = new File(directory);
+        if(!dir.isDirectory()){
+            File newDir = new File(directory);
+            newDir.mkdirs();
+            println("New directory created - " + directory);
+        } else {
+            println("Directory already exists");
+        }
 
         // Initialising the currentImage to be equal to a plain black image. This is so that if the
         // currentImage get's referred to before the camera has started, it will just contain a plain
@@ -446,12 +455,8 @@ public class Sketch extends PApplet {
         } else if (callFunction.equals("_disgardImage")) {
             disgardImage();
         } else if (callFunction.equals("_searchForLocation")) {
-            currentScreen = "SearchingScreen";
-            mySearchingScreen.showScreen();
             searchForLocation();
         } else if (callFunction.equals("_getRandomLocation")) {
-            currentScreen = "SearchingScreen";
-            mySearchingScreen.showScreen();
             getRandomLocation();
         } else if (callFunction.equals("_checkTwitterLogin")) {
             checkTwitterLogin();
@@ -474,8 +479,11 @@ public class Sketch extends PApplet {
 
         // Forcing the onCameraPreviewEvent() to be called, as ketaiCamera does not seem to be
         // calling it implicitly (as it would have done in Processing).
-        if(ketaiCamera.isStarted()){
+        if(currentScreen.equals("CameraLiveViewScreen") && imageMerging == false){
+            println("CAM - Calling onCameraPreviewEvent");
             onCameraPreviewEvent();
+        } else {
+            println("CAM - Not on camera live view screen and imageMerging is currently true");
         }
     }
 
@@ -489,7 +497,6 @@ public class Sketch extends PApplet {
     @Override
     public void mouseReleased(){
         mouseClicked = true;
-        println("MOUSE CLICKED - function - " + mouseClicked);
     }
 
     @Override
@@ -532,11 +539,11 @@ public class Sketch extends PApplet {
     // available from the ketaiCamera.
     public void onCameraPreviewEvent()
     {
-        //println("CAM - New frame available " + readingImage);
-        if (readingImage == false && callFunction != "_mergeImages") {
+        println("CAM - New frame available " + this.readingImage);
+        if (this.readingImage == false) {
             // Reading in a new frame from the ketaiCamera.
             println("CAM - New frame about to be read");
-            readingImage = true;
+            this.readingImage = true;
             ketaiCamera.read();
             currentFrame = ketaiCamera.get();
             thread("previewGreenScreen");
@@ -573,7 +580,9 @@ public class Sketch extends PApplet {
     }
 
     /*-------------------------------------- Custom Functions ------------------------------------------------*/
-    void switchScreens() {
+    public void switchScreens() {
+        image(generalPageBackgroundImage, appWidth / 2, appHeight / 2, appWidth, appHeight);
+
         // Checking if the String that is stored in the currentScreen variable
         // (which gets set in the Icon class when an icon is clicked on) is
         // equal to a series of class Names (i.e. HomeScreen), and if it is, then show that screen.
@@ -602,12 +611,6 @@ public class Sketch extends PApplet {
             mySearchUnsuccessfulScreen.showScreen();
             testingTimeoutScreen("SearchUnsuccessfulScreen");
         } else if (currentScreen.equals("ImagePreviewScreen")) {
-    /*
-    if(readingImage == false && finalKeying == false){
-     finalKeying = true;
-     removeGreenScreen();
-     }
-     */
             myImagePreviewScreen.showScreen();
         } else if (currentScreen.equals("SaveShareScreenA")) {
             returnTo = "SaveShareScreenA";
@@ -645,13 +648,13 @@ public class Sketch extends PApplet {
                 ketaiCamera.start();
                 println("CAM - Starting Ketai Camera");
             }
+            imageMerging = false;
         } else if (ketaiCamera.isStarted()) {
-            ketaiCamera.stop();
-            println("CAM - Stopping Ketai Camera");
+            imageMerging = true;
         }
     }
 
-    void keepImage() {
+    public void keepImage() {
         callFunction = "";
         if(autoSaveModeOn) {
             // Checking if Storage is available
@@ -667,7 +670,7 @@ public class Sketch extends PApplet {
         }
     }
 
-    Boolean saveImageToPhotoGallery(){
+    public Boolean saveImageToPhotoGallery(){
         Boolean successfull = false;
         if (isExternalStorageWritable()) {
             saveToPath = directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg";
@@ -683,7 +686,7 @@ public class Sketch extends PApplet {
         return successfull;
     }
 
-    Boolean saveImageLocally(){
+    public Boolean saveImageLocally(){
         Boolean successfull = false;
         if (compiledImage.save(sketchPath("twitterImage.jpg"))) {
             println("Successfully saved image locally - " + sketchPath("twitterImage.jpg"));
@@ -694,7 +697,7 @@ public class Sketch extends PApplet {
         return successfull;
     }
 
-    Boolean isExternalStorageWritable() {
+    public Boolean isExternalStorageWritable() {
         Boolean answer = false;
 
         // Creating a string to store the state of the external storage
@@ -717,7 +720,7 @@ public class Sketch extends PApplet {
     // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
     // eeded a way to clear it from the screen until the
     // code that normally would clear it is added
-    void testingTimeoutScreen(String fadeToScreen) {
+    public void testingTimeoutScreen(String fadeToScreen) {
         if (mousePressed)
         {
             currentScreen = fadeToScreen;
@@ -755,13 +758,13 @@ public class Sketch extends PApplet {
         println("FAV - Favourite location " + currentLocationName + " is now: " + myCameraLiveViewScreen.favouriteLocation);
     }
 
-    void switchLearningMode() {
+    public void switchLearningMode() {
         callFunction = "";
         mySettingsScreen.learningModeOn = !mySettingsScreen.learningModeOn;
         println("Learning mode is now: " + mySettingsScreen.learningModeOn);
     }
 
-    void switchAutoSave() {
+    public void switchAutoSave() {
         callFunction = "";
         autoSaveModeOn = !autoSaveModeOn;
 
@@ -775,13 +778,12 @@ public class Sketch extends PApplet {
         println("Auto-save is now: " + autoSaveModeOn);
     }
 
-    void switchShakeMovement(){
+    public void switchShakeMovement(){
         shakeMovementOn = !shakeMovementOn;
     }
 
 
-    void sendTweet() {
-        // getShareableImage();
+    public void sendTweet() {
         callFunction = "";
         if(TwitterLoginActivity.twitterLoggedIn) {
             currentScreen = "SharingScreen";
@@ -828,14 +830,6 @@ public class Sketch extends PApplet {
             println("Twitter - No twitter account logged in");
         }
     }
-    /*
-    void getShareableImage(File latestImage){
-    File getImage = new File(currentImage);
-    if(latestImage == null || getImage.lastModified().after(latestImage.lastModified())){
-      latestImage = getImage;
-      latestImage.getPath();
-    }
-    }*/
 
     public void previewGreenScreen() {
         println("Starting removing Green Screen at frame " + frameCount);
@@ -890,18 +884,19 @@ public class Sketch extends PApplet {
         println("Finished removing Green Screen at frame " + frameCount);
     }
 
-    void mergeImages() {
-        callFunction = "";
+    public void mergeImages() {
+        imageMerging = true;
+        currentFrame = null;
+
         PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
-        println(cameraRotation);
         mergedImage.beginDraw();
         mergedImage.imageMode(CENTER);
-        mergedImage.image(currentLocationImage, appWidth/2, appHeight/2, appWidth, appHeight);
+        mergedImage.image(currentLocationImage, appWidth / 2, appHeight / 2, appWidth, appHeight);
         mergedImage.endDraw();
 
         mergedImage.beginDraw();
         mergedImage.pushMatrix();
-        mergedImage.translate(appWidth/2, appHeight/2);
+        mergedImage.translate(appWidth / 2, appHeight / 2);
         mergedImage.scale(cameraScale, 1);
         mergedImage.rotate(radians(cameraRotation));
         mergedImage.imageMode(CENTER);
@@ -915,15 +910,22 @@ public class Sketch extends PApplet {
         mergedImage.endDraw();
 
         compiledImage = mergedImage.get();
+        mergedImage = null;
+
         currentScreen = "ImagePreviewScreen";
+        imageMerging = false;
+        readingImage = false;
     }
 
-    void disgardImage() {
+    public void disgardImage() {
         compiledImage = null;
         currentScreen = "CameraLiveViewScreen";
     }
 
-    void searchForLocation() {
+    public void searchForLocation() {
+        currentScreen = "SearchingScreen";
+        switchScreens();
+
         // Getting the current input value of this text input (i.e. the most recent text input will have been the search box)
         searchAddress = currentTextInputValue;
         compiledSearchAddress = searchAddress.replace(" ", "+");
@@ -951,7 +953,10 @@ public class Sketch extends PApplet {
         }
     }
 
-    void getRandomLocation() {
+    public void getRandomLocation() {
+        currentScreen = "SearchingScreen";
+        switchScreens();
+
         println("Getting a random location");
         String randomLocationURLData = myFavouritesScreen.getRandomFavourite();
         googleImageLatLng = randomLocationURLData.split("@")[1].split("&")[0];
@@ -978,7 +983,7 @@ public class Sketch extends PApplet {
         }
     }
 
-    int checkIfFavourite(String currentFavTitle) {
+    public int checkIfFavourite(String currentFavTitle) {
 
         println("FAV - Checking if " + currentFavTitle + " is a favourite location");
         int favIndex = -1;
@@ -994,7 +999,7 @@ public class Sketch extends PApplet {
         return favIndex;
     }
 
-    void checkFavIcon() {
+    public void checkFavIcon() {
         println("FAV - Switching favicon image");
         if (checkIfFavourite(currentLocationName) > -1) {
             myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconYesImage.png"));
@@ -1003,7 +1008,7 @@ public class Sketch extends PApplet {
         }
     }
 
-    void checkTwitterLogin(){
+    public void checkTwitterLogin(){
         println("Checking if Twitter logged in");
         if(TwitterLoginActivity.twitterLoggedIn) {
             println("Twitter already logged in");
@@ -1064,103 +1069,4 @@ public class Sketch extends PApplet {
         startActivity(Intent.createChooser(share, "Share to"));
         this.getActivity().finish();
     }
-    /*
-    void removeGreenScreen() {
-    println("Starting removing Green Screen at frame " + frameCount);
-
-    // Changing the colour mode to HSB, so that I can work with the hue, satruation and
-    // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
-    // and brightness to 100.
-    colorMode(HSB, 360, 100, 100);
-
-    PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
-
-    keyedImage = currentFrame.get();
-
-    // Loading in the pixel arrays of the keyed image and the girl green screen image
-    keyedImage.loadPixels();
-    currentFrame.loadPixels();
-
-    int cfPixelsLength = currentFrame.pixels.length;
-    int cfWidth = currentFrame.width;
-
-    for (int i = 0; i < cfPixelsLength; i++) {
-
-    // Getting the hue, saturation and brightness values of the current pixel
-    float pixelHue = hue(currentFrame.pixels[i]);
-
-    // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
-    if (pixelHue > 60 && pixelHue < 180) {
-
-    float pixelSaturation = saturation(currentFrame.pixels[i]);
-    float pixelBrightness = brightness(currentFrame.pixels[i]);
-
-
-    // Creating variables to store the hue of the pixels surrounding the current pixel.
-    // Defaulting these the be equal to the current pixels hue, and only changing them if
-    // the current pixel is away from the edge of the picture
-    float pixelHueToLeft = pixelHue;
-    float pixelHueToRight = pixelHue;
-    float pixelHueAbove = pixelHue;
-    float pixelHueBelow = pixelHue;
-
-
-    // If the current pixel is not near the edge of the image, changing the values of the variables
-    // for the pixels around it to get their hue values
-    if (i > cfWidth + 1 && i < cfPixelsLength - cfWidth - 1) {
-    pixelHueToLeft = hue(currentFrame.pixels[i - 1]);
-    pixelHueToRight = hue(currentFrame.pixels[i + 1]);
-    pixelHueAbove = hue(currentFrame.pixels[i - cfWidth]);
-    pixelHueBelow = hue(currentFrame.pixels[i + cfWidth]);
-    }
-
-    // If the saturation and brightness are above 30, then this is a green pixel
-    if (pixelSaturation > 30 && pixelBrightness > 30)
-    {
-    // If the hue of the pixel is between 90 and 100, this is not fully green, but with a tinge
-    if (pixelHue > 90 && pixelHue < 100) {
-    // This seems to effect the girl's hair on the left
-    // Lowering the hue, saturation and opacity, to reduce the intensity of the colour
-    keyedImage.pixels[i] = color(pixelHue * 0.3, pixelSaturation * 0.4, pixelBrightness, 200);
-    } else if (pixelHue > 155) {
-    // Increasing the hue, and reducing the saturation
-    keyedImage.pixels[i] = color(pixelHue * 1.2, pixelSaturation * 0.5, pixelBrightness, 255);
-    } else if (pixelHue < 115) {
-    // Reducting the hue and saturation. Fixes the girl's hair (in greenScreenImage1) but adds in some of
-    // the green screeen in greenScreenImage2)
-    keyedImage.pixels[i] = color(pixelHue * 0.4, pixelSaturation * 0.5, pixelBrightness, 255);
-    } else {
-    // If the pixels around this pixel are in the more intense are of green, then assume this is part of the green screen
-    if (pixelHueToLeft > 90 && pixelHueToLeft < 150 && pixelHueToRight > 90 && pixelHueToRight < 150 && pixelHueAbove > 90 && pixelHueAbove < 150 && pixelHueBelow > 90 && pixelHueBelow < 150) {
-    // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-    keyedImage.pixels[i] = color(0, 0, 0, 0);
-    } else if (pixelHue > 130) {
-    // This seems to be the edges around the girl
-    // Increasing the hue, reducing the saturation and displaying the pixel at half opacity
-    keyedImage.pixels[i] = color(pixelHue * 1.1, pixelSaturation * 0.5, pixelBrightness, 150);
-    } else {
-    // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-    keyedImage.pixels[i] = color(0, 0, 0, 0);
-    }
-    }
-    } else {
-    // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
-    // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
-    // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge
-    // from this pixel.
-    keyedImage.pixels[i] = color(pixelHue * 0.6, pixelSaturation * 0.3, pixelBrightness);
-    }
-    }
-    }
-
-    // Updating the pixel arrays of the ketaiCamera and the keyed image
-    currentFrame.updatePixels();
-    keyedImage.updatePixels();
-
-    // Resetting the color mode to RGB
-    colorMode(RGB, 255, 255, 255);
-
-    println("Finished removing Green Screen and merging images at frame " + frameCount);
-    }
-    */
 }

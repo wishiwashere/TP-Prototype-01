@@ -1,5 +1,7 @@
 package processing.test.wish_i_was_here;
 
+import processing.core.PApplet;
+
 public class CameraLiveViewScreen extends Screen {
     private Sketch sketch;
 
@@ -70,7 +72,7 @@ public class CameraLiveViewScreen extends Screen {
                 // user can continue turn around in that direction, otherwise allowing it to equal to the
                 // current heading value minus the amount scrolled on the X
                 sketch.googleImageHeading = (sketch.googleImageHeading + amountScrolledX) > 359 ? 0 : sketch.googleImageHeading + amountScrolledX;
-                sketch.println("scrolled right. heading is now " + googleImageHeading);
+                println("scrolled right. heading is now " + googleImageHeading);
             } else {
                 // The user has scrolled LEFT
 
@@ -80,12 +82,12 @@ public class CameraLiveViewScreen extends Screen {
                 // user can continue turn around in that direction, otherwise allowing it to equal to the
                 // current heading value plus the amount scrolled on the X
                 sketch.googleImageHeading = (sketch.googleImageHeading - amountScrolledX) < 0 ? 359 : sketch.googleImageHeading - amountScrolledX;
-                sketch.println("scrolled left. heading is now " + sketch.googleImageHeading);
+                println("scrolled left. heading is now " + sketch.googleImageHeading);
             }
 
             if(sketch.shakeMovementOn == false) {
 
-                sketch.println("amountScrolledY = " + amountScrolledY);
+                println("amountScrolledY = " + amountScrolledY);
                 if (sketch.previousMouseY > sketch.mouseY) {
                     // The user has scrolled UP
 
@@ -95,7 +97,7 @@ public class CameraLiveViewScreen extends Screen {
                     // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch
                     // value plus the amount scrolled on the Y
                     sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledY) < -90 ? -90 : sketch.googleImagePitch - amountScrolledY;
-                    sketch.println("scrolled up. pitch is now " + sketch.googleImagePitch);
+                    println("scrolled up. pitch is now " + sketch.googleImagePitch);
                 } else {
                     // The user has scrolled DOWN
 
@@ -105,7 +107,7 @@ public class CameraLiveViewScreen extends Screen {
                     // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch
                     // value minus the amount scrolled on the Y
                     sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledY) > 90 ? 90 : sketch.googleImagePitch + amountScrolledY;
-                    sketch.println("scrolled down. pitch is now " + sketch.googleImagePitch);
+                    println("scrolled down. pitch is now " + sketch.googleImagePitch);
                 }
 
                 sketch.loadGoogleImage();

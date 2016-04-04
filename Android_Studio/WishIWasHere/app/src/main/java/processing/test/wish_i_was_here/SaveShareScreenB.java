@@ -9,16 +9,16 @@ public class SaveShareScreenB extends Screen {
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
-    public SaveShareScreenB(Sketch _sketch, PImage bgImage) {
+    public SaveShareScreenB(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
         // turn call it's super class (Rectangle) and create a rectangle with the
         // default values i.e. fullscreen, centered etc.
-        super(_sketch, bgImage);
+        super(_sketch);
 
         sketch = _sketch;
 
-        messageInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.07, sketch.appWidth * 0.8, sketch.appHeight * 0.3, _sketch.color(255, 255, 255), "messageInput", "LEFT-TOP");
+        messageInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.07, sketch.appWidth * 0.8, sketch.appHeight * 0.3, "messageInput", "LEFT-TOP");
         messageInput.setMaxTextLength(126);
 
         // Creating the icon/s for this screen, using locally scoped variables, as these
