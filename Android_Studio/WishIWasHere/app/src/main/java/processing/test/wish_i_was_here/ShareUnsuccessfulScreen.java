@@ -28,9 +28,10 @@ public class ShareUnsuccessfulScreen extends Screen {
 
         Icon cancelIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.cancelIconImage, "Cancel", true, "Below", "CameraLiveViewScreen");
         Icon retryIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.retryIconImage, "Retry", true, "Below", "_sendTweet");
+        Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX, sketch.largeIconBottomY * 0.7, sketch.largeIconSize, sketch.largeIconSize, sketch.shareImageToDeviceAppsImage, "Share", true, "Below", "_shareImageToDeviceApps");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
-        Icon[] allIcons = {cancelIcon, retryIcon};
+        Icon[] allIcons = {cancelIcon, retryIcon, shareImageToDeviceAppsIcon};
 
         // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
         // the temporary allIcons array to the screenIcons array of the Screen class so that they

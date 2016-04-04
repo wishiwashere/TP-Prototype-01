@@ -8,6 +8,8 @@ import ketai.camera.*;
 import ketai.ui.*;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Environment;
 
 import java.io.File;
@@ -146,6 +148,7 @@ public class Sketch extends PApplet {
     PImage overlayImage;
     PImage sharingScreenImage;
     PImage searchingImage;
+    PImage shareImageToDeviceAppsImage;
 
     /*-------------------------------------- Sizing ------------------------------------------------*/
 
@@ -326,6 +329,7 @@ public class Sketch extends PApplet {
         overlayImage = loadImage("overlay.png");
         sharingScreenImage = loadImage("sharingScreenImage.png");
         searchingImage = loadImage("searchingImage.png");
+        shareImageToDeviceAppsImage = loadImage("instagramAccountIconImage.png");
 
     /*-------------------------------------- Sizing ------------------------------------------------*/
 
@@ -336,7 +340,7 @@ public class Sketch extends PApplet {
         iconRightX = (float)(appWidth * 0.85);
         iconCenterX = (float)(appWidth * 0.5);
         iconTopY = (float)(appHeight * 0.085);
-        iconBottomY = (float)(appHeight * 0.92);
+        iconBottomY = (float)(appHeight * 0.9);
         iconCenterY = (float)(appHeight * 0.5);
         largeIconSize = (float)(appWidth * 0.25);
         smallIconSize = (float)(appWidth * 0.15);
@@ -434,8 +438,6 @@ public class Sketch extends PApplet {
         } else if (callFunction.equals("_switchAutoSave")) {
             switchAutoSave();
         } else if (callFunction.equals("_sendTweet")) {
-            currentScreen = "SharingScreen";
-            mySharingScreen.showScreen();
             sendTweet();
         } else if (callFunction.equals("_mergeImages")) {
             mergeImages();
@@ -453,7 +455,9 @@ public class Sketch extends PApplet {
             checkTwitterLogin();
         } else if(callFunction.equals("_switchShakeMovement")){
             switchShakeMovement();
-        }else {
+        } else if(callFunction.equals("_shareImageToDeviceApps")) {
+            shareImageToDeviceApps();
+        } else {
             println(callFunction + " - This function does not exist / cannot be triggered by this icon");
         }
 
@@ -542,15 +546,15 @@ public class Sketch extends PApplet {
             }
             Icon[] alteredIcons = myCameraLiveViewScreen.getScreenIcons();
             for (int i = 0; i < alteredIcons.length; i++) {
-                println(i);
+                //println(i);
                 if (accelerometerX > 7) {
-                    println("Device is being turned to the left");
+                    //println("Device is being turned to the left");
                     alteredIcons[i].setRotation(90);
                 }else if (accelerometerX < -7) {
-                    println("Device is being turned to the right");
+                    //println("Device is being turned to the right");
                     alteredIcons[i].setRotation(-90);
                 }else {
-                    println("Device standing straight");
+                    //println("Device standing straight");
                     alteredIcons[i].setRotation(0);
                 }
 
@@ -604,7 +608,6 @@ public class Sketch extends PApplet {
             mySaveShareScreenB.showScreen();
         } else if (currentScreen.equals("SharingScreen")) {
             mySharingScreen.showScreen();
-            testingTimeoutScreen("ShareSaveSuccessfulScreen");
         } else if (currentScreen.equals("ShareSaveSuccessfulScreen")) {
             myShareSaveSuccessfulScreen.showScreen();
             testingTimeoutScreen("CameraLiveViewScreen");
@@ -636,18 +639,16 @@ public class Sketch extends PApplet {
             }
         } else if (ketaiCamera.isStarted()) {
             ketaiCamera.stop();
-                println("CAM - Stopping Ketai Camera");
+            println("CAM - Stopping Ketai Camera");
         }
     }
 
     void keepImage() {
         callFunction = "";
         if(autoSaveModeOn) {
-            saveImageToPhotoGallery();
             // Checking if Storage is available
             if (isExternalStorageWritable()) {
                 if (saveImageToPhotoGallery()) {
-                    this.imageSaved = true;
                     currentScreen = "SaveShareScreenA";
                 } else {
                     println("Failed to save image");
@@ -666,6 +667,7 @@ public class Sketch extends PApplet {
             if (compiledImage.save(saveToPath)) {
                 println("Successfully saved image to - " + saveToPath);
                 successfull = true;
+                imageSaved = true;
             } else {
                 println("Failed to save image");
             }
@@ -774,6 +776,9 @@ public class Sketch extends PApplet {
         // getShareableImage();
         callFunction = "";
         if(TwitterLoginActivity.twitterLoggedIn) {
+            currentScreen = "SharingScreen";
+            mySharingScreen.showScreen();
+
             // Creating a string to to hold the value that is in the message input
             String message = mySaveShareScreenB.messageInput.getInputValue();
 
@@ -807,7 +812,11 @@ public class Sketch extends PApplet {
                 currentScreen = "ShareUnsuccessfulScreen";
             }
         } else {
-            currentScreen = "ShareSaveSuccessfulScreen";
+            if(this.imageShared == false && this.imageSaved == false){
+                currentScreen = "CameraLiveViewScreen";
+            } else {
+                currentScreen = "ShareSaveSuccessfulScreen";
+            }
             println("Twitter - No twitter account logged in");
         }
     }
@@ -1019,6 +1028,33 @@ public class Sketch extends PApplet {
     public void saveUserPreferencesXML(){
         saveXML(userPreferencesXML, sketchPath("user_preferences.xml"));
         loadUserPreferencesXML();
+    }
+
+    public void shareImageToDeviceApps(){
+        if(this.imageSaved == false) {
+            saveImageToPhotoGallery();
+        }
+        createInstagramIntent(saveToPath);
+    }
+
+    public void createInstagramIntent(String imagePath){
+
+        // Create the new Intent using the 'Send' action.
+        Intent share = new Intent(Intent.ACTION_SEND);
+
+        // Set the MIME type
+        share.setType("image/*");
+
+        // Create the URI from the media
+        File media = new File(imagePath);
+        Uri uri = Uri.fromFile(media);
+
+        // Add the URI to the Intent.
+        share.putExtra(Intent.EXTRA_STREAM, uri);
+
+        // Broadcast the Intent.
+        startActivity(Intent.createChooser(share, "Share to"));
+        this.getActivity().finish();
     }
     /*
     void removeGreenScreen() {

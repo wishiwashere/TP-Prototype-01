@@ -43,12 +43,6 @@ public class SaveShareScreenB extends Screen {
         // This reduces the need for each screen to have to loop through it's icons, or call the
         // same method on multiple icons.
         this.setScreenIcons(allIcons);
-
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
-        this.setScreenTitle("Save Share Screen B");
     }
 
     // Creating a public showScreen method, which is called by the draw() funciton whenever this

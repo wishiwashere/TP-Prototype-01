@@ -25,8 +25,8 @@ public class SaveShareScreenA extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon twitterIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY, sketch.largeIconSize, sketch.largeIconSize, sketch.twitterAccountIconImage, "Twitter", true, "Below", "_checkTwitterLogin");
-        Icon saveIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.5, sketch.largeIconSize, sketch.largeIconSize, sketch.saveIconImage, "Save", true, "Below", "_keepImage");
+        Icon twitterIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 1.45, sketch.largeIconSize, sketch.largeIconSize, sketch.twitterAccountIconImage, "Twitter", true, "Below", "_checkTwitterLogin");
+        Icon saveIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.iconCenterY * 1.45, sketch.largeIconSize, sketch.largeIconSize, sketch.saveIconImage, "Save", true, "Below", "_keepImage");
         Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Cancel", true, "Middle", "CameraLiveViewScreen");
         Icon nextIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Next", true, "Middle", "SaveShareScreenB");
 
@@ -40,12 +40,6 @@ public class SaveShareScreenA extends Screen {
         // This reduces the need for each screen to have to loop through it's icons, or call the
         // same method on multiple icons.
         this.setScreenIcons(allIcons);
-
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
-        this.setScreenTitle("Save Share Screen A");
     }
 
     // Creating a public showScreen method, which is called by the draw() funciton whenever this
@@ -57,6 +51,6 @@ public class SaveShareScreenA extends Screen {
         // generate the size and background of the screen
         this.drawScreen();
 
-        this.addImage(sketch.compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.5, sketch.appWidth * 0.3, sketch.appHeight * 0.3);
+        this.addImage(sketch.compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.65, sketch.appWidth * 0.5, sketch.appHeight * 0.5);
     }
 }
