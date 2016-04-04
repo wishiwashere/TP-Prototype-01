@@ -79,7 +79,7 @@ public class Screen extends Rectangle {
         if (this.screenTitle.length() > 0)
         {
             sketch.fill(0);
-            this.addText(this.screenTitle, sketch.appWidth/2, sketch.screenTitleY, sketch.appHeight * 0.08);
+            this.addText(this.screenTitle, sketch.appWidth/2, sketch.screenTitleY, sketch.appHeight * 0.07);
         }
 
         // Checking if this screen has any icons to be displayed
@@ -107,7 +107,6 @@ public class Screen extends Rectangle {
   /*-------------------------------------- get() and set() ------------------------------------------------*/
 
     protected void setScreenTitle(String title) {
-        sketch.println("FAV - Setting Screen Title to " + title);
         // Setting the screenTitle to the title passed in by each screen. If no
         // title is passed, this variable has already been initialised to an
         // empty string above

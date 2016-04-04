@@ -340,15 +340,14 @@ public class Sketch extends PApplet {
         iconRightX = (float)(appWidth * 0.85);
         iconCenterX = (float)(appWidth * 0.5);
         iconTopY = (float)(appHeight * 0.085);
-        iconBottomY = (float)(appHeight * 0.9);
+        iconBottomY = (float)(appHeight * 0.87);
         iconCenterY = (float)(appHeight * 0.5);
         largeIconSize = (float)(appWidth * 0.25);
         smallIconSize = (float)(appWidth * 0.15);
         homeIconSize = (float)(largeIconSize * 1.3);
         largeIconBottomY = (float)(iconBottomY - (largeIconSize/2));
-        screenTitleY = (float)(appHeight * 0.2);
+        screenTitleY = iconTopY;
 
-        println("TEST - ScreenTitleY = " + screenTitleY);
         // Initialising the defaultTextSize to be equal to a percentage of the app's current height
         defaultTextSize = (float)(appHeight * 0.035);
 
@@ -524,7 +523,7 @@ public class Sketch extends PApplet {
     // available from the ketaiCamera.
     public void onCameraPreviewEvent()
     {
-        println("CAM - New frame available " + readingImage);
+        //println("CAM - New frame available " + readingImage);
         if (readingImage == false && callFunction != "_mergeImages") {
             // Reading in a new frame from the ketaiCamera.
             println("CAM - New frame about to be read");

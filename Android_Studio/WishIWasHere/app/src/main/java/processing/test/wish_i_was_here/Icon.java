@@ -159,7 +159,7 @@ public class Icon extends ClickableElement {
                         // Resets required for the About Screen.
                         // Resetting teh screenTitleY position to it's original value (as it may have been
                         // incremented if the about screen was scrolled
-                        sketch.screenTitleY = (float)(appHeight * 0.08);
+                        sketch.screenTitleY = sketch.iconTopY;
 
                         // Resetting the about screen's loaded value to false, so that the next time it is opened
                         // it will reset to it's original positions
