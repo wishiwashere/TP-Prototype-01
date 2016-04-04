@@ -491,10 +491,11 @@ void onCameraPreviewEvent()
     // Reading in a new frame from the ketaiCamera.
     readingImage = true;
     ketaiCamera.read();
-    //currentFrame = ketaiCamera.get();
-    //thread("previewGreenScreen");
-    println("About to call sendCameraImageToServer");
-    thread("sendCameraImageToServer");
+    currentFrame = ketaiCamera.get();
+    thread("previewGreenScreen");
+    
+    //println("About to call sendCameraImageToServer");
+    //thread("sendCameraImageToServer");
   }
 }
 
