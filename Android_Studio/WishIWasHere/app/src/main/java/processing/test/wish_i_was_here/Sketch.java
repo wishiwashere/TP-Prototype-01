@@ -194,7 +194,6 @@ public class Sketch extends PApplet {
     ShareUnsuccessfulScreen myShareUnsuccessfulScreen;
     ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
     SearchingScreen mySearchingScreen;
-    SocialMediaLoginScreen mySocialMediaLoginScreen;
     SocialMediaLogoutScreen mySocialMediaLogoutScreen;
     LoadingScreen myLoadingScreen;
 
@@ -371,7 +370,6 @@ public class Sketch extends PApplet {
         myShareUnsuccessfulScreen = new ShareUnsuccessfulScreen(this, placeholderBackgroundImage);
         myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(this, placeholderBackgroundImage);
         mySearchingScreen = new SearchingScreen(this, placeholderBackgroundImage);
-        mySocialMediaLoginScreen = new SocialMediaLoginScreen(this, placeholderBackgroundImage);
         mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this, placeholderBackgroundImage);
         myLoadingScreen = new LoadingScreen(this, loadImage("loadingScreenImage.png"));
 
@@ -616,8 +614,6 @@ public class Sketch extends PApplet {
             myShareSaveUnsuccessfulScreen.showScreen();
         } else if (currentScreen.equals("SearchingScreen")) {
             mySearchingScreen.showScreen();
-        } else if (currentScreen.equals("SocialMediaLoginScreen")) {
-            mySocialMediaLoginScreen.showScreen();
         } else if (currentScreen.equals("SocialMediaLogoutScreen")) {
             mySocialMediaLogoutScreen.showScreen();
         } else if (currentScreen.equals("LoadingScreen")) {

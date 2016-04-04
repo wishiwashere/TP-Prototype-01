@@ -43,11 +43,10 @@ public class SettingsScreen extends Screen {
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImage, "Home", false, "HomeScreen");
         Icon learningModeIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.5, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, learningModeToggleSwitchImage, "Learning mode switch", false, "_switchLearningMode");
         Icon autoSaveIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.8, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, autoSaveToggleSwitchImage, "Auto-save switch", false, "_switchAutoSave");
-        Icon instagramAccountIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.instagramAccountIconImage, "Instagram", true, "Below", "SocialMediaLoginScreen");
         Icon twitterAccountIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.twitterAccountIconImage, "Twitter", true, "Below", "_checkTwitterLogin");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
-        Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, instagramAccountIcon, twitterAccountIcon};
+        Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, twitterAccountIcon};
 
         // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
         // the temporary allIcons array to the screenIcons array of the Screen class so that they
