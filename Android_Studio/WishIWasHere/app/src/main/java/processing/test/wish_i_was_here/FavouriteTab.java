@@ -19,7 +19,7 @@ public class FavouriteTab extends ClickableElement {
         // almost white colour (as pure white will not be shown - previous work around in the
         // Rectangle class), and the title of the location (for printing to the console to
         // let us know which tab was clicked on - if one has been clicked).
-        super(_sketch, _sketch.width/2, (y + 1) * _sketch.height * 0.25, _sketch.width * 0.55, _sketch.height * 0.17, title);
+        super(_sketch, _sketch.width/2, (y + 1) * _sketch.height * 0.22, _sketch.width * 0.65, _sketch.height * 0.17, title);
 
         sketch = _sketch;
 

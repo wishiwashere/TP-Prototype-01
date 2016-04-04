@@ -906,7 +906,7 @@ public class Sketch extends PApplet {
 
         mergedImage.beginDraw();
         mergedImage.imageMode(CENTER);
-        mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float) (appHeight * 0.9), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
+        mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float) (appHeight * 0.8), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
         mergedImage.endDraw();
 
         compiledImage = mergedImage.get();

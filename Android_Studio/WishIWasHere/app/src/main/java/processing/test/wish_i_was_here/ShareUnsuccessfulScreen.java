@@ -61,8 +61,10 @@ public class ShareUnsuccessfulScreen extends Screen {
         this.addText("Your postcard", sketch.iconCenterX, sketch.appHeight * 0.18);
         this.addText("was not sent", sketch.iconCenterX, sketch.appHeight * 0.26);
         this.addImage(sketch.loadImage("sharingScreenImage.png"), sketch.iconCenterX, sketch.appHeight * 0.4, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
-        this.addText("But good news :)", sketch.iconCenterX, sketch.appHeight * 0.54);
-        this.addText("We have still", sketch.iconCenterX, sketch.appHeight * 0.62);
-        this.addText("saved it for you!", sketch.iconCenterX, sketch.appHeight * 0.7);
+        if(this.imageSaved) {
+            this.addText("But good news :)", sketch.iconCenterX, sketch.appHeight * 0.54);
+            this.addText("We have still", sketch.iconCenterX, sketch.appHeight * 0.62);
+            this.addText("saved it for you!", sketch.iconCenterX, sketch.appHeight * 0.7);
+        }
     }
 }

@@ -5,7 +5,7 @@ import processing.core.*;
 public class AboutScreen extends Screen {
     private Sketch sketch;
 
-    private String aboutText = "We are Creative Multimedia students in our 3rd Year in Limerick Institute of Technology Clonmel. As part of a team project, we decided to design, create and build an application that will transport you to different locations around the world in a fun and interactive way. It is the no pay, no stress holiday app. ";
+    private String aboutText = "We are 3rd Year Creative Multimedia students in Limerick Institute of Technology, Clonmel. As part of a team project, we decided to design, create and build an application that will transport you to different locations around the world. Our aim is to make the world a little bit smaller, one click at a time. ";
     private String attributionHeading = "Attributions: ";
     //private String attributionText1 = "Google Maps Geolocation API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc" + "/n/n" + "Google Street View Image API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc" + "/n/n" + "Android Studio, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 2.5 Generic. It is attributed to Google Inc and the Open Handset Alliance" + "/n/n" + "Ketai, Copyright © 2015, Licensed by Processing Foundation" + "/n/n" + "Processing, Copyright © 2004, Licensed by Processing Foundation" + "/n/n" + "Fabric.io, Copyright © 2016, Licensed by Twitter Inc" + "/n/n" + "ExpressJS, Copyright © 2016 StrongLoop, IBM, and other expressjs.com contributors. By the Node JS Foundation" + "/n/n" + "Jimp, Copyright © 2016 Licensed by MIT" + "/n/n" + "Onecolor, Copyright © 2011, Licensed by One.com";
     private String attributionText1 = "Google Maps Geolocation API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc";
@@ -99,17 +99,18 @@ public class AboutScreen extends Screen {
         sketch.textSize((float) (sketch.appWidth * 0.05));
         sketch.fill(0);
         sketch.text(aboutText, (float) (sketch.appWidth * 0.1), (float) (this.getY() + (sketch.appHeight * -0.1)), (float) (sketch.appWidth * 0.8), (float) (sketch.appHeight * 0.9));
-        sketch.text(attributionHeading, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 0.5)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
 
-        sketch.text(attributionText1, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 0.6)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
-        sketch.text(attributionText2, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 0.85)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
-        sketch.text(attributionText3, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 1.1)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
-        sketch.text(attributionText4, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 1.35)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
-        sketch.text(attributionText5, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 1.60)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
-        sketch.text(attributionText6, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 1.85)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
-        sketch.text(attributionText7, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 2.1)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
-        sketch.text(attributionText8, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 2.35)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
-        sketch.text(attributionText9, (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 2.60)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 0.9));
+        sketch.text("Attributions" + "\r\n\r\n"
+                + attributionText1 + "\r\n\r\n"
+                + attributionText2 + "\r\n\r\n"
+                + attributionText3 + "\r\n\r\n"
+                + attributionText4 + "\r\n\r\n"
+                + attributionText5 + "\r\n\r\n"
+                + attributionText6 + "\r\n\r\n"
+                + attributionText7 + "\r\n\r\n"
+                + attributionText8 + "\r\n\r\n"
+                + attributionText9
+                , (float)(sketch.appWidth * 0.1), (float)(this.getY()  + (sketch.appHeight * 0.48)), (float)(sketch.appWidth * 0.8), (float)(sketch.appHeight * 1.6));
 
         // Checking if the page is being scrolled
         if (sketch.mousePressed) {

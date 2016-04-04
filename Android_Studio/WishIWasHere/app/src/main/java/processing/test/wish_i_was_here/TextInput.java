@@ -60,7 +60,7 @@ public class TextInput extends ClickableElement {
 
         sketch = _sketch;
 
-        super.setBackgroundColor(sketch.color(255, 255, 255, 0));
+        super.setBackgroundColor(sketch.color(255, 255, 255, 149));
 
         // Initialising the inputTitle to be equal to the requested title
         this.inputTitle = title;
