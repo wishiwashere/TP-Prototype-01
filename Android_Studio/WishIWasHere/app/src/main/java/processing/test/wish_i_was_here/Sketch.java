@@ -545,7 +545,7 @@ public class Sketch extends PApplet {
             println("CAM - New frame about to be read");
             this.readingImage = true;
             ketaiCamera.read();
-            currentFrame = ketaiCamera.get();
+
             thread("previewGreenScreen");
         }
     }
@@ -725,6 +725,7 @@ public class Sketch extends PApplet {
         {
             currentScreen = fadeToScreen;
             mousePressed = false;
+            mouseClicked = false;
         }
     }
 
@@ -832,56 +833,65 @@ public class Sketch extends PApplet {
     }
 
     public void previewGreenScreen() {
-        println("Starting removing Green Screen at frame " + frameCount);
+        try {
+            println("Starting removing Green Screen at frame " + frameCount);
 
-        // Changing the colour mode to HSB, so that I can work with the hue, satruation and
-        // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
-        // and brightness to 100.
-        colorMode(HSB, 360, 100, 100);
+            currentFrame = ketaiCamera.get();
 
-        PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
+            // Changing the colour mode to HSB, so that I can work with the hue, satruation and
+            // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
+            // and brightness to 100.
+            colorMode(HSB, 360, 100, 100);
 
-        keyedImage = currentFrame.get();
+            PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
 
-        // Loading in the pixel arrays of the keyed image and the girl green screen image
-        keyedImage.loadPixels();
+            keyedImage = currentFrame.get();
 
-        for (int i = 0; i < keyedImage.pixels.length; i++) {
+            // Loading in the pixel arrays of the keyed image and the girl green screen image
+            keyedImage.loadPixels();
 
-            // Getting the hue, saturation and brightness values of the current pixel
-            float pixelHue = hue(currentFrame.pixels[i]);
+            for (int i = 0; i < keyedImage.pixels.length; i++) {
 
-            // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
-            if (pixelHue > 60 && pixelHue < 180) {
+                // Getting the hue, saturation and brightness values of the current pixel
+                float pixelHue = hue(currentFrame.pixels[i]);
 
-                float pixelSaturation = saturation(currentFrame.pixels[i]);
-                float pixelBrightness = brightness(currentFrame.pixels[i]);
+                // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
+                if (pixelHue > 60 && pixelHue < 180) {
 
-                // If the saturation and brightness are above 30, then this is a green pixel
-                if (pixelSaturation > 30 && pixelBrightness > 20)
-                {
-                    // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
-                    keyedImage.pixels[i] = color(0, 0, 0, 0);
-                } else {
-                    // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
-                    // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
-                    // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge
-                    // from this pixel.
-                    keyedImage.pixels[i] = color((int)(pixelHue * 0.6), (int)(pixelSaturation * 0.3), (int)(pixelBrightness));
+                    float pixelSaturation = saturation(currentFrame.pixels[i]);
+                    float pixelBrightness = brightness(currentFrame.pixels[i]);
+
+                    // If the saturation and brightness are above 30, then this is a green pixel
+                    if (pixelSaturation > 30 && pixelBrightness > 20) {
+                        // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
+                        keyedImage.pixels[i] = color(0, 0, 0, 0);
+                    } else {
+                        // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
+                        // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
+                        // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge
+                        // from this pixel.
+                        keyedImage.pixels[i] = color((int) (pixelHue * 0.6), (int) (pixelSaturation * 0.3), (int) (pixelBrightness));
+                    }
                 }
             }
+
+            // Updating the pixel arrays of the ketaiCamera and the keyed image
+            keyedImage.updatePixels();
+
+            // Resetting the color mode to RGB
+            colorMode(RGB, 255, 255, 255);
+
+            currentImage = keyedImage.get();
+
+            keyedImage = null;
+            currentFrame = null;
+
+            readingImage = false;
+            println("Finished removing Green Screen at frame " + frameCount);
+        } catch(OutOfMemoryError e){
+            println("Green screen keying could not be completed - " + e);
+            this.readingImage = false;
         }
-
-        // Updating the pixel arrays of the ketaiCamera and the keyed image
-        keyedImage.updatePixels();
-
-        // Resetting the color mode to RGB
-        colorMode(RGB, 255, 255, 255);
-
-        currentImage = keyedImage.get();
-
-        readingImage = false;
-        println("Finished removing Green Screen at frame " + frameCount);
     }
 
     public void mergeImages() {
