@@ -151,6 +151,7 @@ public class Sketch extends PApplet {
     PImage sharingScreenImage;
     PImage searchingImage;
     PImage shareImageToDeviceAppsImage;
+    PImage returnCameraLiveViewIcon;
 
 
     Boolean mouseClicked = false;
@@ -332,7 +333,8 @@ public class Sketch extends PApplet {
         overlayImage = loadImage("overlay.png");
         sharingScreenImage = loadImage("sharingScreenImage.png");
         searchingImage = loadImage("searchingImage.png");
-        shareImageToDeviceAppsImage = loadImage("instagramAccountIconImage.png");
+        shareImageToDeviceAppsImage = loadImage("shareIconImage.png");
+        returnCameraLiveViewIcon = loadImage("returnCameraLiveViewIcon.png");
 
     /*-------------------------------------- Sizing ------------------------------------------------*/
 

@@ -18,10 +18,14 @@ public class ShareSaveSuccessfulScreen extends Screen {
 
         sketch = _sketch;
 
-        Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.6, sketch.largeIconSize, sketch.largeIconSize, sketch.shareImageToDeviceAppsImage, "Share", true, "Below", "_shareImageToDeviceApps");
+        Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 1.5, sketch.largeIconSize, sketch.largeIconSize, sketch.shareImageToDeviceAppsImage, "\r\n\n" + "Share to other" + "\r\n" + " applications", true, "Below", "_shareImageToDeviceApps");
+
+        Icon returnCameraLiveViewIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.iconCenterY * 1.5, sketch.largeIconSize, sketch.largeIconSize, sketch.returnCameraLiveViewIcon, "\r\n\n" + "Return to" +"\r\n" + " camera view", true, "Below", "CameraLiveViewScreen");
+
+        //Icon shareImageToDeviceAppsIcon = new Icon( sketch, sketch.appWidth * 0.7, sketch.iconCenterY * 1.45, sketch.largeIconSize, sketch.largeIconSize, sketch.shareImageToDeviceAppsImage, "Share", true, "Below", "_shareImageToDeviceApps");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
-        Icon[] allIcons = {shareImageToDeviceAppsIcon};
+        Icon[] allIcons = {shareImageToDeviceAppsIcon,returnCameraLiveViewIcon };
 
         this.setScreenIcons(allIcons);
 
