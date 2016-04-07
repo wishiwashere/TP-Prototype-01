@@ -107,6 +107,8 @@ public class Icon extends ClickableElement {
         }
         if (sketch.mouseClicked) {
             if (this.checkMouseOver()) {
+                mouseClicked = false;
+
                 // Checking if this icon has a link associated with it
                 if (this.iconLinkTo.length() > 0)
                 {
@@ -171,7 +173,6 @@ public class Icon extends ClickableElement {
                     }
                 }
             }
-            mouseClicked = false;
         }
     }
 }

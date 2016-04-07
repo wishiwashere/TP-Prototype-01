@@ -114,7 +114,7 @@ public class AboutScreen extends Screen {
 
         // Checking if the page is being scrolled
         if (sketch.mousePressed) {
-
+            sketch.mouseClicked = false;
             // Calculating the amount scolled, based on the distance between the previous y position,
             // and the current y position. When the mouse is first pressed, the previous y position
             // is initialised (in the main sketch) but then while the mouse is held down, the previous

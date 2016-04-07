@@ -491,14 +491,10 @@ public class Sketch extends PApplet {
 
     @Override
     public void mousePressed() {
+        mouseClicked = true;
         keyboardRequired = false;
         previousMouseY = mouseY;
         previousMouseX = mouseX;
-    }
-
-    @Override
-    public void mouseReleased(){
-        mouseClicked = true;
     }
 
     @Override
@@ -611,7 +607,6 @@ public class Sketch extends PApplet {
             mySearchScreen.showScreen();
         } else if (currentScreen.equals("SearchUnsuccessfulScreen")) {
             mySearchUnsuccessfulScreen.showScreen();
-            testingTimeoutScreen("SearchUnsuccessfulScreen");
         } else if (currentScreen.equals("ImagePreviewScreen")) {
             myImagePreviewScreen.showScreen();
         } else if (currentScreen.equals("SaveShareScreenA")) {
@@ -623,7 +618,6 @@ public class Sketch extends PApplet {
             mySharingScreen.showScreen();
         } else if (currentScreen.equals("ShareSaveSuccessfulScreen")) {
             myShareSaveSuccessfulScreen.showScreen();
-            testingTimeoutScreen("CameraLiveViewScreen");
         } else if (currentScreen.equals("ShareUnsuccessfulScreen")) {
             myShareUnsuccessfulScreen.showScreen();
         } else if (currentScreen.equals("ShareSaveUnsuccessfulScreen")) {
@@ -634,7 +628,7 @@ public class Sketch extends PApplet {
             mySocialMediaLogoutScreen.showScreen();
         } else if (currentScreen.equals("LoadingScreen")) {
             myLoadingScreen.showScreen();
-            testingTimeoutScreen("HomeScreen");
+            fadeToScreen("HomeScreen");
         } else {
             println("This screen doesn't exist");
             //currentScreen = "HomeScreen";
@@ -718,14 +712,10 @@ public class Sketch extends PApplet {
         return answer;
     }
 
-
-    // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
-    // eeded a way to clear it from the screen until the
-    // code that normally would clear it is added
-    public void testingTimeoutScreen(String fadeToScreen) {
-        if (mousePressed)
+    public void fadeToScreen(String nextScreen) {
+        if (mouseClicked)
         {
-            currentScreen = fadeToScreen;
+            currentScreen = nextScreen;
             mousePressed = false;
             mouseClicked = false;
         }

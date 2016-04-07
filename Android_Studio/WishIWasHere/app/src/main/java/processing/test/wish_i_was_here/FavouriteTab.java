@@ -43,7 +43,7 @@ public class FavouriteTab extends ClickableElement {
 
         // If the mouse is currently pressed, checking if the mouse was over this
         // tab when the press/click occurred
-        if (sketch.mousePressed) {
+        if (sketch.mouseClicked) {
             // Checking the mouse was over this by using the super class ClickableElement's
             // checkMouseOver() method
             if (this.checkMouseOver()){

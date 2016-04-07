@@ -115,7 +115,7 @@ public class TextInput extends ClickableElement {
             }
             this.addTextBox(displayText);
         }
-        if (sketch.mousePressed) {
+        if (sketch.mouseClicked) {
             if (this.checkMouseOver()) {
                 sketch.keyboardRequired = true;
                 sketch.currentTextInput = this;
