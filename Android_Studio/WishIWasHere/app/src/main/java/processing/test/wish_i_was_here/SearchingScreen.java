@@ -4,6 +4,7 @@ import processing.core.*;
 
 public class SearchingScreen extends Screen {
     private Sketch sketch;
+    private PImage searchingImage;
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
@@ -15,6 +16,8 @@ public class SearchingScreen extends Screen {
         super(_sketch);
 
         sketch = _sketch;
+
+        searchingImage = sketch.loadImage("searchingImage.png");
 
         // Setting the title of this screen. The screenTitle variable was also declared in this
         // class's super class (Screen), so that it can be accessed when showing the screen
@@ -32,6 +35,6 @@ public class SearchingScreen extends Screen {
         // generate the size and background of the screen
         this.drawScreen();
 
-        this.addImage(sketch.searchingImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth * 0.4, sketch.appWidth * 0.4);
+        this.addImage(this.searchingImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth * 0.4, sketch.appWidth * 0.4);
     }
 }

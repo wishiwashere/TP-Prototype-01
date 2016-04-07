@@ -87,7 +87,7 @@ public class Rectangle extends Sketch {
             // Setting the fill colour of the object to the value specified
             sketch.fill(this.rectCol);
 
-            sketch.noStroke();
+            sketch.stroke((float) (sketch.appWidth * 0.01));
 
             // Setting the drawing mode of the rectangle to be centered. This way, if a rotation has
             // been applied to the rectangle, it will pivot around it's center point
@@ -290,9 +290,7 @@ public class Rectangle extends Sketch {
     }
 
     protected void setImage(PImage img) {
-        if (img.width == this.rectImage.width) {
-            this.rectImage = img;
-        }
+        this.rectImage = img;
     }
 
     // Set method that sets the rotation of instance

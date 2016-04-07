@@ -5,6 +5,8 @@ import processing.core.*;
 public class SharingScreen extends Screen {
     private Sketch sketch;
 
+    private PImage sharingScreenImage;
+
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
     public SharingScreen(Sketch _sketch) {
@@ -15,6 +17,8 @@ public class SharingScreen extends Screen {
         super(_sketch);
 
         sketch = _sketch;
+
+        sharingScreenImage = sketch.loadImage("sharingScreenImage.png");
 
         // Setting the title of this screen. The screenTitle variable was also declared in this
         // class's super class (Screen), so that it can be accessed when showing the screen
@@ -32,6 +36,6 @@ public class SharingScreen extends Screen {
         // generate the size and background of the screen
         this.drawScreen();
 
-        this.addImage(sketch.sharingScreenImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
+        this.addImage(this.sharingScreenImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
     }
 }

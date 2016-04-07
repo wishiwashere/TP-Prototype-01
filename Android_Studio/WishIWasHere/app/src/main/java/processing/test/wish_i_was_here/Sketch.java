@@ -122,37 +122,7 @@ public class Sketch extends PApplet {
 
     // Declaring the image holders for the icons that will appear throughout the sketch,
     // so that they can all be loaded in once, and then used throughout the relevant screens
-    PImage randomPageIconImage;
-    PImage searchPageIconImage;
-    PImage aboutPageIconImage;
-    PImage favouritesPageIconImage;
-    PImage settingsPageIconImage;
-    PImage homeIconImage;
-    PImage homeIconImageWhite;
-    PImage favIconImage;
-    PImage shakeIconImage;
-    PImage shutterIconImage;
-    PImage switchViewIconImage;
-    PImage retryIconImage;
-    PImage deleteIconImage;
-    PImage saveIconImage;
-    PImage disgardIconImage;
-    PImage keepIconImage;
-    PImage cancelIconImage;
-    PImage facebookAccountIconImage;
-    PImage twitterAccountIconImage;
-    PImage instagramAccountIconImage;
-    PImage emailIconImage;
-    PImage buttonImage;
     PImage generalPageBackgroundImage;
-    PImage toggleSwitchOnIconImage;
-    PImage toggleSwitchOffIconImage;
-    PImage overlayImage;
-    PImage sharingScreenImage;
-    PImage searchingImage;
-    PImage shareImageToDeviceAppsImage;
-    PImage returnCameraLiveViewIcon;
-
 
     Boolean mouseClicked = false;
 
@@ -218,7 +188,6 @@ public class Sketch extends PApplet {
     PImage currentImage;
 
     Boolean readingImage = false;
-    PImage currentFrame;
 
     /*-------------------------------------- Google Street View Images ------------------------------------------------*/
     String searchAddress;
@@ -307,34 +276,8 @@ public class Sketch extends PApplet {
         // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
         // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
         // reused on multiple pages
-        randomPageIconImage = loadImage("randomPageIconImage.png");
-        searchPageIconImage = loadImage("searchPageIconImage.png");
-        aboutPageIconImage = loadImage("aboutPageIconImage.png");
-        favouritesPageIconImage = loadImage("favouritesPageIconImage.png");
-        settingsPageIconImage = loadImage("settingsPageIconImage.png");
-        homeIconImage = loadImage("homeIconImage.png");
-        homeIconImageWhite = loadImage("homeIconWhiteImage.png");
-        favIconImage = loadImage("favIconNoImage.png");
-        shakeIconImage = loadImage("shakeIconImage.png");
-        shutterIconImage = loadImage("shutterIconImage.png");
-        switchViewIconImage = loadImage("switchViewIconImage.png");
-        retryIconImage = loadImage("retryIconImage.png");
-        saveIconImage = loadImage("saveIconImage.png");
-        disgardIconImage = loadImage("disgardIconImage.png");
-        keepIconImage = loadImage("keepIconImage.png");
-        cancelIconImage = loadImage("cancelIconImage.png");
-        facebookAccountIconImage = loadImage("facebookAccountIconImage.png");
-        twitterAccountIconImage = loadImage("twitterAccountIconImage.png");
-        instagramAccountIconImage = loadImage("instagramAccountIconImage.png");
-        buttonImage = loadImage("buttonImage.png");
         generalPageBackgroundImage = loadImage("generalPageBackgroundImage.png");
-        toggleSwitchOnIconImage = loadImage("toggleSwitchOnIconImage.png");
-        toggleSwitchOffIconImage = loadImage("toggleSwitchOffIconImage.png");
-        overlayImage = loadImage("overlay.png");
-        sharingScreenImage = loadImage("sharingScreenImage.png");
-        searchingImage = loadImage("searchingImage.png");
-        shareImageToDeviceAppsImage = loadImage("shareIconImage.png");
-        returnCameraLiveViewIcon = loadImage("returnCameraLiveViewIcon.png");
+
 
     /*-------------------------------------- Sizing ------------------------------------------------*/
 
@@ -407,8 +350,6 @@ public class Sketch extends PApplet {
             currentImage.pixels[i] = color(0);
         }
         currentImage.updatePixels();
-
-        currentFrame = createImage(ketaiCamera.width, ketaiCamera.height, ARGB);
 
     /*----------------------------------- Twitter Tweeting -----------------------------------------*/
         //Setting up Twitter and informing twitter of the users credentials to our application can tweet
@@ -825,6 +766,9 @@ public class Sketch extends PApplet {
     }
 
     public void previewGreenScreen() {
+        PImage currentFrame;
+        PImage keyedImage;
+
         try {
             println("Starting removing Green Screen at frame " + frameCount);
 
@@ -835,7 +779,7 @@ public class Sketch extends PApplet {
             // and brightness to 100.
             colorMode(HSB, 360, 100, 100);
 
-            PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
+            keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
 
             keyedImage = currentFrame.get();
 
@@ -882,13 +826,15 @@ public class Sketch extends PApplet {
             println("Finished removing Green Screen at frame " + frameCount);
         } catch(OutOfMemoryError e){
             println("Green screen keying could not be completed - " + e);
+            keyedImage = null;
+            currentFrame = null;
             this.readingImage = false;
         }
     }
 
     public void mergeImages() {
+        PImage overlayImage = loadImage("overlay.png");
         imageMerging = true;
-        currentFrame = null;
 
         PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
         mergedImage.beginDraw();
@@ -908,11 +854,12 @@ public class Sketch extends PApplet {
 
         mergedImage.beginDraw();
         mergedImage.imageMode(CENTER);
-        mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float) (appHeight * 0.8), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
+        mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float)(appHeight - (appWidth * 0.22)), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
         mergedImage.endDraw();
 
         compiledImage = mergedImage.get();
         mergedImage = null;
+        overlayImage = null;
 
         currentScreen = "ImagePreviewScreen";
         imageMerging = false;

@@ -42,12 +42,10 @@ public class AboutScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImage, "Home", false, "HomeScreen");
-        Icon facebookIcon = new Icon(sketch, sketch.appWidth * 0.2, sketch.iconBottomY, sketch.facebookAccountIconImage, "Facebook", false, "https://www.facebook.com/wishiwashereapp");
-        Icon twitterIcon = new Icon(sketch, sketch.appWidth * 0.5, sketch.iconBottomY, sketch.twitterAccountIconImage, "Twitter", false, "https://twitter.com/wishiwashere");
-        Icon instagramIcon = new Icon(sketch, sketch.appWidth * 0.8, sketch.iconBottomY, sketch.instagramAccountIconImage, "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
-        //Icon emailIcon = new Icon(sketch, sketch.appWidth * 0.8, sketch.iconBottomY, sketch.emailIconImage, "Email", false, "mailto:wishiwashere.thenopayholiday@gmail.com");
-
+        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconImage.png"), "Home", false, "HomeScreen");
+        Icon facebookIcon = new Icon(sketch, sketch.appWidth * 0.2, sketch.iconBottomY, sketch.loadImage("facebookAccountIconImage.png"), "Facebook", false, "https://www.facebook.com/wishiwashereapp");
+        Icon twitterIcon = new Icon(sketch, sketch.appWidth * 0.5, sketch.iconBottomY, sketch.loadImage("twitterAccountIconImage.png"), "Twitter", false, "https://twitter.com/wishiwashere");
+        Icon instagramIcon = new Icon(sketch, sketch.appWidth * 0.8, sketch.iconBottomY, sketch.loadImage("instagramAccountIconImage.png"), "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {homeIcon, facebookIcon, twitterIcon, instagramIcon};

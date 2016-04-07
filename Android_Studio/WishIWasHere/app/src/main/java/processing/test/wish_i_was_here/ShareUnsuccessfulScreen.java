@@ -26,9 +26,9 @@ public class ShareUnsuccessfulScreen extends Screen {
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
 
-        Icon cancelIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.cancelIconImage, "Cancel", true, "Below", "CameraLiveViewScreen");
-        Icon retryIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.retryIconImage, "Retry", true, "Below", "_sendTweet");
-        Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX, sketch.largeIconBottomY * 0.7, sketch.largeIconSize, sketch.largeIconSize, sketch.shareImageToDeviceAppsImage, "Share", true, "Below", "_shareImageToDeviceApps");
+        Icon cancelIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("cancelIconImage.png"), "Cancel", true, "Below", "CameraLiveViewScreen");
+        Icon retryIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("retryIconImage.png"), "Retry", true, "Below", "_sendTweet");
+        Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX, sketch.largeIconBottomY * 0.7, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("shareImageToDeviceAppsImage.png"), "Share", true, "Below", "_shareImageToDeviceApps");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {cancelIcon, retryIcon, shareImageToDeviceAppsIcon};

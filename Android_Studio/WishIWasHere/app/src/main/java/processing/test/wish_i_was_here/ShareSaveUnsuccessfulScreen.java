@@ -25,10 +25,10 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon retryIcon = new Icon(sketch, sketch.iconCenterX  * 0.55, sketch.largeIconBottomY * 0.75, sketch.largeIconSize, sketch.largeIconSize, sketch.retryIconImage, "Retry", true, "Below", "_sendTweet");
-        Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 0.75, sketch.largeIconSize, sketch.largeIconSize, sketch.shareImageToDeviceAppsImage, "Share", true, "Below", "_shareImageToDeviceApps");
-        Icon deleteIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.deleteIconImage, "Delete", true, "Below", "CameraLiveViewScreen");
-        Icon saveIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.saveIconImage, "Save", true, "Below", "ShareSaveSuccessfulScreen");
+        Icon retryIcon = new Icon(sketch, sketch.iconCenterX  * 0.55, sketch.largeIconBottomY * 0.75, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("retryIconImage.png"), "Retry", true, "Below", "_sendTweet");
+        Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 0.75, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("shareImageToDeviceAppsImage.png"), "Share", true, "Below", "_shareImageToDeviceApps");
+        Icon deleteIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("deleteIconImage.png"), "Delete", true, "Below", "CameraLiveViewScreen");
+        Icon saveIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("saveIconImage"), "Save", true, "Below", "ShareSaveSuccessfulScreen");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {retryIcon, deleteIcon, saveIcon, shareImageToDeviceAppsIcon};

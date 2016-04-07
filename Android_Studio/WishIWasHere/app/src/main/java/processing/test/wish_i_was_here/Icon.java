@@ -52,6 +52,12 @@ public class Icon extends ClickableElement {
         this(_sketch, x, y, w, h, img, title, showTitle, "Middle", linkTo);
     }
 
+    // Partial Constructor
+    public Icon(Sketch _sketch, double x, double y, double w, double h, String title, Boolean showTitle, String titlePosition, String linkTo){
+        this(_sketch, x, y, w, h, null, title, showTitle, titlePosition, linkTo);
+        super.setBackgroundColor(sketch.color(255, 255, 255));
+    }
+
     // Full Constructor. Both of the above constructors both pass their values to this constructor, as
     // well as other icon's in the app that want to pass arguments for all of the specified values
     public Icon(Sketch _sketch, double x, double y, double w, double h, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo) {
@@ -128,17 +134,17 @@ public class Icon extends ClickableElement {
 
                         if(this.iconLinkTo.equals("_switchLearningMode")){
                             if(sketch.learningModeOn){
-                                this.setImage(sketch.toggleSwitchOffIconImage);
+                                this.setImage(sketch.loadImage("toggleSwitchOffIconImage.png"));
                             }
                             else{
-                                this.setImage(sketch.toggleSwitchOnIconImage);
+                                this.setImage(sketch.loadImage("toggleSwitchOnIconImage.png"));
                             }
                         }else if(this.iconLinkTo.equals("_switchAutoSave")){
                             if(sketch.autoSaveModeOn){
-                                this.setImage(sketch.toggleSwitchOffIconImage);
+                                this.setImage(sketch.loadImage("toggleSwitchOffIconImage.png"));
                             }
                             else{
-                                this.setImage(sketch.toggleSwitchOnIconImage);
+                                this.setImage(sketch.loadImage("toggleSwitchOnIconImage.png"));
                             }
                         }
 

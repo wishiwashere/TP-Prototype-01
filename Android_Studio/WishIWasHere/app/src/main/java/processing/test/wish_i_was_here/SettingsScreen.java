@@ -18,18 +18,18 @@ public class SettingsScreen extends Screen {
 
         PImage autoSaveToggleSwitchImage;
         if(sketch.autoSaveModeOn){
-            autoSaveToggleSwitchImage = sketch.toggleSwitchOnIconImage;
+            autoSaveToggleSwitchImage = sketch.loadImage("toggleSwitchOnIconImage.png");
         }
         else{
-            autoSaveToggleSwitchImage = sketch.toggleSwitchOffIconImage;
+            autoSaveToggleSwitchImage = sketch.loadImage("toggleSwitchOffIconImage.png");
         }
 
         PImage learningModeToggleSwitchImage;
         if(sketch.learningModeOn){
-            learningModeToggleSwitchImage = sketch.toggleSwitchOnIconImage;
+            learningModeToggleSwitchImage = sketch.loadImage("toggleSwitchOnIconImage.png");
         }
         else{
-            learningModeToggleSwitchImage = sketch.toggleSwitchOffIconImage;
+            learningModeToggleSwitchImage = sketch.loadImage("toggleSwitchOffIconImage.png");
         }
         // Creating the icon/s for this screen, using locally scoped variables, as these
         // icons will be only ever be referred to from the allIcons array. Setting their
@@ -40,10 +40,10 @@ public class SettingsScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImage, "Home", false, "HomeScreen");
+        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconImage.png"), "Home", false, "HomeScreen");
         Icon learningModeIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.5, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, learningModeToggleSwitchImage, "Learning mode switch", false, "_switchLearningMode");
         Icon autoSaveIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.8, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, autoSaveToggleSwitchImage, "Auto-save switch", false, "_switchAutoSave");
-        Icon twitterAccountIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.twitterAccountIconImage, "Twitter", true, "Below", "_checkTwitterLogin");
+        Icon twitterAccountIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("twitterAccountIconImage.png"), "Twitter", true, "Below", "_checkTwitterLogin");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, twitterAccountIcon};

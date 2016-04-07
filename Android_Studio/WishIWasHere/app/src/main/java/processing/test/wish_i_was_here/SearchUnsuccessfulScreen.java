@@ -25,9 +25,9 @@ public class SearchUnsuccessfulScreen extends Screen {
         // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
-        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImage, "Home", false, "HomeScreen");
-        Icon searchTravelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.searchPageIconImage, "Search Again", true, "Below", "SearchScreen");
-        Icon randomTravelIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.randomPageIconImage, "Random", true, "Below", "_getRandomLocation");
+        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconImage.png"), "Home", false, "HomeScreen");
+        Icon searchTravelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("searchPageIconImage.png"), "Search Again", true, "Below", "SearchScreen");
+        Icon randomTravelIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("randomPageIconImage.png"), "Random", true, "Below", "_getRandomLocation");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {homeIcon, searchTravelIcon, randomTravelIcon};

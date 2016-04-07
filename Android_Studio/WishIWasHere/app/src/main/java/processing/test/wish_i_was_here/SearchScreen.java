@@ -30,9 +30,9 @@ public class SearchScreen extends Screen {
         // value of the name of the screen they will later link to. The title arguments, as well
         // as the linkTo argument, are optional
 
-        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.homeIconImage, "Home", false, "HomeScreen");
-        Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconCenterY * 1.1, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Cancel", true, "Middle", "HomeScreen");
-        Icon searchIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconCenterY * 1.1, sketch.appWidth * 0.4, sketch.appHeight * 0.08, sketch.buttonImage, "Search", true, "Middle", "_searchForLocation");
+        Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconImage.png"), "Home", false, "HomeScreen");
+        Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconCenterY * 1.1, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Cancel", true, "Middle", "HomeScreen");
+        Icon searchIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconCenterY * 1.1, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Search", true, "Middle", "_searchForLocation");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {homeIcon, searchIcon, cancelIcon};
