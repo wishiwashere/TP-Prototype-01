@@ -6,6 +6,7 @@ public class CameraLiveViewScreen extends Screen {
     private Sketch sketch;
 
     public Icon favIcon;
+    public Icon shakeIcon;
 
     public Boolean favouriteLocation;
 
@@ -22,6 +23,13 @@ public class CameraLiveViewScreen extends Screen {
 
         this.favouriteLocation = false;
 
+        String switchViewIconImage;
+        if(sketch.ketaiCamera.getNumberOfCameras() > 1){
+            switchViewIconImage = "switchViewIconImage.png";
+        } else {
+            switchViewIconImage = "switchViewIconDisabledImage.png";
+        }
+
         // Creating the icon/s for this screen, using locally scoped variables, as these
         // icons will be only ever be referred to from the allIcons array. Setting their
         // x, and y, based on percentages of the width and height (where icon positioning variables
@@ -33,9 +41,9 @@ public class CameraLiveViewScreen extends Screen {
         // as the linkTo argument, are optional
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconWhiteImage.png"), "Home", false, "HomeScreen");
         favIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconTopY, sketch.loadImage("favIconImage.png"), "Add to Favourites", false, "_addToFavourites");
-        Icon shakeIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.loadImage("shakeIconImage.png"), "Turn on/off Shake", false, "_switchShakeMovement");
+        shakeIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.loadImage("shakeIconOffImage.png"), "Turn on/off Shake", false, "_switchShakeMovement");
         Icon shutterIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconBottomY, sketch.loadImage("shutterIconImage.png"), "Take a Picture", false, "_mergeImages");
-        Icon switchViewIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, sketch.loadImage("switchViewIconImage.png"), "Switch View", false, "_switchCameraView");
+        Icon switchViewIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, sketch.loadImage(switchViewIconImage), "Switch View", false, "_switchCameraView");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
         Icon[] allIcons = {homeIcon, favIcon, shakeIcon, shutterIcon, switchViewIcon};

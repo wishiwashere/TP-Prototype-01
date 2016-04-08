@@ -4,6 +4,7 @@ import processing.core.*;
 
 public class ShareSaveUnsuccessfulScreen extends Screen {
     private Sketch sketch;
+    private PImage shareSaveUnsuccessfulScreenImage;
 
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
@@ -15,6 +16,8 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
         super(_sketch);
 
         sketch = _sketch;
+
+        shareSaveUnsuccessfulScreenImage = sketch.loadImage("shareSaveUnsuccessfulScreenImage.png");
 
         // Creating the icon/s for this screen, using locally scoped variables, as these
         // icons will be only ever be referred to from the allIcons array. Setting their
@@ -57,9 +60,20 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
         // generate the size and background of the screen
         this.drawScreen();
 
+        String methodUsed = "";
+
+        if (sketch.imageSaved == false && sketch.imageShared == false){
+            methodUsed = "shared or saved";
+        } else if (sketch.imageSaved == false){
+            methodUsed = "saved";
+        } else if (sketch.imageShared == false){
+            methodUsed = "shared";
+        }
+
         this.addText("We're sorry :(", sketch.iconCenterX, sketch.appHeight * 0.1);
         this.addText("Your postcard", sketch.iconCenterX, sketch.appHeight * 0.18);
-        this.addText("was not sent", sketch.iconCenterX, sketch.appHeight * 0.26);
-        this.addImage(sketch.loadImage("shareSaveUnsuccessfulScreenImage.png"), sketch.iconCenterX, sketch.appHeight * 0.4, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
+        this.addText("was not able to be", sketch.iconCenterX, sketch.appHeight * 0.26);
+        this.addText(methodUsed, sketch.iconCenterX, sketch.appHeight * 0.34);
+        this.addImage(shareSaveUnsuccessfulScreenImage, sketch.iconCenterX, sketch.appHeight * 0.48, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
     }
 }

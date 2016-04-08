@@ -37,20 +37,14 @@ public class TwitterLoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Main View
-        setContentView(R.layout.activity_twitter_login);
-
-        cancelLoginButton = (Button) findViewById(R.id.cancel_login_button);
-        cancelLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                goToMainActivity();
-            }
-        });
-
         // Fabric.io - Twitter
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new com.twitter.sdk.android.Twitter(authConfig));
+
+        Log.d("TWITTERLOGINACTIVITY", "Fabic initialised = " + Fabric.isInitialized());
+
+        // Main View
+        setContentView(R.layout.activity_twitter_login);
 
         loginButton = (TwitterLoginButton) findViewById(R.id.twitter_login_button);
         loginButton.setCallback(new Callback<TwitterSession>() {
@@ -81,6 +75,15 @@ public class TwitterLoginActivity extends Activity {
         // so that the user never actually sees this activity's screen, and is instead
         // taken directly to the Twitter login page
         //loginButton.performClick();
+
+
+        cancelLoginButton = (Button) findViewById(R.id.cancel_login_button);
+        cancelLoginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToMainActivity();
+            }
+        });
     }
 
     @Override

@@ -129,24 +129,8 @@ public class Icon extends ClickableElement {
                         // Logging out what site the app will now be taken to
                         println("Going to " + this.iconLinkTo);
                     } else if (this.iconLinkTo.indexOf("_") == 0) {
-
+                        // This is a call to a function within the app
                         sketch.callFunction = this.iconLinkTo;
-
-                        if(this.iconLinkTo.equals("_switchLearningMode")){
-                            if(sketch.learningModeOn){
-                                this.setImage(sketch.loadImage("toggleSwitchOffIconImage.png"));
-                            }
-                            else{
-                                this.setImage(sketch.loadImage("toggleSwitchOnIconImage.png"));
-                            }
-                        }else if(this.iconLinkTo.equals("_switchAutoSave")){
-                            if(sketch.autoSaveModeOn){
-                                this.setImage(sketch.loadImage("toggleSwitchOffIconImage.png"));
-                            }
-                            else{
-                                this.setImage(sketch.loadImage("toggleSwitchOnIconImage.png"));
-                            }
-                        }
 
                         // Logging out what page the app will now be taken to
                         println("Calling the " + this.iconLinkTo + "() function");
@@ -180,5 +164,13 @@ public class Icon extends ClickableElement {
                 }
             }
         }
+    }
+
+    public void setIconLinkTo(String link){
+        iconLinkTo = link;
+    }
+
+    public void setIconTitle(String title){
+        iconTitle = title;
     }
 }

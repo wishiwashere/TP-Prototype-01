@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wish I Was Here</string>
+    <string name="twitter_login_screen_text">Welcome to the Wish I Was Here App. If you would like to tweet images from your adventures, please login with twitter</string>
 </resources>

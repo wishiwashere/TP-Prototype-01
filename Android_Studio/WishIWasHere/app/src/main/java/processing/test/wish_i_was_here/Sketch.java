@@ -76,6 +76,8 @@ public class Sketch extends PApplet {
     XML userPreferencesXML;
     XML[] favouriteLocationsData;
     XML[] settingsData;
+    Boolean sendToTwitterOn = false;
+    Boolean saveThisImageOn = true;
     Boolean autoSaveModeOn = true;
     Boolean learningModeOn = false;
 
@@ -321,7 +323,7 @@ public class Sketch extends PApplet {
         myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(this);
         mySearchingScreen = new SearchingScreen(this);
         mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this);
-        myLoadingScreen = new LoadingScreen(this, loadImage("loadingScreenImage.png"));
+        myLoadingScreen = new LoadingScreen(this, loadImage("loadingScreenImage.jpg"));
 
     /*-------------------------------------- Saving ------------------------------------------------*/
 
@@ -352,14 +354,17 @@ public class Sketch extends PApplet {
         currentImage.updatePixels();
 
     /*----------------------------------- Twitter Tweeting -----------------------------------------*/
-        //Setting up Twitter and informing twitter of the users credentials to our application can tweet
-        // from the users twitter account and access their account
-        cb.setOAuthConsumerKey(ourOAuthConsumerKey);
-        cb.setOAuthConsumerSecret(ourOAuthConsumerSecret);
-        cb.setOAuthAccessToken(ourOAuthAccessToken);
-        cb.setOAuthAccessTokenSecret(ourOAuthAccessTokenSecret);
+        if(TwitterLoginActivity.twitterLoggedIn) {
+            sendToTwitterOn = true;
+            //Setting up Twitter and informing twitter of the users credentials to our application can tweet
+            // from the users twitter account and access their account
+            cb.setOAuthConsumerKey(ourOAuthConsumerKey);
+            cb.setOAuthConsumerSecret(ourOAuthConsumerSecret);
+            cb.setOAuthAccessToken(ourOAuthAccessToken);
+            cb.setOAuthAccessTokenSecret(ourOAuthAccessTokenSecret);
 
-        twitter = new TwitterFactory(cb.build()).getInstance();
+            twitter = new TwitterFactory(cb.build()).getInstance();
+        }
 
     /*----------------------------------- Ketai Sensor -----------------------------------------*/
         sensor = new KetaiSensor(this);
@@ -383,6 +388,10 @@ public class Sketch extends PApplet {
             // No function needs to be called
         } else if (callFunction.equals("_keepImage")) {
             keepImage();
+        } else if (callFunction.equals("_toggleSavingOfCurrentImage")) {
+            toggleSavingOfCurrentImage();
+        } else if (callFunction.equals("_switchSendToTwitter")) {
+            switchSendToTwitter();
         } else if (callFunction.equals("_switchCameraView")) {
             myCameraLiveViewScreen.switchCameraView();
         } else if (callFunction.equals("_addToFavourites")) {
@@ -423,10 +432,10 @@ public class Sketch extends PApplet {
         // Forcing the onCameraPreviewEvent() to be called, as ketaiCamera does not seem to be
         // calling it implicitly (as it would have done in Processing).
         if(currentScreen.equals("CameraLiveViewScreen") && imageMerging == false){
-            println("CAM - Calling onCameraPreviewEvent");
+            //("CAM - Calling onCameraPreviewEvent");
             onCameraPreviewEvent();
         } else {
-            println("CAM - Not on camera live view screen and imageMerging is currently true");
+            //println("CAM - Not on camera live view screen and imageMerging is currently true");
         }
     }
 
@@ -478,10 +487,10 @@ public class Sketch extends PApplet {
     // available from the ketaiCamera.
     public void onCameraPreviewEvent()
     {
-        println("CAM - New frame available " + this.readingImage);
+        //println("CAM - New frame available " + this.readingImage);
         if (this.readingImage == false) {
             // Reading in a new frame from the ketaiCamera.
-            println("CAM - New frame about to be read");
+            //println("CAM - New frame about to be read");
             this.readingImage = true;
             ketaiCamera.read();
 
@@ -593,17 +602,20 @@ public class Sketch extends PApplet {
 
     public void keepImage() {
         callFunction = "";
-        if(autoSaveModeOn) {
+        if(saveThisImageOn) {
+            println("KEEP IMAGE - This image was saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
             // Checking if Storage is available
             if (isExternalStorageWritable()) {
                 if (saveImageToPhotoGallery()) {
-                    currentScreen = "SaveShareScreenA";
+                    currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "ShareSaveSuccessfulScreen";
                 } else {
                     println("Failed to save image");
+                    currentScreen = "ShareSaveUnsuccessfulScreen";
                 }
             }
         } else {
-            currentScreen = "SaveShareScreenA";
+            println("KEEP IMAGE - This image was not saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
+            currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "CameraLiveViewScreen";
         }
     }
 
@@ -618,6 +630,7 @@ public class Sketch extends PApplet {
                 imageSaved = true;
             } else {
                 println("Failed to save image");
+                imageSaved = true;
             }
         }
         return successfull;
@@ -656,6 +669,9 @@ public class Sketch extends PApplet {
     public void fadeToScreen(String nextScreen) {
         if (mouseClicked)
         {
+            if(currentScreen.equals("LoadingScreen")){
+                myLoadingScreen = null;
+            }
             currentScreen = nextScreen;
             mousePressed = false;
             mouseClicked = false;
@@ -694,19 +710,45 @@ public class Sketch extends PApplet {
 
     public void switchLearningMode() {
         callFunction = "";
-        mySettingsScreen.learningModeOn = !mySettingsScreen.learningModeOn;
-        println("Learning mode is now: " + mySettingsScreen.learningModeOn);
+        learningModeOn = !learningModeOn;
+
+        for(int i = 0; i < settingsData.length; i++){
+            if(settingsData[i].getString("name").equals("learningMode")) {
+                settingsData[i].setString("on", learningModeOn.toString());
+                saveUserPreferencesXML();
+            }
+        }
+
+        if(learningModeOn){
+            mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOnIconImage.png"));
+        }
+        else{
+            mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
+        }
+
+        println("Learning mode is now: " + learningModeOn);
     }
 
     public void switchAutoSave() {
         callFunction = "";
         autoSaveModeOn = !autoSaveModeOn;
+        saveThisImageOn = autoSaveModeOn;
+
 
         for(int i = 0; i < settingsData.length; i++){
             if(settingsData[i].getString("name").equals("autoSaveMode")){
-                settingsData[i].setString("turnedOn", autoSaveModeOn.toString());
+                settingsData[i].setString("on", autoSaveModeOn.toString());
                 saveUserPreferencesXML();
             }
+        }
+
+        if(autoSaveModeOn){
+            mySettingsScreen.autoSaveIcon.setImage(loadImage("toggleSwitchOnIconImage.png"));
+            mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOnImage.png"));
+        }
+        else{
+            mySettingsScreen.autoSaveIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
+            mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOffImage.png"));
         }
 
         println("Auto-save is now: " + autoSaveModeOn);
@@ -714,12 +756,33 @@ public class Sketch extends PApplet {
 
     public void switchShakeMovement(){
         shakeMovementOn = !shakeMovementOn;
+        if(shakeMovementOn){
+            myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOnImage.png"));
+        }
+        else{
+            myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOffImage.png"));
+        }
+    }
+
+    public void switchSendToTwitter(){
+        if(TwitterLoginActivity.twitterLoggedIn){
+            sendToTwitterOn = !sendToTwitterOn;
+
+            if(sendToTwitterOn){
+                mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOnImage.png"));
+            } else {
+                mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOffImage.png"));
+            }
+
+        } else {
+            println("This user can not turn on Twitter, as they have not previously logged in with Twitter");
+        }
     }
 
 
     public void sendTweet() {
         callFunction = "";
-        if(TwitterLoginActivity.twitterLoggedIn) {
+        if(sendToTwitterOn) {
             currentScreen = "SharingScreen";
             mySharingScreen.showScreen();
 
@@ -770,7 +833,7 @@ public class Sketch extends PApplet {
         PImage keyedImage;
 
         try {
-            println("Starting removing Green Screen at frame " + frameCount);
+            //println("Starting removing Green Screen at frame " + frameCount);
 
             currentFrame = ketaiCamera.get();
 
@@ -823,7 +886,7 @@ public class Sketch extends PApplet {
             currentFrame = null;
 
             readingImage = false;
-            println("Finished removing Green Screen at frame " + frameCount);
+            //println("Finished removing Green Screen at frame " + frameCount);
         } catch(OutOfMemoryError e){
             println("Green screen keying could not be completed - " + e);
             keyedImage = null;
@@ -833,35 +896,40 @@ public class Sketch extends PApplet {
     }
 
     public void mergeImages() {
-        PImage overlayImage = loadImage("overlay.png");
-        imageMerging = true;
+        try {
+            PImage overlayImage = loadImage("overlay.png");
+            imageMerging = true;
 
-        PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
-        mergedImage.beginDraw();
-        mergedImage.imageMode(CENTER);
-        mergedImage.image(currentLocationImage, appWidth / 2, appHeight / 2, appWidth, appHeight);
-        mergedImage.endDraw();
+            PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
+            mergedImage.beginDraw();
+            mergedImage.imageMode(CENTER);
+            mergedImage.image(currentLocationImage, appWidth / 2, appHeight / 2, appWidth, appHeight);
+            mergedImage.endDraw();
 
-        mergedImage.beginDraw();
-        mergedImage.pushMatrix();
-        mergedImage.translate(appWidth / 2, appHeight / 2);
-        mergedImage.scale(cameraScale, 1);
-        mergedImage.rotate(radians(cameraRotation));
-        mergedImage.imageMode(CENTER);
-        mergedImage.image(currentImage, 0, 0, appHeight, appWidth);
-        mergedImage.popMatrix();
-        mergedImage.endDraw();
+            mergedImage.beginDraw();
+            mergedImage.pushMatrix();
+            mergedImage.translate(appWidth / 2, appHeight / 2);
+            mergedImage.scale(cameraScale, 1);
+            mergedImage.rotate(radians(cameraRotation));
+            mergedImage.imageMode(CENTER);
+            mergedImage.image(currentImage, 0, 0, appHeight, appWidth);
+            mergedImage.popMatrix();
+            mergedImage.endDraw();
 
-        mergedImage.beginDraw();
-        mergedImage.imageMode(CENTER);
-        mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float)(appHeight - (appWidth * 0.22)), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
-        mergedImage.endDraw();
+            mergedImage.beginDraw();
+            mergedImage.imageMode(CENTER);
+            mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float) (appHeight - (appWidth * 0.22)), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
+            mergedImage.endDraw();
 
-        compiledImage = mergedImage.get();
-        mergedImage = null;
-        overlayImage = null;
+            compiledImage = mergedImage.get();
+            mergedImage = null;
+            overlayImage = null;
 
-        currentScreen = "ImagePreviewScreen";
+            currentScreen = "ImagePreviewScreen";
+        } catch(OutOfMemoryError e){
+            println("Could not save image - " + e);
+            currentScreen = "ShareSaveUnsuccessfulScreen";
+        }
         imageMerging = false;
         readingImage = false;
     }
@@ -982,7 +1050,10 @@ public class Sketch extends PApplet {
         settingsData = userPreferencesXML.getChildren("setting");
         for(int i = 0; i < settingsData.length; i++){
             if(settingsData[i].getString("name").equals("autoSaveMode")){
-                autoSaveModeOn = Boolean.parseBoolean(settingsData[i].getString("turnedOn"));
+                autoSaveModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
+                saveThisImageOn = autoSaveModeOn;
+            } else if(settingsData[i].getString("name").equals("learningMode")){
+                learningModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
             }
         }
     }
@@ -1017,5 +1088,15 @@ public class Sketch extends PApplet {
         // Broadcast the Intent.
         startActivity(Intent.createChooser(share, "Share to"));
         this.getActivity().finish();
+    }
+
+    public void toggleSavingOfCurrentImage(){
+        saveThisImageOn = !saveThisImageOn;
+
+        if(saveThisImageOn){
+            mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOnImage.png"));
+        } else {
+            mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOffImage.png"));
+        }
     }
 }

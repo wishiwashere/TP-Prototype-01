@@ -55,10 +55,6 @@ public class SocialMediaLogoutScreen extends Screen{
         // generate the size and background of the screen
         this.drawScreen();
 
-        this.addText("Are you sure you want", sketch.iconCenterX, sketch.appHeight * 0.3);
-        this.addText("to remove your", sketch.iconCenterX, sketch.appHeight * 0.38);
-        this.addText("@username", sketch.iconCenterX, sketch.appHeight * 0.46);
-        this.addText("Instagram account from", sketch.iconCenterX, sketch.appHeight * 0.54);
-        this.addText("our app?", sketch.iconCenterX, sketch.appHeight * 0.62);
+        this.addText("Are you sure you want \r\n to remove your \r\n" + TwitterLoginActivity.twitterUserUsername + "\r\n Twitter account from \r\n our app?", sketch.iconCenterX, sketch.appHeight * 0.3);
     }
 }

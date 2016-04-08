@@ -8,5 +8,6 @@
     <location name="Leaning Tower Of Piza" latLng="43.7224555,10.3960728" heading="54.4" pitch="10"/>
     <location name="Times Square" latLng="40.7585806,-73.9850687" heading="30" pitch="20"/>
 
-    <setting name="autoSaveMode" turnedOn="true"/>
+    <setting name="autoSaveMode" on="true"/>
+    <setting name="learningMode" on="true"/>
 </UserPreferences>

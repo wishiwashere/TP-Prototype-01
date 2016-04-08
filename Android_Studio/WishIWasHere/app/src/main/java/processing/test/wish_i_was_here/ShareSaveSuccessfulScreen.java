@@ -5,8 +5,6 @@ import processing.core.*;
 public class ShareSaveSuccessfulScreen extends Screen {
     private Sketch sketch;
 
-    private String methodUsed = "";
-
     // Creating a public constructor for the TemplateScreen class, so that
     // an instance of it can be declared in the main sketch
     public ShareSaveSuccessfulScreen(Sketch _sketch) {
@@ -44,6 +42,7 @@ public class ShareSaveSuccessfulScreen extends Screen {
     // Creating a public showScreen method, which is called by the draw() function whenever this
     // screen needs to be displayed
     public void showScreen() {
+        String methodUsed = "";
 
         if(sketch.imageSaved && sketch.imageShared){
             methodUsed = "shared & saved";
