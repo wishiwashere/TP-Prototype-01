@@ -1,9 +1,13 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
-// The Rectangle class is the super class which is the super class for the majority of classes in this app.
-// The purpose of this is that all classes can inherit the properties and methods of this class.
+// The Rectangle class is the super class which is the super class for all classes in this app (excluding
+// the Sketch class, from which it extends from, nor the MainActivity or TwitterLoginActivity classes, which
+// handle the activity's of the app, and are not written in Processing). The purpose of this is that all
+// classes can inherit the properties and methods of this class.
 public class Rectangle extends Sketch {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into

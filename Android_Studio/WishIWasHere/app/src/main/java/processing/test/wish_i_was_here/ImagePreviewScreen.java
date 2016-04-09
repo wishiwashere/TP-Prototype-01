@@ -1,5 +1,13 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
+import processing.core.*;
+
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when a user has
+// taken a picture, and allows them to preview it before choosing whether to save and/or share it on
+// the next screen.
 public class ImagePreviewScreen extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -47,22 +55,18 @@ public class ImagePreviewScreen extends Screen {
         // This reduces the need for each screen to have to loop through it's icons, or call the
         // same method on multiple icons.
         this.setScreenIcons(allIcons);
-
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
-        this.setScreenTitle("");
     }
 
-    // Creating a public showScreen method, which is called by the draw() funciton whenever this
+    // Creating a public showScreen method, which is called by the draw() function whenever this
     // screen needs to be displayed
     public void showScreen() {
-        sketch.image(sketch.compiledImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth, sketch.appHeight);
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        sketch.image(sketch.compiledImage, sketch.appWidth / 2, sketch.appHeight / 2, sketch.appWidth, sketch.appHeight);
+
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen. Calling this
+        // method after the compiled image has been added to the sketch, so that the icons of this screen will appear on
+        // top of these images.
         this.drawScreen();
     }
 }

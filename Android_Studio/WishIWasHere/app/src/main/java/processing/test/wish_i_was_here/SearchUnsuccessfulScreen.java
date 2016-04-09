@@ -1,7 +1,12 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when a search
+// for a location has been unsuccessful.
 public class SearchUnsuccessfulScreen extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -51,10 +56,8 @@ public class SearchUnsuccessfulScreen extends Screen {
         // same method on multiple icons.
         this.setScreenIcons(allIcons);
 
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
+        // Setting the title of this screen in this class's super class (Screen), so that it can be accessed
+        // when showing the screen (i.e can be displayed as the header text of the page).
         this.setScreenTitle("");
     }
 
@@ -62,9 +65,8 @@ public class SearchUnsuccessfulScreen extends Screen {
     // screen needs to be displayed
     public void showScreen() {
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
         this.addText("We're sorry :(", sketch.iconCenterX, sketch.appHeight * 0.1);

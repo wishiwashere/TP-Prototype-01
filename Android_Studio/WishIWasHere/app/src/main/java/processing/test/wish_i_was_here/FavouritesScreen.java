@@ -1,9 +1,16 @@
 package processing.test.wish_i_was_here;
 
-import java.util.ArrayList;
-
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// Importing the java ArrayList class, so that the favourite tabs for this screen can be stored in
+// an array which can be added to, removed from and updated.
+import java.util.ArrayList;
+
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when users
+// want to view or access their favourite locations, so they can quickly return to them.
 public class FavouritesScreen extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -123,10 +130,8 @@ public class FavouritesScreen extends Screen {
         // same method on multiple icons.
         this.setScreenIcons(allIcons);
 
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
+        // Setting the title of this screen in this class's super class (Screen), so that it can be accessed
+        // when showing the screen (i.e can be displayed as the header text of the page).
         this.setScreenTitle("Favourites");
     }
 
@@ -151,9 +156,10 @@ public class FavouritesScreen extends Screen {
             println("firstLoad");
         }
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
+        // Calling this method after the above check has been done to see if the icons etc. on this screen have
+        // been reset, so that the screen appears correctly, even on it's first load.
         this.drawScreen();
 
         // Looping through our array of favourite tabs, and calling the showFavourite() method (of

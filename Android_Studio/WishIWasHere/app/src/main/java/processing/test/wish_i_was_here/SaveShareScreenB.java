@@ -1,7 +1,12 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when a user
+// decides to share their image to Twitter, and allows them to add a message to the Tweet.
 public class SaveShareScreenB extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -60,9 +65,8 @@ public class SaveShareScreenB extends Screen {
     // screen needs to be displayed
     public void showScreen() {
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
         this.addImage(sketch.compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.4, sketch.appWidth * 0.8, sketch.appWidth * 0.6);

@@ -1,7 +1,13 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when a user
+// wants to change their settings (i.e. turn on/off learning mode, turn on/off autosave mode or log
+// out of their Twitter account.
 public class SettingsScreen extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -79,10 +85,8 @@ public class SettingsScreen extends Screen {
             this.setScreenIcons(allIcons);
         }
 
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
+        // Setting the title of this screen in this class's super class (Screen), so that it can be accessed
+        // when showing the screen (i.e can be displayed as the header text of the page).
         this.setScreenTitle("Settings");
     }
 
@@ -90,9 +94,8 @@ public class SettingsScreen extends Screen {
     // screen needs to be displayed
     public void showScreen() {
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
         // Adding text to go beside the icon that will be toggled in order label each setting for the users convenience

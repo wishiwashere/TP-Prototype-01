@@ -1,7 +1,12 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed while an image
+// has been shared and/or shared successfully.
 public class ShareSaveSuccessfulScreen extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -42,17 +47,16 @@ public class ShareSaveSuccessfulScreen extends Screen {
         // This reduces the need for each screen to have to loop through it's icons, or call the
         // same method on multiple icons.
         this.setScreenIcons(allIcons);
-
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
-        this.setScreenTitle("");
     }
 
     // Creating a public showScreen method, which is called by the draw() function whenever this
     // screen needs to be displayed
     public void showScreen() {
+
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
+        this.drawScreen();
+
         String methodUsed = "";
 
         if(sketch.imageSaved && sketch.imageShared){
@@ -63,10 +67,7 @@ public class ShareSaveSuccessfulScreen extends Screen {
             methodUsed = "shared";
         }
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
-        this.drawScreen();
+
         this.addText("Your postcard", sketch.iconCenterX, sketch.appHeight * 0.1);
         this.addText("has been", sketch.iconCenterX, sketch.appHeight * 0.18);
         this.addText("successfully", sketch.iconCenterX, sketch.appHeight * 0.26);

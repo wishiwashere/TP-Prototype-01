@@ -1,7 +1,12 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when a user
+// decides to keep and image, and offers them the option to save and/or share this image on Twitter.
 public class SaveShareScreenA extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -62,6 +67,7 @@ public class SaveShareScreenA extends Screen {
         nextIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Next", true, "Middle", "_keepImage");
 
         Icon[] allIcons = {twitterIcon, saveIcon, cancelIcon, nextIcon};
+
         // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
         // the temporary allIcons array to the screenIcons array of the Screen class so that they
         // can be looped through by the showScreen() method, and methods inherited from the Icon
@@ -75,9 +81,8 @@ public class SaveShareScreenA extends Screen {
     // screen needs to be displayed
     public void showScreen() {
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
         if(sketch.saveThisImageOn || sketch.sendToTwitterOn){

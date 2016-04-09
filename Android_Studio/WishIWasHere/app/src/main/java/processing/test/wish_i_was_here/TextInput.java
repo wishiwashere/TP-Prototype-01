@@ -1,7 +1,8 @@
 package processing.test.wish_i_was_here;
 
-import processing.core.PApplet;
-import processing.core.PConstants;
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
+import processing.core.*;
 
 public class TextInput extends ClickableElement {
 

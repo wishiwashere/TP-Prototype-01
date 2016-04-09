@@ -1,7 +1,13 @@
 package processing.test.wish_i_was_here;
 
-import processing.core.PApplet;
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
+import processing.core.*;
 
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when a user
+// is viewing themselves in a location, and offers them to option to take a picture, save the location
+// as a favourite, as well as functionalities specific to this screen (such as switching between cameras)
 public class CameraLiveViewScreen extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -164,8 +170,10 @@ public class CameraLiveViewScreen extends Screen {
         // image appears in the correct orientation.
         this.addImage(sketch.currentImage, sketch.appHeight, sketch.appWidth, sketch.cameraScale, sketch.cameraRotation);
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons. This method will then
-        // in turn call it's super class's (Rectangle) method, to generate the screen.
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen. Calling this
+        // method after the Google street view image, and the keyed image have been added to the sketch, so that the icons
+        // of this screen will appear on top of these images.
         this.drawScreen();
     }
 

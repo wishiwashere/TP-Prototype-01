@@ -1,7 +1,14 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when a user
+// returns to the home screen, and acts as the main navigation for the app i.e. users can choose to go
+// to a random location, a specific location, view their favourites, read about the app or change their
+// settings.
 public class HomeScreen extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -59,9 +66,8 @@ public class HomeScreen extends Screen {
     // screen needs to be displayed
     public void showScreen() {
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
     }
 }

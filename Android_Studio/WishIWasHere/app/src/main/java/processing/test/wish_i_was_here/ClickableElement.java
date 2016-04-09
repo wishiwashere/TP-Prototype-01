@@ -1,7 +1,12 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the Rectangle class, and so inherits the methods and variables this class.
+// This class acts as a super class for all clickable elements in the app, such as TextInput and Icon
+// classes, so they will all inherit the methods and variables from this class.
 public class ClickableElement extends Rectangle {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into

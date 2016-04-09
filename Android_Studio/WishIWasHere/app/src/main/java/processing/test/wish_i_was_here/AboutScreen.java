@@ -1,7 +1,14 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the Screen class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes. This screen is displayed when a user
+// wants to read more about the app. This screen was a requirement based on the Google attribution
+// requirements, which specify that their attribution must be clearly visible with a "legal" or "about"
+// page, accessible from the main app.
 public class AboutScreen extends Screen {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -70,10 +77,8 @@ public class AboutScreen extends Screen {
         // same method on multiple icons.
         this.setScreenIcons(allIcons);
 
-        // Setting the title of this screen. The screenTitle variable was also declared in this
-        // class's super class (Screen), so that it can be accessed when showing the screen
-        // (i.e can be displayed as the header text of the page). If no screenTitle were set,
-        // then no header text will appear on this page
+        // Setting the title of this screen in this class's super class (Screen), so that it can be accessed
+        // when showing the screen (i.e can be displayed as the header text of the page).
         this.setScreenTitle("About");
     }
 
@@ -96,9 +101,10 @@ public class AboutScreen extends Screen {
             println("firstLoad");
         }
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
+        // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
+        // Calling this method after the above check has been done to see if the icons etc. on this screen have
+        // been reset, so that the screen appears correctly, even on it's first load.
         this.drawScreen();
 
         this.addImage(sketch.loadImage("aboutPageTeamImage.jpg"), sketch.appWidth / 2, this.getY() + (sketch.appHeight * -0.25), sketch.appWidth * 0.7, sketch.appHeight * 0.2);

@@ -1,7 +1,11 @@
 package processing.test.wish_i_was_here;
 
+// Importing the Processing library, so this class can declare variables using Processing specific
+// datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the ClickableElement class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes.
 public class Icon extends ClickableElement {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
