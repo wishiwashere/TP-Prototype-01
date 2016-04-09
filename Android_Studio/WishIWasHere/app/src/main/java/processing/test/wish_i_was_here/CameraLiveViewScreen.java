@@ -3,6 +3,12 @@ package processing.test.wish_i_was_here;
 import processing.core.PApplet;
 
 public class CameraLiveViewScreen extends Screen {
+
+    // Creating a private variable to store the instance of the main sketch which will be passed into
+    // the constructors of this class when they are initialised. The purpose of this variable is so that
+    // we can access the Processing library, along with other global methods and variables of the main
+    // sketch class, from within this class. Every reference to a Processing method/variable, or a public
+    // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
     public Icon favIcon;
@@ -19,6 +25,11 @@ public class CameraLiveViewScreen extends Screen {
         // centered etc.
         super(_sketch);
 
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
         this.favouriteLocation = false;
@@ -61,9 +72,10 @@ public class CameraLiveViewScreen extends Screen {
     // screen needs to be displayed
     public void showScreen() {
 
-        // Checking if the mouse is pressed (i.e. the user wants to interact with the image)
+        // Checking if the mouse is pressed (i.e. the user wants to scroll around the background of this image)
         if (sketch.mousePressed) {
-            // Calculating the amount scolled, based on the distance between the previous y position,
+
+            // Calculating the amount scrolled, based on the distance between the previous y position,
             // and the current y position. When the mouse is first pressed, the previous y position
             // is initialised (in the main sketch) but then while the mouse is held down, the previous
             // y position gets updated each time this function runs (so that the scrolling can occur
@@ -93,54 +105,67 @@ public class CameraLiveViewScreen extends Screen {
                 println("scrolled left. heading is now " + sketch.googleImageHeading);
             }
 
+            // Checking if shakeMovementOn is currently false, because when shake movement is activated, the user will
+            // not be controlling the pitch of the Google image by scrolling, but instead by moving their device around
+            // to look "up" and "down".
             if(sketch.shakeMovementOn == false) {
 
+                // Logging out the amount the user has scrolled (for TESTING purposes)
                 println("amountScrolledY = " + amountScrolledY);
+
+                // Determining which direction the user has scrolled, based on the previous and current mouse Y positions
+                // i.e. has the user scrolled up or down.
                 if (sketch.previousMouseY > sketch.mouseY) {
                     // The user has scrolled UP
 
                     // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
                     // operator to check that this will not result in a value greater than 90 (the maximum
-                    // value allowed for the pitch. If it does, then stopping the pitch at 90 i.e. so the
-                    // user cannot excede the maximum value, otherwise allowing it to equal to the current pitch
-                    // value plus the amount scrolled on the Y
+                    // value allowed for the pitch). If it does, then stopping the pitch at 90 i.e. so the
+                    // user cannot exceed the maximum value, otherwise allowing it to equal to the current pitch
+                    // value plus the amount scrolled on the Y axis.
                     sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledY) < -90 ? -90 : sketch.googleImagePitch - amountScrolledY;
+
+                    // Logging out the current pitch of the Google image (for TESTING purposes)
                     println("scrolled up. pitch is now " + sketch.googleImagePitch);
                 } else {
                     // The user has scrolled DOWN
 
                     // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
                     // operator to check that this will not result in a value less than -90 (the minimum
-                    // value allowed for the pitch. If it does, then stopping the pitch at -90 i.e. so the
-                    // user cannot excede the minimum value, otherwise allowing it to equal to the current pitch
-                    // value minus the amount scrolled on the Y
+                    // value allowed for the pitch). If it does, then stopping the pitch at -90 i.e. so the
+                    // user cannot exceed the minimum value, otherwise allowing it to equal to the current pitch
+                    // value minus the amount scrolled on the Y axis.
                     sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledY) > 90 ? 90 : sketch.googleImagePitch + amountScrolledY;
+
+                    // Logging out the current pitch of the Google image (for TESTING purposes)
                     println("scrolled down. pitch is now " + sketch.googleImagePitch);
                 }
 
+                // Calling the loadGoogleImage method from the main Sketch class, so that a new google image will be
+                // loaded in, with the new heading and pitch values specified above. The call to this function only
+                // occurs within this class when
                 sketch.loadGoogleImage();
             }
             sketch.previousMouseX = sketch.mouseX;
             sketch.previousMouseY = sketch.mouseY;
         }
 
-        if (sketch.compiledImage != null) {
-            sketch.compiledImage = null;
-        }
-        // Using the currentLocationImage as the background for the camera live view i.e. so the user
-        // can feel like they are taking a picture in that location
-        sketch.image(sketch.currentLocationImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth, sketch.appHeight);
+        // Adding the currentLocationImage to the CameraLiveViewScreen, so that the user can feel like they are taking a picture
+        // in that location. Passing in the currentLocationImage, as sourced from the Google Street View Image API, using the
+        // location specified by the user. Setting the rotation of this image to be equal to the orientationRotation of the
+        // app, so that the image will be rotated based on which way the user is holding the device, so users can take pictures
+        // in both landscape and portrait.
+        this.addImage(sketch.currentLocationImage, sketch.appWidth, sketch.appHeight, sketch.orientationRotation);
 
-        // Calls super super class (Rectangle). Passing in the current frame image, the width and height
-        // which have been reversed - i.e. the width will now be equal to the height of the app, as the
-        // ketaiCamera image requires it's rotation to be offset by 90 degress (either in the plus or the
-        // minus depending on whether you are using the front or rear camera) so the width and the height
-        // need to swap to fit with the image's new resolution
-        this.addBackgroundImage(sketch.currentImage, sketch.appHeight, sketch.appWidth, sketch.cameraScale, sketch.cameraRotation);
+        // Adding the current keyed image to the CameraLiveViewScreen, so that the user can see themselves in the location added
+        // above. Setting the scaleX of this image to be equal to the cameraScale, which accounts for and corrects the way in which
+        // front facing cameras read in images in reverse (so they no longer appear reversed). Setting the rotation of this image
+        // to be equal to the cameraRotation, which accounts for and corrects the way in which ketaiCamera reads in images, so the
+        // image appears in the correct orientation.
+        this.addImage(sketch.currentImage, sketch.appHeight, sketch.appWidth, sketch.cameraScale, sketch.cameraRotation);
 
-        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's
-        // icons. This method will then in turn call it's super class's (Rectangle) method, to
-        // generate the size and background of the screen
+        // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons. This method will then
+        // in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
     }
 

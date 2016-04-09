@@ -128,6 +128,8 @@ public class Sketch extends PApplet {
 
     Boolean mouseClicked = false;
 
+    int orientationRotation = 0;
+
     /*-------------------------------------- Sizing ------------------------------------------------*/
 
     // Declaring global variables, which will contain the width and height of the device's
@@ -545,6 +547,7 @@ public class Sketch extends PApplet {
             finalKeying = false;
             imageSaved = false;
             imageShared = false;
+            compiledImage = null;
             myCameraLiveViewScreen.showScreen();
         } else if (currentScreen.equals("FavouritesScreen")) {
             myFavouritesScreen.showScreen();
@@ -833,7 +836,7 @@ public class Sketch extends PApplet {
         PImage keyedImage;
 
         try {
-            //println("Starting removing Green Screen at frame " + frameCount);
+            println("Starting removing Green Screen at frame " + frameCount);
 
             currentFrame = ketaiCamera.get();
 
@@ -886,7 +889,7 @@ public class Sketch extends PApplet {
             currentFrame = null;
 
             readingImage = false;
-            //println("Finished removing Green Screen at frame " + frameCount);
+            println("Finished removing Green Screen at frame " + frameCount);
         } catch(OutOfMemoryError e){
             println("Green screen keying could not be completed - " + e);
             keyedImage = null;

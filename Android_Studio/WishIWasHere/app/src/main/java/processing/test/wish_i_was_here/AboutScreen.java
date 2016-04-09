@@ -3,6 +3,12 @@ package processing.test.wish_i_was_here;
 import processing.core.*;
 
 public class AboutScreen extends Screen {
+
+    // Creating a private variable to store the instance of the main sketch which will be passed into
+    // the constructors of this class when they are initialised. The purpose of this variable is so that
+    // we can access the Processing library, along with other global methods and variables of the main
+    // sketch class, from within this class. Every reference to a Processing method/variable, or a public
+    // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
     private String aboutText = "We are 3rd Year Creative Multimedia students in Limerick Institute of Technology, Clonmel. As part of a team project, we decided to design, create and build an application that will transport you to different locations around the world. Our aim is to make the world a little bit smaller, one click at a time. ";
@@ -31,6 +37,11 @@ public class AboutScreen extends Screen {
         // default values i.e. fullscreen, centered etc.
         super(_sketch, _sketch.width / 2, _sketch.height / 2, _sketch.width, _sketch.height * 2, null);
 
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
         // Creating the icon/s for this screen, using locally scoped variables, as these

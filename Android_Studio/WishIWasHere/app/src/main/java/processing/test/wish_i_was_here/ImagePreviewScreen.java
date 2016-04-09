@@ -1,6 +1,12 @@
 package processing.test.wish_i_was_here;
 
 public class ImagePreviewScreen extends Screen {
+
+    // Creating a private variable to store the instance of the main sketch which will be passed into
+    // the constructors of this class when they are initialised. The purpose of this variable is so that
+    // we can access the Processing library, along with other global methods and variables of the main
+    // sketch class, from within this class. Every reference to a Processing method/variable, or a public
+    // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
     // Creating a public constructor for the TemplateScreen class, so that
@@ -12,6 +18,11 @@ public class ImagePreviewScreen extends Screen {
         // centered etc.
         super(_sketch);
 
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
         // Creating the icon/s for this screen, using locally scoped variables, as these

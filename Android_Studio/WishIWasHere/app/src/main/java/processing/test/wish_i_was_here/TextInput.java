@@ -4,6 +4,12 @@ import processing.core.PApplet;
 import processing.core.PConstants;
 
 public class TextInput extends ClickableElement {
+
+    // Creating a private variable to store the instance of the main sketch which will be passed into
+    // the constructors of this class when they are initialised. The purpose of this variable is so that
+    // we can access the Processing library, along with other global methods and variables of the main
+    // sketch class, from within this class. Every reference to a Processing method/variable, or a public
+    // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
     // Creating private variables to store the TextInput's title and value
@@ -58,9 +64,17 @@ public class TextInput extends ClickableElement {
         // of the super class (ClickableElement)
         super(_sketch, x, y, w, h, title);
 
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
-        super.setBackgroundColor(sketch.color(255, 255, 255));
+        // Calling the Rectangle class's setBackgroundColor() method, which this class had inherited through the
+        // ClickableElement class, to default all instances of the TextInput class to have an opaque white background.
+        // This now means that each TextInput class will have a white rectangle as their background.
+        super.setBackgroundColor(sketch.color(255, 255, 255, 255));
 
         // Initialising the inputTitle to be equal to the requested title
         this.inputTitle = title;

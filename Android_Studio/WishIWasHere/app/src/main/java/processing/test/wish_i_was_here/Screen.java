@@ -3,6 +3,13 @@ package processing.test.wish_i_was_here;
 import processing.core.*;
 
 public class Screen extends Rectangle {
+
+    // Creating a private variable to store the instance of the main sketch which will be passed into
+    // the constructors of this class when they are initialised. The purpose of this variable is so that
+    // we can access the Processing library, along with other global methods and variables of the main
+    // sketch class, from within this class. Every reference to a Processing method/variable, or a public
+    // method/variable of the main sketch, must be prefixed with this object while within this and all
+    // other classes which extend from it.
     private Sketch sketch;
 
     // Declaring the screenIcons array, which will be used to store the

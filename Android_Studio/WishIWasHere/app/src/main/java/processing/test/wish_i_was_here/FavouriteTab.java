@@ -1,6 +1,12 @@
 package processing.test.wish_i_was_here;
 
 public class FavouriteTab extends ClickableElement {
+
+    // Creating a private variable to store the instance of the main sketch which will be passed into
+    // the constructors of this class when they are initialised. The purpose of this variable is so that
+    // we can access the Processing library, along with other global methods and variables of the main
+    // sketch class, from within this class. Every reference to a Processing method/variable, or a public
+    // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
     // Creating two private strings, one to hold the favourite title, and the other to hold
@@ -21,6 +27,11 @@ public class FavouriteTab extends ClickableElement {
         // let us know which tab was clicked on - if one has been clicked).
         super(_sketch, _sketch.width/2, (y + 1) * _sketch.height * 0.22, _sketch.width * 0.65, _sketch.height * 0.17, title);
 
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
         super.setBackgroundColor(sketch.color(255, 255, 255, 149));

@@ -3,6 +3,12 @@ package processing.test.wish_i_was_here;
 import processing.core.*;
 
 public class Icon extends ClickableElement {
+
+    // Creating a private variable to store the instance of the main sketch which will be passed into
+    // the constructors of this class when they are initialised. The purpose of this variable is so that
+    // we can access the Processing library, along with other global methods and variables of the main
+    // sketch class, from within this class. Every reference to a Processing method/variable, or a public
+    // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
     // Creating private variables to store the icon's link, title and show title
@@ -55,6 +61,11 @@ public class Icon extends ClickableElement {
     // Partial Constructor
     public Icon(Sketch _sketch, double x, double y, double w, double h, String title, Boolean showTitle, String titlePosition, String linkTo){
         this(_sketch, x, y, w, h, null, title, showTitle, titlePosition, linkTo);
+
+        // Calling the Rectangle class's setBackgroundColor() method, which this class had inherited through the
+        // ClickableElement class, to default all instances of the Icon class, which do not specify a background image, i.e.
+        // buttons, to have an opaque white background. This now means that each button, which does not have a background
+        // image, will have a white rectangle as their background.
         super.setBackgroundColor(sketch.color(255, 255, 255));
     }
 
@@ -66,6 +77,11 @@ public class Icon extends ClickableElement {
         // of the super class (Rectangle)
         super(_sketch, x, y, w, h, img, title);
 
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
         // Initialising the iconLinkTo to be equal to the requested link

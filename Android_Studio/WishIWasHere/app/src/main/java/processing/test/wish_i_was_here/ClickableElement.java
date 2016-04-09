@@ -3,6 +3,13 @@ package processing.test.wish_i_was_here;
 import processing.core.*;
 
 public class ClickableElement extends Rectangle {
+
+    // Creating a private variable to store the instance of the main sketch which will be passed into
+    // the constructors of this class when they are initialised. The purpose of this variable is so that
+    // we can access the Processing library, along with other global methods and variables of the main
+    // sketch class, from within this class. Every reference to a Processing method/variable, or a public
+    // method/variable of the main sketch, must be prefixed with this object while within this and all
+    // other classes which extend from it.
     private Sketch sketch;
 
     String elementTitle = "";
@@ -13,6 +20,13 @@ public class ClickableElement extends Rectangle {
     public ClickableElement(Sketch _sketch, double x, double y, double w, double h, PImage img, String title) {
         super(_sketch, x, y, w, h, img);
         this.elementTitle = title;
+
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this and all other classes
+        // which extend from it.
         sketch = _sketch;
     }
 
@@ -20,6 +34,13 @@ public class ClickableElement extends Rectangle {
     public ClickableElement(Sketch _sketch, double x, double y, double w, double h, String title) {
         super(_sketch, x, y, w, h);
         this.elementTitle = title;
+
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this and all other classes
+        // which extend from it.
         sketch = _sketch;
     }
 
