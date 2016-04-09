@@ -17,13 +17,13 @@ public class ImagePreviewScreen extends Screen {
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
-    // Creating a public constructor for the TemplateScreen class, so that
-    // an instance of it can be declared in the main sketch
+    // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public ImagePreviewScreen(Sketch _sketch) {
 
-        // Calling the super class (Screen), which will in turn call it's super class
-        // (Rectangle) and create a rectangle with the default values i.e. fullscreen,
-        // centered etc.
+        // Passing the instance of the Sketch class, which was passed to constructor of this class, to the
+        // super class (Screen), which will in turn pass it to it's super class (Rectangle). The purpose
+        // of this variable is so that we can access the Processing library, along with other global methods
+        // and variables of the main sketch class, from all other classes.
         super(_sketch);
 
         // Initialising this class's local sketch variable, with the instance which was passed to the
@@ -61,6 +61,11 @@ public class ImagePreviewScreen extends Screen {
     // screen needs to be displayed
     public void showScreen() {
 
+        // Setting the image mode to center, so the image will appear centered on screen
+        sketch.imageMode(sketch.CENTER);
+
+        // Adding this screen's private loadingScreenImage, so it will appear as part of this screen. Calculating
+        // the x, y, width and height based on the current width and height of the device this app is running on.
         sketch.image(sketch.compiledImage, sketch.appWidth / 2, sketch.appHeight / 2, sketch.appWidth, sketch.appHeight);
 
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.

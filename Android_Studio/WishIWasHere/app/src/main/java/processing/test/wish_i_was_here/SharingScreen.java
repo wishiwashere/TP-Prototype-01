@@ -16,10 +16,10 @@ public class SharingScreen extends Screen {
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
+    // Creating a private variable to store the image which will be displayed as part of this screen
     private PImage sharingScreenImage;
 
-    // Creating a public constructor for the TemplateScreen class, so that
-    // an instance of it can be declared in the main sketch
+    // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public SharingScreen(Sketch _sketch) {
 
         // Passing the color parametre to the super class (Screen), which will in
@@ -34,6 +34,8 @@ public class SharingScreen extends Screen {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
+        // Initialising this class's private sharingScreenImage variable by loading the image in from the assets
+        // folder, so that it can be displayd when this screen is called.
         sharingScreenImage = sketch.loadImage("sharingScreenImage.png");
 
         // Setting the title of this screen in this class's super class (Screen), so that it can be accessed
@@ -49,6 +51,9 @@ public class SharingScreen extends Screen {
         // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
-        this.addImage(this.sharingScreenImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
+        // Adding this screen's private sharingScreenImage, using the addImage() method, as inherited from the
+        // Rectangle class, so it will appear as part of this screen. Calculating the x, y, width and height
+        // based on the current width and height of the device this app is running on.
+        this.addImage(sharingScreenImage, sketch.appWidth/2, sketch.appHeight/2, sketch.appWidth * 0.8, sketch.appWidth * 0.4);
     }
 }

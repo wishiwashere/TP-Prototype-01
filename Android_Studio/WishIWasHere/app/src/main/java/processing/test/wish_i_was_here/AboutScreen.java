@@ -20,7 +20,6 @@ public class AboutScreen extends Screen {
 
     private String aboutText = "We are 3rd Year Creative Multimedia students in Limerick Institute of Technology, Clonmel. As part of a team project, we decided to design, create and build an application that will transport you to different locations around the world. Our aim is to make the world a little bit smaller, one click at a time. ";
     private String attributionHeading = "Attributions: ";
-    //private String attributionText1 = "Google Maps Geolocation API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc" + "/n/n" + "Google Street View Image API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc" + "/n/n" + "Android Studio, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 2.5 Generic. It is attributed to Google Inc and the Open Handset Alliance" + "/n/n" + "Ketai, Copyright © 2015, Licensed by Processing Foundation" + "/n/n" + "Processing, Copyright © 2004, Licensed by Processing Foundation" + "/n/n" + "Fabric.io, Copyright © 2016, Licensed by Twitter Inc" + "/n/n" + "ExpressJS, Copyright © 2016 StrongLoop, IBM, and other expressjs.com contributors. By the Node JS Foundation" + "/n/n" + "Jimp, Copyright © 2016 Licensed by MIT" + "/n/n" + "Onecolor, Copyright © 2011, Licensed by One.com";
     private String attributionText1 = "Google Maps Geolocation API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc";
     private String attributionText2 = "Google Street View Image API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc";
     private String attributionText3 = "Android Studio, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 2.5 Generic. It is attributed to Google Inc and the Open Handset Alliance";
@@ -35,14 +34,14 @@ public class AboutScreen extends Screen {
     private Icon[] pageIcons;
     public Boolean loaded = false;
 
-    // Creating a public constructor for the AboutScreen class, so that
-    // an instance of it can be declared in the main sketch
+    // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public AboutScreen(Sketch _sketch) {
 
-        // Passing the color parametre to the super class (Screen), which will in
-        // turn call it's super class (Rectangle) and create a rectangle with the
-        // default values i.e. fullscreen, centered etc.
-        super(_sketch, _sketch.width / 2, _sketch.height / 2, _sketch.width, _sketch.height * 2, null);
+        // Passing the instance of the Sketch class, which was passed to constructor of this class, to the
+        // super class (Screen), which will in turn pass it to it's super class (Rectangle). The purpose
+        // of this variable is so that we can access the Processing library, along with other global methods
+        // and variables of the main sketch class, from all other classes.
+        super(_sketch);
 
         // Initialising this class's local sketch variable, with the instance which was passed to the
         // constructor of this class. The purpose of this variable is so that we can access the Processing
@@ -65,7 +64,8 @@ public class AboutScreen extends Screen {
         Icon twitterIcon = new Icon(sketch, sketch.appWidth * 0.5, sketch.iconBottomY, sketch.loadImage("twitterAccountIconImage.png"), "Twitter", false, "https://twitter.com/wishiwashere");
         Icon instagramIcon = new Icon(sketch, sketch.appWidth * 0.8, sketch.iconBottomY, sketch.loadImage("instagramAccountIconImage.png"), "Instagram", false, "https://www.instagram.com/wishiwashereapp/");
 
-        // Creating a temporary allIcons array to store the icon/s we have created above.
+        // Creating a temporary allIcons array to store the icon/s we have created above, so that they can
+        // be passed to the super class (Screen) to be stored as this screen's icons.
         Icon[] allIcons = {homeIcon, facebookIcon, twitterIcon, instagramIcon};
         pageIcons = allIcons;
 

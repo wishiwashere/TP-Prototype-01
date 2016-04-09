@@ -53,13 +53,13 @@ public class FavouritesScreen extends Screen {
     // the tabs, as well as checking if they are being clicked on.
     public ArrayList<FavouriteTab> favTabs;
 
-    // Creating a public constructor for the FavouriteScreen class, so that
-    // an instance of it can be declared in the main sketch
+    // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public FavouritesScreen(Sketch _sketch) {
 
-        // Passing the color parametre to the super class (Screen), which will in
-        // turn call it's super class (Rectangle) and create a rectangle with the
-        // default values i.e. fullscreen, centered etc.
+        // Passing the instance of the Sketch class, which was passed to constructor of this class, to the
+        // super class (Screen), which will in turn pass it to it's super class (Rectangle). The purpose
+        // of this variable is so that we can access the Processing library, along with other global methods
+        // and variables of the main sketch class, from all other classes.
         super(_sketch);
 
         // Initialising this class's local sketch variable, with the instance which was passed to the

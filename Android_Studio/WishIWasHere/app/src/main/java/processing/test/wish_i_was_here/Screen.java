@@ -41,24 +41,15 @@ public class Screen extends Rectangle {
   /*-------------------------------------- Constructor() ------------------------------------------------*/
 
     protected Screen(Sketch _sketch) {
-        // Calling this class's super class (Screen) to create a screen using
-        // the default settings
+        // Calling this class's super class (Screen) to create a screen using the default settings i.e.
+        // fullscreen, centered in the screen of the device
         super(_sketch);
 
-        sketch = _sketch;
-    }
-
-    protected Screen(Sketch _sketch, PImage img) {
-        // Calling this class's super class (Screen) to create a screen using
-        // the default settings along with a background image
-        super(_sketch, img);
-
-        sketch = _sketch;
-    }
-
-    protected Screen(Sketch _sketch, double x, double y, double w, double h, PImage img) {
-        super(_sketch, x, y, w, h, img);
-
+        // Initialising this class's local sketch variable, with the instance which was passed to the
+        // constructor of this class. The purpose of this variable is so that we can access the Processing
+        // library, along with other global methods and variables of the main sketch class, from within
+        // this class. Every reference to a Processing method/variable, or a public method/variable of
+        // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
     }
 

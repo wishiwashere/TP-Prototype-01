@@ -24,6 +24,7 @@ public class Icon extends ClickableElement {
 
   /*-------------------------------------- Constructor() ------------------------------------------------*/
 
+    // Partial Constructor
     // This constructor is used by icons in the CameraLiveView Screen, that want to accept the
     // default width and height of an icon, but do not link to another page
     public Icon(Sketch _sketch, double x, double y, PImage img, String title, Boolean showTitle) {
@@ -35,6 +36,7 @@ public class Icon extends ClickableElement {
         this(_sketch, x, y, _sketch.width * 0.15, _sketch.width * 0.15, img, title, showTitle, "Middle", "");
     }
 
+    // Partial Constructor
     // This constructor is used by icons such as the homeIcon, that want to accept the default
     // width and height of an icon, and also link to another page
     public Icon(Sketch _sketch, double x, double y, PImage img, String title, Boolean showTitle, String linkTo) {
@@ -46,6 +48,7 @@ public class Icon extends ClickableElement {
         this(_sketch, x, y, _sketch.width * 0.15, _sketch.width * 0.15, img, title, showTitle, "Middle", linkTo);
     }
 
+    // Partial Constructor
     // This constructor is used by icons such as the homeIcon, that want to accept the default
     // width and height of an icon, and also link to another page
     public Icon(Sketch _sketch, double x, double y, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo) {
@@ -73,8 +76,9 @@ public class Icon extends ClickableElement {
         super.setBackgroundColor(sketch.color(255, 255, 255));
     }
 
-    // Full Constructor. Both of the above constructors both pass their values to this constructor, as
-    // well as other icon's in the app that want to pass arguments for all of the specified values
+    // Full Constructor.
+    // All of the above constructors both pass their values to this constructor, as well as other icon's in the app that
+    // want to pass arguments for all of the specified values.
     public Icon(Sketch _sketch, double x, double y, double w, double h, PImage img, String title, Boolean showTitle, String titlePosition, String linkTo) {
 
         // Passing the relevant parametres from the constructor into the constructor

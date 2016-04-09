@@ -16,13 +16,13 @@ public class SocialMediaLogoutScreen extends Screen{
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
-    // Creating a public constructor for the SearchTravelScreen class, so that
-    // an instance of it can be declared in the main sketch
+    // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public SocialMediaLogoutScreen(Sketch _sketch){
 
-        // Passing the color parametre to the super class (Screen), which will in
-        // turn call it's super class (Rectangle) and create a rectangle with the
-        // default values i.e. fullscreen, centered etc.
+        // Passing the instance of the Sketch class, which was passed to constructor of this class, to the
+        // super class (Screen), which will in turn pass it to it's super class (Rectangle). The purpose
+        // of this variable is so that we can access the Processing library, along with other global methods
+        // and variables of the main sketch class, from all other classes.
         super(_sketch);
 
         // Initialising this class's local sketch variable, with the instance which was passed to the
@@ -36,15 +36,15 @@ public class SocialMediaLogoutScreen extends Screen{
         // icons will be only ever be referred to from the allIcons array. Setting their
         // x, and y, based on percentages of the width and height (where icon positioning variables
         // are used, these were defined in the main sketch. Not passing in any width or height, so as
-        // to allow this icon to be set to the default size in the Icon class of the app . Passing
-        // in a colour value of white. Passing in a name for the icon, followed by a boolean to choose
-        // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
-        // value of the name of the screen they will later link to. The title arguments, as well
-        // as the linkTo argument, are optional
+        // to allow this icon to be set to the default size in the Icon class of the app. Passing
+        // in a name for the icon, followed by a boolean to choose whether this name should be displayed
+        // on the icon or not. Finally, passing in a linkTo value of the name of the screen they will
+        // later link to.
         Icon noIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "No", true, "Middle", "SettingsScreen");
         Icon yesIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Yes", true, "Middle", "SettingsScreen");
 
-        // Creating a temporary allIcons array to store the icon/s we have created above.
+        // Creating a temporary allIcons array to store the icon created above, so that they can be
+        // passed to the super class (Screen) and stored as the icons for this screen.
         Icon[] allIcons = {noIcon, yesIcon};
 
         // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
@@ -60,7 +60,7 @@ public class SocialMediaLogoutScreen extends Screen{
         this.setScreenTitle("Social Media Logout Screen");
     }
 
-    // Creating a public showScreen method, which is called by the draw() funciton whenever this
+    // Creating a public showScreen method, which is called by the draw() function whenever this
     // screen needs to be displayed
     public void showScreen(){
 
@@ -68,6 +68,9 @@ public class SocialMediaLogoutScreen extends Screen{
         // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
+        // Calling the addText() method, which was inherited from the Rectangle class, to add text to the screen
+        // which confirms the user's account name (which accessed from a static variable in the TwitterLoginActivity
+        // class)
         this.addText("Are you sure you want \r\n to remove your \r\n" + TwitterLoginActivity.twitterUserUsername + "\r\n Twitter account from \r\n our app?", sketch.iconCenterX, sketch.appHeight * 0.3);
     }
 }

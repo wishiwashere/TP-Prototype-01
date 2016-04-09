@@ -242,7 +242,6 @@ public class Rectangle extends Sketch {
 
   /*-------------------------------------- addImage() ------------------------------------------------*/
 
-
     // Partial addImage() method, which is used by images that require a specific rotation, but will accept
     // the defaults for every other property. This is mainly used by the CameraLiveViewScreen to add the
     // current Google street view image to the sketch, rotating it based upon the device's orientation.

@@ -325,7 +325,7 @@ public class Sketch extends PApplet {
         myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(this);
         mySearchingScreen = new SearchingScreen(this);
         mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this);
-        myLoadingScreen = new LoadingScreen(this, loadImage("loadingScreenImage.jpg"));
+        myLoadingScreen = new LoadingScreen(this);
 
     /*-------------------------------------- Saving ------------------------------------------------*/
 
