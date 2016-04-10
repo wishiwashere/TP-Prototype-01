@@ -25,13 +25,12 @@ public class AboutScreen extends Screen {
     // Creating a private string to contain all of the attribution text we require for this screen. This
     // string will be initialised in the constructor of this screen, using the array declared below, so
     // that each line attribution will be displayed on it's own line.
-    private String attributionText;
+    private String attributionText = "Attributions";
 
     // Creating a private array of Strings, so that attribution lines of text can easily be added/removed
     // from this screen as needed. This array will be used in the constructor of this class, to generate
     // the text which will be displayed on screen as one String.
     private String[] attributionTextLines ={
-            "Attributions",
             "Google Maps Geolocation API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc",
             "Google Street View Image API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc",
             "Android Studio, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 2.5 Generic. It is attributed to Google Inc and the Open Handset Alliance",
@@ -103,7 +102,7 @@ public class AboutScreen extends Screen {
             // Concatenating this line of attribution text, to the attributionText variable, along with
             // the string delimiters for "return" and "new line" so that each line of text will be displayed
             // on it's own line.
-            this.attributionText += attributionTextLines[i] + "\r\n\r\n";
+            this.attributionText +=  "\r\n\r\n" + attributionTextLines[i];
         }
     }
 
