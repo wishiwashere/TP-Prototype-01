@@ -1031,6 +1031,7 @@ public class Sketch extends PApplet {
     public void checkTwitterLogin(){
         println("Checking if Twitter logged in");
         if(TwitterLoginActivity.twitterLoggedIn) {
+            currentScreen = "SocialMediaLogoutScreen";
             println("Twitter already logged in");
             println("In SKETCH - Twitter username = " + TwitterLoginActivity.twitterUserUsername);
             println("In SKETCH - Twitter userid = " + TwitterLoginActivity.twitterUserUserId);

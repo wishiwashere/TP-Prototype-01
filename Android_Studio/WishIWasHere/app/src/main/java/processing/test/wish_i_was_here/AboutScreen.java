@@ -88,6 +88,11 @@ public class AboutScreen extends Screen {
         if (!this.loaded) {
             // Resetting the position values of the element so on the screen every time the page is opened,
             // so that if a user leaves the screen half scrolled, it will still be reset upon their return
+
+            // Resetting the screenTitleY position to it's original value (as it may have been
+            // incremented if the about screen was scrolled
+            sketch.screenTitleY = sketch.iconTopY;
+
             this.setY(sketch.appHeight/2);
             this.getScreenIcons()[0].setY(sketch.iconTopY);
             this.getScreenIcons()[1].setY(sketch.iconBottomY);

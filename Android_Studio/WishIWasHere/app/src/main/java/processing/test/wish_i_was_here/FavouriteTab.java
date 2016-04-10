@@ -40,7 +40,7 @@ public class FavouriteTab extends ClickableElement {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
-        super.setBackgroundColor(sketch.color(255, 255, 255, 149));
+        this.setBackgroundColor(sketch.color(255, 255, 255, 149));
 
         // Initialising the two private strings, one to hold the favourite title, and the other to hold
         // the location URL data of the favourite. The title will be used as text on the tab

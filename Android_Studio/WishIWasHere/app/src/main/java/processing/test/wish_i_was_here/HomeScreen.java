@@ -69,5 +69,10 @@ public class HomeScreen extends Screen {
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
         // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
+
+        // Resetting the About and Favourites screen's loaded values to false, so that the next time
+        // they are opened they will reset to their original positions
+        sketch.myAboutScreen.loaded = false;
+        sketch.myFavouritesScreen.loaded = false;
     }
 }

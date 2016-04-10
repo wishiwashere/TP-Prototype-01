@@ -65,7 +65,7 @@ public class SettingsScreen extends Screen {
         autoSaveIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.8, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, sketch.loadImage(autoSaveToggleSwitchImage), "Auto-save switch", false, "_switchAutoSave");
 
         if(TwitterLoginActivity.twitterLoggedIn) {
-            Icon twitterAccountIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("twitterAccountIconOnImage.png"), "Twitter", true, "Below", "_checkTwitterLogin");
+            Icon twitterAccountIcon = new Icon(sketch, sketch.iconLeftX + (sketch.largeIconSize/2), sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("twitterAccountIconOnImage.png"), "Twitter", true, "Below", "_checkTwitterLogin");
             Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, twitterAccountIcon};
             // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
             // the temporary allIcons array to the screenIcons array of the Screen class so that they

@@ -4,6 +4,8 @@ package processing.test.wish_i_was_here;
 // datatypes i.e. PImage objects.
 import processing.core.*;
 
+// This class extends from the ClickableElement class, which in turn extends from the Rectangle class, and so
+// inherits methods and variables from both of these classes
 public class TextInput extends ClickableElement {
 
     // Creating a private variable to store the instance of the main sketch which will be passed into
@@ -13,8 +15,8 @@ public class TextInput extends ClickableElement {
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
-    // Creating private variables to store the TextInput's title and value
-    // properties, so that they can only be accessed within this class
+    // Creating private variables to store the TextInput's title, value and text alignment properties, so
+    // that they can only be accessed within this class (
     private String inputTitle = "";
     private String inputValue = "";
     private String inputTextAlign = "";
@@ -43,8 +45,9 @@ public class TextInput extends ClickableElement {
     // want to pass arguments for all of the specified values.
     public TextInput(Sketch _sketch, double x, double y, double w, double h, String title, String align) {
 
-        // Passing the relevant parameters from the constructor into the constructor
-        // of the super class (ClickableElement)
+        // Passing the relevant parameters from the constructor into the constructor of the super class (ClickableElement).
+        // Also passing the instance of the Sketch class, which was just passed to this constructor, so that the super
+        // class can also access the Processing library, as well as the global methods and variables of the Sketch class.
         super(_sketch, x, y, w, h, title);
 
         // Initialising this class's local sketch variable, with the instance which was passed to the
@@ -57,7 +60,7 @@ public class TextInput extends ClickableElement {
         // Calling the Rectangle class's setBackgroundColor() method, which this class had inherited through the
         // ClickableElement class, to default all instances of the TextInput class to have an opaque white background.
         // This now means that each TextInput class will have a white rectangle as their background.
-        super.setBackgroundColor(sketch.color(255, 255, 255, 255));
+        this.setBackgroundColor(sketch.color(255, 255, 255, 255));
 
         // Initialising the inputTitle to be equal to the requested title
         this.inputTitle = title;
@@ -106,16 +109,12 @@ public class TextInput extends ClickableElement {
         sketch.text(displayText, this.textX1, this.textY1, this.textX2, this.textY2);
     }
 
-    public void setInputValue(String val) {
-        this.inputValue = val;
-    }
-
     public String getInputValue() {
         return this.inputValue;
     }
 
-    public void clearInputValue() {
-        this.inputValue = "";
+    public void setInputValue(String val) {
+        this.inputValue = val;
     }
 
     public int getMaxTextLength(){
@@ -124,5 +123,9 @@ public class TextInput extends ClickableElement {
 
     public void setMaxTextLength(int maxLength){
         maxTextLength = maxLength;
+    }
+
+    public void clearInputValue() {
+        this.inputValue = "";
     }
 }

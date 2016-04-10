@@ -41,8 +41,10 @@ public class Screen extends Rectangle {
   /*-------------------------------------- Constructor() ------------------------------------------------*/
 
     protected Screen(Sketch _sketch) {
-        // Calling this class's super class (Screen) to create a screen using the default settings i.e.
-        // fullscreen, centered in the screen of the device
+        // Calling this class's super class (Rectangle) to create a screen using the default settings i.e.
+        // fullscreen, centered in the screen of the device. Also passing the instance of the Sketch class,
+        // which was just passed to this constructor, so that the super class can also access the Processing
+        // library, as well as the global methods and variables of the Sketch class.
         super(_sketch);
 
         // Initialising this class's local sketch variable, with the instance which was passed to the

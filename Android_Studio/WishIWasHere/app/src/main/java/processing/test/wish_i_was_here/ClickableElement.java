@@ -17,12 +17,20 @@ public class ClickableElement extends Rectangle {
     // other classes which extend from it.
     private Sketch sketch;
 
-    String elementTitle = "";
+    // Creating a private variable to store the title of the element. This title will only be used for
+    // logging out which element was clicked on
+    private String elementTitle = "";
 
   /*-------------------------------------- Constructor() ------------------------------------------------*/
 
+    // Full Constructor
     // This constructor is used by icons
     public ClickableElement(Sketch _sketch, double x, double y, double w, double h, PImage img, String title) {
+
+        // Calling this class's super class (Rectangle) to create an element with the specified x, y
+        // width, height and background image. Also passing the instance of the Sketch class, which was
+        // just passed to this constructor, so that the super class can also access the Processing library,
+        // as well as the global methods and variables of the Sketch class.
         super(_sketch, x, y, w, h, img);
         this.elementTitle = title;
 
@@ -35,8 +43,14 @@ public class ClickableElement extends Rectangle {
         sketch = _sketch;
     }
 
+    // Full Constructor
     // This constructor is used by textInputs
     public ClickableElement(Sketch _sketch, double x, double y, double w, double h, String title) {
+
+        // Calling this class's super class (Rectangle) to create an element with the specified x, y
+        // width and height. Also passing the instance of the Sketch class, which was just passed to
+        // this constructor, so that the super class can also access the Processing library, as well
+        // as the global methods and variables of the Sketch class.
         super(_sketch, x, y, w, h);
         this.elementTitle = title;
 

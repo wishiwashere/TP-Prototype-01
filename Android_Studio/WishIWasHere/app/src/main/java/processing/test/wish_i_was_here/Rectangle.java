@@ -32,12 +32,12 @@ public class Rectangle extends Sketch {
     private float rectHeight;
 
     // Creating a variable to store the background color of each rectangle, if they have one. Defaulting this
-    // to a random value, as it is not possible to set an integer to null. In the show() method of this class,
+    // to 0 as it is not possible to set an integer to null. In the show() method of this class,
     // this color will be as the fill for the rectangle's background, if it has been changed to another value
     // i.e. if a subclass using the setBackgroundColor() method to change this value from the default. Generally,
     // only icons that don't have background images, i.e. buttons, or text input areas, ever set a value for this
     // color.
-    private int rectCol = 1234567;
+    private int rectCol = 0;
 
     // Defaulting the rotation of every instance of the Rectangle class to 0. Subclasses can use the setRotation()
     // method to change this value if needed. Storing the rotation value in radians, as this is the expected value
@@ -128,7 +128,7 @@ public class Rectangle extends Sketch {
         // does this rectangle require a background color (which will be added by drawing a rectangle which uses this
         // color as it's fill). Not all subclasses will require a background color, it is primarily TextInputs and
         // icons which do not have a background image i.e. buttons.
-        if(this.rectCol != 1234567){
+        if(this.rectCol != 0){
 
             // Setting the fill colour of the rectangle to the value specified
             sketch.fill(this.rectCol);
