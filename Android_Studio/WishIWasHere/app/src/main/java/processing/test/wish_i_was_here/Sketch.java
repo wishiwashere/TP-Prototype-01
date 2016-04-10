@@ -686,6 +686,9 @@ public class Sketch extends PApplet {
 
     public void addToFavourites() {
         callFunction = "";
+
+        Boolean favouriteLocation = false;
+
         int favLocationIndex = checkIfFavourite(currentLocationName);
 
         if (favLocationIndex > -1) {
@@ -693,8 +696,8 @@ public class Sketch extends PApplet {
                 if (favouriteLocationsData[i].getString("name").equals(currentLocationName)) {
                     userPreferencesXML.removeChild(favouriteLocationsData[i]);
                     myFavouritesScreen.favTabs.remove(favLocationIndex);
-                    myCameraLiveViewScreen.favouriteLocation = false;
                     saveUserPreferencesXML();
+                    favouriteLocation = false;
                 }
             }
         } else {
@@ -707,11 +710,11 @@ public class Sketch extends PApplet {
 
             FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng, googleImageHeading, googleImagePitch);
             myFavouritesScreen.favTabs.add(newFavTab);
-            myCameraLiveViewScreen.favouriteLocation = true;
+            favouriteLocation = true;
         }
 
         checkFavIcon();
-        println("FAV - Favourite location " + currentLocationName + " is now: " + myCameraLiveViewScreen.favouriteLocation);
+        println("FAV - Favourite location " + currentLocationName + " is now " + favouriteLocation);
     }
 
     public void switchLearningMode() {

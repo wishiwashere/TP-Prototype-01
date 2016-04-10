@@ -26,8 +26,6 @@ public class CameraLiveViewScreen extends Screen {
     public Icon favIcon;
     public Icon shakeIcon;
 
-    public Boolean favouriteLocation;
-
     /*-------------------------------------- Constructor() ------------------------------------------------*/
     // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public CameraLiveViewScreen(Sketch _sketch) {
@@ -45,14 +43,10 @@ public class CameraLiveViewScreen extends Screen {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
-        this.favouriteLocation = false;
-
-        String switchViewIconImage;
-        if(sketch.ketaiCamera.getNumberOfCameras() > 1){
-            switchViewIconImage = "switchViewIconImage.png";
-        } else {
-            switchViewIconImage = "switchViewIconDisabledImage.png";
-        }
+        // Creating a temporary String variable, to store the path to the icon image which should
+        // be displayed on the switchViewIconImage on this screen, when the sketch first loads.
+        // This will depend on whether or not there are multiple cameras available on this device.
+        String switchViewIconImage = sketch.ketaiCamera.getNumberOfCameras() > 1 ? "switchViewIconImage.png" : "switchViewIconDisabledImage.png";
 
         // Creating the icon/s for this screen, using a locally scoped variable for the home, shutter and
         // switchView icons, as these icons will be only ever be referred to from the allIcons array.
@@ -89,14 +83,15 @@ public class CameraLiveViewScreen extends Screen {
         // Checking if the mouse is pressed (i.e. the user wants to scroll around the background of this image)
         if (sketch.mousePressed) {
 
-            // Calculating the amount scrolled, based on the distance between the previous y position,
-            // and the current y position. When the mouse is first pressed, the previous y position
-            // is initialised (in the main sketch) but then while the mouse is held down, the previous
-            // y position gets updated each time this function runs (so that the scrolling can occur
-            // while the person is still moving their hand (and not just after they release the screen)
+            // Calculating the amount scrolled on the x axis, based on the distance between the previous x position,
+            // and the current x position, as well as the amount scrolled on the y axis based on the distance between
+            // the previous y position and the current y position.
             float amountScrolledX = dist(0, sketch.pmouseX, 0, sketch.mouseX);
             float amountScrolledY = dist(0, sketch.pmouseY, 0, sketch.mouseY);
 
+            // Checking which direction the user has scrolled on the X axis based on the previous x position of the
+            // mouse, in comparison with the current x position of the mouse. Scrolling on the x axis controls the
+            // heading of the google image i.e. left to right view point
             if (sketch.pmouseX > sketch.mouseX) {
                 // The user has scrolled RIGHT
 
@@ -106,6 +101,8 @@ public class CameraLiveViewScreen extends Screen {
                 // user can continue turn around in that direction, otherwise allowing it to equal to the
                 // current heading value minus the amount scrolled on the X
                 sketch.googleImageHeading = (sketch.googleImageHeading + amountScrolledX) > 359 ? 0 : sketch.googleImageHeading + amountScrolledX;
+
+                // Logging out the current heading of the Google image (for TESTING purposes)
                 println("scrolled right. heading is now " + googleImageHeading);
             } else {
                 // The user has scrolled LEFT
@@ -116,6 +113,8 @@ public class CameraLiveViewScreen extends Screen {
                 // user can continue turn around in that direction, otherwise allowing it to equal to the
                 // current heading value plus the amount scrolled on the X
                 sketch.googleImageHeading = (sketch.googleImageHeading - amountScrolledX) < 0 ? 359 : sketch.googleImageHeading - amountScrolledX;
+
+                // Logging out the current heading of the Google image (for TESTING purposes)
                 println("scrolled left. heading is now " + sketch.googleImageHeading);
             }
 
@@ -128,7 +127,7 @@ public class CameraLiveViewScreen extends Screen {
                 println("amountScrolledY = " + amountScrolledY);
 
                 // Determining which direction the user has scrolled, based on the previous and current mouse Y positions
-                // i.e. has the user scrolled up or down.
+                // i.e. has the user scrolled up or down which will determine the pitch of the google image
                 if (sketch.pmouseY > sketch.mouseY) {
                     // The user has scrolled UP
 
@@ -157,7 +156,9 @@ public class CameraLiveViewScreen extends Screen {
 
                 // Calling the loadGoogleImage method from the main Sketch class, so that a new google image will be
                 // loaded in, with the new heading and pitch values specified above. The call to this function only
-                // occurs within this class when
+                // occurs within this class when the global shakeMovementOn variable is false, as otherwise the user
+                // will be moving around the location using their device's accelerometer, and the loadGoogleImage()
+                // method will be called from there instead (as it will need to be called more frequently)
                 sketch.loadGoogleImage();
             }
         }
@@ -183,24 +184,31 @@ public class CameraLiveViewScreen extends Screen {
         this.drawScreen();
     }
 
+    // Private switchCameraView method, which allows users to switch between cameras on their device, using the icon on screen
     public void switchCameraView()
     {
+        // Resetting the global callFunction variable, which was used to trigger this function, to and empty
+        // string, so that this function won't be called again
         sketch.callFunction = "";
 
-        // If the camera is already running before we try and effect it
+        // Checking if the ketaiCamera is already running
         if (sketch.ketaiCamera.isStarted())
         {
             // Checking if the device has more than one camera. If it does we want to toggle between them
             if (sketch.ketaiCamera.getNumberOfCameras() > 1)
             {
-                // Ternary operator to toggle between cameras 1 & 0 (i.e. front and back)
+                // Using a ternary operator to toggle between cameras i.e. 1 is the camera facing away from the user
+                // while 0 is the camera facing the user
                 sketch.camNum = sketch.camNum == 0 ? 1 : 0;
 
-                // Toggle the image rotation value between a plus and a minus i.e. -90 and 90
+                // Toggle the image rotation value between a plus and a minus i.e. -90 and 90, so that the resulting
+                // image from the ketaiCamera can be rotated appropriately for display on the CameraLiveViewScreen, as
+                // well as when it is being added to the compiled image when they are merged
                 sketch.cameraRotation *= -1;
 
                 // Toggling the scale of the camera image between 1 and -1 (depending on if the camera
-                // is front or rear facing (only on devices with more than one camera)
+                // is front or rear facing) so that the image can be scaled appropriately to avoid the mirror image
+                // that the camera facing the user produces by default
                 sketch.cameraScale *= -1;
 
                 // Stopping the ketaiCamera so that no new frames will be read in, switching to the camera specified

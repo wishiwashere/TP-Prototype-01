@@ -35,6 +35,7 @@
         android:layout_marginTop="340dp"
         android:textSize="16sp"
         android:textAlignment="center"
-        android:text="Cancel" />
+        android:textAllCaps="false"
+        android:text="@string/cancel_login_button_text" />
 
 </RelativeLayout>
