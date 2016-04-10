@@ -58,8 +58,8 @@ public class SettingsScreen extends Screen {
         // variables are used, these were defined in the main sketch. Not passing in any width or height,
         // so as to allow this icon to be set to the default size in the Icon class of the app. Passing in
         // a name for the icon, followed by a boolean to choose whether this name should be displayed on
-        // the icon or not. Finally, passing in a linkTo value of the name of the screen they will later
-        // link to.
+        // the icon or not. Finally, passing in a linkTo value of the name of the screen or function they
+        // will later link to.
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconImage.png"), "Home", false, "HomeScreen");
         learningModeIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.5, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, sketch.loadImage(learningModeToggleSwitchImage), "Learning mode switch", false, "_switchLearningMode");
         autoSaveIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.8, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, sketch.loadImage(autoSaveToggleSwitchImage), "Auto-save switch", false, "_switchAutoSave");

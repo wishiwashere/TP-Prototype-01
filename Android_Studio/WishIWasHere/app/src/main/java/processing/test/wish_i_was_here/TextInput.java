@@ -16,16 +16,28 @@ public class TextInput extends ClickableElement {
     private Sketch sketch;
 
     // Creating private variables to store the TextInput's title, value and text alignment properties, so
-    // that they can only be accessed within this class (
+    // that they can only be accessed within this class (the input's can be altered using the public get and set
+    // methods provided in this class. The inputTitle is used to log out to the console which input was clicked on,
+    // The inputTextAlign determines the text alignment for the text within this text input.
     private String inputTitle = "";
     private String inputValue = "";
     private String inputTextAlign = "";
+    private int textVertAlign;
 
+    // Creating private variables, which will determine the positioning and dimensions of the text box that will
+    // be required to display text within this text input. textX1 and textY1 will determine where the top left corner
+    // of the text box will be positioned, while textX2 and textY2 will determine where the bottom left corner of
+    // the text box will be positioned. Any text added to the inputValue of this input, will be displayed within this
+    // text box (using the addTextBox() method of this class). Any text which exceeds the bounds of this box will not be
+    // displayed.
     private float textX1;
     private float textY1;
     private float textX2;
     private float textY2;
-    private int textVertAlign;
+
+    // Creating a private variable to store the maximum amount of character allowed in this TextInput. Defaulting this
+    // to 400. This value can be adjusted using the get and set methods provided in this class. For example, the TextInput
+    // for adding a message to a tweet has a lower limit, to abide by twitter's restrictions on tweet lengths.
     private int maxTextLength = 400;
 
     /*-------------------------------------- Constructor() ------------------------------------------------*/
@@ -35,8 +47,10 @@ public class TextInput extends ClickableElement {
     // but will accept left aligned text as default
     public TextInput(Sketch _sketch, double x, double y, double w, double h, String title) {
 
-        // Since not text align value has been passed in, defaulting this to left aligned. Passing this, along
-        // with the specified x, y, width, height and title into the full constructor of this class.
+        // Since no text align value has been passed in, defaulting this to left aligned. Passing this, along
+        // with the specified x, y, width, height and title into the full constructor of this class. Also passing
+        // the instance of the Sketch class, which was just passed to this constructor, so that this class
+        // can also access the Processing library, as well as the global methods and variables of the Sketch class.
         this(_sketch, x, y, w, h, title, "LEFT");
     }
 
@@ -62,69 +76,148 @@ public class TextInput extends ClickableElement {
         // This now means that each TextInput class will have a white rectangle as their background.
         this.setBackgroundColor(sketch.color(255, 255, 255, 255));
 
-        // Initialising the inputTitle to be equal to the requested title
+        // Initialising the inputTitle to be equal to the requested title. This title will only be used to log out the
+        // which TextInput was clicked on, if a click occurs
         this.inputTitle = title;
+
+        // Initialising the text alignment of this TextInput to be equal to the value passed in. This will determine
+        // the vertical and horizontal alignment of text within this TextInput text box.
         this.inputTextAlign = align;
 
+        // Initialising the variable which will determine the positioning and dimensions of the text box that will
+        // be required to display text within this text input. textX1 and textY1 will determine where the top left corner
+        // of the text box will be positioned, while textX2 and textY2 will determine where the bottom left corner of
+        // the text box will be positioned. Any text added to the inputValue of this input, will be displayed within this
+        // text box (using the addTextBox() method of this class). Any text which exceeds the bounds of this box will not be
+        // displayed. Since the TextInput (along with all other descendants of the Rectangle class) will be drawn from it's
+        // center point, determining the positioning values for these co-ordinates by either adding or taking away half of
+        // the width and height that were passed into this constructor. Using decimal multiplication to achieve this, so as
+        // to make the text box just short of the full dimensions of the TextInput, so that text does not appear right up
+        // to the edge of the surrounding rectangle i.e. textX1 will be positioned 2% of the width further in than the TextInput's
+        // top left corner (almost like padding in HTML)
         this.textX1 = (float)(x - (w * 0.48));
         this.textY1 = (float)(y - (h * 0.45));
         this.textX2 = (float)(x + (w * 0.48));
         this.textY2 = (float)(y + (h * 0.45));
 
+        // Determining the vertical alignment of text text in this text box, based on the value passed in
         if (this.inputTextAlign.equals("LEFT")) {
-            this.textVertAlign = CENTER;
+            // If the horizontal alignment specified was just left aligned, then setting the vertical
+            // alignment to CENTER (a constant containing the integer value for aligning text - as defined
+            // in the Processing libarary)
+            this.textVertAlign = sketch.CENTER;
+
         } else if (inputTextAlign.equals("LEFT-TOP")) {
-            this.textVertAlign = TOP;
+            // If the horizontal alignment specified was left-top aligned, then setting the vertical
+            // alignment to TOP (a constant containing the integer value for aligning text - as defined
+            // in the Processing library)
+            this.textVertAlign = sketch.TOP;
         }
     }
 
   /*-------------------------------------- showTextInput() ------------------------------------------------*/
 
     // Creating a public showTextInput function, which can be called anywhere in the code
-    // to display the icon, and add any text that has been specified
+    // to display the TextInput, and add any text that has been specified
     public void showTextInput() {
-        // Calling the show() method (which was inherited from the Rectangle class)
-        // so that this icon will be displayed on screen
+
+        // Calling the show() method (which was inherited from the Rectangle class so that this TextInput will be
+        // displayed on screen
         this.show();
 
-        // Checking if the length of the value is greater than 0 i.e.
+        // Checking if the length of the value is greater than 0 i.e. is there text to be added to this TextInput
         if (this.inputValue.length() > 0) {
+
+            // Calling this method's addTextBox() method, passing in the current input value of the input
             this.addTextBox(this.inputValue);
         }
+
+        // Checking if the mouse was clicked, using a custom variable defined in the main Sketch (to
+        // differentiate between mouse clicked and mouse pressed (i.e. clicking or scrolling)
         if (sketch.mouseClicked) {
+
+            // Checking if the mouse was over this TextInput when the click occurred (using the checkMouseOver() method
+            // inherited from the ClickableElement class). This method returns a boolean value, to confirm if the
+            // mouse was over the TextInput when the click occurred.
             if (this.checkMouseOver()) {
+
+                // Setting the keyboardRequired variable, defined in the main Sketch class, to true, so that the
+                // device's keyboard can be triggered i.e. so that the user can add text to this TextInput using
+                // the default keyboard of their device.
                 sketch.keyboardRequired = true;
+
+                // Setting the currentTextInput variable in the main Sketch, which stores TextInput objects, to
+                // be equal to this TextInput so that any text which is entered while this input is in focus,
+                // will be added to it.
                 sketch.currentTextInput = this;
+
+                // Clearing the value of currentTextInputValue, which stores the value of the current text input,
+                // so that text from previous TextInput's will not be carried over to this one. If this input already
+                // had a value when the user clicked on it, this will be added again in the main sketch, by accessing
+                // it's current value using the get method on the currentTextInput variable defined above.
                 sketch.currentTextInputValue = "";
+
+                // Logging out that this TextInput was clicked on.
                 println("The " + this.inputTitle + " text input was clicked on");
             }
         }
     }
 
+    // Declaring a private method, which can only be used within this class, to add a text box to the TextInput,
+    // to display the current value it contains. This method expects one parameter, i.e. the text which should be
+    // added to it.
     private void addTextBox(String displayText) {
+
+        // Setting the rectMode (rectangle drawing mode) of the sketch to be determined using Corners, so that the
+        // text box can be drawn by specifying the top left corner co-ordinates, and the bottom right corner co-ordinates
+        // (as specified in the Processing API when adding a text box)
         sketch.rectMode(CORNERS);
+
+        // Setting the fill to black, so that the text will appear black
         sketch.fill(0);
-        sketch.textAlign(LEFT, this.textVertAlign);
+
+        // Setting the text alignment of this text box to left on the horizontal axis (as we have no text boxes that require
+        // any other alignment value on this axis) and the determining the vertical alignment of the text based on the textVertAlign
+        // property of this TextInput i.e. a constant containing the integer value for aligning text - as defined in the
+        // Processing library)
+        sketch.textAlign(sketch.LEFT, this.textVertAlign);
+
+        // Setting the text size of this TextInput to be equal to the defaultTextSize, as defined in the main Sketch class.
+        // This is a relative value, and will depend on the size of the device that the app is running on.
         sketch.textSize(sketch.defaultTextSize);
+
+        // Adding the text to the TextInput using the Processing text() method, passing in the positioning and dimensions
+        // of the text box that will be required to display text within this text input. textX1 and textY1 will determine
+        // where the top left corner of the text box will be positioned, while textX2 and textY2 will determine where the
+        // bottom left corner of the text box will be positioned. Any text added to the inputValue of this input, will be
+        // displayed within this text box (using the addTextBox() method of this class). Any text which exceeds the bounds
+        // of this box will not be displayed. The co-ordinates of the text box just short of the full dimensions of the
+        // TextInput, so that text does not appear right up to the edge of the surrounding rectangle i.e. textX1 will be
+        // positioned slightly in from the TextInput's top left corner (almost like padding in HTML)
         sketch.text(displayText, this.textX1, this.textY1, this.textX2, this.textY2);
     }
 
+    // Get method which returns the current value of the text entered into in this input
     public String getInputValue() {
         return this.inputValue;
     }
 
+    // Set method to set the current value of the text entered into this input
     public void setInputValue(String val) {
         this.inputValue = val;
     }
 
+    // Get method which returns the maximum number of characters allowed into this input
     public int getMaxTextLength(){
         return maxTextLength;
     }
 
+    // Set method to set the maximum amount of characters allowed into this input
     public void setMaxTextLength(int maxLength){
         maxTextLength = maxLength;
     }
 
+    // Clear method which clears the current value of this input
     public void clearInputValue() {
         this.inputValue = "";
     }

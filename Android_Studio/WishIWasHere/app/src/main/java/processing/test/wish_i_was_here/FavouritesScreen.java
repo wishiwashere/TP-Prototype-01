@@ -2,6 +2,7 @@ package processing.test.wish_i_was_here;
 
 // Importing the Processing library, so this class can declare variables using Processing specific
 // datatypes i.e. PImage objects.
+
 import processing.core.*;
 
 // Importing the java ArrayList class, so that the favourite tabs for this screen can be stored in
@@ -53,6 +54,7 @@ public class FavouritesScreen extends Screen {
     // the tabs, as well as checking if they are being clicked on.
     public ArrayList<FavouriteTab> favTabs;
 
+    /*-------------------------------------- Constructor() ------------------------------------------------*/
     // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public FavouritesScreen(Sketch _sketch) {
 
@@ -108,15 +110,13 @@ public class FavouritesScreen extends Screen {
             favTabs.add(newFavTab);
         }
 
-        // Creating the icon/s for this screen, using locally scoped variables, as these
-        // icons will be only ever be referred to from the allIcons array. Setting their
-        // x, and y, based on percentages of the width and height (where icon positioning variables
-        // are used, these were defined in the main sketch. Not passing in any width or height, so as
-        // to allow this icon to be set to the default size in the Icon class of the app . Passing
-        // in a colour value of white. Passing in a name for the icon, followed by a boolean to choose
-        // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
-        // value of the name of the screen they will later link to. The title arguments, as well
-        // as the linkTo argument, are optional
+        // Creating the icon/s for this screen, using locally scoped variables, as these icons will be only
+        // ever be referred to from the allIcons array. Setting their x, and y, based on percentages of the
+        // width and height (where icon positioning variables are used, these were defined in the main sketch.
+        // Not passing in any width or height, so as to allow this icon to be set to the default size in the
+        // Icon class of the app. Passing in a name for the icon, followed by a boolean to choose whether this
+        // name should be displayed on the icon or not. Finally, passing in a linkTo value of the name of the
+        // screen or function they will later link to.
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconImage.png"), "Home", false, "HomeScreen");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.
@@ -135,30 +135,14 @@ public class FavouritesScreen extends Screen {
         this.setScreenTitle("Favourites");
     }
 
+    /*-------------------------------------- showScreen() ------------------------------------------------*/
+
     // Creating a public showScreen method, which is called by the draw() funciton whenever this
     // screen needs to be displayed
     public void showScreen() {
 
         if (!this.loaded) {
-            // Resetting the position values of the element so on the screen every time the page is opened,
-            // so that if a user leaves the screen half scrolled, it will still be reset upon their return
-
-            // Resetting the screenTitleY position to it's original value (as it may have been
-            // incremented if the about screen was scrolled
-            sketch.screenTitleY = sketch.iconTopY;
-
-            this.setY(sketch.appHeight/2);
-            this.getScreenIcons()[0].setY(sketch.iconTopY);
-
-            for (int i = 0; i < favTabs.size(); i++) {
-                favTabs.get(i).setY((float) ((i + 1) * sketch.appHeight * 0.25));
-            }
-
-            // Setting loaded to true, so that this block of code will only run once (each time this page
-            // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
-            // when an icon that links to another page has been clicked.
-            this.loaded = true;
-            println("firstLoad");
+            this.resetScreen();
         }
 
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
@@ -174,38 +158,8 @@ public class FavouritesScreen extends Screen {
         }
 
         if (sketch.mousePressed) {
-            sketch.mouseClicked = false;
-            // Calculating the amount scolled, based on the distance between the previous y position,
-            // and the current y position. When the mouse is first pressed, the previous y position
-            // is initialised (in the main sketch) but then while the mouse is held down, the previous
-            // y position gets updated each time this function runs (so that the scrolling can occur
-            // while the person is still moving their hand (and not just after they release the screen)
-            float amountScrolled = dist(0, sketch.previousMouseY, 0, sketch.mouseY);
 
-            Icon[] icons = this.getScreenIcons();
-
-            // Looping through each of the page icons, which are only being stored in an array within
-            // this class so that they can be looped through to be repositioned (i.e. in every other
-            // screen, these icons would be stored only in the super class, and not directly accessible
-            // within the individual screen classes
-            for (int i = 0; i < icons.length; i++) {
-                // Checking which direction the user scrolled
-                if (sketch.previousMouseY > sketch.mouseY) {
-                    // The user has scrolled UP
-                    // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
-                    // moving the icon up the screen
-                    icons[i].setY(icons[i].getY() - amountScrolled);
-                } else {
-                    // The user has scrolled DOWN
-                    // Checking if the screen's y position is less than or equal to half of the height i.e. is
-                    // so that the screen cannot be down any further once you reach the top
-                    if (this.getY() <= (sketch.appHeight/2) - amountScrolled) {
-                        // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
-                        // moving the icon down the screen
-                        icons[i].setY(icons[i].getY() + amountScrolled);
-                    }
-                }
-            }
+            float amountScrolled = scrollScreen();
 
             // Looping through each of the page icons, which are only being stored in an array within
             // this class so that they can be looped through to be repositioned (i.e. in every other
@@ -213,7 +167,7 @@ public class FavouritesScreen extends Screen {
             // within the individual screen classes
             for (int i = 0; i < favTabs.size(); i++) {
                 // Checking which direction the user scrolled
-                if (sketch.previousMouseY > sketch.mouseY) {
+                if (sketch.pmouseY > sketch.mouseY) {
                     // The user has scrolled UP
                     // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
                     // moving the icon up the screen
@@ -226,43 +180,38 @@ public class FavouritesScreen extends Screen {
                         // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
                         // moving the icon down the screen
                         this.favTabs.get(i).setY(this.favTabs.get(i).getY() + amountScrolled);
+                    } else {
+                        this.resetScreen();
                     }
                 }
             }
-
-            // Checking which direction the user scrolled (the reason I have to do this seperatley from above is
-            // that including these lines within the icons loop above makes these elements move faster than the
-            // page icons
-            if (sketch.previousMouseY > sketch.mouseY) {
-                // The user has scrolled UP
-                // Setting the screen's y postion to it's current y position, minus the amount scrolled
-                this.setY(this.getY() - amountScrolled);
-                // Setting the global positioning variable screenTitleY to be decremented by the amount scrolled. Note:
-                // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
-                // an icon's link is passed in to change a page)
-                sketch.screenTitleY -= amountScrolled;
-            } else {
-                // The user has scrolled DOWN
-                // Checking if the screen's y position is less than or equal to half of the height i.e. is
-                // so that the screen cannot be down any further once you reach the top
-                if (this.getY() <= (sketch.appHeight/2) - amountScrolled) {
-                    // Setting the screen's y postion to it's current y position, plus the amount scrolled
-                    this.setY(this.getY() + amountScrolled);
-                    // Setting the global positioning variable screenTitleY to be incremented by the amount scrolled. Note:
-                    // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
-                    // an icon's link is passed in to change a page)
-                    sketch.screenTitleY += amountScrolled;
-                }
-            }
-
-            // Updating the previous mouse Y to be equal to the current mouse y, so that the next time this function is
-            // called, the scrolling will be detected from this point i.e. so that scrolling appears continous, even if the
-            // user keeps there finger/mouse held on the screen while moving up and down
-            sketch.previousMouseY = sketch.mouseY;
         }
     }
 
-    public String getRandomFavourite(){
+    private void resetScreen(){
+        // Resetting the position values of the element so on the screen every time the page is opened,
+        // so that if a user leaves the screen half scrolled, it will still be reset upon their return
+
+        // Resetting the screenTitleY position to it's original value (as it may have been
+        // incremented if the about screen was scrolled
+        sketch.screenTitleY = sketch.iconTopY;
+
+        this.setY(sketch.appHeight / 2);
+        this.getScreenIcons()[0].setY(sketch.iconTopY);
+
+        for (int i = 0; i < favTabs.size(); i++) {
+            favTabs.get(i).setY((float) ((i + 1) * sketch.appHeight * 0.25));
+        }
+
+        // Setting loaded to true, so that this block of code will only run once (each time this page
+        // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
+        // when an icon that links to another page has been clicked.
+        this.loaded = true;
+        println("firstLoad");
+    }
+
+    /*-------------------------------------- get() and set() ------------------------------------------------*/
+    public String getRandomFavourite() {
         // Splitting the favourite string at the "@". Getting data at index 1 of the new split
         // string array (i.e. the second half of the string which contains the URL data we
         // require to request this specific location (longitude, latitude, heading and pitch).
@@ -274,7 +223,7 @@ public class FavouritesScreen extends Screen {
         return locationURLData;
     }
 
-    public ArrayList<FavouriteTab> getFavTabs(){
+    public ArrayList<FavouriteTab> getFavTabs() {
         return favTabs;
     }
 }

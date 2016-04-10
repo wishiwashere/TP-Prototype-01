@@ -32,6 +32,13 @@ public class ShareSaveSuccessfulScreen extends Screen {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
+        // Creating the icon/s for this screen, using locally scoped variables, as these icons will be only
+        // ever be referred to from the allIcons array. Setting their x, and y, based on percentages of the
+        // width and height (where icon positioning variables are used, these were defined in the main sketch.
+        // Not passing in any width or height, so as to allow this icon to be set to the default size in the
+        // Icon class of the app. Passing in a name for the icon, followed by a boolean to choose whether this
+        // name should be displayed on the icon or not. Finally, passing in a linkTo value of the name of the
+        // screen or function they will later link to.
         Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 1.5, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("shareImageToDeviceAppsImage.png"), "\r\n\n" + "Share to other" + "\r\n" + " applications", true, "Below", "_shareImageToDeviceApps");
         Icon returnCameraLiveViewIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.iconCenterY * 1.5, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("returnCameraLiveViewIcon.png"), "\r\n\n" + "Return to" +"\r\n" + " camera view", true, "Below", "CameraLiveViewScreen");
 

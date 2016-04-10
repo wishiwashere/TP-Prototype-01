@@ -35,12 +35,13 @@ public class Screen extends Rectangle {
     // screen
     public String screenTitle = "";
 
-    // Creating protected constructors for the Screen class, so that they can
-    // only be accessed by classes which extend from this class
-
   /*-------------------------------------- Constructor() ------------------------------------------------*/
 
+    // Full Constructor
+    // Creating a protected constructor for the Screen class, so that it can only be accessed by classes
+    // which extend from this class
     protected Screen(Sketch _sketch) {
+
         // Calling this class's super class (Rectangle) to create a screen using the default settings i.e.
         // fullscreen, centered in the screen of the device. Also passing the instance of the Sketch class,
         // which was just passed to this constructor, so that the super class can also access the Processing
@@ -57,19 +58,22 @@ public class Screen extends Rectangle {
 
   /*-------------------------------------- drawScreen() ------------------------------------------------*/
 
-    // Creating a public method so that this screen can be displayed from
-    // within the main sketch
+    // Creating a public method so that this screen can be displayed from within the main sketch
     public void drawScreen() {
-        // Calling the show() method (as inherited from the Rectangle class)
-        // to display this screen's background
+
+        // Calling the show() method (as inherited from the Rectangle class) to display this screen
         this.show();
 
-        // Checking if this screen has been given a title (i.e. if the contents
-        // of the screenTitle is at least one character long
+        // Checking if this screen has been given a title (i.e. if the contents of the screenTitle has been set
         if (this.screenTitle.length() > 0)
         {
+            // Setting the fill to black, so that the text will be black
             sketch.fill(0);
-            this.addText(this.screenTitle, sketch.appWidth/2, sketch.screenTitleY, sketch.appHeight * 0.07);
+
+            // Using the addText() method (as inherited from the Rectangle class) to add this title to the screen.
+            // Calculating the positioning and text size of this title based on the size of the device on which
+            // it is being displayed, as well as through global variables declared in the main Sketch class.
+            this.addText(this.screenTitle, sketch.appWidth/2, sketch.screenTitleY, sketch.screenTitleTextSize);
         }
 
         // Checking if this screen has any icons to be displayed
@@ -78,38 +82,102 @@ public class Screen extends Rectangle {
             // Looping through each of the screen's icons
             for (int i = 0; i < this.screenIcons.length; i++) {
 
-                // Calling the showIcon() method (as inherited from the Icon class)
-                // to display the icon on screen
+                // Calling the showIcon() method (as inherited from the Icon class) to display the icon on screen
                 this.screenIcons[i].showIcon();
 
-                // Checking if the mouse is currently pressed i.e. if a click has
-                // been detected
-                if (sketch.mousePressed)
+                // Checking if the mouse is currently clicked i.e. if a click has been detected
+                if (sketch.mouseClicked)
                 {
-                    // Calling the checkMouseOver() method (as inherited from the Icon
-                    // class, to see if the mouse was over this icon when it was clicked
+                    // Calling the checkMouseOver() method (as inherited from the Icon class, to see if the mouse
+                    // was over this icon when it was clicked
                     this.screenIcons[i].checkMouseOver();
                 }
             }
         }
     }
 
+    protected float scrollScreen() {
+
+        // Setting the global mouseClicked variable, as defined in the main Sketch class, to false, so that
+        // while the user is scrolling, the cannot inadvertently click on an icon on the screen if they scroll
+        // over it.
+        sketch.mouseClicked = false;
+
+        // Calculating the amount scolled, based on the distance between the previous y position,
+        // and the current y position. When the mouse is first pressed, the previous y position
+        // is initialised (in the main sketch) but then while the mouse is held down, the previous
+        // y position gets updated each time this function runs (so that the scrolling can occur
+        // while the person is still moving their hand (and not just after they release the screen)
+        float amountScrolled = dist(0, sketch.pmouseY, 0, sketch.mouseY);
+
+        // Looping through each of the page icons, which are only being stored in an array within
+        // this class so that they can be looped through to be repositioned (i.e. in every other
+        // screen, these icons would be stored only in the super class, and not directly accessible
+        // within the individual screen classes
+        for (int i = 0; i < this.screenIcons.length; i++) {
+            // Checking which direction the user scrolled
+            if (sketch.pmouseY > sketch.mouseY) {
+                // The user has scrolled UP
+                // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
+                // moving the icon up the screen
+                this.screenIcons[i].setY(this.screenIcons[i].getY() - amountScrolled);
+            } else {
+                // The user has scrolled DOWN
+                // Checking if the screen's y position is less than or equal to half of the height i.e. is
+                // so that the screen cannot be down any further once you reach the top
+                if (this.getY() <= (sketch.appHeight / 2) - amountScrolled) {
+                    // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
+                    // moving the icon down the screen
+                    this.screenIcons[i].setY(this.screenIcons[i].getY() + amountScrolled);
+                }
+            }
+        }
+
+        // Checking which direction the user scrolled (the reason I have to do this seperatley from above is
+        // that including these lines within the icons loop above makes these elements move faster than the
+        // page icons
+        if (sketch.pmouseY > sketch.mouseY) {
+            // The user has scrolled UP
+            // Setting the screen's y postion to it's current y position, minus the amount scrolled
+            this.setY(this.getY() - amountScrolled);
+            // Setting the global positioning variable screenTitleY to be decremented by the amount scrolled. Note:
+            // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
+            // an icon's link is passed in to change a page)
+            sketch.screenTitleY -= amountScrolled;
+        } else {
+            // The user has scrolled DOWN
+            // Checking if the screen's y position is less than or equal to half of the height i.e. is
+            // so that the screen cannot be down any further once you reach the top
+            if (this.getY() <= (sketch.appHeight / 2) - amountScrolled) {
+                // Setting the screen's y postion to it's current y position, plus the amount scrolled
+                this.setY(this.getY() + amountScrolled);
+                // Setting the global positioning variable screenTitleY to be incremented by the amount scrolled. Note:
+                // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
+                // an icon's link is passed in to change a page)
+                sketch.screenTitleY += amountScrolled;
+            }
+        }
+
+        return amountScrolled;
+    }
+
   /*-------------------------------------- get() and set() ------------------------------------------------*/
 
+    // Protected set method to change the screen title, which can only be called by descendants of this class
     protected void setScreenTitle(String title) {
-        // Setting the screenTitle to the title passed in by each screen. If no
-        // title is passed, this variable has already been initialised to an
-        // empty string above
         this.screenTitle = title;
     }
 
+    // Protected get method which returns the array containing all of the icons belonging to this screen, which can
+    // only be called by descendants of this class
     protected Icon[] getScreenIcons() {
         return this.screenIcons;
     }
 
+    // Protected set method which sets this screen's icons array to containing all of the icons belonging to this screen,
+    // which can only be called by descendants of this class. Each screen that contains icons will call this method when
+    // their constructor has been called.
     protected void setScreenIcons(Icon[] icons) {
-        // Initialising the screenIcons array with the contents from the allIcons
-        // array that each screen will pass in
         this.screenIcons = icons;
     }
 }

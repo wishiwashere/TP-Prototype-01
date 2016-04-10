@@ -23,6 +23,7 @@ public class FavouriteTab extends ClickableElement {
     public String favTitle;
     public String favLocation;
 
+    /*-------------------------------------- Constructor ------------------------------------------------*/
     public FavouriteTab(Sketch _sketch, String title, String location, float y) {
         // Calling the super class (ClickableElement) constructor, passing in the required
         // x value (which is centered), y value (which is incremented by this favourite's
@@ -40,7 +41,7 @@ public class FavouriteTab extends ClickableElement {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
-        this.setBackgroundColor(sketch.color(255, 255, 255, 149));
+        this.setBackgroundColor(sketch.color(255, 255, 255, 100));
 
         // Initialising the two private strings, one to hold the favourite title, and the other to hold
         // the location URL data of the favourite. The title will be used as text on the tab

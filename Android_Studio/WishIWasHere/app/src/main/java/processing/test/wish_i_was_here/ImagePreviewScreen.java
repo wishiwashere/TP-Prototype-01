@@ -33,15 +33,13 @@ public class ImagePreviewScreen extends Screen {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
-        // Creating the icon/s for this screen, using locally scoped variables, as these
-        // icons will be only ever be referred to from the allIcons array. Setting their
-        // x, and y, based on percentages of the width and height (where icon positioning variables
-        // are used, these were defined in the main sketch. Not passing in any width or height, so as
-        // to allow this icon to be set to the default size in the Icon class of the app . Passing
-        // in a colour value of white. Passing in a name for the icon, followed by a boolean to choose
-        // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
-        // value of the name of the screen they will later link to. The title arguments, as well
-        // as the linkTo argument, are optional
+        // Creating the icon/s for this screen, using locally scoped variables, as these icons will be only
+        // ever be referred to from the allIcons array. Setting their x, and y, based on percentages of the
+        // width and height (where icon positioning variables are used, these were defined in the main sketch.
+        // Not passing in any width or height, so as to allow this icon to be set to the default size in the
+        // Icon class of the app. Passing in a name for the icon, followed by a boolean to choose whether this
+        // name should be displayed on the icon or not. Finally, passing in a linkTo value of the name of the
+        // screen or function they will later link to.
         Icon disgardIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.loadImage("disgardIconImage.png"), "Disgard Image", false, "_disgardImage");
         Icon keepIcon = new Icon(sketch, sketch.iconRightX, sketch.iconBottomY, sketch.loadImage("keepIconImage.png"), "Keep Image", false, "SaveShareScreenA");
 
@@ -57,8 +55,7 @@ public class ImagePreviewScreen extends Screen {
         this.setScreenIcons(allIcons);
     }
 
-    // Creating a public showScreen method, which is called by the draw() function whenever this
-    // screen needs to be displayed
+    // Creating a public showScreen method, which is called by the draw() function whenever this screen needs to be displayed
     public void showScreen() {
 
         // Setting the image mode to center, so the image will appear centered on screen

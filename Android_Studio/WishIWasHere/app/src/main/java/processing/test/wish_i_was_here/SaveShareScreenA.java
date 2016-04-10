@@ -59,8 +59,8 @@ public class SaveShareScreenA extends Screen {
         // variables are used, these were defined in the main sketch. Not passing in any width or height,
         // so as to allow this icon to be set to the default size in the Icon class of the app. Passing in
         // a name for the icon, followed by a boolean to choose whether this name should be displayed on
-        // the icon or not. Finally, passing in a linkTo value of the name of the screen they will later
-        // link to.
+        // the icon or not. Finally, passing in a linkTo value of the name of the screen or function they will
+        // later link to.
         saveIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.iconCenterY * 1.42, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage(saveIconImage), "Save", true, "Below", "_toggleSavingOfCurrentImage");
         twitterIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 1.42, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage(twitterIconImage), "Twitter", true, "Below", "_switchSendToTwitter");
         Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Cancel", true, "Middle", "CameraLiveViewScreen");

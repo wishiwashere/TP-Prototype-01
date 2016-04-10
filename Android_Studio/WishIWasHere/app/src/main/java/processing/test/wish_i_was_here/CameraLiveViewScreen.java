@@ -28,6 +28,7 @@ public class CameraLiveViewScreen extends Screen {
 
     public Boolean favouriteLocation;
 
+    /*-------------------------------------- Constructor() ------------------------------------------------*/
     // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public CameraLiveViewScreen(Sketch _sketch) {
 
@@ -61,8 +62,8 @@ public class CameraLiveViewScreen extends Screen {
         // variables are used, these were defined in the main sketch. Not passing in any width or height,
         // so as to allow this icon to be set to the default size in the Icon class of the app. Passing in
         // a name for the icon, followed by a boolean to choose whether this name should be displayed on
-        // the icon or not. Finally, passing in a linkTo value of the name of the screen they will later
-        // link to.
+        // the icon or not. Finally, passing in a linkTo value of the name of the screen or function they
+        // will later link to.
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconWhiteImage.png"), "Home", false, "HomeScreen");
         favIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconTopY, sketch.loadImage("favIconImage.png"), "Add to Favourites", false, "_addToFavourites");
         shakeIcon = new Icon(sketch, sketch.iconLeftX, sketch.iconBottomY, sketch.loadImage("shakeIconOffImage.png"), "Turn on/off Shake", false, "_switchShakeMovement");
@@ -93,10 +94,10 @@ public class CameraLiveViewScreen extends Screen {
             // is initialised (in the main sketch) but then while the mouse is held down, the previous
             // y position gets updated each time this function runs (so that the scrolling can occur
             // while the person is still moving their hand (and not just after they release the screen)
-            float amountScrolledX = dist(0, sketch.previousMouseX, 0, sketch.mouseX);
-            float amountScrolledY = dist(0, sketch.previousMouseY, 0, sketch.mouseY);
+            float amountScrolledX = dist(0, sketch.pmouseX, 0, sketch.mouseX);
+            float amountScrolledY = dist(0, sketch.pmouseY, 0, sketch.mouseY);
 
-            if (sketch.previousMouseX > sketch.mouseX) {
+            if (sketch.pmouseX > sketch.mouseX) {
                 // The user has scrolled RIGHT
 
                 // Decrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
@@ -128,7 +129,7 @@ public class CameraLiveViewScreen extends Screen {
 
                 // Determining which direction the user has scrolled, based on the previous and current mouse Y positions
                 // i.e. has the user scrolled up or down.
-                if (sketch.previousMouseY > sketch.mouseY) {
+                if (sketch.pmouseY > sketch.mouseY) {
                     // The user has scrolled UP
 
                     // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
@@ -159,8 +160,6 @@ public class CameraLiveViewScreen extends Screen {
                 // occurs within this class when
                 sketch.loadGoogleImage();
             }
-            sketch.previousMouseX = sketch.mouseX;
-            sketch.previousMouseY = sketch.mouseY;
         }
 
         // Adding the currentLocationImage to the CameraLiveViewScreen, so that the user can feel like they are taking a picture

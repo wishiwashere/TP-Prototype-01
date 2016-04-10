@@ -64,13 +64,6 @@ public class Sketch extends PApplet {
     TextInput currentTextInput = null;
     String currentTextInputValue = "";
 
-    // Creating a global variable which will contain the value of the most recent y position of the
-    // mouse. This variable gets it's first value each time a mousePressed event occurs (i.e. when the
-    // user first holds down the mouse). It will then be continually updated (on any pages that scroll)
-    // and used to determine how much a user has scrolled, and move the contents of these page's accordingly
-    float previousMouseY;
-    float previousMouseX;
-
     PImage compiledImage;
 
     XML userPreferencesXML;
@@ -157,6 +150,7 @@ public class Sketch extends PApplet {
     // Declaring a global variable which will contain the default text size, which will be
     // initialised in the setup() function of the app
     float defaultTextSize;
+    float screenTitleTextSize;
 
     /*-------------------------------------- Screens ------------------------------------------------*/
 
@@ -302,6 +296,7 @@ public class Sketch extends PApplet {
 
         // Initialising the defaultTextSize to be equal to a percentage of the app's current height
         defaultTextSize = (float)(appHeight * 0.035);
+        screenTitleTextSize = (float) (appHeight * 0.07);
 
     /*-------------------------------------- Screens ------------------------------------------------*/
         // Creating the screens which will be used in this application. Setting a random background
@@ -445,8 +440,6 @@ public class Sketch extends PApplet {
     public void mousePressed() {
         mouseClicked = true;
         keyboardRequired = false;
-        previousMouseY = mouseY;
-        previousMouseX = mouseX;
     }
 
     @Override

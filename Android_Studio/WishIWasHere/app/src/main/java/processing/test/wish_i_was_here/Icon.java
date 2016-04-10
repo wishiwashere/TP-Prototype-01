@@ -37,7 +37,9 @@ public class Icon extends ClickableElement {
 
         // If no width or height specified, defaulting these to the smallIconSize (as defined in the main Sketch class)
         // If no title position specified, then defaulting this to "Middle" i.e. centered on the icon. Then passing these
-        // default values, along with the specified parameters, into the full constructor of this class
+        // default values, along with the specified parameters, into the full constructor of this class. Also passing
+        // the instance of the Sketch class, which was just passed to this constructor, so that this class can also
+        // access the Processing library, as well as the global methods and variables of the Sketch class
         this(_sketch, x, y, _sketch.smallIconSize, _sketch.smallIconSize, img, title, showTitle, "Middle", linkTo);
     }
 
@@ -48,7 +50,9 @@ public class Icon extends ClickableElement {
     public Icon(Sketch _sketch, double x, double y, double w, double h, PImage img, String title, Boolean showTitle, String linkTo){
 
         // If no title position specified, then defaulting this to "Middle" i.e. centered on the icon. Then passing this
-        // default value, along with the specified parameters, into the full constructor of this class
+        // default value, along with the specified parameters, into the full constructor of this class. Also passing
+        // the instance of the Sketch class, which was just passed to this constructor, so that this class can also
+        // access the Processing library, as well as the global methods and variables of the Sketch class
         this(_sketch, x, y, w, h, img, title, showTitle, "Middle", linkTo);
     }
 
@@ -58,7 +62,9 @@ public class Icon extends ClickableElement {
     public Icon(Sketch _sketch, double x, double y, double w, double h, String title, Boolean showTitle, String titlePosition, String linkTo){
 
         // If no image specified, then defaulting this to null. Then passing this default value, along with the specified parameters,
-        // into the full constructor of this class
+        // into the full constructor of this class. Also passing the instance of the Sketch class, which was just passed to this
+        // constructor, so that this class can also access the Processing library, as well as the global methods and variables
+        // of the Sketch class
         this(_sketch, x, y, w, h, null, title, showTitle, titlePosition, linkTo);
 
         // Calling the Rectangle class's setBackgroundColor() method, which this class has inherited through the ClickableElement
@@ -151,7 +157,7 @@ public class Icon extends ClickableElement {
         // differentiate between mouse clicked and mouse pressed (i.e. clicking or scrolling)
         if (sketch.mouseClicked) {
 
-            // Checking if the mouse was over this icon when the click occured (using the checkMouseOver() method
+            // Checking if the mouse was over this icon when the click occurred (using the checkMouseOver() method
             // inherited from the ClickableElement class). This method returns a boolean value, to confirm if the
             // mouse was over the icon when the click occurred.
             if (this.checkMouseOver()) {
@@ -211,6 +217,8 @@ public class Icon extends ClickableElement {
             }
         }
     }
+
+  /*-------------------------------------- get() and set() ------------------------------------------------*/
 
     // Public set method to update the value of the iconLinkTo property of the icon
     public void setIconLinkTo(String link){

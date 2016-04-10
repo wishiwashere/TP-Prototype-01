@@ -36,16 +36,13 @@ public class SearchScreen extends Screen {
 
         this.searchInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 0.7, sketch.appWidth * 0.8, sketch.appHeight * 0.3, "searchInput", "LEFT-TOP");
 
-        // Creating the icon/s for this screen, using locally scoped variables, as these
-        // icons will be only ever be referred to from the allIcons array. Setting their
-        // x, and y, based on percentages of the width and height (where icon positioning variables
-        // are used, these were defined in the main sketch. Not passing in any width or height, so as
-        // to allow this icon to be set to the default size in the Icon class of the app . Passing
-        // in a colour value of white. Passing in a name for the icon, followed by a boolean to choose
-        // whether this name should be displayed on the icon or not. Finally, passing in a linkTo
-        // value of the name of the screen they will later link to. The title arguments, as well
-        // as the linkTo argument, are optional
-
+        // Creating the icon/s for this screen, using locally scoped variables, as these icons will be only
+        // ever be referred to from the allIcons array. Setting their x, and y, based on percentages of the
+        // width and height (where icon positioning variables are used, these were defined in the main sketch.
+        // Not passing in any width or height, so as to allow this icon to be set to the default size in the
+        // Icon class of the app. Passing in a name for the icon, followed by a boolean to choose whether this
+        // name should be displayed on the icon or not. Finally, passing in a linkTo value of the name of the
+        // screen or function they will later link to.
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconImage.png"), "Home", false, "HomeScreen");
         Icon cancelIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconCenterY * 1.1, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Cancel", true, "Middle", "HomeScreen");
         Icon searchIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconCenterY * 1.1, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Search", true, "Middle", "_searchForLocation");
