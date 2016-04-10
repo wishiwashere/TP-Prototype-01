@@ -16,8 +16,10 @@ public class SaveShareScreenB extends Screen {
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
-    // Creating a public TextInput variable, so that the TextInput methods can be called from other classes
-    // within the app i.e. messageInput.getInputValue() to get it's current value.
+    // Creating a private TextInput variable, to create a new TextInput within this screen (for users to
+    // enter to enter a message to send with their tweet. This object will never be directly accessed by other
+    // classes from within this class, but instead will be passed into the global currentTextInput variable
+    // in the main Sketch class, when it is click on, by the TextInput class's showTextInput() method.
     public TextInput messageInput;
 
     // Creating a public constructor for the class so that an instance of it can be declared in the main sketch

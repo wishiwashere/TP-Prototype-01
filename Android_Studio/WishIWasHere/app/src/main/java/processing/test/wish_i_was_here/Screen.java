@@ -2,6 +2,7 @@ package processing.test.wish_i_was_here;
 
 // Importing the Processing library, so this class can declare variables using Processing specific
 // datatypes i.e. PImage objects.
+
 import processing.core.*;
 
 // This class extends from the Rectangle class, and so inherits the methods and variables this class.
@@ -56,8 +57,7 @@ public class Screen extends Rectangle {
         sketch = _sketch;
     }
 
-  /*-------------------------------------- drawScreen() ------------------------------------------------*/
-
+    /*-------------------------------------- drawScreen() ------------------------------------------------*/
     // Creating a public method so that this screen can be displayed from within the main sketch
     public void drawScreen() {
 
@@ -65,20 +65,18 @@ public class Screen extends Rectangle {
         this.show();
 
         // Checking if this screen has been given a title (i.e. if the contents of the screenTitle has been set
-        if (this.screenTitle.length() > 0)
-        {
+        if (this.screenTitle.length() > 0) {
             // Setting the fill to black, so that the text will be black
             sketch.fill(0);
 
             // Using the addText() method (as inherited from the Rectangle class) to add this title to the screen.
             // Calculating the positioning and text size of this title based on the size of the device on which
             // it is being displayed, as well as through global variables declared in the main Sketch class.
-            this.addText(this.screenTitle, sketch.appWidth/2, sketch.screenTitleY, sketch.screenTitleTextSize);
+            this.addText(this.screenTitle, sketch.appWidth / 2, sketch.screenTitleY, sketch.screenTitleTextSize);
         }
 
         // Checking if this screen has any icons to be displayed
-        if (this.screenIcons.length > 0)
-        {
+        if (this.screenIcons.length > 0) {
             // Looping through each of the screen's icons
             for (int i = 0; i < this.screenIcons.length; i++) {
 
@@ -86,8 +84,7 @@ public class Screen extends Rectangle {
                 this.screenIcons[i].showIcon();
 
                 // Checking if the mouse is currently clicked i.e. if a click has been detected
-                if (sketch.mouseClicked)
-                {
+                if (sketch.mouseClicked) {
                     // Calling the checkMouseOver() method (as inherited from the Icon class, to see if the mouse
                     // was over this icon when it was clicked
                     this.screenIcons[i].checkMouseOver();
@@ -96,6 +93,9 @@ public class Screen extends Rectangle {
         }
     }
 
+    /*-------------------------------------- scrollScreen() ------------------------------------------------*/
+    // Creating a protected method for scrolling the screen, and the elements within it, so that only classes
+    // which are descendants of this class, can access it.
     protected float scrollScreen() {
 
         // Setting the global mouseClicked variable, as defined in the main Sketch class, to false, so that
@@ -103,29 +103,29 @@ public class Screen extends Rectangle {
         // over it.
         sketch.mouseClicked = false;
 
-        // Calculating the amount scolled, based on the distance between the previous y position,
-        // and the current y position. When the mouse is first pressed, the previous y position
-        // is initialised (in the main sketch) but then while the mouse is held down, the previous
-        // y position gets updated each time this function runs (so that the scrolling can occur
-        // while the person is still moving their hand (and not just after they release the screen)
+        // Calculating the amount scrolled, based on the distance between the previous y position,
+        // and the current y position. Not accounting for the x position (which is being defaulted
+        // to 0) as this is irrelevant when scrolling up/down the screen)
         float amountScrolled = dist(0, sketch.pmouseY, 0, sketch.mouseY);
 
-        // Looping through each of the page icons, which are only being stored in an array within
-        // this class so that they can be looped through to be repositioned (i.e. in every other
-        // screen, these icons would be stored only in the super class, and not directly accessible
-        // within the individual screen classes
+        // Looping through each of the screen's icons, which the screen would have passed to this class
+        // when the screen was first created
         for (int i = 0; i < this.screenIcons.length; i++) {
-            // Checking which direction the user scrolled
+
+            // Checking which direction the user scrolled, based on the previous and current Y positions
             if (sketch.pmouseY > sketch.mouseY) {
                 // The user has scrolled UP
+
                 // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
                 // moving the icon up the screen
                 this.screenIcons[i].setY(this.screenIcons[i].getY() - amountScrolled);
             } else {
                 // The user has scrolled DOWN
-                // Checking if the screen's y position is less than or equal to half of the height i.e. is
-                // so that the screen cannot be down any further once you reach the top
+
+                // Checking if the screen's y position is less than or equal to half of the height, minus the amount
+                // scrolled i.e. so that the screen cannot be scrolled down any further once you reach the top
                 if (this.getY() <= (sketch.appHeight / 2) - amountScrolled) {
+
                     // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
                     // moving the icon down the screen
                     this.screenIcons[i].setY(this.screenIcons[i].getY() + amountScrolled);
@@ -133,24 +133,30 @@ public class Screen extends Rectangle {
             }
         }
 
-        // Checking which direction the user scrolled (the reason I have to do this seperatley from above is
+        // Checking which direction the user scrolled (the reason we have to do this separately from above is
         // that including these lines within the icons loop above makes these elements move faster than the
         // page icons
         if (sketch.pmouseY > sketch.mouseY) {
             // The user has scrolled UP
-            // Setting the screen's y postion to it's current y position, minus the amount scrolled
+
+            // Setting the screen's y position to it's current y position, minus the amount scrolled i.e. moving
+            // the screen up
             this.setY(this.getY() - amountScrolled);
+
             // Setting the global positioning variable screenTitleY to be decremented by the amount scrolled. Note:
-            // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
-            // an icon's link is passed in to change a page)
+            // this variable gets reset everytime the page is changed (in the HomeScreen class)
             sketch.screenTitleY -= amountScrolled;
         } else {
             // The user has scrolled DOWN
-            // Checking if the screen's y position is less than or equal to half of the height i.e. is
-            // so that the screen cannot be down any further once you reach the top
+
+            // Checking if the screen's y position is less than or equal to half of the height minus the amount
+            // scrolled i.e. so that the screen cannot be scrolled down any further once you reach the top
             if (this.getY() <= (sketch.appHeight / 2) - amountScrolled) {
-                // Setting the screen's y postion to it's current y position, plus the amount scrolled
+
+                // Setting the screen's y position to it's current y position, plus the amount scrolled i.e. moving
+                // the screen down
                 this.setY(this.getY() + amountScrolled);
+
                 // Setting the global positioning variable screenTitleY to be incremented by the amount scrolled. Note:
                 // this variable gets reset everytime the page is changed (in the Icon class's checkMouseOver function, when
                 // an icon's link is passed in to change a page)
@@ -158,6 +164,8 @@ public class Screen extends Rectangle {
             }
         }
 
+        // Returning the amount scrolled from this function, so that the screen which called it can use this value to
+        // move other unique elements on it's screen based on the same amount
         return amountScrolled;
     }
 

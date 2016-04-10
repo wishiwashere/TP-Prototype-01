@@ -15,6 +15,8 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
     // sketch class, from within this class. Every reference to a Processing method/variable, or a public
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
+
+    // Creating a private variable to store the image which will be displayed as part of this screen
     private PImage shareSaveUnsuccessfulScreenImage;
 
     // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
@@ -33,6 +35,8 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
+        // Initialising this class's private shareSaveUnsuccessfulScreenImage variable by loading the image
+        // in from the assets folder, so that it can be displayed when this screen is called.
         shareSaveUnsuccessfulScreenImage = sketch.loadImage("shareSaveUnsuccessfulScreenImage.png");
 
         // Creating the icon/s for this screen, using locally scoped variables, as these icons will be only
@@ -67,8 +71,13 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
         // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
+        // Creating a local string, which will contain the value of the tasks that have been unsuccessful.
+        // This will be based on the series of if statements below, and then used to add text to this screen
+        // to give the user feedback on which issue occurred.
         String methodUsed = "";
 
+        // Checking if this image has been unable to be saved, shared, or both, so as to determine
+        // which lines of text to add to this screen
         if (sketch.imageSaved == false && sketch.imageShared == false){
             methodUsed = "shared or saved";
         } else if (sketch.imageSaved == false){
@@ -77,10 +86,21 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
             methodUsed = "shared";
         }
 
+        // Using the addText() method, as inherited from the Rectangle class, to add the following
+        // lines of text to the screen. Using positioning values which will make this screen responsive
+        // to the size of the device it is being displayed on. Using the iconCenterX variable, as defined
+        // in the main Sketch class
         this.addText("We're sorry :(", sketch.iconCenterX, sketch.appHeight * 0.1);
         this.addText("Your postcard", sketch.iconCenterX, sketch.appHeight * 0.18);
         this.addText("was not able to be", sketch.iconCenterX, sketch.appHeight * 0.26);
+
+        // Specifying which method/s have been unsuccessful, using the string generated above, based on which
+        // tasks were not completed
         this.addText(methodUsed, sketch.iconCenterX, sketch.appHeight * 0.34);
-        this.addImage(shareSaveUnsuccessfulScreenImage, sketch.iconCenterX, sketch.appHeight * 0.48, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
+
+        // Adding this screen's private shareSaveUnsuccessfulScreenImage, using the addImage() method, as inherited
+        // from the Rectangle class, so it will appear as part of this screen. Calculating the x, y, width and height
+        // based on the current width and height of the device this app is running on.
+        this.addImage(this.shareSaveUnsuccessfulScreenImage, sketch.iconCenterX, sketch.appHeight * 0.48, sketch.appWidth * 0.5, sketch.appHeight * 0.16);
     }
 }

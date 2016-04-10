@@ -43,6 +43,20 @@ public class Sketch extends PApplet {
     String ourOAuthAccessToken = TwitterLoginActivity.twitterUserAccessToken;
     String ourOAuthAccessTokenSecret = TwitterLoginActivity.twitterUserSecretToken;
 
+    // Creating an array of random locations based on the random location XML file in the
+    // assets folder. Storing these in a seperate XML file to the user preferences, althrought
+    // Each location has a latLng attribute, which represents the latitude
+    // and longitude of the location, a heading attribute which represents the left/right
+    // positioning of the view (between 0 and 360) and a pitch attribute which represents
+    // the up/down angle of the view (between -90 and 90).
+    // In the original Google Street View URL (from the browser) i.e. the Colosseum
+    // url was https://www.google.ie/maps/@41.8902646,12.4905161,3a,75y,90.81h,95.88t/data=!3m6!1e1!3m4!1sR8bILL5qdsO7_m5BHNdSvQ!2e0!7i13312!8i6656!6m1!1e1
+    // the first two numbers after the @ represent the latitude and longitude, the number
+    // with the h after it represents the heading, and the number with the t after it
+    // seems to be to do with the pitch, but never works that way in this
+    // method so I just decided the pitch value based on what looks good
+    XML[] randomLocations;
+
     String returnTo = "HomeScreen";
 
     // Creating a global variable, which any icon can use to pass the name of the function
@@ -234,7 +248,7 @@ public class Sketch extends PApplet {
     }
 
     @Override
-    public void setup(){
+    public void setup() {
         println("Main Sketch is being reset");
     /*-------------------------------------- Ketai ------------------------------------------------*/
 
@@ -251,13 +265,11 @@ public class Sketch extends PApplet {
         // Check if the device has more than one camera i.e. does it have a front
         // and a rear facing camera?
 
-        if (ketaiCamera.getNumberOfCameras() > 1)
-        {
+        if (ketaiCamera.getNumberOfCameras() > 1) {
             // If there is more than one camera, then default to the front camera
             // (which as far as I can tell tends to be at index 1)
             camNum = 1;
-        } else
-        {
+        } else {
             // If there is only one camera, then default to the rear camera
             // (which as far as I can tell tends to be at index 0)
             camNum = 0;
@@ -267,6 +279,7 @@ public class Sketch extends PApplet {
         ketaiCamera.setCameraID(camNum);
 
     /*---------------------------------- User Preferences XML ---------------------------------------*/
+        randomLocations = loadXML("random_locations.xml").getChildren("location");
         loadUserPreferencesXML();
 
     /*-------------------------------------- Images ------------------------------------------------*/
@@ -282,20 +295,20 @@ public class Sketch extends PApplet {
         // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
         // the icons on each page all line up with one another. These measurements are all based on percentages
         // of the app's display width and height (as defined above
-        iconLeftX = (float)(appWidth * 0.15);
-        iconRightX = (float)(appWidth * 0.85);
-        iconCenterX = (float)(appWidth * 0.5);
-        iconTopY = (float)(appHeight * 0.085);
-        iconBottomY = (float)(appHeight * 0.87);
-        iconCenterY = (float)(appHeight * 0.5);
-        largeIconSize = (float)(appWidth * 0.25);
-        smallIconSize = (float)(appWidth * 0.15);
-        homeIconSize = (float)(largeIconSize * 1.3);
-        largeIconBottomY = iconBottomY - (largeIconSize/2);
+        iconLeftX = (float) (appWidth * 0.15);
+        iconRightX = (float) (appWidth * 0.85);
+        iconCenterX = (float) (appWidth * 0.5);
+        iconTopY = (float) (appHeight * 0.085);
+        iconBottomY = (float) (appHeight * 0.87);
+        iconCenterY = (float) (appHeight * 0.5);
+        largeIconSize = (float) (appWidth * 0.25);
+        smallIconSize = (float) (appWidth * 0.15);
+        homeIconSize = (float) (largeIconSize * 1.3);
+        largeIconBottomY = iconBottomY - (largeIconSize / 2);
         screenTitleY = iconTopY;
 
         // Initialising the defaultTextSize to be equal to a percentage of the app's current height
-        defaultTextSize = (float)(appHeight * 0.035);
+        defaultTextSize = (float) (appHeight * 0.035);
         screenTitleTextSize = (float) (appHeight * 0.07);
 
     /*-------------------------------------- Screens ------------------------------------------------*/
@@ -308,7 +321,7 @@ public class Sketch extends PApplet {
         myCameraLiveViewScreen = new CameraLiveViewScreen(this);
         myFavouritesScreen = new FavouritesScreen(this);
         mySettingsScreen = new SettingsScreen(this);
-        myAboutScreen = new AboutScreen (this);
+        myAboutScreen = new AboutScreen(this);
         mySearchScreen = new SearchScreen(this);
         mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(this);
         myImagePreviewScreen = new ImagePreviewScreen(this);
@@ -327,11 +340,11 @@ public class Sketch extends PApplet {
         // Storing a string that tells the app where to store the images, by default
         // it goes to the pictures folder and this string as it has WishIWasHereApp
         // it is creating a folder in the picture folder of the device
-        directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";
+        directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES + "/WishIWasHereApp/";
 
         // Checking if the directory already exists. If not, then creating it.
         File dir = new File(directory);
-        if(!dir.isDirectory()){
+        if (!dir.isDirectory()) {
             File newDir = new File(directory);
             newDir.mkdirs();
             println("New directory created - " + directory);
@@ -351,7 +364,7 @@ public class Sketch extends PApplet {
         currentImage.updatePixels();
 
     /*----------------------------------- Twitter Tweeting -----------------------------------------*/
-        if(TwitterLoginActivity.twitterLoggedIn) {
+        if (TwitterLoginActivity.twitterLoggedIn) {
             sendToTwitterOn = true;
             //Setting up Twitter and informing twitter of the users credentials to our application can tweet
             // from the users twitter account and access their account
@@ -409,9 +422,9 @@ public class Sketch extends PApplet {
             getRandomLocation();
         } else if (callFunction.equals("_checkTwitterLogin")) {
             checkTwitterLogin();
-        } else if(callFunction.equals("_switchShakeMovement")){
+        } else if (callFunction.equals("_switchShakeMovement")) {
             switchShakeMovement();
-        } else if(callFunction.equals("_shareImageToDeviceApps")) {
+        } else if (callFunction.equals("_shareImageToDeviceApps")) {
             shareImageToDeviceApps();
         } else {
             println(callFunction + " - This function does not exist / cannot be triggered by this icon");
@@ -428,7 +441,7 @@ public class Sketch extends PApplet {
 
         // Forcing the onCameraPreviewEvent() to be called, as ketaiCamera does not seem to be
         // calling it implicitly (as it would have done in Processing).
-        if(currentScreen.equals("CameraLiveViewScreen") && imageMerging == false){
+        if (currentScreen.equals("CameraLiveViewScreen") && imageMerging == false) {
             //("CAM - Calling onCameraPreviewEvent");
             onCameraPreviewEvent();
         } else {
@@ -452,8 +465,7 @@ public class Sketch extends PApplet {
         if (key == CODED) {
             //println(key);
             // Checking if the key pressed was the backspace key
-            if (keyCode == 67)
-            {
+            if (keyCode == 67) {
                 // Checking that the length of the current currentTextInputValue string is greater than 0 (i.e.
                 // if the string is empty, don't try to delete anything)
                 if (currentTextInputValue.length() > 0) {
@@ -464,10 +476,10 @@ public class Sketch extends PApplet {
                 }
             }
         } else {
-            if(currentTextInputValue.length() < currentTextInput.getMaxTextLength() - 1){
+            if (currentTextInputValue.length() < currentTextInput.getMaxTextLength() - 1) {
                 // If the key is not a coded value, adding the character to currentTextInputValue string
                 currentTextInputValue += key;
-            }else{
+            } else {
                 println("This text is too long");
             }
 
@@ -480,8 +492,7 @@ public class Sketch extends PApplet {
 
     // ketaiCamera event which is automatically called everytime a new frame becomes
     // available from the ketaiCamera.
-    public void onCameraPreviewEvent()
-    {
+    public void onCameraPreviewEvent() {
         //println("CAM - New frame available " + this.readingImage);
         if (this.readingImage == false) {
             // Reading in a new frame from the ketaiCamera.
@@ -493,7 +504,7 @@ public class Sketch extends PApplet {
         }
     }
 
-    public void onAccelerometerEvent(float accelerometerX, float accelerometerY, float accelerometerZ){
+    public void onAccelerometerEvent(float accelerometerX, float accelerometerY, float accelerometerZ) {
         if (currentScreen.equals("CameraLiveViewScreen")) {
             if (shakeMovementOn) {
                 if (frameCount % 4 == 0) {
@@ -508,16 +519,16 @@ public class Sketch extends PApplet {
                 if (accelerometerX > 7) {
                     //println("Device is being turned to the left");
                     alteredIcons[i].setRotation(90);
-                }else if (accelerometerX < -7) {
+                } else if (accelerometerX < -7) {
                     //println("Device is being turned to the right");
                     alteredIcons[i].setRotation(-90);
-                }else {
+                } else {
                     //println("Device standing straight");
                     alteredIcons[i].setRotation(0);
                 }
 
             }
-        }else {
+        } else {
             shakeMovementOn = false;
         }
     }
@@ -598,7 +609,7 @@ public class Sketch extends PApplet {
 
     public void keepImage() {
         callFunction = "";
-        if(saveThisImageOn) {
+        if (saveThisImageOn) {
             println("KEEP IMAGE - This image was saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
             // Checking if Storage is available
             if (isExternalStorageWritable()) {
@@ -615,7 +626,7 @@ public class Sketch extends PApplet {
         }
     }
 
-    public Boolean saveImageToPhotoGallery(){
+    public Boolean saveImageToPhotoGallery() {
         Boolean successfull = false;
         if (isExternalStorageWritable()) {
             saveToPath = directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg";
@@ -632,7 +643,7 @@ public class Sketch extends PApplet {
         return successfull;
     }
 
-    public Boolean saveImageLocally(){
+    public Boolean saveImageLocally() {
         Boolean successfull = false;
         if (compiledImage.save(sketchPath("twitterImage.jpg"))) {
             println("Successfully saved image locally - " + sketchPath("twitterImage.jpg"));
@@ -663,9 +674,8 @@ public class Sketch extends PApplet {
     }
 
     public void fadeToScreen(String nextScreen) {
-        if (mouseClicked)
-        {
-            if(currentScreen.equals("LoadingScreen")){
+        if (mouseClicked) {
+            if (currentScreen.equals("LoadingScreen")) {
                 myLoadingScreen = null;
             }
             currentScreen = nextScreen;
@@ -678,9 +688,9 @@ public class Sketch extends PApplet {
         callFunction = "";
         int favLocationIndex = checkIfFavourite(currentLocationName);
 
-        if(favLocationIndex > -1){
-            for(int i = 0; i < favouriteLocationsData.length; i++){
-                if(favouriteLocationsData[i].getString("name").equals(currentLocationName)){
+        if (favLocationIndex > -1) {
+            for (int i = 0; i < favouriteLocationsData.length; i++) {
+                if (favouriteLocationsData[i].getString("name").equals(currentLocationName)) {
                     userPreferencesXML.removeChild(favouriteLocationsData[i]);
                     myFavouritesScreen.favTabs.remove(favLocationIndex);
                     myCameraLiveViewScreen.favouriteLocation = false;
@@ -708,17 +718,16 @@ public class Sketch extends PApplet {
         callFunction = "";
         learningModeOn = !learningModeOn;
 
-        for(int i = 0; i < settingsData.length; i++){
-            if(settingsData[i].getString("name").equals("learningMode")) {
+        for (int i = 0; i < settingsData.length; i++) {
+            if (settingsData[i].getString("name").equals("learningMode")) {
                 settingsData[i].setString("on", learningModeOn.toString());
                 saveUserPreferencesXML();
             }
         }
 
-        if(learningModeOn){
+        if (learningModeOn) {
             mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOnIconImage.png"));
-        }
-        else{
+        } else {
             mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
         }
 
@@ -731,18 +740,17 @@ public class Sketch extends PApplet {
         saveThisImageOn = autoSaveModeOn;
 
 
-        for(int i = 0; i < settingsData.length; i++){
-            if(settingsData[i].getString("name").equals("autoSaveMode")){
+        for (int i = 0; i < settingsData.length; i++) {
+            if (settingsData[i].getString("name").equals("autoSaveMode")) {
                 settingsData[i].setString("on", autoSaveModeOn.toString());
                 saveUserPreferencesXML();
             }
         }
 
-        if(autoSaveModeOn){
+        if (autoSaveModeOn) {
             mySettingsScreen.autoSaveIcon.setImage(loadImage("toggleSwitchOnIconImage.png"));
             mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOnImage.png"));
-        }
-        else{
+        } else {
             mySettingsScreen.autoSaveIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
             mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOffImage.png"));
         }
@@ -750,21 +758,20 @@ public class Sketch extends PApplet {
         println("Auto-save is now: " + autoSaveModeOn);
     }
 
-    public void switchShakeMovement(){
+    public void switchShakeMovement() {
         shakeMovementOn = !shakeMovementOn;
-        if(shakeMovementOn){
+        if (shakeMovementOn) {
             myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOnImage.png"));
-        }
-        else{
+        } else {
             myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOffImage.png"));
         }
     }
 
-    public void switchSendToTwitter(){
-        if(TwitterLoginActivity.twitterLoggedIn){
+    public void switchSendToTwitter() {
+        if (TwitterLoginActivity.twitterLoggedIn) {
             sendToTwitterOn = !sendToTwitterOn;
 
-            if(sendToTwitterOn){
+            if (sendToTwitterOn) {
                 mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOnImage.png"));
             } else {
                 mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOffImage.png"));
@@ -778,7 +785,7 @@ public class Sketch extends PApplet {
 
     public void sendTweet() {
         callFunction = "";
-        if(sendToTwitterOn) {
+        if (sendToTwitterOn) {
             currentScreen = "SharingScreen";
             mySharingScreen.showScreen();
 
@@ -815,7 +822,7 @@ public class Sketch extends PApplet {
                 currentScreen = "ShareUnsuccessfulScreen";
             }
         } else {
-            if(this.imageShared == false && this.imageSaved == false){
+            if (this.imageShared == false && this.imageSaved == false) {
                 currentScreen = "CameraLiveViewScreen";
             } else {
                 currentScreen = "ShareSaveSuccessfulScreen";
@@ -883,7 +890,7 @@ public class Sketch extends PApplet {
 
             readingImage = false;
             println("Finished removing Green Screen at frame " + frameCount);
-        } catch(OutOfMemoryError e){
+        } catch (OutOfMemoryError e) {
             println("Green screen keying could not be completed - " + e);
             keyedImage = null;
             currentFrame = null;
@@ -922,7 +929,7 @@ public class Sketch extends PApplet {
             overlayImage = null;
 
             currentScreen = "ImagePreviewScreen";
-        } catch(OutOfMemoryError e){
+        } catch (OutOfMemoryError e) {
             println("Could not save image - " + e);
             currentScreen = "ShareSaveUnsuccessfulScreen";
         }
@@ -971,13 +978,16 @@ public class Sketch extends PApplet {
         switchScreens();
 
         println("Getting a random location");
-        String randomLocationURLData = myFavouritesScreen.getRandomFavourite();
-        googleImageLatLng = randomLocationURLData.split("@")[1].split("&")[0];
-        googleImageHeading = Float.parseFloat(randomLocationURLData.split("heading=")[1].split("&")[0]);
-        googleImagePitch = Float.parseFloat(randomLocationURLData.split("pitch=")[1]);
 
-        currentLocationName = randomLocationURLData.split("@")[0];
+        int randomIndex = round(random(randomLocations.length - 1));
 
+        googleImageLatLng = randomLocations[randomIndex].getString("latLng");
+        googleImageHeading = Float.parseFloat(randomLocations[randomIndex].getString("heading"));
+        googleImagePitch = Float.parseFloat(randomLocations[randomIndex].getString("pitch"));
+
+        currentLocationName = randomLocations[randomIndex].getString("name");
+
+        println("Random location selected: " + currentLocationName);
         loadGoogleImage();
     }
 
@@ -1021,9 +1031,9 @@ public class Sketch extends PApplet {
         }
     }
 
-    public void checkTwitterLogin(){
+    public void checkTwitterLogin() {
         println("Checking if Twitter logged in");
-        if(TwitterLoginActivity.twitterLoggedIn) {
+        if (TwitterLoginActivity.twitterLoggedIn) {
             currentScreen = "SocialMediaLogoutScreen";
             println("Twitter already logged in");
             println("In SKETCH - Twitter username = " + TwitterLoginActivity.twitterUserUsername);
@@ -1033,9 +1043,9 @@ public class Sketch extends PApplet {
         }
     }
 
-    public void loadUserPreferencesXML(){
+    public void loadUserPreferencesXML() {
         File localUserPreferencesPath = new File(sketchPath("user_preferences.xml"));
-        if(localUserPreferencesPath.exists()){
+        if (localUserPreferencesPath.exists()) {
             userPreferencesXML = loadXML(sketchPath("user_preferences.xml"));
         } else {
             userPreferencesXML = loadXML("user_preferences.xml");
@@ -1045,29 +1055,29 @@ public class Sketch extends PApplet {
         favouriteLocationsData = userPreferencesXML.getChildren("location");
 
         settingsData = userPreferencesXML.getChildren("setting");
-        for(int i = 0; i < settingsData.length; i++){
-            if(settingsData[i].getString("name").equals("autoSaveMode")){
+        for (int i = 0; i < settingsData.length; i++) {
+            if (settingsData[i].getString("name").equals("autoSaveMode")) {
                 autoSaveModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
                 saveThisImageOn = autoSaveModeOn;
-            } else if(settingsData[i].getString("name").equals("learningMode")){
+            } else if (settingsData[i].getString("name").equals("learningMode")) {
                 learningModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
             }
         }
     }
 
-    public void saveUserPreferencesXML(){
+    public void saveUserPreferencesXML() {
         saveXML(userPreferencesXML, sketchPath("user_preferences.xml"));
         loadUserPreferencesXML();
     }
 
-    public void shareImageToDeviceApps(){
-        if(this.imageSaved == false) {
+    public void shareImageToDeviceApps() {
+        if (this.imageSaved == false) {
             saveImageToPhotoGallery();
         }
         createInstagramIntent(saveToPath);
     }
 
-    public void createInstagramIntent(String imagePath){
+    public void createInstagramIntent(String imagePath) {
 
         // Create the new Intent using the 'Send' action.
         Intent share = new Intent(Intent.ACTION_SEND);
@@ -1087,10 +1097,10 @@ public class Sketch extends PApplet {
         this.getActivity().finish();
     }
 
-    public void toggleSavingOfCurrentImage(){
+    public void toggleSavingOfCurrentImage() {
         saveThisImageOn = !saveThisImageOn;
 
-        if(saveThisImageOn){
+        if (saveThisImageOn) {
             mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOnImage.png"));
         } else {
             mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOffImage.png"));

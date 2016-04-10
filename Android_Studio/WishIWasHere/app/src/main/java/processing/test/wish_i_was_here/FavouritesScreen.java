@@ -2,7 +2,6 @@ package processing.test.wish_i_was_here;
 
 // Importing the Processing library, so this class can declare variables using Processing specific
 // datatypes i.e. PImage objects.
-
 import processing.core.*;
 
 // Importing the java ArrayList class, so that the favourite tabs for this screen can be stored in
@@ -21,32 +20,10 @@ public class FavouritesScreen extends Screen {
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
-    // Creating a private array of all the favourite locations we want to display
-    // in the favourites screen. The data before the "@" represents the location's title
-    // while the data after is used to generate a URL to request this location's Google
-    // Street View Image (in this class's showScreen() method). (Note - this is a naming
-    // convention that we have created, so that the favourite title and location details
-    // can all be stored in the one string). The values from these strings will be split and
-    // passed into the relevant constructor of each favTab (in the constructor of this class).
-    // The first two numbers after the "@" represent the latitude and longitude of the location
-    // The heading represents the left/right positioning of the view (between 0 and 360)
-    // The pitch represents the up/down angle of the view (between -90 and 90)
-    // In the original Google Street View URL (from the browser) i.e. the Colosseum
-    // url was https://www.google.ie/maps/@41.8902646,12.4905161,3a,75y,90.81h,95.88t/data=!3m6!1e1!3m4!1sR8bILL5qdsO7_m5BHNdSvQ!2e0!7i13312!8i6656!6m1!1e1
-    // the first two numbers after the @ represent the latitude and longitude, the number
-    // with the h after it represents the heading, and the number with the t after it
-    // seems to be to do with the pitch, but never works that way in this
-    // method so I just decided the pitch value based on what looks good
-    private String[] favourites = {
-            "Pyramids Of Giza@29.9752572,31.1387288&heading=292.67&pitch=-0.76",
-            "Eiffel Tower@48.8568402,2.2967311&heading=314.59&pitch=20",
-            "Colosseum@41.8902646,12.4905161&heading=80&pitch=10",
-            "Taj Mahal@27.1738903,78.0419927&heading=10&&pitch=10",
-            "Big Ben@51.500381,-0.1262538&heading=105&pitch=10",
-            "Leaning Tower Of Piza@43.7224555,10.3960728&heading=54.4&pitch=10",
-            "TimesSquare@40.7585806,-73.9850687&heading=30&pitch=20"
-    };
-
+    // Creating a private boolean, which will be used to check if this page has be reloaded yet i.e.
+    // so that when the user leaves this screen, it will be reset (using this class's resetScreen() method)
+    // so that if the page was partially scrolled when they left it, it will reset when they come back to
+    // this screen. Resetting this variable to false in the HomeScreen class.
     public Boolean loaded = false;
 
     // Declaring a private favTabs array, to store each of the favourite tabs we create,
@@ -211,17 +188,6 @@ public class FavouritesScreen extends Screen {
     }
 
     /*-------------------------------------- get() and set() ------------------------------------------------*/
-    public String getRandomFavourite() {
-        // Splitting the favourite string at the "@". Getting data at index 1 of the new split
-        // string array (i.e. the second half of the string which contains the URL data we
-        // require to request this specific location (longitude, latitude, heading and pitch).
-        // Getting a random location by generating a random index value within the length of the
-        // favourites array (rounding it off so that it will always equal an int)
-        int randomIndex = round(random(this.favTabs.size() - 1));
-
-        String locationURLData = this.favTabs.get(randomIndex).favTitle + "@" + this.favTabs.get(randomIndex).favLocation;
-        return locationURLData;
-    }
 
     public ArrayList<FavouriteTab> getFavTabs() {
         return favTabs;

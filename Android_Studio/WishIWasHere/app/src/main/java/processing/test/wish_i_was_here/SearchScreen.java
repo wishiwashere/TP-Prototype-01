@@ -16,6 +16,10 @@ public class SearchScreen extends Screen {
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
+    // Creating a private TextInput variable, to create a new TextInput within this screen (for users to
+    // enter the location they are searching for. This object will never be directly accessed by other
+    // classes from within this class, but instead will be passed into the global currentTextInput variable
+    // in the main Sketch class, when it is click on, by the TextInput class's showTextInput() method.
     private TextInput searchInput;
 
     // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
@@ -34,6 +38,9 @@ public class SearchScreen extends Screen {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
+        // Initialising the TextInput variable, passing in an x, y, width and height. Also passing in the
+        // title of this TextInput as well as the text alignment that will be used to display the text
+        // within it.
         this.searchInput = new TextInput(sketch, sketch.iconCenterX, sketch.iconCenterY * 0.7, sketch.appWidth * 0.8, sketch.appHeight * 0.3, "searchInput", "LEFT-TOP");
 
         // Creating the icon/s for this screen, using locally scoped variables, as these icons will be only
@@ -63,14 +70,15 @@ public class SearchScreen extends Screen {
         this.setScreenTitle("Search");
     }
 
-    // Creating a public showScreen method, which is called by the draw() funciton whenever this
-    // screen needs to be displayed
+    // Creating a public showScreen method, which is called by the draw() function whenever this screen needs to be displayed
     public void showScreen() {
 
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
         // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
+        // Displaying the text input, along with it's value, on screen by calling the showTextInput() method
+        // of the TextInput class.
         this.searchInput.showTextInput();
     }
 }

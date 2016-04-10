@@ -19,20 +19,34 @@ public class AboutScreen extends Screen {
     // method/variable of the main sketch, must be prefixed with this object while within this class.
     private Sketch sketch;
 
+    // Creating a private string to contain the text we will display to briefly introduce us and our project
     private String aboutText = "We are 3rd Year Creative Multimedia students in Limerick Institute of Technology, Clonmel. As part of a team project, we decided to design, create and build an application that will transport you to different locations around the world. Our aim is to make the world a little bit smaller, one click at a time. ";
-    private String attributionHeading = "Attributions: ";
-    private String attributionText1 = "Google Maps Geolocation API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc";
-    private String attributionText2 = "Google Street View Image API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc";
-    private String attributionText3 = "Android Studio, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 2.5 Generic. It is attributed to Google Inc and the Open Handset Alliance";
-    private String attributionText4 = "Ketai, Copyright © 2015, Licensed by Processing Foundation";
-    private String attributionText5 = "Processing, Copyright © 2004, Licensed by Processing Foundation";
-    private String attributionText6 = "Fabric.io, Copyright © 2016, Licensed by Twitter Inc";
-    private String attributionText7 = "ExpressJS, Copyright © 2016 StrongLoop, IBM, and other expressjs.com contributors. By the Node JS Foundation";
-    private String attributionText8 = "Jimp, Copyright © 2016 Licensed by MIT";
-    private String attributionText9 = "Onecolor, Copyright © 2011, Licensed by One.com";
 
+    // Creating a private string to contain all of the attribution text we require for this screen. This
+    // string will be initialised in the constructor of this screen, using the array declared below, so
+    // that each line attribution will be displayed on it's own line.
+    private String attributionText;
 
-    private Icon[] pageIcons;
+    // Creating a private array of Strings, so that attribution lines of text can easily be added/removed
+    // from this screen as needed. This array will be used in the constructor of this class, to generate
+    // the text which will be displayed on screen as one String.
+    private String[] attributionTextLines ={
+            "Attributions",
+            "Google Maps Geolocation API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc",
+            "Google Street View Image API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc",
+            "Android Studio, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 2.5 Generic. It is attributed to Google Inc and the Open Handset Alliance",
+            "Ketai, Copyright © 2015, Licensed by Processing Foundation",
+            "Processing, Copyright © 2004, Licensed by Processing Foundation",
+            "Fabric.io, Copyright © 2016, Licensed by Twitter Inc",
+            "ExpressJS, Copyright © 2016 StrongLoop, IBM, and other expressjs.com contributors. By the Node JS Foundation",
+            "Jimp, Copyright © 2016 Licensed by MIT",
+            "Onecolor, Copyright © 2011, Licensed by One.com"
+    };
+
+    // Creating a private boolean, which will be used to check if this page has be reloaded yet i.e.
+    // so that when the user leaves this screen, it will be reset (using this class's resetScreen() method)
+    // so that if the page was partially scrolled when they left it, it will reset when they come back to
+    // this screen. Resetting this variable to false in the HomeScreen class.
     public Boolean loaded = false;
 
     /*-------------------------------------- Constructor() ------------------------------------------------*/
@@ -68,7 +82,6 @@ public class AboutScreen extends Screen {
         // Creating a temporary allIcons array to store the icon/s we have created above, so that they can
         // be passed to the super class (Screen) to be stored as this screen's icons.
         Icon[] allIcons = {homeIcon, facebookIcon, twitterIcon, instagramIcon};
-        pageIcons = allIcons;
 
         // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
         // the temporary allIcons array to the screenIcons array of the Screen class so that they
@@ -81,12 +94,30 @@ public class AboutScreen extends Screen {
         // Setting the title of this screen in this class's super class (Screen), so that it can be accessed
         // when showing the screen (i.e can be displayed as the header text of the page).
         this.setScreenTitle("About");
+
+        // Looping through all of the lines of attribution text, so that they can all be stored in the
+        // one String variable (attributionText) to be added to the screen as text in the showScree()
+        // method of this class.
+        for (int i = 0; i < attributionTextLines.length; i++){
+
+            // Concatenating this line of attribution text, to the attributionText variable, along with
+            // the string delimiters for "return" and "new line" so that each line of text will be displayed
+            // on it's own line.
+            this.attributionText += attributionTextLines[i] + "\r\n\r\n";
+        }
     }
 
     /*-------------------------------------- showScreen() ------------------------------------------------*/
     // Creating a public showScreen method, which is called by the draw() function whenever this screen needs to be displayed
     public void showScreen() {
+
+        // Checking if this page has be reloaded yet i.e. so that when the user leaves this screen. If the page
+        // was partially scrolled when the user left it, it will reset when they come back to this screen.
+        // Resetting this variable to false in the HomeScreen class.
         if (!this.loaded) {
+
+            // Calling the resetScreen() method of this class, so that the layout and positioning of this
+            // screen will be reset
             this.resetScreen();
         }
 
@@ -98,49 +129,60 @@ public class AboutScreen extends Screen {
 
         this.addImage(sketch.loadImage("aboutPageTeamImage.jpg"), sketch.appWidth / 2, this.getY() + (sketch.appHeight * -0.25), sketch.appWidth * 0.7, sketch.appHeight * 0.2);
 
+        // Setting the rectMode (rectangle drawing mode) of the sketch to be determined using Corners, so that the
+        // text box can be drawn by specifying the top left corner co-ordinates, and the bottom right corner co-ordinates
+        // (as specified in the Processing API when adding a text box)
         sketch.rectMode(CORNER);
+
+        // Setting the text alignment of this text box to left on the horizontal axis
         sketch.textAlign(LEFT);
+
+        // Setting the text size to the defaultTextSize, as declared in the main Sketch class
         sketch.textSize(sketch.defaultTextSize);
+
+        // Setting the fill to 0, so that the text will appear black
         sketch.fill(0);
+
+        // Adding the text to the screen using the Processing text() method, passing in the positioning and dimensions
+        // of the text box that will be required to display text within this text input. The first argument will pass in the
+        // full string of text to be added, the second and third arguments will determine where the top left corner of the text
+        // box will be positioned, while the fourth and fifth arguments will determine where the bottom left corner of the text
+        // box will be positioned. This is so the text can wrap around if the line is too long to fit across the screen.
+
+        // Adding text about the project and it's creators (see note above)
         sketch.text(aboutText, (float) (sketch.appWidth * 0.1), (float) (this.getY() + (sketch.appHeight * -0.1)), (float) (sketch.appWidth * 0.8), (float) (sketch.appHeight * 0.9));
 
-        sketch.text("Attributions" + "\r\n\r\n"
-                + attributionText1 + "\r\n\r\n"
-                + attributionText2 + "\r\n\r\n"
-                + attributionText3 + "\r\n\r\n"
-                + attributionText4 + "\r\n\r\n"
-                + attributionText5 + "\r\n\r\n"
-                + attributionText6 + "\r\n\r\n"
-                + attributionText7 + "\r\n\r\n"
-                + attributionText8 + "\r\n\r\n"
-                + attributionText9
-                , (float) (sketch.appWidth * 0.1), (float) (this.getY() + (sketch.appHeight * 0.48)), (float) (sketch.appWidth * 0.8), (float) (sketch.appHeight * 1.6));
+        // Adding the attribution text (see note above)
+        sketch.text(this.attributionText, (float) (sketch.appWidth * 0.1), (float) (this.getY() + (sketch.appHeight * 0.48)), (float) (sketch.appWidth * 0.8), (float) (sketch.appHeight * 1.6));
 
         // Checking if the page is being scrolled
         if (sketch.mousePressed) {
-            // Calling this class's scrollScreen() method, to scroll the elements on the screen
+            // Calling the scrollScreen() method, as inherited from the Screen class, to scroll the elements on the screen
             this.scrollScreen();
         }
     }
 
+    // Private method to reset the positioning of the elements on the screen, either when the user leaves the
+    // screen (in the HomeScreen class) or if the user reaches the top of the screen again
     private void resetScreen(){
-        // Resetting the position values of the element so on the screen every time the page is opened,
-        // so that if a user leaves the screen half scrolled, it will still be reset upon their return
 
         // Resetting the screenTitleY position to it's original value (as it may have been
         // incremented if the about screen was scrolled
         sketch.screenTitleY = sketch.iconTopY;
 
+        // Resetting the screen to it's original position (i.e. centered vertically on the device screen)
         this.setY(sketch.appHeight / 2);
+
+        // Resetting each of the screen icons individually, by accessing them from the screenIcons array
+        // which this screen initialised in it's super class (Screen) when this screen was created.
+        // Using global positioning values defined in the main Sketch class.
         this.getScreenIcons()[0].setY(sketch.iconTopY);
         this.getScreenIcons()[1].setY(sketch.iconBottomY);
         this.getScreenIcons()[2].setY(sketch.iconBottomY);
         this.getScreenIcons()[3].setY(sketch.iconBottomY);
 
-        // Setting loaded to true, so that this block of code will only run once (each time this page
-        // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
-        // when an icon that links to another page has been clicked.
+        // Setting loaded to true. This value will be reset to false in the HomeScreen class, so that the
+        // page will always be reset before a user views it again (incase they left the screen partially scrolled)
         this.loaded = true;
-        println("firstLoad");
     }
 }

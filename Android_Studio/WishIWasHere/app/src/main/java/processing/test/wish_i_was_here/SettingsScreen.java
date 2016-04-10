@@ -49,6 +49,7 @@ public class SettingsScreen extends Screen {
         // variables.
         String autoSaveToggleSwitchImage = sketch.autoSaveModeOn ? "toggleSwitchOnIconImage.png" : "toggleSwitchOffIconImage.png";
         String learningModeToggleSwitchImage = sketch.learningModeOn ? "toggleSwitchOnIconImage.png" : "toggleSwitchOffIconImage.png";
+        String twitterAccountIconImage = TwitterLoginActivity.twitterLoggedIn ? "twitterAccountIconOnImage.png" : "twitterAccountIconOffImage.png";
 
         // Creating the icon/s for this screen, using a locally scoped variable for the home icon, as this
         // icon will be only ever be referred to from the allIcons array. Initialising the two public
@@ -63,42 +64,36 @@ public class SettingsScreen extends Screen {
         Icon homeIcon = new Icon(sketch, sketch.iconRightX, sketch.iconTopY, sketch.loadImage("homeIconImage.png"), "Home", false, "HomeScreen");
         learningModeIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.5, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, sketch.loadImage(learningModeToggleSwitchImage), "Learning mode switch", false, "_switchLearningMode");
         autoSaveIcon = new Icon(sketch, sketch.iconRightX * 0.9, sketch.iconCenterY * 0.8, sketch.smallIconSize * 1.8, sketch.smallIconSize * 0.9, sketch.loadImage(autoSaveToggleSwitchImage), "Auto-save switch", false, "_switchAutoSave");
+        Icon twitterAccountIcon = new Icon(sketch, sketch.iconLeftX + (sketch.largeIconSize/2), sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage(twitterAccountIconImage), "Twitter", true, "Below", "_checkTwitterLogin");
 
-        if(TwitterLoginActivity.twitterLoggedIn) {
-            Icon twitterAccountIcon = new Icon(sketch, sketch.iconLeftX + (sketch.largeIconSize/2), sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("twitterAccountIconOnImage.png"), "Twitter", true, "Below", "_checkTwitterLogin");
-            Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, twitterAccountIcon};
-            // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
-            // the temporary allIcons array to the screenIcons array of the Screen class so that they
-            // can be looped through by the showScreen() method, and methods inherited from the Icon
-            // class (such as showIcon and checkMouseOver) can be called on them from within this array.
-            // This reduces the need for each screen to have to loop through it's icons, or call the
-            // same method on multiple icons.
-            this.setScreenIcons(allIcons);
-        } else {
-            Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon};
-            // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
-            // the temporary allIcons array to the screenIcons array of the Screen class so that they
-            // can be looped through by the showScreen() method, and methods inherited from the Icon
-            // class (such as showIcon and checkMouseOver) can be called on them from within this array.
-            // This reduces the need for each screen to have to loop through it's icons, or call the
-            // same method on multiple icons.
-            this.setScreenIcons(allIcons);
-        }
+        // Creating a temporary allIcons array to store the icon/s we have created above.
+        Icon[] allIcons = {homeIcon, learningModeIcon, autoSaveIcon, twitterAccountIcon};
+
+        // Calling the setScreenIcons() method of this screen's super class (Screen). This passes
+        // the temporary allIcons array to the screenIcons array of the Screen class so that they
+        // can be looped through by the showScreen() method, and methods inherited from the Icon
+        // class (such as showIcon and checkMouseOver) can be called on them from within this array.
+        // This reduces the need for each screen to have to loop through it's icons, or call the
+        // same method on multiple icons.
+        this.setScreenIcons(allIcons);
 
         // Setting the title of this screen in this class's super class (Screen), so that it can be accessed
         // when showing the screen (i.e can be displayed as the header text of the page).
         this.setScreenTitle("Settings");
     }
 
-    // Creating a public showScreen method, which is called by the draw() funciton whenever this
-    // screen needs to be displayed
+    // Creating a public showScreen method, which is called by the draw() function whenever this screen needs to be displayed
     public void showScreen() {
 
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
         // This method will then in turn call it's super class's (Rectangle) method, to generate the screen.
         this.drawScreen();
 
-        // Adding text to go beside the icon that will be toggled in order label each setting for the users convenience
+        // Adding text to go beside the icon that will be toggled in order label each setting for the users
+        // convenience using the addText() method, as inherited from the Rectangle class, to add the following
+        // lines of text to the screen. Using positioning values which will make this screen responsive
+        // to the size of the device it is being displayed on. Using the iconLeftX and iconCenterY variables,
+        // as defined in the main Sketch class. Setting the alignment of the text to left aligned.
         this.addText("Learning Mode", "LEFT", sketch.iconLeftX, sketch.iconCenterY * 0.5);
         this.addText("Autosave Image", "LEFT", sketch.iconLeftX, sketch.iconCenterY * 0.8);
     }

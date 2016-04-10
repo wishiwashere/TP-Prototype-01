@@ -36,7 +36,7 @@ public class SearchingScreen extends Screen {
         sketch = _sketch;
 
         // Initialising this class's private searchingImage variable by loading the image in from the assets
-        // folder, so that it can be displayd when this screen is called.
+        // folder, so that it can be displayed when this screen is called.
         searchingImage = sketch.loadImage("searchingImage.png");
 
         // Setting the title of this screen in this class's super class (Screen), so that it can be accessed
