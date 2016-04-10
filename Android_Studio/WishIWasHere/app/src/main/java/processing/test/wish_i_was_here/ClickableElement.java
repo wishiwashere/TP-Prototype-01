@@ -45,7 +45,7 @@ public class ClickableElement extends Rectangle {
     }
 
     // Full Constructor
-    // This constructor is used by the TextInput class
+    // This constructor is used by the TextInput class, as well as the FavouriteTab class
     public ClickableElement(Sketch _sketch, double x, double y, double w, double h, String title) {
 
         // Calling this class's super class (Rectangle) to create an element with the specified x, y

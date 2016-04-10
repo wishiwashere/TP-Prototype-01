@@ -48,30 +48,23 @@ public class FavouritesScreen extends Screen {
         // the main sketch, must be prefixed with this object while within this class.
         sketch = _sketch;
 
-        // Creating the favTabs array to be long enough to contain each of the favourite
-        // places we have declared in the favourites array above i.e. so that we will have
-        // enough tabs to display each of the favourites
+        // Creating the favTabs array to store each of the favourite tabs that will be created below
         this.favTabs = new ArrayList<FavouriteTab>();
 
         // Looping through the favourites array, so that we can create a new tab for
         // each favourite place
         for (int f = 0; f < sketch.favouriteLocationsData.length; f++) {
 
-            // Getting the title of the favourite location by splitting the value stored for
-            // the favourite at the "@" symbol (Note - this is a naming convention that we have
-            // created, so that the favourite title and location details can all be stored in
-            // the one string). Once the string has been split, it results in a new array that
-            // contains the two half's, the first being the title of the favourite, so in this
-            // instance we want to get the portion of the string at index 0
-            String favTitle = sketch.favouriteLocationsData[f].getString("name");
-
-            // As with the favTitle, we are splitting the favourite string at the "@", except
-            // this time it is the portion of the string at index 1 we want (i.e. the second
-            // half of the string which contains the URL data we require to request this
-            // specific location (longitude, latitude, heading and pitch).
-            String favLocation = sketch.favouriteLocationsData[f].getString("latLng")
-                    + "&heading=" + sketch.favouriteLocationsData[f].getString("heading")
-                    + "&pitch=" + sketch.favouriteLocationsData[f].getString("pitch");
+            // Creating temporary variables to store the data relating to this location from
+            // the favourite locations xml file, so that they can be passed in to this favourite
+            // tab's constructor. Parsing the heading and pitch data to floats, as they will have
+            // been stored as strings in the XML file. The purpose of casting them back to floats is
+            // that we want the user to be able to scroll around the location and therefore be able
+            // to increment/decrement these values.
+            String name = sketch.favouriteLocationsData[f].getString("name");
+            String latLng = sketch.favouriteLocationsData[f].getString("latLng");
+            float heading = Float.parseFloat(sketch.favouriteLocationsData[f].getString("heading"));
+            float pitch = Float.parseFloat(sketch.favouriteLocationsData[f].getString("pitch"));
 
             // Creating a temporary variable to hold the new Favourite Tab, passing in the title
             // and location URL data for the current favourite, as well as the increment variable,
@@ -79,7 +72,7 @@ public class FavouritesScreen extends Screen {
             // of the FavouriteTab class (as it passes the y value to the super class, it multiplies
             // the y value by this number, so that it increases with each tab i.e. they are spaced
             // vertically down along the screen)
-            FavouriteTab newFavTab = new FavouriteTab(sketch, favTitle, favLocation, f);
+            FavouriteTab newFavTab = new FavouriteTab(sketch, name, latLng, heading, pitch, f);
 
             // Adding the new FavTab to this class's favTabs array, so that we can loop through them
             // in the showScreen() method, to display them, as well as checking if they are being
