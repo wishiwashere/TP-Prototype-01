@@ -51,8 +51,8 @@ public class FavouritesScreen extends Screen {
         // Creating the favTabs array to store each of the favourite tabs that will be created below
         this.favTabs = new ArrayList<FavouriteTab>();
 
-        // Looping through the favourites array, so that we can create a new tab for
-        // each favourite place
+        // Looping through the favourites array, to create a new tab for each favourite location in the
+        // user_preferences.xml file, so they can be displayed as a list of tabs on this screen
         for (int f = 0; f < sketch.favouriteLocationsData.length; f++) {
 
             // Creating temporary variables to store the data relating to this location from
@@ -67,12 +67,8 @@ public class FavouritesScreen extends Screen {
             float pitch = Float.parseFloat(sketch.favouriteLocationsData[f].getString("pitch"));
 
             // Creating a temporary variable to hold the new Favourite Tab, passing in the title
-            // and location URL data for the current favourite, as well as the increment variable,
-            // which will be used to space out the favourite tabs on the page within the constructor
-            // of the FavouriteTab class (as it passes the y value to the super class, it multiplies
-            // the y value by this number, so that it increases with each tab i.e. they are spaced
-            // vertically down along the screen)
-            FavouriteTab newFavTab = new FavouriteTab(sketch, name, latLng, heading, pitch, f);
+            // and location data for the current favourite.
+            FavouriteTab newFavTab = new FavouriteTab(sketch, name, latLng, heading, pitch);
 
             // Adding the new FavTab to this class's favTabs array, so that we can loop through them
             // in the showScreen() method, to display them, as well as checking if they are being
@@ -107,11 +103,15 @@ public class FavouritesScreen extends Screen {
 
     /*-------------------------------------- showScreen() ------------------------------------------------*/
 
-    // Creating a public showScreen method, which is called by the draw() funciton whenever this
-    // screen needs to be displayed
+    // Creating a public showScreen method, which is called by the draw() function whenever this screen needs to be displayed
     public void showScreen() {
 
+        // Checking if this page has be reloaded yet i.e. so that when the user leaves this screen. If the page
+        // was partially scrolled when the user left it, it will reset when they come back to this screen.
+        // Resetting this variable to false in the HomeScreen class.
         if (!this.loaded) {
+            // Calling the resetScreen() method of this class, so that the layout and positioning of this
+            // screen will be reset
             this.resetScreen();
         }
 
@@ -127,30 +127,38 @@ public class FavouritesScreen extends Screen {
             this.favTabs.get(f).showFavourite();
         }
 
+        // Checking if the page is being scrolled
         if (sketch.mousePressed) {
 
+            // Calling the Screen class's scrollScreen() method, to scroll the icons, screen and screen
+            // title. This method returns the amount the user has scrolled on the screen, so that it
+            // can be used within this class to scroll the favourite tabs separately
             float amountScrolled = scrollScreen();
 
-            // Looping through each of the page icons, which are only being stored in an array within
-            // this class so that they can be looped through to be repositioned (i.e. in every other
-            // screen, these icons would be stored only in the super class, and not directly accessible
-            // within the individual screen classes
+            // Looping through each of the favourite tabs, to change their positions according to the amount they
+            // have been scrolled
             for (int i = 0; i < favTabs.size(); i++) {
-                // Checking which direction the user scrolled
+
+                // Checking which direction the user scrolled, based on the previous and current mouse Y positions
                 if (sketch.pmouseY > sketch.mouseY) {
                     // The user has scrolled UP
+
                     // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
                     // moving the icon up the screen
                     this.favTabs.get(i).setY(this.favTabs.get(i).getY() - amountScrolled);
                 } else {
                     // The user has scrolled DOWN
+
                     // Checking if the screen's y position is less than or equal to half of the height i.e. is
                     // so that the screen cannot be down any further once you reach the top
                     if (this.getY() <= (sketch.appHeight/2) - amountScrolled) {
+
                         // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
                         // moving the icon down the screen
                         this.favTabs.get(i).setY(this.favTabs.get(i).getY() + amountScrolled);
                     } else {
+                        // The user has reached the top of the screen, so calling this class's resetScreen() method,
+                        // to reset the Favourite icons, and other elements on screen, to their original positions
                         this.resetScreen();
                     }
                 }
@@ -158,30 +166,46 @@ public class FavouritesScreen extends Screen {
         }
     }
 
+    // Private resetScreen() method, which can only be called from within this class, to reset all of the
+    // elements on screen to their original positions. Called each time the screen is opened, or if the
+    // user scrolls back up and reaches the top of the screen
     private void resetScreen(){
-        // Resetting the position values of the element so on the screen every time the page is opened,
-        // so that if a user leaves the screen half scrolled, it will still be reset upon their return
 
         // Resetting the screenTitleY position to it's original value (as it may have been
         // incremented if the about screen was scrolled
         sketch.screenTitleY = sketch.iconTopY;
 
+        // Resetting the screen's y value to be centered on the device's screen
         this.setY(sketch.appHeight / 2);
+
+        // Since there is only one icon on this screen (the home icon) just accessing the first icon
+        // in this screen's allScreenIcons array, to be equal to the gloabl iconTopY position, as declared
+        // in the main Sketch class
         this.getScreenIcons()[0].setY(sketch.iconTopY);
 
-        for (int i = 0; i < favTabs.size(); i++) {
-            favTabs.get(i).setY((float) ((i + 1) * sketch.appHeight * 0.25));
+        // Looping through each of the favourite tabs, in reverse so the newest always appear at the top,
+        // to reset their positions on screen
+        for (int i = favTabs.size() - 1; i >=0; i--) {
+            // Generating this tab's y position by taking the value of i away from the total number of favourite
+            // tabs, and then multiplying it by 25% of the screen height, so that each tab will be spaced evenly
+            // one below the other, with some spacing in between
+            float tabYPosition = (float) ((favTabs.size() - i) * sketch.appHeight * 0.25);
+
+            // Using the setY() method, as inherited from the Rectangle class, through the ClickableElement class,
+            // to set the y position of this favourite tab, using the value generated above.
+            favTabs.get(i).setY(tabYPosition);
         }
 
-        // Setting loaded to true, so that this block of code will only run once (each time this page
-        // is opened). This value will be reset to false in the Icon class's checkMouseOver function,
-        // when an icon that links to another page has been clicked.
+        // Setting loaded to true. This value will be reset to false in the HomeScreen class, so that the
+        // page will always be reset before a user views it again (incase they left the screen partially scrolled)
+        // or when the user reaches the top of the screen after scrolling down.
         this.loaded = true;
-        println("firstLoad");
     }
 
     /*-------------------------------------- get() and set() ------------------------------------------------*/
 
+    // Public get method which returns the ArrayList of all of the FavouriteTabs, so that they can be accessed
+    // from the main Sketch class i.e. to check if a location is already a favourite before adding/removing it
     public ArrayList<FavouriteTab> getFavTabs() {
         return favTabs;
     }

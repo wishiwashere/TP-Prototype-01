@@ -25,15 +25,14 @@ public class FavouriteTab extends ClickableElement {
     public float favLocationPitch;
 
     /*-------------------------------------- Constructor ------------------------------------------------*/
-    public FavouriteTab(Sketch _sketch, String name, String locationLatLng, float locationHeading, float locationPitch, float y) {
+    public FavouriteTab(Sketch _sketch, String name, String locationLatLng, float locationHeading, float locationPitch) {
 
         // Calling the super class (ClickableElement) constructor, passing in the required
-        // x value (which is centered), y value (which is incremented by this favourite's
-        // position in the FavouriteScreen favourites array - plus 1 so that this value
-        // never equals 0), setting a relative width and height, and the title of the location
-        // (for printing to the console to let us know which tab was clicked on - if one has been
-        // clicked).
-        super(_sketch, _sketch.width/2, (y + 1) * _sketch.height * 0.22, _sketch.width * 0.65, _sketch.height * 0.17, name);
+        // x value (which is centered), and defaulting the y value to 0, as this will be reset
+        // everytime the FavouriteScreen's resetScreen() method is called, setting a relative
+        // width and height, and the title of the location (for printing to the console to let
+        // us know which tab was clicked on when a click occurs).
+        super(_sketch, _sketch.width/2, 0, _sketch.width * 0.65, _sketch.height * 0.17, name);
 
         // Initialising this class's local sketch variable, with the instance which was passed to the
         // constructor of this class. The purpose of this variable is so that we can access the Processing
@@ -78,14 +77,17 @@ public class FavouriteTab extends ClickableElement {
                 sketch.googleImageLatLng = this.favLocationLatLng;
                 sketch.googleImageHeading = this.favLocationHeading;
                 sketch.googleImagePitch = this.favLocationPitch;
-
                 sketch.currentLocationName = this.favLocationName;
 
+                // Calling the loadGoogleImage() method from the main Sketch class, to load in a new
+                // street view image with the location data specified by this tab
                 sketch.loadGoogleImage();
             }
         }
     }
 
+    // Public get method for getting the name of this tab's location. This will be used in the
+    // main sketch to check if a location is a favourite or not.
     public String getFavLocationName(){
         return favLocationName;
     }

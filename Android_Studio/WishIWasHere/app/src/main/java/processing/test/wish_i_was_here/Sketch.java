@@ -705,7 +705,7 @@ public class Sketch extends PApplet {
             newChild.setString("pitch", String.valueOf(googleImagePitch));
             saveUserPreferencesXML();
 
-            FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng, googleImageHeading, googleImagePitch, myFavouritesScreen.favTabs.size() - 1);
+            FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng, googleImageHeading, googleImagePitch);
             myFavouritesScreen.favTabs.add(newFavTab);
             myCameraLiveViewScreen.favouriteLocation = true;
         }
