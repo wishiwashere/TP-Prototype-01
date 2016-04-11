@@ -6,21 +6,6 @@ public class LearningMode extends ClickableElement {
   public String captureText = "Tap here to take a picture";
   public String switchCameraText = "Tap here to switch camera views";
 
-
-  /* -------------------------- Constructor -------------------------------*/
-  // This constructor is used by icons such as the homeIcon, that want to accept the default 
-  // width and height of an icon, and also link to another page
-  public learningMdoe(float x, float y, float w, float h, String learningText) {
-
-    // If no width or height specified, defaulting these to 15% of the screen width.
-    // If no link is specified, then defaulting this to an empty string.
-    // Then passing this default, along with the specified parametres, into the 
-    // full constructor of this class
-    this(x, y, w, h, learningText);
-  }
-
-  /*-------------------------------------------------------------------------*/
-
   public void showLearningMode() {
     fill(0, 255, 0);
     rect(appWidth/32, appHeight/16, appWidth/4, appHeight/6);
@@ -39,7 +24,6 @@ public class LearningMode extends ClickableElement {
 
     //for learning mode box
     fill(48, 2, 125, 100);
-  
   
   if (mousePressed) {
     learningModeOn = false;

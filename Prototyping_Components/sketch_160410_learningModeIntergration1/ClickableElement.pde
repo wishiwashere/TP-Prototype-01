@@ -16,10 +16,10 @@ public class ClickableElement extends Rectangle {
   }
   
     // This constructor is used by learningMode
-  public ClickableElement(float x, float y, float w, float h, String title) {
+ /* public ClickableElement(float x, float y, float w, float h, String title) {
     super(x, y, w, h);
     elementTitle = title;
-  }
+  }*/
 
   /*-------------------------------------- checkMouseOver() ------------------------------------------------*/
 

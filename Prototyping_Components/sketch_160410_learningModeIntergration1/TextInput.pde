@@ -57,12 +57,12 @@ public class TextInput extends ClickableElement {
     passwordInput = password;
 
     inputTextAlign = align;
-    
+
     textX1 = x - (w * 0.48);
     textY1 = y - (h * 0.45);
     textX2 = x + (w * 0.48);
     textY2 = y + (h * 0.45);
-    
+
     if (inputTextAlign.equals("LEFT")) {
       textVertAlign = CENTER;
     } else if (inputTextAlign.equals("LEFT-TOP")) {
@@ -70,7 +70,7 @@ public class TextInput extends ClickableElement {
     }
   }
 
-  /*-------------------------------------- showTextInput() ------------------------------------------------*/
+/*-------------------------------------- showTextInput() ------------------------------------------------*/
 
   // Creating a public showTextInput function, which can be called anywhere in the code
   // to display the icon, and add any text that has been specified

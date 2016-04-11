@@ -682,6 +682,7 @@ void switchAutoSave() {
   callFunction = "";
   mySettingsScreen.autoSaveModeOn = !mySettingsScreen.autoSaveModeOn;
   println("Auto-save is now: " + mySettingsScreen.autoSaveModeOn);
+  //showLearningMode();
 }
 
 
