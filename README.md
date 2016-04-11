@@ -39,6 +39,8 @@ Currently on our team project our application has:
 	** Sending images and text on Twitter
 	** User login/verification on Twitter using Fabric
 * Text Input
+	** Ability to type into a device
+	** Ability to interpret key presses on a soft keyboard
 	** Restrictive text input
 	** Setting a character limit
 * Favourites
