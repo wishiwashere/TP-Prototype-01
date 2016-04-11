@@ -64,14 +64,14 @@ public class Sketch extends PApplet {
     // If a user has learningModeOn turned on, as defined by their user preferences, this boolean
     // will be true. They can then toggle this functionality on/off in the Settings screen, to choose
     // whether they want to see the learning mode suggestions when they use the app or not.
-    // If a user is logged in to Twitter, then senToTwitterOn will be changed to true. If they
+    // If a user is logged in to Twitter, then sendToTwitterOn will be changed to true. If they
     // then decided to disable/enable sending to Twitter for individual images (in SaveShareScreenA)
     // then this boolean will toggle on/off.
     // If a user has autoSaveModeOn turned on, then saveThisImageOn will also be set to true. If a user
     // then wants to turn off saving for an individual image, they can toggle this functionality on/off
     // in SaveShareScreenA, while not affecting their overall autoSaveModeOn setting. Images will only
     // ever save to the device when saveThisImageOn is set to true, regardless of whether autosaveMode
-    // is on or off (to allow the user to make individual choices for each image.
+    // is on or off (to allow the user to make individual choices for each image).
     public Boolean autoSaveModeOn = true;
     public Boolean learningModeOn = false;
     public Boolean sendToTwitterOn = false;
@@ -223,6 +223,12 @@ public class Sketch extends PApplet {
     // image, and eventually is added to the compiled image to create the final image the user
     // will save/send to Twitter
     public PImage currentImage;
+
+    // Creating a private variable to pass the image from the Ketai Camera into the removeGreenScreen
+    // thread. The purpose of using this variable, instead of accessing the image directly from the
+    // Ketai Camera in the removeGreenScreen thread, is that accessing the pixel array of the camera
+    // seems to produce unexpected results i.e. distortions in the image
+    private PImage currentFrame;
 
     /*-------------------------------------- Sizing ----------------------------------------------*/
     // Declaring global variables, which will contain the width and height of the device's
@@ -645,13 +651,34 @@ public class Sketch extends PApplet {
             // this one has been completed
             this.readingImage = true;
 
-            // Reading in the newest frame from the Ketai Camera
-            ketaiCamera.read();
+            // Adding a try/catch statement around the following, as loading in the image from the Ketai
+            // camera, and then calling the removeGreenScreen thread, tends to cause a crash on it's first
+            // attempt (because of the spike in memory, an out of memory error occurs). Once the first
+            // frame has been keyed successfully, this no longer seems to occur, as the app will have
+            // been allocated more memory.
+            try {
+                // Reading in the newest frame from the Ketai Camera
+                ketaiCamera.read();
 
-            // Calling the removeGreenScreen thread, to remove the green background from the current
-            // frame of Ketai Camera, and pass it back to the sketch by setting currentImage to be
-            // equal to it's contents
-            thread("removeGreenScreen");
+                // Getting the current image from the Ketai Camera and storing it in the currentFrame
+                // variable, so that it can be read from within the removeGreenScreen thread. The purpose
+                // of using this variable, instead of accessing the image directly from the Ketai Camera
+                // in the removeGreenScreen thread, is that accessing the pixel array of the camera seems
+                // to produce unexpected results i.e. distortions in the image
+                currentFrame = ketaiCamera.get();
+
+                // Calling the removeGreenScreen thread, to remove the green background from the current
+                // frame of Ketai Camera, and pass it back to the sketch by setting currentImage to be
+                // equal to it's contents
+                thread("removeGreenScreen");
+
+            } catch (OutOfMemoryError e) {
+                println("Unable to initiate the removeGreenScreen thread - " + e);
+
+                // Resetting the readingImage variable to false, so that even if this frame was unsuccessful
+                // in being keyed, the app can continue to try and read in more frames
+                readingImage = false;
+            }
         }
     }
 
@@ -729,7 +756,8 @@ public class Sketch extends PApplet {
         if (currentScreen.equals("HomeScreen")) {
             myHomeScreen.showScreen();
         } else if (currentScreen.equals("CameraLiveViewScreen")) {
-            // Resetting imageSaved, imageShared and compiledImage, incase they have not already been reset
+            // Resetting imageSaved, imageShared and compiledImage, in case they have not already
+            // been reset
             imageSaved = false;
             imageShared = false;
             compiledImage = null;
@@ -775,7 +803,7 @@ public class Sketch extends PApplet {
     }
 
     /*-------------------------------------- CheckFunctionCalls() --------------------------------*/
-    public void checkFunctionCalls(){
+    public void checkFunctionCalls() {
         // Checking if any screen's icons are trying to trigger any functions
         if (callFunction.equals("")) {
             // No function needs to be called
@@ -819,26 +847,70 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- KeepImage() -----------------------------------------*/
     public void keepImage() {
-        callFunction = "";
+        // Checking if the saveThisImageOn boolean is true. If a user has autoSaveModeOn turned on,
+        // then saveThisImageOn will also be set to true. If a user then wants to turn off saving for
+        // an individual image, they can toggle this functionality on/off in SaveShareScreenA, while
+        // not affecting their overall autoSaveModeOn setting. Images will only ever save to the device
+        // when saveThisImageOn is set to true, regardless of whether autosaveMode is on or off (to
+        // allow the user to make individual choices for each image).
         if (saveThisImageOn) {
+
             println("KEEP IMAGE - This image was saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
-            // Checking if Storage is available
+
+            // Checking if Storage is available. This method will return a boolean value, to
+            // indicate whether external storage is mounted and writable
             if (isExternalStorageWritable()) {
+
+                // Saving the image to the photo gallery of the user's device, using the saveImageToPhotoGallery
+                // method. This method returns a boolean value, to indicate whether the image was saved
+                // successfully or not
                 if (saveImageToPhotoGallery()) {
+
+                    // Determining which screen to redirect the user to, based on whether they also want
+                    // to send this image to Twitter or not. If a user is logged in to Twitter, then
+                    // sendToTwitterOn will be changed to true. If they then decided to disable/enable
+                    // sending to Twitter for individual images (in SaveShareScreenA) then this boolean
+                    // will toggle on/off. If the user is also sending the image to Twitter, then taking
+                    // them to SaveShareScreenB, so they can add a message to their tweet, otherwise
+                    // taking them to the ShareSaveSuccessfulScreen, where the imageShared and imageSaved
+                    // booleans will determine which tasks have been successfully completed, in order to
+                    // display the appropriate confirmation text on screen
                     currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "ShareSaveSuccessfulScreen";
                 } else {
                     println("Failed to save image");
-                    currentScreen = "ShareSaveUnsuccessfulScreen";
+
+                    // Determining which screen to redirect the user to, based on whether they also want
+                    // to send this image to Twitter or not. If a user is logged in to Twitter, then
+                    // sendToTwitterOn will be changed to true. If they then decided to disable/enable
+                    // sending to Twitter for individual images (in SaveShareScreenA) then this boolean
+                    // will toggle on/off. If the user is also sending the image to Twitter, then taking
+                    // them to SaveShareScreenB, so they can add a message to their tweet, otherwise
+                    // taking them to the ShareSaveUnsuccessfulScreen, where the imageShared and imageSaved
+                    // booleans will determine which tasks have been unsuccessfully completed, in order to
+                    // display the appropriate options on screen
+                    currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "ShareSaveUnsuccessfulScreen";
                 }
             }
         } else {
+
+
             println("KEEP IMAGE - This image was not saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
+            // The user does not want to save the image
+            // Determining which screen to redirect the user to, based on whether they also want
+            // to send this image to Twitter or not. If a user is logged in to Twitter, then
+            // sendToTwitterOn will be changed to true. If they then decided to disable/enable
+            // sending to Twitter for individual images (in SaveShareScreenA) then this boolean
+            // will toggle on/off. If the user is sending the image to Twitter, then taking
+            // them to SaveShareScreenB, so they can add a message to their tweet, otherwise
+            // taking them back to the CameraLiveViewScreen, as they have decided not to save
+            // or share this image
             currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "CameraLiveViewScreen";
         }
     }
 
     /*-------------------------------------- IsExternalStorageWritable()--------------------------*/
     public Boolean isExternalStorageWritable() {
+        // Creating a local boolean, to store
         Boolean answer = false;
 
         // Creating a string to store the state of the external storage
@@ -1067,13 +1139,10 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- RemoveGreenScreen() ---------------------------------*/
     public void removeGreenScreen() {
-        PImage currentFrame;
         PImage keyedImage;
 
         try {
             println("Starting removing Green Screen at frame " + frameCount);
-
-            currentFrame = ketaiCamera.get();
 
             // Changing the colour mode to HSB, so that I can work with the hue, satruation and
             // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
