@@ -18,38 +18,89 @@ import java.util.ArrayList;
 import twitter4j.*;
 import twitter4j.conf.*;
 
+// This class contains the main Sketch for the Processing portion of this app
 public class Sketch extends PApplet {
 
-    /*-------------------------------------- Globally Accessed Variables ------------------------------------------------*/
+    /*-------------------------------------- Navigation/Status Variables -------------------------*/
 
-    // Setting the default screen to be the HomeScreen, so that when the app is loaded,
+    // Setting the default screen to be the LoadingScreen, so that when the app is loaded,
     // this is the first screen that is displayed. Since this global variable is available
     // throughout the sketch (i.e. within all classes as well as the main sketch) we will
     // use this variable to pass in the value of "iconLinkTo" when the icon is clicked on
-    // within the checkMouseOver() method of the Icon class. The variable will then be tested
-    // against each of the potential screen names (in the main sketch's draw function) to
-    // decide which sketch should have the showScreen() method called on it i.e. (which
-    // screen should be displayed).
-    // FOR TESTING PURPOSES CHANGING THIS STRING TO THE CLASS NAME OF ANOTHER SCREEN WILL
-    // FORCE IT TO LOAD FIRST WHEN THE APP RUNS
-    String currentScreen = "LoadingScreen";
+    // within the checkMouseOver() method of the ClickableElement class. The variable will
+    // then be tested against each of the potential screen names (in the this class's
+    // switchScreens() function) to decide which class should have the showScreen() method
+    // called on it i.e. (which screen should be displayed).
+    public String currentScreen = "LoadingScreen";
 
-    // Creating a global variable for ourBrowserApiKey that is required to make requests
-    // to the Google Street View Image API. This key will be removed before commits to
-    // GitHub, for security purposes.
-    String ourBrowserApiKey = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
-    String ourOAuthConsumerKey = "huoLN2BllLtOzezay2ei07bzo";
-    String ourOAuthConsumerSecret = "k2OgK1XmjHLBMBRdM9KKyu86GS8wdIsv9Wbk9QOdzObXzHYsjb";
-    String ourOAuthAccessToken = TwitterLoginActivity.twitterUserAccessToken;
-    String ourOAuthAccessTokenSecret = TwitterLoginActivity.twitterUserSecretToken;
-
-    String returnTo = "HomeScreen";
+    // Creating a string to store the name of the screen to which an icon should return the
+    // user to i.e. if the user has arrived at screen B from screen A, then clicking
+    // cancel on this screen should return them to screen A. They may also have come
+    // to this screen from screen C screen, in which case the cancel button should
+    // return them there. Defaulting this to be equal to the home screen. This variable will
+    // be used in the Icon class's showIcon() method, to determine which screen to return a
+    // user to, if the icon's link begins with a "-". This is a naming convention we created
+    // so that it is clearer which icons link to an as of yet undetermined screen.
+    public String returnTo = "HomeScreen";
 
     // Creating a global variable, which any icon can use to pass the name of the function
     // they link to. The value of this variable is set in the Icon class when an icon is clicked
     // on, and it's iconLinkTo value begins with a "_". This is a naming convention we created
     // so that it is clearer which icons link to screens and which link to functions.
-    String callFunction = "";
+    public String callFunction = "";
+
+    // Creating a global variable, which can be used to determine if a user has clicked on an
+    // element. Using a custom variable to store this, as opposed to using the Processing mousePressed
+    // variable, as we want to differentiate between a mouse being clicked and a mouse being pressed
+    // (i.e. clicking or scrolling). This variable will be set to true when a mousePressed() event
+    // occurs, and then reset to false when a element identifies itself as having been clicked on,
+    // or when a scrolling event is detected.
+    public Boolean mouseClicked = false;
+
+    // Creating public booleans, to monitor which functionalities are currently turned on/off.
+    // If a user has autoSaveModeOn turned on, as defined by their user preferences, this boolean
+    // will be true. They can then toggle this functionality on/off in the Settings screen, to choose
+    // whether saving will be automatically enabled for all images.
+    // If a user has learningModeOn turned on, as defined by their user preferences, this boolean
+    // will be true. They can then toggle this functionality on/off in the Settings screen, to choose
+    // whether they want to see the learning mode suggestions when they use the app or not.
+    // If a user is logged in to Twitter, then sendToTwitterOn will be changed to true. If they
+    // then decided to disable/enable sending to Twitter for individual images (in SaveShareScreenA)
+    // then this boolean will toggle on/off.
+    // If a user has autoSaveModeOn turned on, then saveThisImageOn will also be set to true. If a user
+    // then wants to turn off saving for an individual image, they can toggle this functionality on/off
+    // in SaveShareScreenA, while not affecting their overall autoSaveModeOn setting. Images will only
+    // ever save to the device when saveThisImageOn is set to true, regardless of whether autosaveMode
+    // is on or off (to allow the user to make individual choices for each image).
+    public Boolean autoSaveModeOn = true;
+    public Boolean learningModeOn = false;
+    public Boolean sendToTwitterOn = false;
+    public Boolean saveThisImageOn = true;
+
+    // Creating public booleans, which result screens (such as ShareSaveSuccessfulScreen) will use to
+    // determine which actions were successfully completed i.e. if the image was shared, saved or
+    // both. These variables will only ever be set to true when the action has completed successfully
+    // and reset to false when the user goes back to the CameraLiveViewScreen
+    public Boolean imageShared = false;
+    public Boolean imageSaved = false;
+
+    // Creating a private boolean, to detect whether an image merge is currently being completed
+    // i.e. so no new images will be read in from the device's camera, or sent to the removeGreenScreen()
+    // thread (to reduce the risk of the memory of the device becoming overloaded
+    private Boolean imageMerging = false;
+
+    // Creating a private boolean, to detect whether an image is currently being read in and keyed by
+    // the removeGreenScreen() thread i.e. so no new images will be read in from the device's camera,
+    // or sent to the removeGreenScreen() thread (to reduce the risk of the memory of the device becoming
+    // overloaded
+    private Boolean readingImage = false;
+
+    /*-------------------------------------- Text Inputs -----------------------------------------*/
+    // Creating two private variables, which will contain the TextInput object, as well as it's
+    // value, that is currently in focus. These variables are initialised within the TextInput
+    // class when an input has been clicked on
+    public TextInput currentTextInput = null;
+    public String currentTextInputValue = "";
 
     // Creating a global boolean, to determine if the keyboard is required. This value is set to
     // true within the TextInput class if a text input has been clicked on. While this value is
@@ -57,199 +108,241 @@ public class Sketch extends PApplet {
     // device to display it's keyboard. Each time a mousePressed event occurs, this variable
     // is reset to false, so that if a user clicks anywhere else on the screen, the keyboard
     // will automatically close
-    Boolean keyboardRequired = false;
+    public Boolean keyboardRequired = false;
 
-    Boolean imageMerging = false;
+    /*-------------------------------------- XML Data --------------------------------------------*/
+    // Creating an array of random locations based on the random location XML file in the
+    // assets folder. Storing these in a separate XML file to the user preferences, so that
+    // even if a user deletes all of their favourite locations, there will still be random
+    // locations available to them.
+    // Each location has a latLng attribute, which represents the latitude
+    // and longitude of the location, a heading attribute which represents the left/right
+    // positioning of the view (between 0 and 360) and a pitch attribute which represents
+    // the up/down angle of the view (between -90 and 90).
+    // In the original Google Street View URL (from the browser) i.e. the Colosseum
+    // url was https://www.google.ie/maps/@41.8902646,12.4905161,3a,75y,90.81h,95.88t/data=!3m6!1e1!3m4!1sR8bILL5qdsO7_m5BHNdSvQ!2e0!7i13312!8i6656!6m1!1e1
+    // the first two numbers after the @ represent the latitude and longitude, the number
+    // with the h after it represents the heading, and the number with the t after it
+    // seems to be to do with the pitch, but never works that way in this
+    // method so I just decided the pitch value based on what looks good
+    private XML[] randomLocations;
 
-    TextInput currentTextInput = null;
-    String currentTextInputValue = "";
+    // Creating a variable to store the full XML which will be read in from the user_preferences.xml file
+    // so that it can later be resaved/reloaded as needed
+    private XML userPreferencesXML;
 
-    // Creating a global variable which will contain the value of the most recent y position of the
-    // mouse. This variable gets it's first value each time a mousePressed event occurs (i.e. when the
-    // user first holds down the mouse). It will then be continually updated (on any pages that scroll)
-    // and used to determine how much a user has scrolled, and move the contents of these page's accordingly
-    float previousMouseY;
-    float previousMouseX;
+    // Creating an array to store the XML elements which contain the favourite locations of the user, as
+    // sourced from the userPreferencesXML data which will be stored in the variable above
+    public XML[] favouriteLocationsData;
 
-    PImage compiledImage;
+    // Creating an array to store the XML elements which contain the settings of the user, such as autosaveModeOn,
+    // as sourced from the userPreferencesXML data which will be stored in the variable above
+    private XML[] settingsData;
 
-    XML userPreferencesXML;
-    XML[] favouriteLocationsData;
-    XML[] settingsData;
-    Boolean autoSaveModeOn = true;
-    Boolean learningModeOn = false;
+    /*-------------------------------------- Ketai Camera ----------------------------------------*/
+    // Creating a global variable to store the ketaiCamera object, so that we can access the live stream
+    // of images coming in from the device camera. The images from this camera will never be displayed
+    // in the app, but will instead be passed to the removeGreenScree() method, so any green
+    // background can be removed so the user can see themselves as if they are in the current location
+    public KetaiCamera ketaiCamera;
 
-    /*-------------------------------------- KetaiCamera ------------------------------------------------*/
-
-    // Creating a global variable to store the ketaiCamera object, so that it can be
-    // accessed thoroughout the sketch once it has been initiated i.e. to read in,
-    // display and eventually alter the live stream images
-    KetaiCamera ketaiCamera;
-
-    // Creating a global variable to store the number of the camera we want to view
+    // Creating a global variable to store the number (identifier) of the device camera we want to view
     // at any given time. The front facing camera (on a device with more than one camera)
     // will be at index 1, and the rear camera will be at index 0. On a device with only
     // 1 camera (such as the college Nexus tablets) this camera will always be at index
     // 0, regardless of whether it is a front or back camera
-    int camNum;
+    public int camNum;
 
     // Creating a variable to store a value of 1 or -1, to decide whether and image should be
     // flipped i.e. when using the front facing camera, the x scale should always be -1 to
     // avoid things being in reverse
-    int cameraScale = -1;
+    public int cameraScale = -1;
 
     // Creating a global variable, which will always be set to either 90 or -90 degrees, to ensure
     // that the live stream images from the camera area always oriented in the right rotation.
     // Initialising at -90 degrees, as we will be starting on the front facing camera
-    int cameraRotation = -90;
+    public int cameraRotation = -90;
 
-    Boolean finalKeying = false;
-    Boolean imageShared = false;
-    Boolean imageSaved = false;
+    /*-------------------------------------- KetaiSensor -----------------------------------------*/
 
+    // Declaring an instance of the ketaiSensore class, so that we can later access the sensors
+    // of this device i.e. the accelerometer.
+    private KetaiSensor sensor;
 
-    /*----------------------------------- Twitter Tweeting -----------------------------------------*/
-    // Setting up the configuration for tweeting from an account on Twitter
-    ConfigurationBuilder cb = new ConfigurationBuilder();
+    // Creating a public boolean to detect whether shakeMovementOn is enabled or not. When this functionality
+    // is enabled, the user can use the accelerometer in the device "look up and down" within the
+    // camera live view screen (in fact, they are just updating the heading and pitch values and then
+    // requests are being sent to the Google Street View Image API to request new images, so as to imitate
+    // the ability to "look around" them.
+    public Boolean shakeMovementOn = false;
 
-    // Using the twitter class for tweeting, so later I can call on the twitter factory, which in turn
-    // creates a new instance of the configuration builder
-    Twitter twitter;
+    // Creating a variable to store the current rotation of the device, based on the readings from
+    // the device's accelerometer
+    public int orientationRotation = 0;
 
-    String saveToPath;
+    /*----------------------------------- Twitter ------------------------------------------------*/
+    // Creating variables to store the API keys required for accessing the Twitter API.
+    // Setting the Twitter consumer key and Twitter consumer secret key to be equal to our
+    // developer keys. Setting the Twitter access token, and access secret token to be equal
+    // to the user's tokens, as defined when they logged in using the TwitterLoginActivity.
+    // If the user has not logged in, then these will merely be equal to empty strings, but
+    // as the option to send the image to Twitter will not be available to them, this will
+    // never be an issue.
+    private String twitterOAuthConsumerKey = "huoLN2BllLtOzezay2ei07bzo";
+    private String twitterOAuthConsumerSecret = "k2OgK1XmjHLBMBRdM9KKyu86GS8wdIsv9Wbk9QOdzObXzHYsjb";
+    private String twitterOAuthAccessToken = TwitterLoginActivity.twitterUserAccessToken;
+    private String twitterOAuthAccessTokenSecret = TwitterLoginActivity.twitterUserSecretToken;
 
-    /*-------------------------------------- Images ------------------------------------------------*/
+    // Creating a new instance of the Twitter configuration builder, which will later have the
+    // above API keys stored within it, so that it can be passed to the TwitterFactory to generate
+    // a new instance of the Twitter class.
+    private ConfigurationBuilder cb = new ConfigurationBuilder();
 
-    // Declaring the image holders for the icons that will appear throughout the sketch,
-    // so that they can all be loaded in once, and then used throughout the relevant screens
-    PImage randomPageIconImage;
-    PImage searchPageIconImage;
-    PImage aboutPageIconImage;
-    PImage favouritesPageIconImage;
-    PImage settingsPageIconImage;
-    PImage homeIconImage;
-    PImage homeIconImageWhite;
-    PImage favIconImage;
-    PImage shakeIconImage;
-    PImage shutterIconImage;
-    PImage switchViewIconImage;
-    PImage retryIconImage;
-    PImage deleteIconImage;
-    PImage saveIconImage;
-    PImage disgardIconImage;
-    PImage keepIconImage;
-    PImage cancelIconImage;
-    PImage facebookAccountIconImage;
-    PImage twitterAccountIconImage;
-    PImage instagramAccountIconImage;
-    PImage emailIconImage;
-    PImage buttonImage;
-    PImage generalPageBackgroundImage;
-    PImage toggleSwitchOnIconImage;
-    PImage toggleSwitchOffIconImage;
-    PImage overlayImage;
-    PImage sharingScreenImage;
-    PImage searchingImage;
-    PImage shareImageToDeviceAppsImage;
-    PImage returnCameraLiveViewIcon;
+    // Declaring an instance of the Twitter class, which will be generated by the TwitterFactory class,
+    // using the above API keys, which will have been setup on the configuration builder class. We
+    // will then use the twitter instance to update the user's status i.e. send tweets on the user's
+    // account (if they are logged in with Twitter)
+    private Twitter twitter;
 
+    /*-------------------------------------- Images ----------------------------------------------*/
 
-    Boolean mouseClicked = false;
+    // Loading in the general background image, which will be used to "wipe" the screen each time the
+    // switchScreens method is called. The purpose of this is that individual screens do not need to
+    // contain their own backgrounds, and thus reduces the load on memory.
+    private PImage generalPageBackgroundImage;
 
-    /*-------------------------------------- Sizing ------------------------------------------------*/
+    // Creating a public compiledImage variable, which will store the PImage graphic which contains
+    // the Google Street View image of the background, the keyed image of the user (from the currentImage,
+    // as declared below), and the "Wish I Was Here" overlay image, which can then be saved and/or shared.
+    // This image will also be displayed on the ImagePreviewScreen and the SaveShareScreenA screens.
+    public PImage compiledImage;
 
+    // Creating a global image variable, to store the currentImage. Currently, this is
+    // used to return the keyed image of the user from the removeGreenScreen() thread.
+    // It is then used on the CameraLiveViewScreen as an image ontop of the Google Street View
+    // image, and eventually is added to the compiled image to create the final image the user
+    // will save/send to Twitter
+    public PImage currentImage;
+
+    // Creating a private variable to pass the image from the Ketai Camera into the removeGreenScreen
+    // thread. The purpose of using this variable, instead of accessing the image directly from the
+    // Ketai Camera in the removeGreenScreen thread, is that accessing the pixel array of the camera
+    // seems to produce unexpected results i.e. distortions in the image
+    private PImage currentFrame;
+
+    /*-------------------------------------- Sizing ----------------------------------------------*/
     // Declaring global variables, which will contain the width and height of the device's
     // display, so that these values can be reused throughout all classes (i.e. to calculate
     // more dynamic position/width/height's so that the interface responds to different
     // screen sizes
-    int appWidth;
-    int appHeight;
+    public int appWidth;
+    public int appHeight;
 
     // Declaring the icon positioning X and Y variables, which will be used globally to ensure that
-    // the icons on each page all line up with one another. These measurements are all based on percentages
-    // of the app's display, and are initialised in the setup function of this sketch
-    float iconLeftX;
-    float iconRightX;
-    float iconCenterX;
-    float iconTopY;
-    float iconBottomY;
-    float iconCenterY;
-    float largeIconSize;
-    float smallIconSize;
-    float homeIconSize;
-    float largeIconBottomY;
-    float screenTitleY;
+    // the icons on each page all line up with one another. These measurements will all be based on
+    // percentages of the app's display, and are initialised in the setup function of this sketch
+    public float iconLeftX;
+    public float iconRightX;
+    public float iconCenterX;
+    public float iconTopY;
+    public float iconBottomY;
+    public float iconCenterY;
+    public float largeIconBottomY;
+    public float screenTitleY;
 
-    // Declaring a global variable which will contain the default text size, which will be
-    // initialised in the setup() function of the app
+    // Declaring the icon sizing variables, which will be used globally to ensure that there will be
+    // consistency between the sizes of icons throughout the app. These measurements will all be based on
+    // percentages of the app's display, and are initialised in the setup function of this sketch
+    public float largeIconSize;
+    public float smallIconSize;
+    public float homeIconSize;
+
+    // Declaring the default text size variables, so that there will be consistency with the sizing
+    // of all text within the app
     float defaultTextSize;
+    float screenTitleTextSize;
 
-    /*-------------------------------------- Screens ------------------------------------------------*/
-
-    // Declaring a new instance of each screen in the application, so that they
-    // can be accessed by the draw function to be displayed when needed
-    HomeScreen myHomeScreen;
-    CameraLiveViewScreen myCameraLiveViewScreen;
-    FavouritesScreen myFavouritesScreen;
-    SettingsScreen mySettingsScreen;
-    AboutScreen myAboutScreen;
-    SearchScreen mySearchScreen;
-    SearchUnsuccessfulScreen mySearchUnsuccessfulScreen;
-    ImagePreviewScreen myImagePreviewScreen;
-    SaveShareScreenA mySaveShareScreenA;
-    SaveShareScreenB mySaveShareScreenB;
-    SharingScreen mySharingScreen;
-    ShareSaveSuccessfulScreen myShareSaveSuccessfulScreen;
-    ShareUnsuccessfulScreen myShareUnsuccessfulScreen;
-    ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
-    SearchingScreen mySearchingScreen;
-    SocialMediaLogoutScreen mySocialMediaLogoutScreen;
-    LoadingScreen myLoadingScreen;
+    /*-------------------------------------- Screens ---------------------------------------------*/
+    // Declaring a new instance of each screen in the application, so that they can be accessed by the
+    // draw function to be displayed when needed. The FavouritesScreen and the AboutScreen have been
+    // declared as public, as they will need to be accessed from the HomeScreen class, to reset
+    // their "loaded" boolean to false, so the scrolling of the screens can be reset before the user
+    // views them again
+    private HomeScreen myHomeScreen;
+    private CameraLiveViewScreen myCameraLiveViewScreen;
+    public FavouritesScreen myFavouritesScreen;
+    private SettingsScreen mySettingsScreen;
+    public AboutScreen myAboutScreen;
+    private SearchScreen mySearchScreen;
+    private SearchUnsuccessfulScreen mySearchUnsuccessfulScreen;
+    private ImagePreviewScreen myImagePreviewScreen;
+    private SaveShareScreenA mySaveShareScreenA;
+    private SaveShareScreenB mySaveShareScreenB;
+    private SharingScreen mySharingScreen;
+    private ShareSaveSuccessfulScreen myShareSaveSuccessfulScreen;
+    private ShareUnsuccessfulScreen myShareUnsuccessfulScreen;
+    private ShareSaveUnsuccessfulScreen myShareSaveUnsuccessfulScreen;
+    private SearchingScreen mySearchingScreen;
+    private SocialMediaLogoutScreen mySocialMediaLogoutScreen;
+    private LoadingScreen myLoadingScreen;
 
     /*-------------------------------------- Saving ------------------------------------------------*/
-    // Creating a string that will hold the directory path of where the images will be saved to
-    String directory = "";
+    // Creating a string that will hold the directory path of where the images will be saved to on the
+    // device's external storage
+    private String directory = "";
 
-    // Creating a global image variable, to store the currentImage. Currently, this image is
-    // simply the current frame of the ketaiCamera, but evenually this variable will be
-    // used to hold the "postcard" of the person standing in a Google Street View enviroment.
-    // This variable is set to the current frame of the camera each time a new frame is read
-    // in (i.e. in the onCameraPreviewEvent() of the main sketch)
-    PImage currentImage;
+    // Creating a string to store the full path, including the directory (declared above) and the
+    // filename of the most recent image. This path can then be used either to load the image back
+    // in to attach it as media for a tweet (to send it out to Twitter) or to create a sharing
+    // intent (so that the user can share the image with another app on their device).
+    private String saveToPath;
 
-    Boolean readingImage = false;
-    PImage currentFrame;
+    /*-------------------------------------- Google Street View Images ---------------------------*/
+    // Creating a variable to store the API keys required for accessing the Google Street View Image API,
+    // and the Google Geocoding API. Setting the key to be equal to our Google Developer browers developer key.
+    private String googleBrowserApiKey = "AIzaSyB1t0zfCZYiYe_xXJQhkILcXnfxrnUdUyA";
 
-    /*-------------------------------------- Google Street View Images ------------------------------------------------*/
-    String searchAddress;
-    String compiledSearchAddress;
-    String googleImageLatLng;
-    float googleImagePitch;
-    float googleImageHeading;
-    String currentLocationName = "";
+    // Creating a String variable, to store the input value of the text box on the SearchScreen
+    private String searchAddress;
 
-    // Declaring the currentLocationImage variable, which will be set within the FavouriteTab's showFavourite()
-    // method. For the moment, we will be initialising this variable to a random location in the setup() method
-    // of the main sketch, so that the user will always be able to see a location in the background, even if they
-    // don't go through the favourites menu of the app
-    PImage currentLocationImage = null;
+    // Creating a string to store the searchAddress (as defined above) in the format required to add it
+    // as a parameter to the request URL for the Google Geocoding API, which allows us to search for an address
+    // and receive an XML response containing the relevant location details (latitude, longitude etc) so that
+    // we can then use these to request a new image from the Google Street View Image API
+    private String compiledSearchAddress;
 
-    /*-------------------------------------- Ketai Sensor ------------------------------------------------*/
+    // Creating the global googleImage variables, which will be used to generate the request
+    // URLs for the Google Geocoding API and the Google Street View Image API. Each location
+    // has a latLng attribute, which represents the latitude and longitude of the location,
+    // a heading attribute which represents the left/right positioning of the view (between
+    // 0 and 360) and a pitch attribute which represents the up/down angle of the view
+    // (between -90 and 90).
+    // In the original Google Street View URL (from the browser) i.e. the Colosseum
+    // url was https://www.google.ie/maps/@41.8902646,12.4905161,3a,75y,90.81h,95.88t/
+    // data=!3m6!1e1!3m4!1sR8bILL5qdsO7_m5BHNdSvQ!2e0!7i13312!8i6656!6m1!1e1
+    // the first two numbers after the @ represent the latitude and longitude, the number
+    // with the h after it represents the heading, and the number with the t after it
+    // seems to be to do with the pitch, but never works that way in this
+    // method so I just decided the pitch value based on what looks good
+    public String currentLocationName = "";
+    public String googleImageLatLng;
+    public float googleImagePitch;
+    public float googleImageHeading;
 
-    KetaiSensor sensor;
-    Boolean shakeMovementOn = false;
-    Boolean orientationDetect = true;
+    // Declaring the currentLocationImage variable, which will be initialised by loading in an image
+    // from a request to the Google Street View Image API, using the location data held in the variables
+    // above. It is then used on the CameraLiveViewScreen as an image below of the keyed image of the
+    // user (currentImage), and eventually is added to the compiled image to create the final image the user
+    // will save/send to Twitter
+    public PImage currentLocationImage = null;
 
-    /*-------------------------------------- Built In Functions ------------------------------------------------*/
+
+    /*-------------------------------------- Settings() ------------------------------------------*/
+    // Overriding the Processing settings() method
     @Override
     public void settings() {
-    /*-------------------------------------- Global ------------------------------------------------*/
-
-        // PC TESTING SETTINGS
-        // Setting the size of the sketch (for testing purposes only, will eventually be dynamic)
-        //size(360, 640);
-
-        // ANDROID TESTING SETTINGS
+        // Setting the size of this sketch to be fullscreen, so that it will be responsive to the size
+        // of the device it is running on
         fullScreen();
 
         // Locking the applications orientation to portrait, so that the image being read in from the
@@ -259,18 +352,29 @@ public class Sketch extends PApplet {
         // Initialising the appWidth and appHeight variable with the width and height of the device's
         // display, so that these values can be reused throughout all classes (i.e. to calculate
         // more dynamic position/width/height's so that the interface responds to different
-        // screen sizes (for testing purposes, I am currently setting these to the width and height
-        // of the sketch as the display size of my computer screen gets called when using displayWidth
-        // and displayHeight
+        // screen sizes
         appWidth = width;
         appHeight = height;
     }
 
+    /*-------------------------------------- Setup() ---------------------------------------------*/
+    // Overriding the Processing setup() method
     @Override
-    public void setup(){
+    public void setup() {
         println("Main Sketch is being reset");
-    /*-------------------------------------- Ketai ------------------------------------------------*/
+        /*---------------------------------- XML Data --------------------------------------------*/
+        // Initialising the array of random locations based on the random location XML file in the
+        // assets folder. Storing these in a separate XML file to the user preferences, so that
+        // even if a user deletes all of their favourite locations, there will still be random
+        // locations available to them.
+        randomLocations = loadXML("random_locations.xml").getChildren("location");
 
+        // Loading in the user's preferences by calling this class's loadUserPreferencesXML() method, as this
+        // process will need to be completed multiple times later on in the app (i.e. to save/delete favourite
+        // locations, update settings such as autosave mode etc.
+        loadUserPreferencesXML();
+
+        /*---------------------------------- Ketai Camera ----------------------------------------*/
         // Calling the ketaiCamera constructor to initialise the camera with the same
         // width/height of the device, with a frame rate of 24.
         ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
@@ -278,95 +382,126 @@ public class Sketch extends PApplet {
         // Printing out the list of available cameras i.e. front/rear facing
         println(ketaiCamera.list());
 
-        // Printing out the number of availabe cameras
-        println("There is " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
+        // Printing out the number of available cameras
+        println("There are " + ketaiCamera.getNumberOfCameras() + " camera/s available on this device");
 
-        // Check if the device has more than one camera i.e. does it have a front
-        // and a rear facing camera?
-
-        if (ketaiCamera.getNumberOfCameras() > 1)
-        {
+        // Checking if the device has more than one camera i.e. does it have a front and a rear facing camera?
+        if (ketaiCamera.getNumberOfCameras() > 1) {
             // If there is more than one camera, then default to the front camera
-            // (which as far as I can tell tends to be at index 1)
+            // (which exists at index 1, when there is more than 1 camera)
             camNum = 1;
-        } else
-        {
-            // If there is only one camera, then default to the rear camera
-            // (which as far as I can tell tends to be at index 0)
+        } else {
+            // If there is only one camera, then default to that camera
+            // (which exists at index 0)
             camNum = 0;
         }
 
         // Setting the camera to default to the front camera
         ketaiCamera.setCameraID(camNum);
 
-    /*---------------------------------- User Preferences XML ---------------------------------------*/
-        loadUserPreferencesXML();
+        /*----------------------------------- Ketai Sensor ---------------------------------------*/
+        // Initialising the Ketai Sensor, passing in an instance of the PApplet, so that we can access
+        // the device's sensors
+        sensor = new KetaiSensor(this);
 
-    /*-------------------------------------- Images ------------------------------------------------*/
+        // Enabling the accelerometer of the device, so that we can use it to detect the device orientation
+        // and to allow the user to "look up and down" in the CameraLiveViewScreen
+        sensor.enableAccelerometer();
 
-        // Loading in the icon images, so that they can be accessed globally by all the screen classes. The
-        // reason for loading these in the main sketch is that they only have to be loaded once, even if they are
-        // reused on multiple pages
-        randomPageIconImage = loadImage("randomPageIconImage.png");
-        searchPageIconImage = loadImage("searchPageIconImage.png");
-        aboutPageIconImage = loadImage("aboutPageIconImage.png");
-        favouritesPageIconImage = loadImage("favouritesPageIconImage.png");
-        settingsPageIconImage = loadImage("settingsPageIconImage.png");
-        homeIconImage = loadImage("homeIconImage.png");
-        homeIconImageWhite = loadImage("homeIconWhiteImage.png");
-        favIconImage = loadImage("favIconNoImage.png");
-        shakeIconImage = loadImage("shakeIconImage.png");
-        shutterIconImage = loadImage("shutterIconImage.png");
-        switchViewIconImage = loadImage("switchViewIconImage.png");
-        retryIconImage = loadImage("retryIconImage.png");
-        saveIconImage = loadImage("saveIconImage.png");
-        disgardIconImage = loadImage("disgardIconImage.png");
-        keepIconImage = loadImage("keepIconImage.png");
-        cancelIconImage = loadImage("cancelIconImage.png");
-        facebookAccountIconImage = loadImage("facebookAccountIconImage.png");
-        twitterAccountIconImage = loadImage("twitterAccountIconImage.png");
-        instagramAccountIconImage = loadImage("instagramAccountIconImage.png");
-        buttonImage = loadImage("buttonImage.png");
+        // Starting the sensors that have been enabled (i.e. the accelerometer) so that the relevant
+        // events will be triggered e.g. onAccelerometerEvent()
+        sensor.start();
+
+        /*----------------------------------- Twitter --------------------------------------------*/
+        // Checking if the user has logged in to the app using their Twitter account, by accessing
+        // the twitterLoggedIn static variable of the TwitterLoginActivity class
+        if (TwitterLoginActivity.twitterLoggedIn) {
+
+            // If a user is logged in to Twitter, then senToTwitterOn will be changed to true. If they
+            // then decided to disable/enable sending to Twitter for individual images (in SaveShareScreenA)
+            // then this boolean will toggle on/off.
+            sendToTwitterOn = true;
+
+            // Setting the Twitter OAuth Consumer keys to our applications credentials, as sourced from
+            // our Twitter developer account
+            cb.setOAuthConsumerKey(twitterOAuthConsumerKey);
+            cb.setOAuthConsumerSecret(twitterOAuthConsumerSecret);
+
+            // Setting the oAuth Access tokens to be equal to those supplied by the user when they logged
+            // into Twitter in the TwitterLoginActivity
+            cb.setOAuthAccessToken(twitterOAuthAccessToken);
+            cb.setOAuthAccessTokenSecret(twitterOAuthAccessTokenSecret);
+
+            // Initialising a new instance of the Twitter class, by passing the configuration builder,
+            // which has been set up with the relevant API keys, to the TwitterFactory class. We
+            // will then use the twitter instance to update the user's status i.e. send tweets on the user's
+            // account (if they are logged in with Twitter)
+            twitter = new TwitterFactory(cb.build()).getInstance();
+        }
+
+        /*----------------------------------- Images ---------------------------------------------*/
+
+        // Loading in the general background image, which will be used to "wipe" the screen each time the
+        // switchScreens method is called. The purpose of this is that individual screens do not need to contain
+        // their own backgrounds, and thus reduces the load on memory.
         generalPageBackgroundImage = loadImage("generalPageBackgroundImage.png");
-        toggleSwitchOnIconImage = loadImage("toggleSwitchOnIconImage.png");
-        toggleSwitchOffIconImage = loadImage("toggleSwitchOffIconImage.png");
-        overlayImage = loadImage("overlay.png");
-        sharingScreenImage = loadImage("sharingScreenImage.png");
-        searchingImage = loadImage("searchingImage.png");
-        shareImageToDeviceAppsImage = loadImage("shareIconImage.png");
-        returnCameraLiveViewIcon = loadImage("returnCameraLiveViewIcon.png");
 
-    /*-------------------------------------- Sizing ------------------------------------------------*/
+        // Initialising the currentImage to be equal to a plain black image. This is so that if the
+        // currentImage get's referred to before the camera has started, it will just contain a plain
+        // black screen. Creating this black image by using createImage to make it the full size
+        // of the screen, and then setting each pixel in the image to black. This image will be
+        // used to return the keyed image of the user from the removeGreenScreen() thread.
+        // It is then used on the CameraLiveViewScreen as an image ontop of the Google Street View
+        // image, and eventually is added to the compiled image to create the final image the user
+        // will save/send to Twitter
+        currentImage = createImage(appWidth, appHeight, RGB);
+        currentImage.loadPixels();
+        for (int i = 0; i < currentImage.pixels.length; i++) {
+            // Setting every pixel of the image to be black
+            currentImage.pixels[i] = color(0);
+        }
+        currentImage.updatePixels();
 
+        /*---------------------------------- Sizing ----------------------------------------------*/
         // Initialising the icon positioning X and Y variables, which will be used globally to ensure that
         // the icons on each page all line up with one another. These measurements are all based on percentages
-        // of the app's display width and height (as defined above
-        iconLeftX = (float)(appWidth * 0.15);
-        iconRightX = (float)(appWidth * 0.85);
-        iconCenterX = (float)(appWidth * 0.5);
-        iconTopY = (float)(appHeight * 0.085);
-        iconBottomY = (float)(appHeight * 0.87);
-        iconCenterY = (float)(appHeight * 0.5);
-        largeIconSize = (float)(appWidth * 0.25);
-        smallIconSize = (float)(appWidth * 0.15);
-        homeIconSize = (float)(largeIconSize * 1.3);
-        largeIconBottomY = iconBottomY - (largeIconSize/2);
+        // of the app's display width and height (as defined above)
+        iconLeftX = (float) (appWidth * 0.15);
+        iconRightX = (float) (appWidth * 0.85);
+        iconCenterX = (float) (appWidth * 0.5);
+        iconTopY = (float) (appHeight * 0.085);
+        iconBottomY = (float) (appHeight * 0.87);
+        iconCenterY = (float) (appHeight * 0.5);
+        largeIconBottomY = iconBottomY - (largeIconSize / 2);
         screenTitleY = iconTopY;
 
-        // Initialising the defaultTextSize to be equal to a percentage of the app's current height
-        defaultTextSize = (float)(appHeight * 0.035);
+        // Declaring the icon sizing variables, which will be used globally to ensure that there will be
+        // consistency between the sizes of icons throughout the app. These measurements will all be based on
+        // percentages of the app's display, and are initialised in the setup function of this sketch
+        largeIconSize = (float) (appWidth * 0.25);
+        smallIconSize = (float) (appWidth * 0.15);
+        homeIconSize = (float) (largeIconSize * 1.3);
 
-    /*-------------------------------------- Screens ------------------------------------------------*/
-        // Creating the screens which will be used in this application. Setting a random background
-        // colour for each of these screens so that transitions between them can be more obvious
-        // (for testing purposes only). Note - setting a background color is optional. Depending on the
-        // screen's constructor, you can pass in a background color, a background image, or nothing at
-        // all if you want to default to white
+        // Declaring the default text size variables, so that there will be consistency with the sizing
+        // of all text within the app
+        defaultTextSize = (float) (appHeight * 0.035);
+        screenTitleTextSize = (float) (appHeight * 0.07);
+
+        /*---------------------------------- Screens ---------------------------------------------*/
+        // Declaring a new instance of each screen in the application, so that they can be accessed by the
+        // draw function to be displayed when needed. The FavouritesScreen and the AboutScreen have been
+        // declared as public, as they will need to be accessed from the HomeScreen class, to reset
+        // their "loaded" boolean to false, so the scrolling of the screens can be reset before the user
+        // views them again. Passing the current instance of the Sketch class (this) to the constructors
+        // of each screen, so that they can in turn pass it to their super class (Screen), which will
+        // in turn pass it to it's super class (Rectangle). The purpose of this variable is so that
+        // we can access the Processing library, along with other global methods and variables of the
+        // main sketch class, from all other classes.
         myHomeScreen = new HomeScreen(this);
         myCameraLiveViewScreen = new CameraLiveViewScreen(this);
         myFavouritesScreen = new FavouritesScreen(this);
         mySettingsScreen = new SettingsScreen(this);
-        myAboutScreen = new AboutScreen (this);
+        myAboutScreen = new AboutScreen(this);
         mySearchScreen = new SearchScreen(this);
         mySearchUnsuccessfulScreen = new SearchUnsuccessfulScreen(this);
         myImagePreviewScreen = new ImagePreviewScreen(this);
@@ -378,141 +513,99 @@ public class Sketch extends PApplet {
         myShareSaveUnsuccessfulScreen = new ShareSaveUnsuccessfulScreen(this);
         mySearchingScreen = new SearchingScreen(this);
         mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this);
-        myLoadingScreen = new LoadingScreen(this, loadImage("loadingScreenImage.png"));
+        myLoadingScreen = new LoadingScreen(this);
 
-    /*-------------------------------------- Saving ------------------------------------------------*/
+        /*---------------------------------- Saving ----------------------------------------------*/
+        // Storing a string that tells the app where to store the images externally on the users device.
+        // Using the Environment class to determine the path to the external storage directory, as well
+        // as the Pictures directory, and then concatenating a name for a new directory ("WishIWasHere")
+        // so that images saved from our app will be stored in their own folder.
+        directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES + "/WishIWasHere/";
 
-        // Storing a string that tells the app where to store the images, by default
-        // it goes to the pictures folder and this string as it has WishIWasHereApp
-        // it is creating a folder in the picture folder of the device
-        directory = Environment.getExternalStorageDirectory() + "/" + Environment.DIRECTORY_PICTURES  + "/WishIWasHereApp/";
+        // Creating a new File object, using the directory path specified above
+        File wishIWasHereDirectory = new File(directory);
 
-        // Checking if the directory already exists. If not, then creating it.
-        File dir = new File(directory);
-        if(!dir.isDirectory()){
-            File newDir = new File(directory);
-            newDir.mkdirs();
+        // Checking if this directory already exists
+        if (wishIWasHereDirectory.isDirectory() == false) {
+            // Since the directory does not already exist, using the File mkdirs() method to create it
+            wishIWasHereDirectory.mkdirs();
             println("New directory created - " + directory);
         } else {
             println("Directory already exists");
         }
-
-        // Initialising the currentImage to be equal to a plain black image. This is so that if the
-        // currentImage get's referred to before the camera has started, it will just contain a plain
-        // black screen. Creating this black image by using createImage to make it the full size
-        // of the screen, and then setting each pixel in the image to black
-        currentImage = createImage(appWidth, appHeight, RGB);
-        currentImage.loadPixels();
-        for (int i = 0; i < currentImage.pixels.length; i++) {
-            currentImage.pixels[i] = color(0);
-        }
-        currentImage.updatePixels();
-
-        currentFrame = createImage(ketaiCamera.width, ketaiCamera.height, ARGB);
-
-    /*----------------------------------- Twitter Tweeting -----------------------------------------*/
-        //Setting up Twitter and informing twitter of the users credentials to our application can tweet
-        // from the users twitter account and access their account
-        cb.setOAuthConsumerKey(ourOAuthConsumerKey);
-        cb.setOAuthConsumerSecret(ourOAuthConsumerSecret);
-        cb.setOAuthAccessToken(ourOAuthAccessToken);
-        cb.setOAuthAccessTokenSecret(ourOAuthAccessTokenSecret);
-
-        twitter = new TwitterFactory(cb.build()).getInstance();
-
-    /*----------------------------------- Ketai Sensor -----------------------------------------*/
-        sensor = new KetaiSensor(this);
-        sensor.enableAccelerometer();
-        sensor.start();
     }
 
+    /*-------------------------------------- Draw() ----------------------------------------------*/
+    // Overriding the Processing draw() method
     @Override
     public void draw() {
+        // Clearing the background of the sketch by setting it to black
         background(0);
 
-        // Calling the monitorScreens() function to display the right screen by calling
-        // the showScreen() method. This function then calls the super class's drawScreen()
-        // method, which not only adds the icons and backgrounds to the screen, it also
-        // asks the icons on the screen to call their checkMouseOver() method (inherited from
-        // the Icon class) to see if they were clicked on when a mouse event occurs
+        // Calling the switchScreens() function to display the right screen by checking the
+        // currentScreen variable and calling the showScreen() method on the appropriate screen.
+        // The showScreen() method then calls the super class's (Screen) drawScreen() method,
+        // which adds the icons and backgrounds to the screen. As each icon is displayed on each
+        // call to it's showIcon() method, if a click occurs, it uses the checkMouseOver() method
+        // it has inherited from the ClickableElement class, to see if the mouse was over it when
+        // the click took place
         switchScreens();
 
-        // Checking if any screen's icons are trying to trigger any functions
-        if (callFunction.equals("")) {
-            // No function needs to be called
-        } else if (callFunction.equals("_keepImage")) {
-            keepImage();
-        } else if (callFunction.equals("_switchCameraView")) {
-            myCameraLiveViewScreen.switchCameraView();
-        } else if (callFunction.equals("_addToFavourites")) {
-            thread("addToFavourites");
-        } else if (callFunction.equals("_switchLearningMode")) {
-            switchLearningMode();
-        } else if (callFunction.equals("_switchAutoSave")) {
-            switchAutoSave();
-        } else if (callFunction.equals("_sendTweet")) {
-            sendTweet();
-        } else if (callFunction.equals("_mergeImages")) {
-            mergeImages();
-        } else if (callFunction.equals("_disgardImage")) {
-            disgardImage();
-        } else if (callFunction.equals("_searchForLocation")) {
-            searchForLocation();
-        } else if (callFunction.equals("_getRandomLocation")) {
-            getRandomLocation();
-        } else if (callFunction.equals("_checkTwitterLogin")) {
-            checkTwitterLogin();
-        } else if(callFunction.equals("_switchShakeMovement")){
-            switchShakeMovement();
-        } else if(callFunction.equals("_shareImageToDeviceApps")) {
-            shareImageToDeviceApps();
-        } else {
-            println(callFunction + " - This function does not exist / cannot be triggered by this icon");
-        }
+        // Calling the checkFunctionCalls() method, to check if an icon in the sketch has requested
+        // a function to be called. It does this by checking the callFunciton variable, and calling
+        // the appropriate function if necessary.
+        checkFunctionCalls();
 
-        // Checking if the keyboard is required i.e. if an input field is currently in focus
+        // Checking if the keyboard is required i.e. if a TextInput is currently in focus
         if (keyboardRequired) {
             KetaiKeyboard.show(this);
-            callFunction = "";
         } else {
             KetaiKeyboard.hide(this);
-            callFunction = "";
+        }
+
+        // Turning the camera on and off (if the current screen is the CameraLiveViewScreen and the
+        // camera is not yet turned on, then start the camera, otherwise, if you are on any other screen,
+        // stop the camera
+        if (currentScreen.equals("CameraLiveViewScreen")) {
+            if (!ketaiCamera.isStarted()) {
+                ketaiCamera.start();
+                println("CAM - Starting Ketai Camera");
+            }
         }
 
         // Forcing the onCameraPreviewEvent() to be called, as ketaiCamera does not seem to be
         // calling it implicitly (as it would have done in Processing).
-        if(currentScreen.equals("CameraLiveViewScreen") && imageMerging == false){
-            println("CAM - Calling onCameraPreviewEvent");
+        if (currentScreen.equals("CameraLiveViewScreen") && imageMerging == false) {
             onCameraPreviewEvent();
-        } else {
-            println("CAM - Not on camera live view screen and imageMerging is currently true");
         }
     }
 
+    /*-------------------------------------- mousePressed() --------------------------------------*/
+    // Overriding the Processing mousePressed() method
     @Override
     public void mousePressed() {
-        keyboardRequired = false;
-        previousMouseY = mouseY;
-        previousMouseX = mouseX;
-    }
-
-    @Override
-    public void mouseReleased(){
+        // Setting mouseClicked to true, so that clicks can be dealt with separate to scrolling events
         mouseClicked = true;
+
+        // Resetting keyboardRequired to false, so that the device's keyboard will be hidden (so that
+        // users can click anywhere on the screen to hide the keyboard
+        keyboardRequired = false;
     }
 
+    /*-------------------------------------- keyPressed() ----------------------------------------*/
+    // Overriding the Processing keyPressed() method
     @Override
     public void keyPressed() {
+
         // Getting the current input value of this text input (i.e. so that if a user clicks between different
-        // text fields, they can resume their input instead of the textfield becoming empty)
+        // text fields, they can resume their input instead of the TextInput becoming empty)
         currentTextInputValue = currentTextInput.getInputValue();
 
         // Checking if the key pressed is a coded value i.e. backspace etc
         if (key == CODED) {
             //println(key);
             // Checking if the key pressed was the backspace key
-            if (keyCode == 67)
-            {
+            if (keyCode == 67) {
                 // Checking that the length of the current currentTextInputValue string is greater than 0 (i.e.
                 // if the string is empty, don't try to delete anything)
                 if (currentTextInputValue.length() > 0) {
@@ -523,82 +616,151 @@ public class Sketch extends PApplet {
                 }
             }
         } else {
-            if(currentTextInputValue.length() < currentTextInput.getMaxTextLength() - 1){
-                // If the key is not a coded value, adding the character to currentTextInputValue string
+            // This is a character key
+            // Checking if the current length of the text in this TextInput exceeds it's maximum character length,
+            // i.e. if this is the TextInput for adding a message to a tweet, then the maximum length will be set
+            // to ensure that a user cannot exceed this
+            if (currentTextInputValue.length() < currentTextInput.getMaxTextLength() - 1) {
+                // Adding the character to currentTextInputValue string
                 currentTextInputValue += key;
-            }else{
+            } else {
                 println("This text is too long");
             }
 
         }
+
         // Passing the currentTextInputValue string into the setInputValue of the currentTextInput field
         currentTextInput.setInputValue(currentTextInputValue);
     }
 
-    /*-------------------------------------- Ketai Functions ------------------------------------------------*/
+    /*-------------------------------------- Ketai Camera ----------------------------------------*/
+    // Normally, this method would be implicitly called by the Ketai library, to alert the sketch
+    // of the availability of a new frame. For some reason, this is not happening in Android Studio,
+    // so instead explicitly calling this method from the draw() method in this class, only if we are
+    // on the CameraLiveViewScreen.
+    public void onCameraPreviewEvent() {
+        //println("CAM - New frame available " + this.readingImage);
 
-    // ketaiCamera event which is automatically called everytime a new frame becomes
-    // available from the ketaiCamera.
-    public void onCameraPreviewEvent()
-    {
-        println("CAM - New frame available " + this.readingImage);
+        // Checking if the Sketch is currently reading in and keying an image (as we only want to handle
+        // one image at a time to avoid memory overload
         if (this.readingImage == false) {
-            // Reading in a new frame from the ketaiCamera.
-            println("CAM - New frame about to be read");
-            this.readingImage = true;
-            ketaiCamera.read();
+            // Reading in a new frame from the ketaiCamera object
+            //println("CAM - New frame about to be read");
 
-            thread("previewGreenScreen");
+            // Setting the readingImage variable to true so that no more images can be read in until
+            // this one has been completed
+            this.readingImage = true;
+
+            // Adding a try/catch statement around the following, as loading in the image from the Ketai
+            // camera, and then calling the removeGreenScreen thread, tends to cause a crash on it's first
+            // attempt (because of the spike in memory, an out of memory error occurs). Once the first
+            // frame has been keyed successfully, this no longer seems to occur, as the app will have
+            // been allocated more memory.
+            try {
+                // Reading in the newest frame from the Ketai Camera
+                ketaiCamera.read();
+
+                // Getting the current image from the Ketai Camera and storing it in the currentFrame
+                // variable, so that it can be read from within the removeGreenScreen thread. The purpose
+                // of using this variable, instead of accessing the image directly from the Ketai Camera
+                // in the removeGreenScreen thread, is that accessing the pixel array of the camera seems
+                // to produce unexpected results i.e. distortions in the image
+                currentFrame = ketaiCamera.get();
+
+                // Calling the removeGreenScreen thread, to remove the green background from the current
+                // frame of Ketai Camera, and pass it back to the sketch by setting currentImage to be
+                // equal to it's contents
+                thread("removeGreenScreen");
+
+            } catch (OutOfMemoryError e) {
+                println("Unable to initiate the removeGreenScreen thread - " + e);
+
+                // Resetting the readingImage variable to false, so that even if this frame was unsuccessful
+                // in being keyed, the app can continue to try and read in more frames
+                readingImage = false;
+            }
         }
     }
 
-    public void onAccelerometerEvent(float accelerometerX, float accelerometerY, float accelerometerZ){
+    /*-------------------------------------- Ketai Sensor ----------------------------------------*/
+    // This event is implicitly called by the Ketai library every time an accelerometer event occurs
+    // i.e. every time the device moves
+    public void onAccelerometerEvent(float accelerometerX, float accelerometerY, float accelerometerZ) {
+
+        // Checking if we are currently on the CameraLiveViewScreen, as we are not using the accelerometer
+        // information on any other screen
         if (currentScreen.equals("CameraLiveViewScreen")) {
+
+            // Checking if shakeMovementOn is true i.e. has the user clicked the shakeMovementIcon, so that
+            // they can now move their device to "look up and down" within the location they are currently
+            // in
             if (shakeMovementOn) {
+
+                // Using modulus to slow down how often the following code is called (i.e. it will currently
+                // be called on every 4th frame)
                 if (frameCount % 4 == 0) {
-                    println("The value of X is " + (accelerometerX));
+
+                    // Setting the image pitch to be equal to the accelerometerZ value, mapped from a range
+                    // of 10 to -10, to a larger range of -90 to 90, as these are the maximum allowed values
+                    // for the pitch of a Google Street View Image
                     googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
+
+                    // Calling the loadGoogleImage() method in a thread, to load in a new version of the
+                    // current location's image, with the pitch altered to reflect the new value assigned
+                    // above
                     thread("loadGoogleImage");
                 }
             }
+
+            // Creating a temporary array for the screen icons which belong
+            // to the camera live view screen
             Icon[] alteredIcons = myCameraLiveViewScreen.getScreenIcons();
+
+            // Looping through the temporary array, to access each of the icons
             for (int i = 0; i < alteredIcons.length; i++) {
-                //println(i);
+                // Determining the orientation of the device based on the value
+                // of it's accelerometer on the X axis
                 if (accelerometerX > 7) {
-                    //println("Device is being turned to the left");
+                    // The device is being turned to the left
+                    // Setting the rotation of the icons to be 90 degrees
                     alteredIcons[i].setRotation(90);
-                }else if (accelerometerX < -7) {
-                    //println("Device is being turned to the right");
+                } else if (accelerometerX < -7) {
+                    // The device is being turned to the right
+                    // Setting the rotation of the icons to be -90 degrees
                     alteredIcons[i].setRotation(-90);
-                }else {
-                    //println("Device standing straight");
+                } else {
+                    // The device is standing straight up
+                    // Setting the rotation of the icons to be 0 degrees
                     alteredIcons[i].setRotation(0);
                 }
-
             }
-        }else {
+        } else {
+            // Since we are not currently on the CameraLiveViewScreen, resetting the shakeMovementOn
+            // variable to false
             shakeMovementOn = false;
         }
     }
 
-    /*-------------------------------------- Custom Functions ------------------------------------------------*/
+    /*-------------------------------------- SwitchScreens() -------------------------------------*/
     public void switchScreens() {
+        // Adding the general background image. The purpose of this is that individual screens do not
+        // need to contain their own backgrounds, and thus reduces the load on memory.
         image(generalPageBackgroundImage, appWidth / 2, appHeight / 2, appWidth, appHeight);
 
         // Checking if the String that is stored in the currentScreen variable
-        // (which gets set in the Icon class when an icon is clicked on) is
+        // (which gets set in the ClickableElement class when an icon is clicked on) is
         // equal to a series of class Names (i.e. HomeScreen), and if it is, then show that screen.
         // The showScreen() method of the current screen needs to be called repeatedly,
-        // as this is where additonal funcitonality (such as checking of icons being
-        // clicked on etc) are called. Note - Each sub class of the Screen class
-        // MUST have a showScreen() method (even if this method is only used to call
-        // it's super class's (Screen) drawScreen() method
+        // as this is where additional functionality (such as checking of icons being
+        // clicked on etc) are called.
         if (currentScreen.equals("HomeScreen")) {
             myHomeScreen.showScreen();
         } else if (currentScreen.equals("CameraLiveViewScreen")) {
-            finalKeying = false;
+            // Resetting imageSaved, imageShared and compiledImage, in case they have not already
+            // been reset
             imageSaved = false;
             imageShared = false;
+            compiledImage = null;
             myCameraLiveViewScreen.showScreen();
         } else if (currentScreen.equals("FavouritesScreen")) {
             myFavouritesScreen.showScreen();
@@ -611,7 +773,6 @@ public class Sketch extends PApplet {
             mySearchScreen.showScreen();
         } else if (currentScreen.equals("SearchUnsuccessfulScreen")) {
             mySearchUnsuccessfulScreen.showScreen();
-            testingTimeoutScreen("SearchUnsuccessfulScreen");
         } else if (currentScreen.equals("ImagePreviewScreen")) {
             myImagePreviewScreen.showScreen();
         } else if (currentScreen.equals("SaveShareScreenA")) {
@@ -623,7 +784,6 @@ public class Sketch extends PApplet {
             mySharingScreen.showScreen();
         } else if (currentScreen.equals("ShareSaveSuccessfulScreen")) {
             myShareSaveSuccessfulScreen.showScreen();
-            testingTimeoutScreen("CameraLiveViewScreen");
         } else if (currentScreen.equals("ShareUnsuccessfulScreen")) {
             myShareUnsuccessfulScreen.showScreen();
         } else if (currentScreen.equals("ShareSaveUnsuccessfulScreen")) {
@@ -634,72 +794,123 @@ public class Sketch extends PApplet {
             mySocialMediaLogoutScreen.showScreen();
         } else if (currentScreen.equals("LoadingScreen")) {
             myLoadingScreen.showScreen();
-            testingTimeoutScreen("HomeScreen");
+            // Calling the fadeToScreen method, so that if a click occurs while on this screen, the
+            // user will be taken to the "HomeScreen"
+            fadeToScreen("HomeScreen");
         } else {
             println("This screen doesn't exist");
-            //currentScreen = "HomeScreen";
-        }
-
-
-        // Turning the camera on and off (if the current screen
-        // is the camera live view, and the camera is  not yet turned
-        // on, then start the camera, otherwise, if you are on any other screen,
-        // stop the camera
-        if (currentScreen.equals("CameraLiveViewScreen")) {
-            if (!ketaiCamera.isStarted()) {
-                ketaiCamera.start();
-                println("CAM - Starting Ketai Camera");
-            }
-            imageMerging = false;
-        } else if (ketaiCamera.isStarted()) {
-            imageMerging = true;
         }
     }
 
-    public void keepImage() {
+    /*-------------------------------------- CheckFunctionCalls() --------------------------------*/
+    public void checkFunctionCalls() {
+        // Checking if any screen's icons are trying to trigger any functions
+        if (callFunction.equals("")) {
+            // No function needs to be called
+        } else if (callFunction.equals("_keepImage")) {
+            keepImage();
+        } else if (callFunction.equals("_toggleSavingOfCurrentImage")) {
+            toggleSavingOfCurrentImage();
+        } else if (callFunction.equals("_switchSendToTwitter")) {
+            switchSendToTwitter();
+        } else if (callFunction.equals("_switchCameraView")) {
+            myCameraLiveViewScreen.switchCameraView();
+        } else if (callFunction.equals("_addToFavourites")) {
+            thread("addToFavourites");
+        } else if (callFunction.equals("_switchLearningMode")) {
+            switchLearningMode();
+        } else if (callFunction.equals("_switchAutoSaveMode")) {
+            switchAutoSaveMode();
+        } else if (callFunction.equals("_sendTweet")) {
+            sendTweet();
+        } else if (callFunction.equals("_mergeImages")) {
+            mergeImages();
+        } else if (callFunction.equals("_disgardImage")) {
+            disgardImage();
+        } else if (callFunction.equals("_searchForLocation")) {
+            searchForLocation();
+        } else if (callFunction.equals("_getRandomLocation")) {
+            getRandomLocation();
+        } else if (callFunction.equals("_checkTwitterLogin")) {
+            checkTwitterLogin();
+        } else if (callFunction.equals("_switchShakeMovement")) {
+            switchShakeMovement();
+        } else if (callFunction.equals("_shareImageToDeviceApps")) {
+            shareImageToDeviceApps();
+        } else {
+            println(callFunction + " - This function does not exist / cannot be triggered by this icon");
+        }
+
+        // Resetting the callFunction variable so that functions do not get called repeatedly
         callFunction = "";
-        if(autoSaveModeOn) {
-            // Checking if Storage is available
+    }
+
+    /*-------------------------------------- KeepImage() -----------------------------------------*/
+    public void keepImage() {
+        // Checking if the saveThisImageOn boolean is true. If a user has autoSaveModeOn turned on,
+        // then saveThisImageOn will also be set to true. If a user then wants to turn off saving for
+        // an individual image, they can toggle this functionality on/off in SaveShareScreenA, while
+        // not affecting their overall autoSaveModeOn setting. Images will only ever save to the device
+        // when saveThisImageOn is set to true, regardless of whether autosaveMode is on or off (to
+        // allow the user to make individual choices for each image).
+        if (saveThisImageOn) {
+
+            println("KEEP IMAGE - This image was saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
+
+            // Checking if Storage is available. This method will return a boolean value, to
+            // indicate whether external storage is mounted and writable
             if (isExternalStorageWritable()) {
+
+                // Saving the image to the photo gallery of the user's device, using the saveImageToPhotoGallery
+                // method. This method returns a boolean value, to indicate whether the image was saved
+                // successfully or not
                 if (saveImageToPhotoGallery()) {
-                    currentScreen = "SaveShareScreenA";
+
+                    // Determining which screen to redirect the user to, based on whether they also want
+                    // to send this image to Twitter or not. If a user is logged in to Twitter, then
+                    // sendToTwitterOn will be changed to true. If they then decided to disable/enable
+                    // sending to Twitter for individual images (in SaveShareScreenA) then this boolean
+                    // will toggle on/off. If the user is also sending the image to Twitter, then taking
+                    // them to SaveShareScreenB, so they can add a message to their tweet, otherwise
+                    // taking them to the ShareSaveSuccessfulScreen, where the imageShared and imageSaved
+                    // booleans will determine which tasks have been successfully completed, in order to
+                    // display the appropriate confirmation text on screen
+                    currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "ShareSaveSuccessfulScreen";
                 } else {
                     println("Failed to save image");
+
+                    // Determining which screen to redirect the user to, based on whether they also want
+                    // to send this image to Twitter or not. If a user is logged in to Twitter, then
+                    // sendToTwitterOn will be changed to true. If they then decided to disable/enable
+                    // sending to Twitter for individual images (in SaveShareScreenA) then this boolean
+                    // will toggle on/off. If the user is also sending the image to Twitter, then taking
+                    // them to SaveShareScreenB, so they can add a message to their tweet, otherwise
+                    // taking them to the ShareSaveUnsuccessfulScreen, where the imageShared and imageSaved
+                    // booleans will determine which tasks have been unsuccessfully completed, in order to
+                    // display the appropriate options on screen
+                    currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "ShareSaveUnsuccessfulScreen";
                 }
             }
         } else {
-            currentScreen = "SaveShareScreenA";
+
+
+            println("KEEP IMAGE - This image was not saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
+            // The user does not want to save the image
+            // Determining which screen to redirect the user to, based on whether they also want
+            // to send this image to Twitter or not. If a user is logged in to Twitter, then
+            // sendToTwitterOn will be changed to true. If they then decided to disable/enable
+            // sending to Twitter for individual images (in SaveShareScreenA) then this boolean
+            // will toggle on/off. If the user is sending the image to Twitter, then taking
+            // them to SaveShareScreenB, so they can add a message to their tweet, otherwise
+            // taking them back to the CameraLiveViewScreen, as they have decided not to save
+            // or share this image
+            currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "CameraLiveViewScreen";
         }
     }
 
-    public Boolean saveImageToPhotoGallery(){
-        Boolean successfull = false;
-        if (isExternalStorageWritable()) {
-            saveToPath = directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg";
-            // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
-            if (compiledImage.save(saveToPath)) {
-                println("Successfully saved image to - " + saveToPath);
-                successfull = true;
-                imageSaved = true;
-            } else {
-                println("Failed to save image");
-            }
-        }
-        return successfull;
-    }
-
-    public Boolean saveImageLocally(){
-        Boolean successfull = false;
-        if (compiledImage.save(sketchPath("twitterImage.jpg"))) {
-            println("Successfully saved image locally - " + sketchPath("twitterImage.jpg"));
-            successfull = true;
-        } else {
-            println("Failed to save image locally - " + sketchPath("twitterImage.jpg"));
-        }
-        return successfull;
-    }
-
+    /*-------------------------------------- IsExternalStorageWritable()--------------------------*/
     public Boolean isExternalStorageWritable() {
+        // Creating a local boolean, to store
         Boolean answer = false;
 
         // Creating a string to store the state of the external storage
@@ -718,30 +929,63 @@ public class Sketch extends PApplet {
         return answer;
     }
 
+    /*-------------------------------------- SaveImageToPhotoGallery() ---------------------------*/
+    public Boolean saveImageToPhotoGallery() {
+        Boolean successfull = false;
+        if (isExternalStorageWritable()) {
+            saveToPath = directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg";
+            // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
+            if (compiledImage.save(saveToPath)) {
+                println("Successfully saved image to - " + saveToPath);
+                successfull = true;
+                imageSaved = true;
+            } else {
+                println("Failed to save image");
+                imageSaved = true;
+            }
+        }
+        return successfull;
+    }
 
-    // TESTING PURPOSES ONLY - FOR SCREENS WITH NO INTERACTION
-    // eeded a way to clear it from the screen until the
-    // code that normally would clear it is added
-    public void testingTimeoutScreen(String fadeToScreen) {
-        if (mousePressed)
-        {
-            currentScreen = fadeToScreen;
+    /*-------------------------------------- SaveImageLocally() ----------------------------------*/
+    public Boolean saveImageLocally() {
+        Boolean successfull = false;
+        if (compiledImage.save(sketchPath("twitterImage.jpg"))) {
+            println("Successfully saved image locally - " + sketchPath("twitterImage.jpg"));
+            successfull = true;
+        } else {
+            println("Failed to save image locally - " + sketchPath("twitterImage.jpg"));
+        }
+        return successfull;
+    }
+
+    /*-------------------------------------- FadeToScreen() --------------------------------------*/
+    public void fadeToScreen(String nextScreen) {
+        if (mouseClicked) {
+            if (currentScreen.equals("LoadingScreen")) {
+                myLoadingScreen = null;
+            }
+            currentScreen = nextScreen;
             mousePressed = false;
             mouseClicked = false;
         }
     }
 
+    /*-------------------------------------- AddToFavourites() -----------------------------------*/
     public void addToFavourites() {
         callFunction = "";
+
+        Boolean favouriteLocation = false;
+
         int favLocationIndex = checkIfFavourite(currentLocationName);
 
-        if(favLocationIndex > -1){
-            for(int i = 0; i < favouriteLocationsData.length; i++){
-                if(favouriteLocationsData[i].getString("name").equals(currentLocationName)){
+        if (favLocationIndex > -1) {
+            for (int i = 0; i < favouriteLocationsData.length; i++) {
+                if (favouriteLocationsData[i].getString("name").equals(currentLocationName)) {
                     userPreferencesXML.removeChild(favouriteLocationsData[i]);
                     myFavouritesScreen.favTabs.remove(favLocationIndex);
-                    myCameraLiveViewScreen.favouriteLocation = false;
                     saveUserPreferencesXML();
+                    favouriteLocation = false;
                 }
             }
         } else {
@@ -752,43 +996,102 @@ public class Sketch extends PApplet {
             newChild.setString("pitch", String.valueOf(googleImagePitch));
             saveUserPreferencesXML();
 
-            FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng + "&heading=" + googleImageHeading + "&pitch=" + googleImagePitch, myFavouritesScreen.favTabs.size() - 1);
+            FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng, googleImageHeading, googleImagePitch);
             myFavouritesScreen.favTabs.add(newFavTab);
-            myCameraLiveViewScreen.favouriteLocation = true;
+            favouriteLocation = true;
         }
 
         checkFavIcon();
-        println("FAV - Favourite location " + currentLocationName + " is now: " + myCameraLiveViewScreen.favouriteLocation);
+        println("FAV - Favourite location " + currentLocationName + " is now " + favouriteLocation);
     }
 
+    /*-------------------------------------- SwitchLearningMode() --------------------------------*/
     public void switchLearningMode() {
         callFunction = "";
-        mySettingsScreen.learningModeOn = !mySettingsScreen.learningModeOn;
-        println("Learning mode is now: " + mySettingsScreen.learningModeOn);
-    }
+        learningModeOn = !learningModeOn;
 
-    public void switchAutoSave() {
-        callFunction = "";
-        autoSaveModeOn = !autoSaveModeOn;
-
-        for(int i = 0; i < settingsData.length; i++){
-            if(settingsData[i].getString("name").equals("autoSaveMode")){
-                settingsData[i].setString("turnedOn", autoSaveModeOn.toString());
+        for (int i = 0; i < settingsData.length; i++) {
+            if (settingsData[i].getString("name").equals("learningMode")) {
+                settingsData[i].setString("on", learningModeOn.toString());
                 saveUserPreferencesXML();
             }
+        }
+
+        if (learningModeOn) {
+            mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOnIconImage.png"));
+        } else {
+            mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
+        }
+
+        println("Learning mode is now: " + learningModeOn);
+    }
+
+    /*-------------------------------------- SwitchAutoSaveMode() --------------------------------*/
+    public void switchAutoSaveMode() {
+        callFunction = "";
+        autoSaveModeOn = !autoSaveModeOn;
+        saveThisImageOn = autoSaveModeOn;
+
+
+        for (int i = 0; i < settingsData.length; i++) {
+            if (settingsData[i].getString("name").equals("autoSaveMode")) {
+                settingsData[i].setString("on", autoSaveModeOn.toString());
+                saveUserPreferencesXML();
+            }
+        }
+
+        if (autoSaveModeOn) {
+            mySettingsScreen.autoSaveIcon.setImage(loadImage("toggleSwitchOnIconImage.png"));
+            mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOnImage.png"));
+        } else {
+            mySettingsScreen.autoSaveIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
+            mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOffImage.png"));
         }
 
         println("Auto-save is now: " + autoSaveModeOn);
     }
 
-    public void switchShakeMovement(){
-        shakeMovementOn = !shakeMovementOn;
+    /*-------------------------------------- ToggleSavingOfCurrentImage() ------------------------*/
+    public void toggleSavingOfCurrentImage() {
+        saveThisImageOn = !saveThisImageOn;
+
+        if (saveThisImageOn) {
+            mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOnImage.png"));
+        } else {
+            mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOffImage.png"));
+        }
     }
 
+    /*-------------------------------------- SwitchShakeMovement() -------------------------------*/
+    public void switchShakeMovement() {
+        shakeMovementOn = !shakeMovementOn;
+        if (shakeMovementOn) {
+            myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOnImage.png"));
+        } else {
+            myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOffImage.png"));
+        }
+    }
 
+    /*-------------------------------------- SwitchSentToTwitter() -------------------------------*/
+    public void switchSendToTwitter() {
+        if (TwitterLoginActivity.twitterLoggedIn) {
+            sendToTwitterOn = !sendToTwitterOn;
+
+            if (sendToTwitterOn) {
+                mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOnImage.png"));
+            } else {
+                mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOffImage.png"));
+            }
+
+        } else {
+            println("This user can not turn on Twitter, as they have not previously logged in with Twitter");
+        }
+    }
+
+    /*-------------------------------------- SendTweet() -----------------------------------------*/
     public void sendTweet() {
         callFunction = "";
-        if(TwitterLoginActivity.twitterLoggedIn) {
+        if (sendToTwitterOn) {
             currentScreen = "SharingScreen";
             mySharingScreen.showScreen();
 
@@ -825,7 +1128,7 @@ public class Sketch extends PApplet {
                 currentScreen = "ShareUnsuccessfulScreen";
             }
         } else {
-            if(this.imageShared == false && this.imageSaved == false){
+            if (this.imageShared == false && this.imageSaved == false) {
                 currentScreen = "CameraLiveViewScreen";
             } else {
                 currentScreen = "ShareSaveSuccessfulScreen";
@@ -834,18 +1137,19 @@ public class Sketch extends PApplet {
         }
     }
 
-    public void previewGreenScreen() {
+    /*-------------------------------------- RemoveGreenScreen() ---------------------------------*/
+    public void removeGreenScreen() {
+        PImage keyedImage;
+
         try {
             println("Starting removing Green Screen at frame " + frameCount);
-
-            currentFrame = ketaiCamera.get();
 
             // Changing the colour mode to HSB, so that I can work with the hue, satruation and
             // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
             // and brightness to 100.
             colorMode(HSB, 360, 100, 100);
 
-            PImage keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
+            keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
 
             keyedImage = currentFrame.get();
 
@@ -890,50 +1194,61 @@ public class Sketch extends PApplet {
 
             readingImage = false;
             println("Finished removing Green Screen at frame " + frameCount);
-        } catch(OutOfMemoryError e){
+        } catch (OutOfMemoryError e) {
             println("Green screen keying could not be completed - " + e);
+            keyedImage = null;
+            currentFrame = null;
             this.readingImage = false;
         }
     }
 
+    /*-------------------------------------- MergeImages() ---------------------------------------*/
     public void mergeImages() {
-        imageMerging = true;
-        currentFrame = null;
+        try {
+            PImage overlayImage = loadImage("overlay.png");
+            imageMerging = true;
 
-        PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
-        mergedImage.beginDraw();
-        mergedImage.imageMode(CENTER);
-        mergedImage.image(currentLocationImage, appWidth / 2, appHeight / 2, appWidth, appHeight);
-        mergedImage.endDraw();
+            PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
+            mergedImage.beginDraw();
+            mergedImage.imageMode(CENTER);
+            mergedImage.image(currentLocationImage, appWidth / 2, appHeight / 2, appWidth, appHeight);
+            mergedImage.endDraw();
 
-        mergedImage.beginDraw();
-        mergedImage.pushMatrix();
-        mergedImage.translate(appWidth / 2, appHeight / 2);
-        mergedImage.scale(cameraScale, 1);
-        mergedImage.rotate(radians(cameraRotation));
-        mergedImage.imageMode(CENTER);
-        mergedImage.image(currentImage, 0, 0, appHeight, appWidth);
-        mergedImage.popMatrix();
-        mergedImage.endDraw();
+            mergedImage.beginDraw();
+            mergedImage.pushMatrix();
+            mergedImage.translate(appWidth / 2, appHeight / 2);
+            mergedImage.scale(cameraScale, 1);
+            mergedImage.rotate(radians(cameraRotation));
+            mergedImage.imageMode(CENTER);
+            mergedImage.image(currentImage, 0, 0, appHeight, appWidth);
+            mergedImage.popMatrix();
+            mergedImage.endDraw();
 
-        mergedImage.beginDraw();
-        mergedImage.imageMode(CENTER);
-        mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float) (appHeight * 0.8), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
-        mergedImage.endDraw();
+            mergedImage.beginDraw();
+            mergedImage.imageMode(CENTER);
+            mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float) (appHeight - (appWidth * 0.22)), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
+            mergedImage.endDraw();
 
-        compiledImage = mergedImage.get();
-        mergedImage = null;
+            compiledImage = mergedImage.get();
+            mergedImage = null;
+            overlayImage = null;
 
-        currentScreen = "ImagePreviewScreen";
+            currentScreen = "ImagePreviewScreen";
+        } catch (OutOfMemoryError e) {
+            println("Could not save image - " + e);
+            currentScreen = "ShareSaveUnsuccessfulScreen";
+        }
         imageMerging = false;
         readingImage = false;
     }
 
+    /*-------------------------------------- DisgardImage() --------------------------------------*/
     public void disgardImage() {
         compiledImage = null;
         currentScreen = "CameraLiveViewScreen";
     }
 
+    /*-------------------------------------- SearchForLocation() ---------------------------------*/
     public void searchForLocation() {
         currentScreen = "SearchingScreen";
         switchScreens();
@@ -949,7 +1264,7 @@ public class Sketch extends PApplet {
 
         // Using the Google Maps Geocoding API to query the address the user has specified, and return the relevant XML containing
         // the location data of the place - https://developers.google.com/maps/documentation/geocoding/intro
-        XML locationXML = loadXML("https://maps.googleapis.com/maps/api/geocode/xml?address=" + compiledSearchAddress + "&key=" + ourBrowserApiKey);
+        XML locationXML = loadXML("https://maps.googleapis.com/maps/api/geocode/xml?address=" + compiledSearchAddress + "&key=" + googleBrowserApiKey);
 
         if (locationXML.getChild("status").getContent().equals("OK")) {
             String latitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lat").getContent();
@@ -965,27 +1280,32 @@ public class Sketch extends PApplet {
         }
     }
 
+    /*-------------------------------------- GetRandomLocation() ---------------------------------*/
     public void getRandomLocation() {
         currentScreen = "SearchingScreen";
         switchScreens();
 
         println("Getting a random location");
-        String randomLocationURLData = myFavouritesScreen.getRandomFavourite();
-        googleImageLatLng = randomLocationURLData.split("@")[1].split("&")[0];
-        googleImageHeading = Float.parseFloat(randomLocationURLData.split("heading=")[1].split("&")[0]);
-        googleImagePitch = Float.parseFloat(randomLocationURLData.split("pitch=")[1]);
 
-        currentLocationName = randomLocationURLData.split("@")[0];
+        int randomIndex = round(random(randomLocations.length - 1));
 
+        googleImageLatLng = randomLocations[randomIndex].getString("latLng");
+        googleImageHeading = Float.parseFloat(randomLocations[randomIndex].getString("heading"));
+        googleImagePitch = Float.parseFloat(randomLocations[randomIndex].getString("pitch"));
+
+        currentLocationName = randomLocations[randomIndex].getString("name");
+
+        println("Random location selected: " + currentLocationName);
         loadGoogleImage();
     }
 
+    /*-------------------------------------- LoadGoogleImage() -----------------------------------*/
     public void loadGoogleImage() {
         println("Loading in a new image from Google");
         println("LatLng = " + googleImageLatLng);
         println("Heading = " + googleImageHeading);
         println("Pitch = " + googleImagePitch);
-        currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + ourBrowserApiKey + "&size=" + appWidth / 2 + "x" + appHeight / 2);
+        currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + googleBrowserApiKey + "&size=" + appWidth / 2 + "x" + appHeight / 2);
         println("Image successfully loaded");
 
         checkFavIcon();
@@ -995,6 +1315,7 @@ public class Sketch extends PApplet {
         }
     }
 
+    /*-------------------------------------- CheckIfFavourite() ----------------------------------*/
     public int checkIfFavourite(String currentFavTitle) {
 
         println("FAV - Checking if " + currentFavTitle + " is a favourite location");
@@ -1003,7 +1324,7 @@ public class Sketch extends PApplet {
         ArrayList<FavouriteTab> favouriteTabs = myFavouritesScreen.getFavTabs();
 
         for (int i = 0; i < favouriteTabs.size(); i++) {
-            if (favouriteTabs.get(i).getFavTitle().equals(currentFavTitle)) {
+            if (favouriteTabs.get(i).getFavLocationName().equals(currentFavTitle)) {
                 favIndex = i;
             }
         }
@@ -1011,6 +1332,7 @@ public class Sketch extends PApplet {
         return favIndex;
     }
 
+    /*-------------------------------------- CheckFavIcon() --------------------------------------*/
     public void checkFavIcon() {
         println("FAV - Switching favicon image");
         if (checkIfFavourite(currentLocationName) > -1) {
@@ -1020,9 +1342,11 @@ public class Sketch extends PApplet {
         }
     }
 
-    public void checkTwitterLogin(){
+    /*-------------------------------------- CheckTwitterLogin() ---------------------------------*/
+    public void checkTwitterLogin() {
         println("Checking if Twitter logged in");
-        if(TwitterLoginActivity.twitterLoggedIn) {
+        if (TwitterLoginActivity.twitterLoggedIn) {
+            currentScreen = "SocialMediaLogoutScreen";
             println("Twitter already logged in");
             println("In SKETCH - Twitter username = " + TwitterLoginActivity.twitterUserUsername);
             println("In SKETCH - Twitter userid = " + TwitterLoginActivity.twitterUserUserId);
@@ -1031,9 +1355,10 @@ public class Sketch extends PApplet {
         }
     }
 
-    public void loadUserPreferencesXML(){
+    /*-------------------------------------- LoadUserPreferencesXML() ----------------------------*/
+    public void loadUserPreferencesXML() {
         File localUserPreferencesPath = new File(sketchPath("user_preferences.xml"));
-        if(localUserPreferencesPath.exists()){
+        if (localUserPreferencesPath.exists()) {
             userPreferencesXML = loadXML(sketchPath("user_preferences.xml"));
         } else {
             userPreferencesXML = loadXML("user_preferences.xml");
@@ -1043,26 +1368,32 @@ public class Sketch extends PApplet {
         favouriteLocationsData = userPreferencesXML.getChildren("location");
 
         settingsData = userPreferencesXML.getChildren("setting");
-        for(int i = 0; i < settingsData.length; i++){
-            if(settingsData[i].getString("name").equals("autoSaveMode")){
-                autoSaveModeOn = Boolean.parseBoolean(settingsData[i].getString("turnedOn"));
+        for (int i = 0; i < settingsData.length; i++) {
+            if (settingsData[i].getString("name").equals("autoSaveMode")) {
+                autoSaveModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
+                saveThisImageOn = autoSaveModeOn;
+            } else if (settingsData[i].getString("name").equals("learningMode")) {
+                learningModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
             }
         }
     }
 
-    public void saveUserPreferencesXML(){
+    /*-------------------------------------- SaveUserPreferencesXML() ----------------------------*/
+    public void saveUserPreferencesXML() {
         saveXML(userPreferencesXML, sketchPath("user_preferences.xml"));
         loadUserPreferencesXML();
     }
 
-    public void shareImageToDeviceApps(){
-        if(this.imageSaved == false) {
+    /*-------------------------------------- ShareImageToDeviceApps() ----------------------------*/
+    public void shareImageToDeviceApps() {
+        if (this.imageSaved == false) {
             saveImageToPhotoGallery();
         }
         createInstagramIntent(saveToPath);
     }
 
-    public void createInstagramIntent(String imagePath){
+    /*-------------------------------------- CreateInstagramIntent() -----------------------------*/
+    public void createInstagramIntent(String imagePath) {
 
         // Create the new Intent using the 'Send' action.
         Intent share = new Intent(Intent.ACTION_SEND);

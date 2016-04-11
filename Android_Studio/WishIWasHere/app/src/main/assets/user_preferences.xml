@@ -7,6 +7,8 @@
     <location name="Big Ben" latLng="51.500381,-0.1262538" heading="105" pitch="10"/>
     <location name="Leaning Tower Of Piza" latLng="43.7224555,10.3960728" heading="54.4" pitch="10"/>
     <location name="Times Square" latLng="40.7585806,-73.9850687" heading="30" pitch="20"/>
+    <location name="Bantry, Co. Cork" latLng="51.6807778,-9.4535155" heading="72.24" pitch="30"/>
 
-    <setting name="autoSaveMode" turnedOn="true"/>
+    <setting name="autoSaveMode" on="true"/>
+    <setting name="learningMode" on="true"/>
 </UserPreferences>
