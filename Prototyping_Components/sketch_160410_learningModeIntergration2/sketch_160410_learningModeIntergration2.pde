@@ -545,6 +545,9 @@ void switchScreens() {
   } else if (currentScreen.equals("CameraLiveViewScreen")) {
     finalKeying = false;
     myCameraLiveViewScreen.showScreen();
+    if(learningModeOn){
+      myLearningScreen.showScreen();
+    }
   } else if (currentScreen.equals("FavouritesScreen")) {
     myFavouritesScreen.showScreen();
   } else if (currentScreen.equals("SettingsScreen")) {
