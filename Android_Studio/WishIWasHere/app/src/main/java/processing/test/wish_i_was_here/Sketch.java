@@ -285,6 +285,7 @@ public class Sketch extends PApplet {
     private SearchingScreen mySearchingScreen;
     private SocialMediaLogoutScreen mySocialMediaLogoutScreen;
     private LoadingScreen myLoadingScreen;
+    private LearningScreen myLearningScreen;
 
     /*-------------------------------------- Saving ------------------------------------------------*/
     // Creating a string that will hold the directory path of where the images will be saved to on the
@@ -484,7 +485,7 @@ public class Sketch extends PApplet {
 
         // Declaring the default text size variables, so that there will be consistency with the sizing
         // of all text within the app
-        defaultTextSize = (float) (appHeight * 0.035);
+        defaultTextSize = (float) (appHeight * 0.032);
         screenTitleTextSize = (float) (appHeight * 0.07);
 
         /*---------------------------------- Screens ---------------------------------------------*/
@@ -514,6 +515,7 @@ public class Sketch extends PApplet {
         mySearchingScreen = new SearchingScreen(this);
         mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this);
         myLoadingScreen = new LoadingScreen(this);
+        myLearningScreen = new LearningScreen(this);
 
         /*---------------------------------- Saving ----------------------------------------------*/
         // Storing a string that tells the app where to store the images externally on the users device.
@@ -590,6 +592,10 @@ public class Sketch extends PApplet {
         // Resetting keyboardRequired to false, so that the device's keyboard will be hidden (so that
         // users can click anywhere on the screen to hide the keyboard
         keyboardRequired = false;
+
+        if(currentScreen.equals("CameraLiveViewScreen") && learningModeOn){
+            learningModeOn = false;
+        }
     }
 
     /*-------------------------------------- keyPressed() ----------------------------------------*/
@@ -762,6 +768,9 @@ public class Sketch extends PApplet {
             imageShared = false;
             compiledImage = null;
             myCameraLiveViewScreen.showScreen();
+            if(learningModeOn){
+                myLearningScreen.showScreen();
+            }
         } else if (currentScreen.equals("FavouritesScreen")) {
             myFavouritesScreen.showScreen();
         } else if (currentScreen.equals("SettingsScreen")) {

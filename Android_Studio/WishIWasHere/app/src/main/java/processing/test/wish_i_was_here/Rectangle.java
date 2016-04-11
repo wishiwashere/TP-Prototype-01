@@ -53,8 +53,7 @@ public class Rectangle extends Sketch {
     // class's setImage() method.
     private PImage rectImage = null;
 
-  /*-------------------------------------- Constructor() ------------------------------------------------*/
-
+    /*-------------------------------------- Constructor() ---------------------------------------*/
     // This partial-constructor is used by Screen classes, that want to accept all the defaults i.e.
     // to scale to the full size of the device screen they are running on.
     protected Rectangle(Sketch _sketch) {
@@ -108,8 +107,7 @@ public class Rectangle extends Sketch {
         this.rectImage = img;
     }
 
-  /*-------------------------------------- show() ------------------------------------------------*/
-
+    /*-------------------------------------- show() ----------------------------------------------*/
     // Creating a method to redraw the object or "show" it on the screen. This method is protected, so that only
     // descendants of this class can access it.
     protected void show() {
@@ -161,8 +159,7 @@ public class Rectangle extends Sketch {
         sketch.popMatrix();
     }
 
-  /*-------------------------------------- addText() ------------------------------------------------*/
-
+    /*-------------------------------------- addText() -------------------------------------------*/
     // Partial addText() method used by text that requires a specific x and y, but will accept the defaults for the other
     // properties
     protected void addText(String text, double textX, double textY) {
@@ -240,8 +237,34 @@ public class Rectangle extends Sketch {
         sketch.popMatrix();
     }
 
-  /*-------------------------------------- addImage() ------------------------------------------------*/
+    /*-------------------------------------- addTextBox() ----------------------------------------*/
+    // Declaring a protected method, which can only be accessed by descendants of this class, to add a text box to the screen
+    protected void addTextBox(String displayText, double x1, double y1, double x2, double y2, int alignHorz, int alignVert) {
 
+        // Setting the rectMode (rectangle drawing mode) of the sketch to be determined using Corners, so that the
+        // text box can be drawn by specifying the top left corner co-ordinates, and the bottom right corner co-ordinates
+        // (as specified in the Processing API when adding a text box)
+        sketch.rectMode(CORNERS);
+
+        // Setting the fill to black, so that the text will appear black
+        sketch.fill(0);
+
+        // Setting the text alignment of this text box to left on the horizontal axis and centered on the vertical axis.
+        sketch.textAlign(alignHorz, alignVert);
+
+        // Setting the text size of this text box to be equal to the defaultTextSize, as defined in the main Sketch class.
+        // This is a relative value, and will depend on the size of the device that the app is running on.
+        sketch.textSize(sketch.defaultTextSize);
+
+        // Adding the text box to the screen using the Processing text() method, passing in the positioning and dimensions
+        // of the text box that will be required to display text within this text input. x1 and y1 will determine
+        // where the top left corner of the text box will be positioned, while x2 and y2 will determine where the
+        // bottom left corner of the text box will be positioned. Any text added to this text box will be
+        // displayed within this text box. Any text which exceeds the bounds of this box will not be displayed.
+        sketch.text(displayText, (float)(x1), (float)(y1), (float)(x2), (float)(y2));
+    }
+
+    /*-------------------------------------- addImage() ------------------------------------------*/
     // Partial addImage() method, which is used by images that require a specific rotation, but will accept
     // the defaults for every other property. This is mainly used by the CameraLiveViewScreen to add the
     // current Google street view image to the sketch, rotating it based upon the device's orientation.
@@ -319,8 +342,7 @@ public class Rectangle extends Sketch {
         sketch.popMatrix();
     }
 
-  /*-------------------------------------- get() and set() ------------------------------------------------*/
-
+    /*-------------------------------------- get() and set() -------------------------------------*/
     // Get method that returns the instance's x position
     protected float getX() {
         return rectX;

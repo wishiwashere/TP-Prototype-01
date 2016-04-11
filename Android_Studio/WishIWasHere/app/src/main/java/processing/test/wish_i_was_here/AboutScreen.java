@@ -126,38 +126,31 @@ public class AboutScreen extends Screen {
         // been reset, so that the screen appears correctly, even on it's first load.
         this.drawScreen();
 
+        // Adding the team image, using the addImage() method, as inherited from the Rectangle class through the
+        // Screen class. Passing in the image, x, y, width and height
         this.addImage(sketch.loadImage("aboutPageTeamImage.jpg"), sketch.appWidth / 2, this.getY() + (sketch.appHeight * -0.25), sketch.appWidth * 0.7, sketch.appHeight * 0.2);
 
-        // Setting the rectMode (rectangle drawing mode) of the sketch to be determined using Corners, so that the
-        // text box can be drawn by specifying the top left corner co-ordinates, and the bottom right corner co-ordinates
-        // (as specified in the Processing API when adding a text box)
-        sketch.rectMode(CORNER);
+        // Adding the about text, using the addTextBox() method, as inherited from the Rectangle class through the
+        // Screen class. Passing in the text, x1, y1, x2, y2, horizontal text alignment and vertical text alignment.
+        // x1 and y1 will determine where the top left corner of the text box will be positioned, while x2 and y2
+        // will determine where the bottom left corner of the text box will be positioned.
+        this.addTextBox(this.aboutText, sketch.appWidth * 0.1, this.getY() + (sketch.appHeight * -0.1), sketch.appWidth * 0.95, sketch.appHeight * 0.9, sketch.LEFT, sketch.TOP);
 
-        // Setting the text alignment of this text box to left on the horizontal axis
-        sketch.textAlign(LEFT);
-
-        // Setting the text size to the defaultTextSize, as declared in the main Sketch class
-        sketch.textSize(sketch.defaultTextSize);
-
-        // Setting the fill to 0, so that the text will appear black
-        sketch.fill(0);
-
-        // Adding the text to the screen using the Processing text() method, passing in the positioning and dimensions
-        // of the text box that will be required to display text within this text input. The first argument will pass in the
-        // full string of text to be added, the second and third arguments will determine where the top left corner of the text
-        // box will be positioned, while the fourth and fifth arguments will determine where the bottom left corner of the text
-        // box will be positioned. This is so the text can wrap around if the line is too long to fit across the screen.
-
-        // Adding text about the project and it's creators (see note above)
-        sketch.text(aboutText, (float) (sketch.appWidth * 0.1), (float) (this.getY() + (sketch.appHeight * -0.1)), (float) (sketch.appWidth * 0.8), (float) (sketch.appHeight * 0.9));
-
-        // Adding the attribution text (see note above)
-        sketch.text(this.attributionText, (float) (sketch.appWidth * 0.1), (float) (this.getY() + (sketch.appHeight * 0.48)), (float) (sketch.appWidth * 0.8), (float) (sketch.appHeight * 1.6));
+        // Adding the about text, using the addTextBox() method, as inherited from the Rectangle class through the
+        // Screen class. Passing in the text, x1, y1, x2, y2, horizontal text alignment and vertical text alignment.
+        // x1 and y1 will determine where the top left corner of the text box will be positioned, while x2 and y2
+        // will determine where the bottom left corner of the text box will be positioned.
+        this.addTextBox(this.attributionText, sketch.appWidth * 0.1, this.getY() + (sketch.appHeight * 0.48), sketch.appWidth * 0.95, sketch.appHeight * 1.6, sketch.LEFT, sketch.TOP);
 
         // Checking if the page is being scrolled
         if (sketch.mousePressed) {
-            // Calling the scrollScreen() method, as inherited from the Screen class, to scroll the elements on the screen
-            this.scrollScreen();
+            if(sketch.mouseClicked && sketch.mouseY < sketch.iconTopY){
+                resetScreen();
+                sketch.mouseClicked = false;
+            } else {
+                // Calling the scrollScreen() method, as inherited from the Screen class, to scroll the elements on the screen
+                this.scrollScreen();
+            }
         }
     }
 

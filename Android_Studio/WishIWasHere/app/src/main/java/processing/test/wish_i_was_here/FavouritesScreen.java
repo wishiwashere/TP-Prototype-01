@@ -130,36 +130,42 @@ public class FavouritesScreen extends Screen {
         // Checking if the page is being scrolled
         if (sketch.mousePressed) {
 
-            // Calling the Screen class's scrollScreen() method, to scroll the icons, screen and screen
-            // title. This method returns the amount the user has scrolled on the screen, so that it
-            // can be used within this class to scroll the favourite tabs separately
-            float amountScrolled = scrollScreen();
+            if(sketch.mouseClicked && sketch.mouseY < sketch.iconTopY){
+                resetScreen();
+                sketch.mouseClicked = false;
+            } else {
 
-            // Looping through each of the favourite tabs, to change their positions according to the amount they
-            // have been scrolled
-            for (int i = 0; i < favTabs.size(); i++) {
+                // Calling the Screen class's scrollScreen() method, to scroll the icons, screen and screen
+                // title. This method returns the amount the user has scrolled on the screen, so that it
+                // can be used within this class to scroll the favourite tabs separately
+                float amountScrolled = scrollScreen();
 
-                // Checking which direction the user scrolled, based on the previous and current mouse Y positions
-                if (sketch.pmouseY > sketch.mouseY) {
-                    // The user has scrolled UP
+                // Looping through each of the favourite tabs, to change their positions according to the amount they
+                // have been scrolled
+                for (int i = 0; i < favTabs.size(); i++) {
 
-                    // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
-                    // moving the icon up the screen
-                    this.favTabs.get(i).setY(this.favTabs.get(i).getY() - amountScrolled);
-                } else {
-                    // The user has scrolled DOWN
+                    // Checking which direction the user scrolled, based on the previous and current mouse Y positions
+                    if (sketch.pmouseY > sketch.mouseY) {
+                        // The user has scrolled UP
 
-                    // Checking if the screen's y position is less than or equal to half of the height i.e. is
-                    // so that the screen cannot be down any further once you reach the top
-                    if (this.getY() <= (sketch.appHeight/2) - amountScrolled) {
-
-                        // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
-                        // moving the icon down the screen
-                        this.favTabs.get(i).setY(this.favTabs.get(i).getY() + amountScrolled);
+                        // Setting the y position of the icon to it's current position, minus the amount scrolled i.e.
+                        // moving the icon up the screen
+                        this.favTabs.get(i).setY(this.favTabs.get(i).getY() - amountScrolled);
                     } else {
-                        // The user has reached the top of the screen, so calling this class's resetScreen() method,
-                        // to reset the Favourite icons, and other elements on screen, to their original positions
-                        this.resetScreen();
+                        // The user has scrolled DOWN
+
+                        // Checking if the screen's y position is less than or equal to half of the height i.e. is
+                        // so that the screen cannot be down any further once you reach the top
+                        if (this.getY() <= (sketch.appHeight / 2) - amountScrolled) {
+
+                            // Setting the y position of the icon to it's current position, plus the amount scrolled i.e.
+                            // moving the icon down the screen
+                            this.favTabs.get(i).setY(this.favTabs.get(i).getY() + amountScrolled);
+                        } else {
+                            // The user has reached the top of the screen, so calling this class's resetScreen() method,
+                            // to reset the Favourite icons, and other elements on screen, to their original positions
+                            this.resetScreen();
+                        }
                     }
                 }
             }

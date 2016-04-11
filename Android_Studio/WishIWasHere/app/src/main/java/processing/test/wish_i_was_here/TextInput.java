@@ -128,8 +128,12 @@ public class TextInput extends ClickableElement {
         // Checking if the length of the value is greater than 0 i.e. is there text to be added to this TextInput
         if (this.inputValue.length() > 0) {
 
-            // Calling this method's addTextBox() method, passing in the current input value of the input
-            this.addTextBox(this.inputValue);
+            // Calling the Rectangle class's addTextBox() method, as inherited through the ClickableElement
+            // class. Passing in the current input value of the input, along with the x and y dimensions for
+            // this text box. Also passing in a left alignment (for the text on the X axis, as we have no
+            // text inputs with horizontal alignments other than left) and the vertical text alignment, as
+            // defined in this TextInput's constructor.
+            this.addTextBox(this.inputValue, this.textX1, this.textY1, this.textX2, this.textY2, sketch.LEFT, this.textVertAlign);
         }
 
         // Checking if the mouse was clicked, using a custom variable defined in the main Sketch (to
@@ -161,40 +165,6 @@ public class TextInput extends ClickableElement {
                 println("The " + this.inputTitle + " text input was clicked on");
             }
         }
-    }
-
-    // Declaring a private method, which can only be used within this class, to add a text box to the TextInput,
-    // to display the current value it contains. This method expects one parameter, i.e. the text which should be
-    // added to it.
-    private void addTextBox(String displayText) {
-
-        // Setting the rectMode (rectangle drawing mode) of the sketch to be determined using Corners, so that the
-        // text box can be drawn by specifying the top left corner co-ordinates, and the bottom right corner co-ordinates
-        // (as specified in the Processing API when adding a text box)
-        sketch.rectMode(CORNERS);
-
-        // Setting the fill to black, so that the text will appear black
-        sketch.fill(0);
-
-        // Setting the text alignment of this text box to left on the horizontal axis (as we have no text boxes that require
-        // any other alignment value on this axis) and the determining the vertical alignment of the text based on the textVertAlign
-        // property of this TextInput i.e. a constant containing the integer value for aligning text - as defined in the
-        // Processing library)
-        sketch.textAlign(sketch.LEFT, this.textVertAlign);
-
-        // Setting the text size of this TextInput to be equal to the defaultTextSize, as defined in the main Sketch class.
-        // This is a relative value, and will depend on the size of the device that the app is running on.
-        sketch.textSize(sketch.defaultTextSize);
-
-        // Adding the text to the TextInput using the Processing text() method, passing in the positioning and dimensions
-        // of the text box that will be required to display text within this text input. textX1 and textY1 will determine
-        // where the top left corner of the text box will be positioned, while textX2 and textY2 will determine where the
-        // bottom left corner of the text box will be positioned. Any text added to the inputValue of this input, will be
-        // displayed within this text box (using the addTextBox() method of this class). Any text which exceeds the bounds
-        // of this box will not be displayed. The co-ordinates of the text box just short of the full dimensions of the
-        // TextInput, so that text does not appear right up to the edge of the surrounding rectangle i.e. textX1 will be
-        // positioned slightly in from the TextInput's top left corner (almost like padding in HTML)
-        sketch.text(displayText, this.textX1, this.textY1, this.textX2, this.textY2);
     }
 
     // Get method which returns the current value of the text entered into in this input
