@@ -1,6 +1,6 @@
 #Wish I Was Here App
 
-As part of the Team Project module, current students Eiren McLoughlin and Laura Pigott from a the Creative Mulitimedia B.Sc (hons) degree course in Limerick Institute of Technology, Clonmel are designing, creating and building an application title 'Wish I Was Here'. It is the no pay holiday application that transports the usere to different locations around the world.
+As part of the Team Project module, current students Eiren McLoughlin and Laura Pigott from a the Creative Mulitimedia B.Sc (hons) degree course in Limerick Institute of Technology, Clonmel are designing, creating and building an application title 'Wish I Was Here'. It is the no pay holiday application that transports the user to different locations around the world.
 
 Our aim is to make the world a little bit smaller, one click at a time.
 
@@ -27,15 +27,9 @@ Currently on our team project our application has:
 * Saving to devices storage
 	* Saving images locally to the users device
 	* Creating a Wish I Was Here directory
-		* where images from the application will be saved
-	* Save users preferences
+		* Images from the application will be saved to this directory
+	* Saves the users preferences
 	* Ability to auto-save images	
-  	
-* A navigational system and application layout
-  
-* Graphics designed for the application
-  
-* Toggling buttons
   
 * Accessing the Google Street View API
 	* Searching for a location
@@ -59,10 +53,6 @@ Currently on our team project our application has:
 	* Ability to add favourites
 	* Ability to go to a favourite
 	* Ability to remove a favourite
-  	
-* Share locally saved images with other devices applications
-
-* Dynamic pages
   
 * Movement
 	* Ability to turn on or off movment
@@ -70,12 +60,20 @@ Currently on our team project our application has:
 		* Using the accelerometer to detect if the device is being moved up or down which moves the google Street View images depending on the movement
 	* Swipes dictact the left to right movement of the Google Street View Images	
 	* Depending on orientation, the icons on the camera live view screen rotate based on the way the device is being held
-  	
+ 
+* Share locally saved images with other devices applications
+  
+* Dynamic pages
+ 	  
 * Giving the application an icon
   
 * Ability to scroll within the application
-
-    
+  	
+* A navigational system and application layout
+  
+* Graphics designed for the application
+  
+* Toggling buttons    
   
   
 _We have learned how to:_
