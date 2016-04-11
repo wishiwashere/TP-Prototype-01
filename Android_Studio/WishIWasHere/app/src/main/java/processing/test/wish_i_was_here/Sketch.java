@@ -180,8 +180,6 @@ public class Sketch extends PApplet {
     // the device's accelerometer
     public int deviceOrientation = 0;
 
-    public int compiledImageOrientation = 0;
-
     /*----------------------------------- Twitter ------------------------------------------------*/
     // Creating variables to store the API keys required for accessing the Twitter API.
     // Setting the Twitter consumer key and Twitter consumer secret key to be equal to our
@@ -740,8 +738,6 @@ public class Sketch extends PApplet {
             // Since we are not currently on the CameraLiveViewScreen, resetting the shakeMovementOn
             // variable to false
             shakeMovementOn = false;
-
-            deviceOrientation = 0;
         }
     }
 
@@ -1215,40 +1211,31 @@ public class Sketch extends PApplet {
             PImage overlayImage = loadImage("overlay.png");
             imageMerging = true;
 
-            PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
+            PGraphics mergedImage = createGraphics(googleImageWidth, googleImageHeight, JAVA2D);
             mergedImage.beginDraw();
-            mergedImage.pushMatrix();
-            mergedImage.translate(appWidth / 2, appHeight / 2);
-            mergedImage.rotate(radians(deviceOrientation));
             mergedImage.imageMode(CENTER);
-            mergedImage.image(currentLocationImage, 0, 0, googleImageWidth, googleImageHeight);
-            mergedImage.popMatrix();
+            mergedImage.image(currentLocationImage, googleImageWidth / 2, googleImageHeight / 2, googleImageWidth, googleImageHeight);
             mergedImage.endDraw();
 
             mergedImage.beginDraw();
             mergedImage.pushMatrix();
-            mergedImage.translate(appWidth / 2, appHeight / 2);
+            mergedImage.translate(googleImageWidth / 2, googleImageHeight / 2);
             mergedImage.scale(cameraScale, 1);
-            mergedImage.rotate(radians(cameraRotation));
+            mergedImage.rotate(radians(cameraRotation - (deviceOrientation * cameraScale)));
             mergedImage.imageMode(CENTER);
             mergedImage.image(currentImage, 0, 0, appHeight, appWidth);
             mergedImage.popMatrix();
             mergedImage.endDraw();
 
             mergedImage.beginDraw();
-            mergedImage.pushMatrix();
-            mergedImage.translate((float) (appWidth * 0.7), (float) (appHeight - (appWidth * 0.22)));
-            mergedImage.rotate(radians(cameraRotation * -1));
             mergedImage.imageMode(CENTER);
-            mergedImage.image(overlayImage, 0, 0, (float) (appWidth * 0.55), (float) (appWidth * 0.3));
-            mergedImage.popMatrix();
+            mergedImage.image(overlayImage, (float) (googleImageWidth  - (appWidth * 0.3)), (float) (googleImageHeight - (appWidth * 0.2)), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
             mergedImage.endDraw();
 
             compiledImage = mergedImage.get();
             mergedImage = null;
             overlayImage = null;
 
-            compiledImageOrientation = deviceOrientation == 0 ? 0 : deviceOrientation * -1;
             currentScreen = "ImagePreviewScreen";
         } catch (OutOfMemoryError e) {
             println("Could not save image - " + e);

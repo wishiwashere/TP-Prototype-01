@@ -63,7 +63,7 @@ public class ImagePreviewScreen extends Screen {
 
         // Adding this screen's private loadingScreenImage, so it will appear as part of this screen. Calculating
         // the x, y, width and height based on the current width and height of the device this app is running on.
-        sketch.image(sketch.compiledImage, sketch.appWidth / 2, sketch.appHeight / 2, sketch.appWidth, sketch.appHeight);
+        this.addImage(sketch.compiledImage, sketch.appWidth / 2, sketch.appHeight / 2, sketch.googleImageWidth, sketch.googleImageHeight, 1, sketch.deviceOrientation);
 
         // Calling the super class's (Screen) drawScreen() method, to display each of this screen's icons.
         // This method will then in turn call it's super class's (Rectangle) method, to generate the screen. Calling this

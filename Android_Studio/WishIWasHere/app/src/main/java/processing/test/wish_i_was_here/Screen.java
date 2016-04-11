@@ -82,6 +82,8 @@ public class Screen extends Rectangle {
 
                 if(sketch.currentScreen.equals("CameraLiveViewScreen")){
                     this.screenIcons[i].setRotation(sketch.deviceOrientation);
+                } else {
+                    this.screenIcons[i].setRotation(0);
                 }
 
                 // Calling the showIcon() method (as inherited from the Icon class) to display the icon on screen
