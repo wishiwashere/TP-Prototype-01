@@ -168,7 +168,7 @@ public class CameraLiveViewScreen extends Screen {
         // location specified by the user. Setting the rotation of this image to be equal to the orientationRotation of the
         // app, so that the image will be rotated based on which way the user is holding the device, so users can take pictures
         // in both landscape and portrait.
-        this.addImage(sketch.currentLocationImage, sketch.appWidth, sketch.appHeight, sketch.orientationRotation);
+        this.addImage(sketch.currentLocationImage, sketch.googleImageWidth, sketch.googleImageHeight, sketch.deviceOrientation);
 
         // Adding the current keyed image to the CameraLiveViewScreen, so that the user can see themselves in the location added
         // above. Setting the scaleX of this image to be equal to the cameraScale, which accounts for and corrects the way in which

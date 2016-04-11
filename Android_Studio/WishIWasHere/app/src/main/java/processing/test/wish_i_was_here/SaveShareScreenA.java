@@ -106,6 +106,6 @@ public class SaveShareScreenA extends Screen {
         // Rectangle class, so it will appear as part of this screen. Calculating the x, y, width and height
         // based on the current width and height of the device this app is running on. This image contains the Google
         // street view background, the keyed image of the user, and the overlay image of the "Wish I Was Here Logo".
-        this.addImage(sketch.compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.65, sketch.appWidth * 0.5, sketch.appHeight * 0.5);
+        this.addImage(sketch.compiledImage, sketch.iconCenterX, sketch.iconCenterY * 0.65, sketch.appWidth * 0.5, sketch.appHeight * 0.5, 1, sketch.compiledImageOrientation);
     }
 }

@@ -80,6 +80,10 @@ public class Screen extends Rectangle {
             // Looping through each of the screen's icons
             for (int i = 0; i < this.screenIcons.length; i++) {
 
+                if(sketch.currentScreen.equals("CameraLiveViewScreen")){
+                    this.screenIcons[i].setRotation(sketch.deviceOrientation);
+                }
+
                 // Calling the showIcon() method (as inherited from the Icon class) to display the icon on screen
                 this.screenIcons[i].showIcon();
 

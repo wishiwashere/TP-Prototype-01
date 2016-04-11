@@ -178,7 +178,9 @@ public class Sketch extends PApplet {
 
     // Creating a variable to store the current rotation of the device, based on the readings from
     // the device's accelerometer
-    public int orientationRotation = 0;
+    public int deviceOrientation = 0;
+
+    public int compiledImageOrientation = 0;
 
     /*----------------------------------- Twitter ------------------------------------------------*/
     // Creating variables to store the API keys required for accessing the Twitter API.
@@ -329,6 +331,8 @@ public class Sketch extends PApplet {
     public String googleImageLatLng;
     public float googleImagePitch;
     public float googleImageHeading;
+    public int googleImageWidth;
+    public int googleImageHeight;
 
     // Declaring the currentLocationImage variable, which will be initialised by loading in an image
     // from a request to the Google Street View Image API, using the location data held in the variables
@@ -593,7 +597,7 @@ public class Sketch extends PApplet {
         // users can click anywhere on the screen to hide the keyboard
         keyboardRequired = false;
 
-        if(currentScreen.equals("CameraLiveViewScreen") && learningModeOn){
+        if (currentScreen.equals("CameraLiveViewScreen") && learningModeOn) {
             learningModeOn = false;
         }
     }
@@ -702,48 +706,42 @@ public class Sketch extends PApplet {
             // in
             if (shakeMovementOn) {
 
-                // Using modulus to slow down how often the following code is called (i.e. it will currently
-                // be called on every 4th frame)
-                if (frameCount % 4 == 0) {
-
-                    // Setting the image pitch to be equal to the accelerometerZ value, mapped from a range
-                    // of 10 to -10, to a larger range of -90 to 90, as these are the maximum allowed values
-                    // for the pitch of a Google Street View Image
-                    googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
-
-                    // Calling the loadGoogleImage() method in a thread, to load in a new version of the
-                    // current location's image, with the pitch altered to reflect the new value assigned
-                    // above
-                    thread("loadGoogleImage");
-                }
+                // Setting the image pitch to be equal to the accelerometerZ value, mapped from a range
+                // of 10 to -10, to a larger range of -90 to 90, as these are the maximum allowed values
+                // for the pitch of a Google Street View Image
+                googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
             }
 
-            // Creating a temporary array for the screen icons which belong
-            // to the camera live view screen
-            Icon[] alteredIcons = myCameraLiveViewScreen.getScreenIcons();
-
-            // Looping through the temporary array, to access each of the icons
-            for (int i = 0; i < alteredIcons.length; i++) {
+            // Using modulus to slow down how often the following code is called (i.e. it will currently
+            // be called on every 4th frame)
+            if (frameCount % 4 == 0) {
                 // Determining the orientation of the device based on the value
                 // of it's accelerometer on the X axis
                 if (accelerometerX > 7) {
                     // The device is being turned to the left
-                    // Setting the rotation of the icons to be 90 degrees
-                    alteredIcons[i].setRotation(90);
+                    // Setting the device orientation to be 90 degrees
+                    deviceOrientation = 90;
                 } else if (accelerometerX < -7) {
                     // The device is being turned to the right
-                    // Setting the rotation of the icons to be -90 degrees
-                    alteredIcons[i].setRotation(-90);
+                    // Setting the device orientation to be -90 degrees
+                    deviceOrientation = -90;
                 } else {
                     // The device is standing straight up
-                    // Setting the rotation of the icons to be 0 degrees
-                    alteredIcons[i].setRotation(0);
+                    // Setting the device orientation to be 0 degrees
+                    deviceOrientation = 0;
                 }
+                // Calling the loadGoogleImage() method in a thread, to load in a new version of the
+                // current location's image, with the pitch altered to reflect the new value assigned
+                // above
+                thread("loadGoogleImage");
             }
+
         } else {
             // Since we are not currently on the CameraLiveViewScreen, resetting the shakeMovementOn
             // variable to false
             shakeMovementOn = false;
+
+            deviceOrientation = 0;
         }
     }
 
@@ -768,7 +766,7 @@ public class Sketch extends PApplet {
             imageShared = false;
             compiledImage = null;
             myCameraLiveViewScreen.showScreen();
-            if(learningModeOn){
+            if (learningModeOn) {
                 myLearningScreen.showScreen();
             }
         } else if (currentScreen.equals("FavouritesScreen")) {
@@ -1219,8 +1217,12 @@ public class Sketch extends PApplet {
 
             PGraphics mergedImage = createGraphics(appWidth, appHeight, JAVA2D);
             mergedImage.beginDraw();
+            mergedImage.pushMatrix();
+            mergedImage.translate(appWidth / 2, appHeight / 2);
+            mergedImage.rotate(radians(deviceOrientation));
             mergedImage.imageMode(CENTER);
-            mergedImage.image(currentLocationImage, appWidth / 2, appHeight / 2, appWidth, appHeight);
+            mergedImage.image(currentLocationImage, 0, 0, googleImageWidth, googleImageHeight);
+            mergedImage.popMatrix();
             mergedImage.endDraw();
 
             mergedImage.beginDraw();
@@ -1234,14 +1236,19 @@ public class Sketch extends PApplet {
             mergedImage.endDraw();
 
             mergedImage.beginDraw();
+            mergedImage.pushMatrix();
+            mergedImage.translate((float) (appWidth * 0.7), (float) (appHeight - (appWidth * 0.22)));
+            mergedImage.rotate(radians(cameraRotation * -1));
             mergedImage.imageMode(CENTER);
-            mergedImage.image(overlayImage, (float) (appWidth * 0.7), (float) (appHeight - (appWidth * 0.22)), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
+            mergedImage.image(overlayImage, 0, 0, (float) (appWidth * 0.55), (float) (appWidth * 0.3));
+            mergedImage.popMatrix();
             mergedImage.endDraw();
 
             compiledImage = mergedImage.get();
             mergedImage = null;
             overlayImage = null;
 
+            compiledImageOrientation = deviceOrientation == 0 ? 0 : deviceOrientation * -1;
             currentScreen = "ImagePreviewScreen";
         } catch (OutOfMemoryError e) {
             println("Could not save image - " + e);
@@ -1314,7 +1321,13 @@ public class Sketch extends PApplet {
         println("LatLng = " + googleImageLatLng);
         println("Heading = " + googleImageHeading);
         println("Pitch = " + googleImagePitch);
-        currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + googleBrowserApiKey + "&size=" + appWidth / 2 + "x" + appHeight / 2);
+
+        googleImageWidth = deviceOrientation == 0 ? appWidth : appHeight;
+        googleImageHeight = deviceOrientation == 0 ? appHeight : appWidth;
+
+        currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + googleBrowserApiKey + "&size=" + googleImageWidth + "x" + googleImageHeight);
+        println("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + googleBrowserApiKey + "&size=" + googleImageWidth + "x" + googleImageHeight);
+
         println("Image successfully loaded");
 
         checkFavIcon();

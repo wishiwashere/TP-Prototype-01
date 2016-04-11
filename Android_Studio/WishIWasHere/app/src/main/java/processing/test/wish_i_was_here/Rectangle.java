@@ -241,6 +241,12 @@ public class Rectangle extends Sketch {
     // Declaring a protected method, which can only be accessed by descendants of this class, to add a text box to the screen
     protected void addTextBox(String displayText, double x1, double y1, double x2, double y2, int alignHorz, int alignVert) {
 
+        sketch.pushMatrix();
+
+        sketch.translate(0, 0);
+
+        sketch.rotate(this.getRotation());
+
         // Setting the rectMode (rectangle drawing mode) of the sketch to be determined using Corners, so that the
         // text box can be drawn by specifying the top left corner co-ordinates, and the bottom right corner co-ordinates
         // (as specified in the Processing API when adding a text box)
@@ -262,6 +268,8 @@ public class Rectangle extends Sketch {
         // bottom left corner of the text box will be positioned. Any text added to this text box will be
         // displayed within this text box. Any text which exceeds the bounds of this box will not be displayed.
         sketch.text(displayText, (float)(x1), (float)(y1), (float)(x2), (float)(y2));
+
+        sketch.popMatrix();
     }
 
     /*-------------------------------------- addImage() ------------------------------------------*/

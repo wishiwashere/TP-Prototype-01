@@ -7,18 +7,13 @@ public class LearningScreen extends Screen {
 
     private Rectangle[] allLearningRects = new Rectangle[5];
     private String[] allLearningRectsText = {
-            "Save your location",
-            "Return to home",
-            "Move to view up/down",
-            "Take a picture",
-            "Switch camera views"
+            "Save\r\nyour\r\nlocation",
+            "Return to\r\nhome",
+            "Move to\r\nview\r\nup/down",
+            "Take a\r\npicture",
+            "Switch\r\ncamera\r\nviews"
     };
 
-    private String favText = "Save your location";
-    private String homeText = "Return to home";
-    private String shakeMovementText = "Tilt your phone forwards and backwards to look up and down";
-    private String captureText = "Take a picture";
-    private String switchCameraText = "Switch camera views";
     private String movement = "Swipe left or right to move around your current location";
 
     private float learningBoxWidth;
@@ -41,34 +36,10 @@ public class LearningScreen extends Screen {
         super.show();
 
         for (int i = 0; i < allLearningRects.length; i++) {
-            double x1 = allLearningRects[i].getX() - (learningBoxWidth * 0.48);
-            double y1 = allLearningRects[i].getY() - (learningBoxHeight * 0.48);
-            double x2 = allLearningRects[i].getX() + (learningBoxWidth * 0.48);
-            double y2 = allLearningRects[i].getY() + (learningBoxHeight * 0.48);
-
+            allLearningRects[i].setRotation(sketch.deviceOrientation);
             allLearningRects[i].setBackgroundColor(sketch.color(255));
             allLearningRects[i].show();
-            allLearningRects[i].addTextBox(allLearningRectsText[i], x1, y1, x2, y2, sketch.CENTER, sketch.CENTER);
+            allLearningRects[i].addText(allLearningRectsText[i], allLearningRects[i].getX(), allLearningRects[i].getY());
         }
-        //Colour for the background of the learning mode box, filling it a light shade od grey
-      /*  sketch.fill(240, 240, 240);
-        sketch.rect((float)(sketch.appWidth / 32), (float)(sketch.appHeight / 16), learningBoxX2, (float)(sketch.appHeight / 6));
-        sketch.rect((float)(sketch.appWidth / 1.4), (float)(sketch.appHeight / 16), learningBoxX2, (float)(sketch.appHeight / 6));
-        sketch.rect((float)(sketch.appWidth / 32), (float)(sketch.appHeight / 1.3), learningBoxX2, (float)(sketch.appHeight / 4.8));
-        sketch.rect((float) (sketch.appWidth / 2.8), (float) (sketch.appHeight / 1.3), learningBoxX2, (float) (sketch.appHeight / 6));
-        sketch.rect((float) (sketch.appWidth / 1.4), (float) (sketch.appHeight / 1.3), learningBoxX2, (float) (sketch.appHeight / 6));
-*/
-
-
-        //For the text
-    /*    sketch.textSize(sketch.defaultTextSize);
-
-        sketch.fill(0);
-        sketch.text(favText, (float)(sketch.appWidth / 24.5), (float)(sketch.appHeight / 14.2), learningBoxX2, (float)(sketch.appHeight / 6));
-        sketch.text(homeText, (float)(sketch.appWidth / 1.38), (float)(sketch.appHeight / 14.2), learningBoxX2, (float)(sketch.appHeight / 6));
-        sketch.text(shakeMovementText, (float)(sketch.appWidth / 24.5), (float)(sketch.appHeight / 1.29), learningBoxX2, (float)(sketch.appHeight / 4.8));
-        sketch.text(captureText, (float)(sketch.appWidth / 2.7), (float)(sketch.appHeight / 1.29), learningBoxX2, (float)(sketch.appHeight / 6));
-        sketch.text(switchCameraText, (float)(sketch.appWidth / 1.38), (float)(sketch.appHeight / 1.29), learningBoxX2, (float)(sketch.appHeight / 6));
-    */
     }
 }
