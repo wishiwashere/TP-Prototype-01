@@ -11,7 +11,7 @@ Our portfolios can be seen at:
 
 Our project is being developed for android devices and is soon to be widely availble on the Google Play store for download and currently in the Beta stages for selected users during our developement stage.
 
-This application is being developed using Processing 3 and Android Studio.
+This application is being developed using Processing 3 and Android Studio. Initially all development was in Processing 3 but now have moved onto Android Studio to allow for things such as Twitter login using Fabric
 
 _Current Progression_
 
@@ -54,6 +54,7 @@ Currently on our team project our application has:
 	** Accelerometer movement
 		*** Using the accelerometer to detect if the device is being moved up or down which moves the google Street View images depending on the movement
 	** Swipes dictact the left to right movement of the Google Street View Images	
+	** Depending on orientation, the icons on the camera live view screen rotate based on the way the device is being held/
 * Giving the application an icon
 * Ability to scroll within the application
 
