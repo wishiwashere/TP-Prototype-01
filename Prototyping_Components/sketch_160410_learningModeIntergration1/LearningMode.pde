@@ -23,19 +23,19 @@ public class LearningMode extends ClickableElement {
 
   public void showLearningMode() {
     fill(0, 255, 0);
-    rect(appWidth/3, appHeight/4, appWidth/3, appHeight/4);
-    rect(495, 20, 140, 50);
-    rect(20, 275, 150, 80);
-    rect(245, 275, 140, 50);
-    rect(500, 275, 140, 50);
+    rect(appWidth/32, appHeight/16, appWidth/4, appHeight/6);
+    rect(appWidth/1.4, appHeight/16, appWidth/4, appHeight/6);
+    rect(appWidth/32, appHeight/1.3, appWidth/4, appHeight/4.8);
+    rect(appWidth/2.8, appHeight/1.3, appWidth/4, appHeight/6);
+    rect(appWidth/1.4, appHeight/1.3, appWidth/4, appHeight/6);
 
     //For the text
     fill(255, 0, 0);
-    text(favText, 25, 25, 150, 80);         
-    text(homeText, 500, 25, 150, 80); 
-    text(shakeMovementText, 25, 280, 150, 80); 
-    text(captureText, 250, 280, 150, 80);
-    text(switchCameraText, 450, 280, 150, 80); 
+    text(favText, appWidth/24.5, appHeight/14.2, appWidth/4, appHeight/6);         
+    text(homeText, appWidth/1.38, appHeight/14.2, appWidth/4, appHeight/6); 
+    text(shakeMovementText, appWidth/24.5, appHeight/1.29, appWidth/4, appHeight/4.8); 
+    text(captureText, appWidth/2.7, appHeight/1.29, appWidth/4, appHeight/6);
+    text(switchCameraText, appWidth/1.38, appHeight/1.29, appWidth/4, appHeight/6); 
 
     //for learning mode box
     fill(48, 2, 125, 100);

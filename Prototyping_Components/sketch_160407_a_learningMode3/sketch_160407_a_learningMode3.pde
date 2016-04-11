@@ -26,17 +26,17 @@ void draw() {
     fill(0, 255, 0);
     rect(width/32, height/16, width/4, height/6);
     rect(width/1.4, height/16, width/4, height/6);
-    rect(20, 275, 150, 80);
-    rect(245, 275, 140, 50);
-    rect(500, 275, 140, 50);
+    rect(width/32, height/1.3, width/4, height/4.8);
+    rect(width/2.8, height/1.3, width/4, height/6);
+    rect(width/1.4, height/1.3, width/4, height/6);
 
     //For the text
     fill(255, 0, 0);
     text(favText, width/24.5, height/14.2, width/4, height/6);         
     text(homeText, width/1.38, height/14.2, width/4, height/6); 
-    text(shakeMovementText, 25, 280, 150, 80); 
-    text(captureText, 250, 280, 150, 80);
-    text(switchCameraText, 450, 280, 150, 80); 
+    text(shakeMovementText, width/24.5, height/1.29, width/4, height/4.8); 
+    text(captureText, width/2.7, height/1.29, width/4, height/6);
+    text(switchCameraText, width/1.38, height/1.29, width/4, height/6); 
 
     //for learning mode box
     fill(48, 2, 125, 100);
