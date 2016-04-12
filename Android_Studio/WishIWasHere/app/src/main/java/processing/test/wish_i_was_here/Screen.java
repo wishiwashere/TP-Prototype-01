@@ -77,12 +77,20 @@ public class Screen extends Rectangle {
 
         // Checking if this screen has any icons to be displayed
         if (this.screenIcons.length > 0) {
+
             // Looping through each of the screen's icons
             for (int i = 0; i < this.screenIcons.length; i++) {
 
+                // Checking if the user is currently on the CameraLiveViewScreen, as icons on this screen
+                // will be rotated based on the device's orientation
                 if(sketch.currentScreen.equals("CameraLiveViewScreen")){
+
+                    // Setting the rotation of this icon to be equal to the global deviceOrientation variable,
+                    // which is updated within the onAccelerometerEvent() method of the main Sketch class
                     this.screenIcons[i].setRotation(sketch.deviceOrientation);
                 } else {
+
+                    // If the user is not on the CameraLiveViewScreen, resetting all icons rotations to 0
                     this.screenIcons[i].setRotation(0);
                 }
 

@@ -48,7 +48,7 @@ public class ShareSaveUnsuccessfulScreen extends Screen {
         // screen or function they will later link to.
         Icon retryIcon = new Icon(sketch, sketch.iconCenterX  * 0.55, sketch.largeIconBottomY * 0.75, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("retryIconImage.png"), "Retry", true, "Below", "_sendTweet");
         Icon shareImageToDeviceAppsIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.iconCenterY * 0.75, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("shareImageToDeviceAppsImage.png"), "Share", true, "Below", "_shareImageToDeviceApps");
-        Icon deleteIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("deleteIconImage.png"), "Delete", true, "Below", "CameraLiveViewScreen");
+        Icon deleteIcon = new Icon(sketch, sketch.iconCenterX * 0.55, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("deleteIconImage.png"), "Delete", true, "Below", "_disgardImage");
         Icon saveIcon = new Icon(sketch, sketch.iconCenterX * 1.45, sketch.largeIconBottomY, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("saveIconImage"), "Save", true, "Below", "ShareSaveSuccessfulScreen");
 
         // Creating a temporary allIcons array to store the icon/s we have created above.

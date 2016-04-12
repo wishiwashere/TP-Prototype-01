@@ -1,28 +1,31 @@
 package processing.test.wish_i_was_here;
 
-import ketai.sensors.KetaiSensor;
-import processing.data.XML;
+// Importing the Processing libaray (from which the main app is generated
 import processing.core.*;
-import processing.core.PApplet;
-import ketai.camera.*;
-import ketai.ui.*;
+import processing.data.XML;
 
+// Importing the Ketai library (for accessing the device camera, accelerometer and keyboard)
+import ketai.camera.KetaiCamera;
+import ketai.sensors.KetaiSensor;
+import ketai.ui.KetaiKeyboard;
 
+// Importing the Twitter4J library (for sending tweets to Twitter using a users's account, if they have logged in with Twitter)
+import twitter4j.*;
+import twitter4j.conf.*;
+
+// Importing the Android library (to switch between Activities using Intents, generate URI's and access the device Environment)
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 
+// Importing the Jave library (to create File objects, and ArrayList arrays)
 import java.io.File;
 import java.util.ArrayList;
-
-import twitter4j.*;
-import twitter4j.conf.*;
 
 // This class contains the main Sketch for the Processing portion of this app
 public class Sketch extends PApplet {
 
     /*-------------------------------------- Navigation/Status Variables -------------------------*/
-
     // Setting the default screen to be the LoadingScreen, so that when the app is loaded,
     // this is the first screen that is displayed. Since this global variable is available
     // throughout the sketch (i.e. within all classes as well as the main sketch) we will
@@ -70,7 +73,7 @@ public class Sketch extends PApplet {
     // If a user has autoSaveModeOn turned on, then saveThisImageOn will also be set to true. If a user
     // then wants to turn off saving for an individual image, they can toggle this functionality on/off
     // in SaveShareScreenA, while not affecting their overall autoSaveModeOn setting. Images will only
-    // ever save to the device when saveThisImageOn is set to true, regardless of whether autosaveMode
+    // ever save to the device when saveThisImageOn is set to true, regardless of whether autoSaveMode
     // is on or off (to allow the user to make individual choices for each image).
     public Boolean autoSaveModeOn = true;
     public Boolean learningModeOn = false;
@@ -164,7 +167,6 @@ public class Sketch extends PApplet {
     public int cameraRotation = -90;
 
     /*-------------------------------------- KetaiSensor -----------------------------------------*/
-
     // Declaring an instance of the ketaiSensore class, so that we can later access the sensors
     // of this device i.e. the accelerometer.
     private KetaiSensor sensor;
@@ -205,7 +207,6 @@ public class Sketch extends PApplet {
     private Twitter twitter;
 
     /*-------------------------------------- Images ----------------------------------------------*/
-
     // Loading in the general background image, which will be used to "wipe" the screen each time the
     // switchScreens method is called. The purpose of this is that individual screens do not need to
     // contain their own backgrounds, and thus reduces the load on memory.
@@ -531,8 +532,10 @@ public class Sketch extends PApplet {
 
         // Checking if this directory already exists
         if (wishIWasHereDirectory.isDirectory() == false) {
+
             // Since the directory does not already exist, using the File mkdirs() method to create it
             wishIWasHereDirectory.mkdirs();
+
             println("New directory created - " + directory);
         } else {
             println("Directory already exists");
@@ -573,7 +576,7 @@ public class Sketch extends PApplet {
         if (currentScreen.equals("CameraLiveViewScreen")) {
             if (!ketaiCamera.isStarted()) {
                 ketaiCamera.start();
-                println("CAM - Starting Ketai Camera");
+                println("Starting Ketai Camera");
             }
         }
 
@@ -595,7 +598,12 @@ public class Sketch extends PApplet {
         // users can click anywhere on the screen to hide the keyboard
         keyboardRequired = false;
 
+        // Checking if the user is currently on the CameraLiveViewScreen and if learningModeOn is being displayed
         if (currentScreen.equals("CameraLiveViewScreen") && learningModeOn) {
+
+            // Temporarily turning off learning mode, so that the overlay will no longer be displayed during this
+            // app session. If a user wants to turn learning mode off for all sessions, they can change their user
+            // preferences from within the Settings screen
             learningModeOn = false;
         }
     }
@@ -647,13 +655,10 @@ public class Sketch extends PApplet {
     // so instead explicitly calling this method from the draw() method in this class, only if we are
     // on the CameraLiveViewScreen.
     public void onCameraPreviewEvent() {
-        //println("CAM - New frame available " + this.readingImage);
 
         // Checking if the Sketch is currently reading in and keying an image (as we only want to handle
         // one image at a time to avoid memory overload
         if (this.readingImage == false) {
-            // Reading in a new frame from the ketaiCamera object
-            //println("CAM - New frame about to be read");
 
             // Setting the readingImage variable to true so that no more images can be read in until
             // this one has been completed
@@ -699,6 +704,11 @@ public class Sketch extends PApplet {
         // information on any other screen
         if (currentScreen.equals("CameraLiveViewScreen")) {
 
+            // Creating a local boolean to determine if we need to load a new image in from Google, based
+            // on whether the user has moved around their environment or not. Defaulting it to false,
+            // to avoid loading in new images everytime the onAccelerometerEvent() is called
+            Boolean newGoogleImageRequired = false;
+
             // Checking if shakeMovementOn is true i.e. has the user clicked the shakeMovementIcon, so that
             // they can now move their device to "look up and down" within the location they are currently
             // in
@@ -708,30 +718,59 @@ public class Sketch extends PApplet {
                 // of 10 to -10, to a larger range of -90 to 90, as these are the maximum allowed values
                 // for the pitch of a Google Street View Image
                 googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
+
+                // Since the user is using the shake movement functionality, a new image is required,
+                // as they will be "looking around" the environment they are in, and so by loading in
+                // new images with the imagePitch values specified above, they will feel like this is
+                // a smooth transition, as opposed to a series of images
+                newGoogleImageRequired = true;
             }
 
             // Using modulus to slow down how often the following code is called (i.e. it will currently
             // be called on every 4th frame)
             if (frameCount % 4 == 0) {
+
                 // Determining the orientation of the device based on the value
                 // of it's accelerometer on the X axis
                 if (accelerometerX > 7) {
                     // The device is being turned to the left
-                    // Setting the device orientation to be 90 degrees
-                    deviceOrientation = 90;
+
+                    // Setting the device orientation to be 90 degrees, if it doesn't already equal this
+                    if (deviceOrientation != 90) {
+                        deviceOrientation = 90;
+                        // Since the device's orientation has changed, a new image is needed from Google,
+                        // so that it's aspect ratio will match that of the user's viewpoint
+                        newGoogleImageRequired = true;
+                    }
                 } else if (accelerometerX < -7) {
                     // The device is being turned to the right
-                    // Setting the device orientation to be -90 degrees
-                    deviceOrientation = -90;
+
+                    // Setting the device orientation to be -90 degrees, if it doesn't already equal this
+                    if (deviceOrientation != -90) {
+                        deviceOrientation = -90;
+                        // Since the device's orientation has changed, a new image is needed from Google,
+                        // so that it's aspect ratio will match that of the user's viewpoint
+                        newGoogleImageRequired = true;
+                    }
                 } else {
                     // The device is standing straight up
-                    // Setting the device orientation to be 0 degrees
-                    deviceOrientation = 0;
+
+                    // Setting the device orientation to be 0 degrees, if it doesn't already equal this
+                    if (deviceOrientation != 0) {
+                        deviceOrientation = 0;
+                        // Since the device's orientation has changed, a new image is needed from Google,
+                        // so that it's aspect ratio will match that of the user's viewpoint
+                        newGoogleImageRequired = true;
+                    }
                 }
-                // Calling the loadGoogleImage() method in a thread, to load in a new version of the
-                // current location's image, with the pitch altered to reflect the new value assigned
-                // above
-                thread("loadGoogleImage");
+
+                if (newGoogleImageRequired) {
+                    // Calling the loadGoogleImage() method in a thread, to load in a new version of the
+                    // current location's image, with the relevant properties altered to reflect the new values assigned
+                    // above. Only loading in a new image if a change is required to the background of the
+                    // environment the user is viewing (i.e. through scrolling or accelerometer movement of the screen
+                    thread("loadGoogleImage");
+                }
             }
 
         } else {
@@ -762,13 +801,20 @@ public class Sketch extends PApplet {
             imageShared = false;
             compiledImage = null;
             myCameraLiveViewScreen.showScreen();
+
+            // If learning mode is on, then display the LearningScreen as an overlay over
+            // the CameraLiveViewScreen
             if (learningModeOn) {
                 myLearningScreen.showScreen();
             }
         } else if (currentScreen.equals("FavouritesScreen")) {
             myFavouritesScreen.showScreen();
         } else if (currentScreen.equals("SettingsScreen")) {
-            returnTo = "SettingsScreen";
+            // Setting the global returnTo variable to be equal to the current screen,
+            // so that if user goes to the SocialMediaLogoutScreen, that screen's icons
+            // can determine which screen to return the user to after they have completed
+            // their changes (as they may have come in from another screen)
+            returnTo = currentScreen;
             mySettingsScreen.showScreen();
         } else if (currentScreen.equals("AboutScreen")) {
             myAboutScreen.showScreen();
@@ -779,7 +825,11 @@ public class Sketch extends PApplet {
         } else if (currentScreen.equals("ImagePreviewScreen")) {
             myImagePreviewScreen.showScreen();
         } else if (currentScreen.equals("SaveShareScreenA")) {
-            returnTo = "SaveShareScreenA";
+            // Setting the global returnTo variable to be equal to the current screen,
+            // so that if user goes to the SaveShareScreenA, that screen's icons
+            // can determine which screen to return the user to after they have completed
+            // their changes (as they may have come in from another screen)
+            returnTo = currentScreen;
             mySaveShareScreenA.showScreen();
         } else if (currentScreen.equals("SaveShareScreenB")) {
             mySaveShareScreenB.showScreen();
@@ -807,7 +857,10 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- CheckFunctionCalls() --------------------------------*/
     public void checkFunctionCalls() {
-        // Checking if any screen's icons are trying to trigger any functions
+
+        // Checking if any screen's icons are trying to trigger any functions (by passing their
+        // iconLinkTo values to the global callFunction variable). In order for an icon to link
+        // to a function, as opposed to a Screen, the link must start with "_"
         if (callFunction.equals("")) {
             // No function needs to be called
         } else if (callFunction.equals("_keepImage")) {
@@ -850,6 +903,7 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- KeepImage() -----------------------------------------*/
     public void keepImage() {
+
         // Checking if the saveThisImageOn boolean is true. If a user has autoSaveModeOn turned on,
         // then saveThisImageOn will also be set to true. If a user then wants to turn off saving for
         // an individual image, they can toggle this functionality on/off in SaveShareScreenA, while
@@ -860,7 +914,7 @@ public class Sketch extends PApplet {
 
             println("KEEP IMAGE - This image was saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
 
-            // Checking if Storage is available. This method will return a boolean value, to
+            // Chec0king if Storage is available. This method will return a boolean value, to
             // indicate whether external storage is mounted and writable
             if (isExternalStorageWritable()) {
 
@@ -879,6 +933,7 @@ public class Sketch extends PApplet {
                     // booleans will determine which tasks have been successfully completed, in order to
                     // display the appropriate confirmation text on screen
                     currentScreen = sendToTwitterOn ? "SaveShareScreenB" : "ShareSaveSuccessfulScreen";
+
                 } else {
                     println("Failed to save image");
 
@@ -895,10 +950,10 @@ public class Sketch extends PApplet {
                 }
             }
         } else {
-
+            // The user does not want to save the image
 
             println("KEEP IMAGE - This image was not saved. autoSaveModeOn = " + autoSaveModeOn + " and saveThisImageOn = " + saveThisImageOn);
-            // The user does not want to save the image
+
             // Determining which screen to redirect the user to, based on whether they also want
             // to send this image to Twitter or not. If a user is logged in to Twitter, then
             // sendToTwitterOn will be changed to true. If they then decided to disable/enable
@@ -913,62 +968,118 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- IsExternalStorageWritable()--------------------------*/
     public Boolean isExternalStorageWritable() {
-        // Creating a local boolean, to store
+
+        // Creating a local boolean, to store the result of checking if the external storage on this device
+        // is writable, so that it can be returned from this method. Defaulting it to false, so that we
+        // assume that the storage is not writable, unless proved otherwise
         Boolean answer = false;
 
-        // Creating a string to store the state of the external storage
+        // Creating a string to store the state of the external storage,
         String state = Environment.getExternalStorageState();
 
-        // Testing the string value of the enviroment property media_mounted, against the
-        // string value of the state (as declared above). If media_mounted then storage
+        // Testing the string value of the environment property media_mounted, against the
+        // string value of the state (as declared above). If the media is mounted, then storage
         // is available to be written/read, and all permissions are in place
         if (Environment.MEDIA_MOUNTED.equals(state)) {
+
+            // Logging out the current state of the external storage
             println("External Storage is writable: " + state);
+
+            // Setting the result of this method to be true, so that it can be returned from this funciton
             answer = true;
         } else {
+
+            // Logging out the current state of the external storage
             println("External Storage is writable: " + state);
         }
 
+        // Returning the result, of whether or not external storage is writable, to this method
         return answer;
     }
 
     /*-------------------------------------- SaveImageToPhotoGallery() ---------------------------*/
     public Boolean saveImageToPhotoGallery() {
+
+        // Creating a local boolean, to store the result of whether or not this attempt to save the image
+        // to the user's photo gallery has been successful or not, so that it can be returned from this method
         Boolean successfull = false;
+
+        // Checking if it will be possible to write to external storage, by calling the isExternalStorageWritable()
+        // method, which returns a boolean value
         if (isExternalStorageWritable()) {
+
+            // Generating a new filename for this image, based on the current time. Storing this path in the saveToPath
+            // variable, so that this can be used to save the image, and also used to pass to the share intent, should
+            // the user choose to share this image with another app on their device
             saveToPath = directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg";
-            // Trying to save out the image. Putting this code in an if statement, so that if it fails, a message will be logged
+
+            // Saving the compiledImage to the path specified above
             if (compiledImage.save(saveToPath)) {
+
                 println("Successfully saved image to - " + saveToPath);
+
+                // Setting the result of this method to be true. The result will then be returned from this method
                 successfull = true;
+
+                // Setting the global imageSaved boolean to true, so that the screens that follow can determine
+                // whether or not the image has been saved
                 imageSaved = true;
+
             } else {
                 println("Failed to save image");
-                imageSaved = true;
+
+                // Setting the global imageSaved boolean to false, so that the screens that follow can determine
+                // whether or not the image has been saved
+                imageSaved = false;
             }
         }
+
+        // Returning the result of this method i.e. to specify whether the image has been successfully saved to the
+        // user's photo gallery
         return successfull;
     }
 
     /*-------------------------------------- SaveImageLocally() ----------------------------------*/
     public Boolean saveImageLocally() {
-        Boolean successfull = false;
+
+        // Creating a local boolean, to store the result of whether or not this attempt to save the image
+        // to the locally to the app's internal storage has been successful or not, so that it can be
+        // returned from this method
+        Boolean successful = false;
+
+        // Saving the compiledImage to using the filename "twitterImage", as Twitter will only ever need
+        // to access the most recently saved image (in order to attach it to a Tweet)
         if (compiledImage.save(sketchPath("twitterImage.jpg"))) {
+
             println("Successfully saved image locally - " + sketchPath("twitterImage.jpg"));
-            successfull = true;
+
+            // Setting the result of this method to be true. The result will then be returned from this method
+            successful = true;
+
         } else {
+
             println("Failed to save image locally - " + sketchPath("twitterImage.jpg"));
         }
-        return successfull;
+
+        // Returning the result of this method i.e. to specify whether the image has been successfully saved to the
+        // app's internal storage
+        return successful;
     }
 
     /*-------------------------------------- FadeToScreen() --------------------------------------*/
     public void fadeToScreen(String nextScreen) {
+        // This method is used by Screen's that do not inherently have any interactions associated with
+        // them, so that the next screen can be triggered the next time a mouse click occurs
         if (mouseClicked) {
-            if (currentScreen.equals("LoadingScreen")) {
-                myLoadingScreen = null;
-            }
+
+            // Setting the instance of the LoadingScreen to null, as this screen can only ever be accessed
+            // once in any app session
+            myLoadingScreen = null;
+
+            // Setting the global currentScreen method to be equal to the nextScreen (passed into this function)
             currentScreen = nextScreen;
+
+            // Resetting mousePressed and mouseClicked to false, so that only one click will be detected at a time
             mousePressed = false;
             mouseClicked = false;
         }
@@ -976,53 +1087,102 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- AddToFavourites() -----------------------------------*/
     public void addToFavourites() {
-        callFunction = "";
 
+        // Creating a local boolean, to reflect if the currentLocation is a favourite or not, by the end of
+        // this method (for TESTING purposes)
         Boolean favouriteLocation = false;
 
+        // Getting the index value of the currently location, by checking if it is currently a favourite location
         int favLocationIndex = checkIfFavourite(currentLocationName);
 
+        // If the current location is already a favourite, then it will have an index value greater than
+        // minus 1. If this is a favourite location, then the user is trying to remove it from their favourites.
         if (favLocationIndex > -1) {
+
+            // Looping through the favouriteLocationsData XML elements, as loaded in from the user_preferences.xml
             for (int i = 0; i < favouriteLocationsData.length; i++) {
+
+                // Finding the location whose name matches the current location name
                 if (favouriteLocationsData[i].getString("name").equals(currentLocationName)) {
+
+                    // Removing this XML element from the XML variable, which contains all preferences for this user
                     userPreferencesXML.removeChild(favouriteLocationsData[i]);
+
+                    // Removing this location from the favourite tabs on the Favourites screen, using the index value
+                    // returned from the checkIfFavourite() method above
                     myFavouritesScreen.favTabs.remove(favLocationIndex);
+
+                    // Saving the user_preferences.xml file to the app's internal storage, so the user's updated preferences
+                    // can persist between app sessions
                     saveUserPreferencesXML();
+
+                    // Setting the local favourite location variable to false, as this is no longer a favourite location
                     favouriteLocation = false;
                 }
             }
         } else {
+
+            // Creating a new XML location element in the userPreferencesXML variable
             XML newChild = userPreferencesXML.addChild("location");
+
+            // Storing the current location data as attributes on the new XML element
             newChild.setString("name", currentLocationName);
             newChild.setString("latLng", googleImageLatLng);
             newChild.setString("heading", String.valueOf(googleImageHeading));
             newChild.setString("pitch", String.valueOf(googleImagePitch));
+
+            // Saving the user_preferences.xml file to the app's internal storage, so the user's updated preferences
+            // can persist between app sessions
             saveUserPreferencesXML();
 
+            // Creating a new favourite tab, passing in the values of the current location's data
             FavouriteTab newFavTab = new FavouriteTab(this, currentLocationName, googleImageLatLng, googleImageHeading, googleImagePitch);
+
+            // Adding this new favourite tab to the favTabs array of the FavouritesScreen, so that it can be
+            // displayed on this screen
             myFavouritesScreen.favTabs.add(newFavTab);
+
+            // Setting the local favourite location variable to true, as this now a favourite location
             favouriteLocation = true;
         }
 
+        // Calling the checkFavIcon() method to check if this location is stored as a favourite, so that the right
+        // favIcon image can be displayed on the camera live view screen
         checkFavIcon();
-        println("FAV - Favourite location " + currentLocationName + " is now " + favouriteLocation);
+
+        // Logging out the favourite status of the current location (for TESTING purposes)
+        println("Favourite location " + currentLocationName + " is now " + favouriteLocation);
     }
 
     /*-------------------------------------- SwitchLearningMode() --------------------------------*/
     public void switchLearningMode() {
-        callFunction = "";
+
+        // Toggling the value of learningModeOn between true and false i.e. making it equal to the
+        // opposite of what it currently is
         learningModeOn = !learningModeOn;
 
+        // Looping through all of the settings data of the app
         for (int i = 0; i < settingsData.length; i++) {
+
+            // Finding the relevant elements which contain the value for the learningMode setting, so that
+            // it's value can be updated to reflect the current setting in the app
             if (settingsData[i].getString("name").equals("learningMode")) {
+
+                // Storing the current "on" value of this element an attribute on the learningMode element
                 settingsData[i].setString("on", learningModeOn.toString());
+
+                // Saving the user_preferences.xml file to the app's internal storage, so the user's updated preferences
+                // can persist between app sessions
                 saveUserPreferencesXML();
             }
         }
 
+        // Checking what the current status of learningModeOn is
         if (learningModeOn) {
+            // Since learning mode is now on, setting it's toggle switch to on
             mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOnIconImage.png"));
         } else {
+            // Since learning mode is now off, setting it's toggle switch to off
             mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
         }
 
@@ -1031,23 +1191,43 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- SwitchAutoSaveMode() --------------------------------*/
     public void switchAutoSaveMode() {
-        callFunction = "";
+
+        // Toggling the value of autoSaveModeOn between true and false i.e. making it equal to the
+        // opposite of what it currently is. Also resetting the saveThisImageOn boolean to match this
+        // new setting.
         autoSaveModeOn = !autoSaveModeOn;
         saveThisImageOn = autoSaveModeOn;
 
-
+        // Looping through all of the settings data of the app
         for (int i = 0; i < settingsData.length; i++) {
+
+            // Finding the relevant elements which contain the value for the autoSaveMode setting, so that
+            // it's value can be updated to reflect the current setting in the app
             if (settingsData[i].getString("name").equals("autoSaveMode")) {
+
+                // Storing the current "on" value of this element an attribute on the learningMode element
                 settingsData[i].setString("on", autoSaveModeOn.toString());
+
+                // Saving the user_preferences.xml file to the app's internal storage, so the user's updated preferences
+                // can persist between app sessions
                 saveUserPreferencesXML();
             }
         }
 
+        // Checking what the current status of autoSaveModeOn is
         if (autoSaveModeOn) {
+
+            // Since autosave mode is now on, setting it's toggle switch to on
             mySettingsScreen.autoSaveIcon.setImage(loadImage("toggleSwitchOnIconImage.png"));
+
+            // Since autosave mode is now on, also setting the Save icon on SaveShareScreenA to on
             mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOnImage.png"));
         } else {
+
+            // Since autosave mode is now off, setting it's toggle switch to off
             mySettingsScreen.autoSaveIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
+
+            // Since autosave mode is now off, also setting the Save icon on SaveShareScreenA to off
             mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOffImage.png"));
         }
 
@@ -1056,33 +1236,65 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- ToggleSavingOfCurrentImage() ------------------------*/
     public void toggleSavingOfCurrentImage() {
+
+        // Toggling the value of saveThisImageOn between true and false i.e. making it equal to the
+        // opposite of what it currently is.
         saveThisImageOn = !saveThisImageOn;
 
+        // Checking the current status saveThisImageOn
         if (saveThisImageOn) {
+
+            // Since saveThisImageOn is now on, setting the Save icon on SaveShareScreenA to on
             mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOnImage.png"));
         } else {
+
+            // Since saveThisImageOn is now off, setting the Save icon on SaveShareScreenA to off
             mySaveShareScreenA.saveIcon.setImage(loadImage("saveIconOffImage.png"));
         }
+
+        println("SaveThisImageOn is now: " + saveThisImageOn);
     }
 
     /*-------------------------------------- SwitchShakeMovement() -------------------------------*/
     public void switchShakeMovement() {
+
+        // Toggling the value of shakeMovementOn between true and false i.e. making it equal to the
+        // opposite of what it currently is.
         shakeMovementOn = !shakeMovementOn;
+
+        // Checking the current status of shakeMovementOc
         if (shakeMovementOn) {
+
+            // Since shakeMovementOn is now on, setting the shake icon on CameraLiveViewScreen to on
             myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOnImage.png"));
+
         } else {
+
+            // Since shakeMovementOn is now off, setting the shake icon on CameraLiveViewScreen to off
             myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOffImage.png"));
         }
     }
 
     /*-------------------------------------- SwitchSentToTwitter() -------------------------------*/
     public void switchSendToTwitter() {
+
+        // This functionality is only possible if the user has already logged in to Twitter. Checking
+        // if they have by accessing the twitterLoggedIn static variable from the TwitterLoginActivity class
         if (TwitterLoginActivity.twitterLoggedIn) {
+
+            // Toggling the value of sendToTwitterOn between true and false i.e. making it equal to the
+            // opposite of what it currently is.
             sendToTwitterOn = !sendToTwitterOn;
 
+            // Checking the current status of sendToTwitterOn
             if (sendToTwitterOn) {
+
+                // Since sendToTwitterOn is now on, setting the Twitter icon on SaveShareScreenA to on
                 mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOnImage.png"));
+
             } else {
+
+                // Since sendToTwitterOn is now on, setting the Twitter icon on SaveShareScreenA to on
                 mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOffImage.png"));
             }
 
@@ -1093,55 +1305,95 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- SendTweet() -----------------------------------------*/
     public void sendTweet() {
-        callFunction = "";
+
+        // Checking if the user want to send this image to Twitter or not. This variable will only ever
+        // be set to true if the user has already logged in with their Twitter account. A user can then
+        // toggle this functionality on/off for each image they take in the app (i.e. so not all images
+        // have to be shared online
         if (sendToTwitterOn) {
+
+            // Setting the currentScreen to be equal to the SharingSCreen, so that this will be displayed while the
+            // relevant requests are being made to setup and send this image out to Twitter, using the user's account.
+            // Calling the switchScreens() method, so that this screen will be displayed immediately
             currentScreen = "SharingScreen";
             mySharingScreen.showScreen();
 
-            // Creating a string to to hold the value that is in the message input
+            // Acessing the current value of the TextInput on SaveShareScreenB i.e. the message the user would
+            // like to add to their tweet
             String message = mySaveShareScreenB.messageInput.getInputValue();
 
-            //making the current screen "Sharing Screen"
-            currentScreen = "SharingScreen";
+            // Wrapping the sending of this tweet in a try/catch, to catch any TwitterExceptions that may be thrown
             try {
+
+                // Creating a new status object, which will contain the user's message (as declared above) along with the
+                // #WishIWasHere hashtag. The user's input into the TextInput on SaveShareScreenB had a maximum character
+                // length applied to it, so that this message will never exceed the Twitter limit of 144 characters (including
+                // the hashtag we are concatenating)
                 StatusUpdate status = new StatusUpdate(message + " #WishIWasHere");
-                //System.out.println("Status updated to [" + status.getText() + "].");
+
+                // Calling the saveImageLocally() method, to temporarily store the image in the app's internal storage
                 if (saveImageLocally()) {
+
+                    // Loading the image we just saved to the app's internal storage, back in as a File object,
+                    // as this is the required method to attach an image to a tweet
                     File twitterImage = new File(sketchPath("twitterImage.jpg"));
+
+                    // Setting the media of the Twitter status to be equal to the image we just loaded back in
                     status.setMedia(twitterImage);
                 }
-                twitter.updateStatus(status);
-                // Making a twitter status that will hold the message the user typed
-                // and adding the Wish I Was Here tag onto the end of the message
 
+                // Calling the updateStatus() method on the Twitter object, which was generated by the TwitterFactory class
+                // when this app was loaded. All of the consumer keys (of our app) and access tokens (of the user's account)
+                // were passed to the constructor of this class, so that the Twitter API will accept tweets coming from this
+                // app on behalf of the user
+                twitter.updateStatus(status);
+
+                // Setting the global imageShared variable to true, so that the screens which appear following this will
+                // be able to determine if the user shared the image or not
                 this.imageShared = true;
 
-                //Changing the current Screen
+                // Switching the currentScreen to the ShareSaveSuccessfulScreen
                 currentScreen = "ShareSaveSuccessfulScreen";
 
-                //Cleaing the message input so it is empty the next time the user
-                // arrives to send another tweet
+                // Clearing the input value of the message input on the SaveShareScreenB, as the value
+                // of the message is not longer needed
                 mySaveShareScreenB.messageInput.clearInputValue();
-            } catch (TwitterException te) {
-                //If the tweet can't be sent, it will print out the reason that
-                // is causing the problem
-                System.out.println("Error: " + te.getMessage());
 
-                //Changing the current screen to be the unsuccessul share screen
+            } catch (TwitterException te) {
+
+                println("Unable t send tweet " + te);
+
+                // Setting the global imageShared variable to false, so that the screens which appear following this will
+                // be able to determine if the user shared the image or not
+                this.imageShared = true;
+
+                //Changing the current screen to be the ShareUnsuccessfulScreen
                 currentScreen = "ShareUnsuccessfulScreen";
             }
         } else {
-            if (this.imageShared == false && this.imageSaved == false) {
+            println("Twitter - No twitter account logged in");
+
+            // Since this user does not want to send this image to Twitter (or is not currently logged in to their
+            // Twitter account) determining which screen to send them to
+            if (imageSaved == false) {
+
+                // Since the user has chosen not to save or share this image, returning them to the CameraLiveViewScreen
                 currentScreen = "CameraLiveViewScreen";
             } else {
+
+                // Since the user has already chosen to save this image, sending them on to the ShareSaveSuccessfulScreen,
+                // where the global imageSaved and imageShared variables will be used to determine the appropriate message
+                // and options to the user
                 currentScreen = "ShareSaveSuccessfulScreen";
             }
-            println("Twitter - No twitter account logged in");
         }
     }
 
     /*-------------------------------------- RemoveGreenScreen() ---------------------------------*/
     public void removeGreenScreen() {
+
+        // Creating a local keyedImage variable, within which the image of the user, minus the green
+        // screen background, will be created below
         PImage keyedImage;
 
         try {
@@ -1152,29 +1404,38 @@ public class Sketch extends PApplet {
             // and brightness to 100.
             colorMode(HSB, 360, 100, 100);
 
-            keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
+            //keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
 
+            // Defaulting the keyedImage the full currentFrame image, so that only green pixels have to
+            // be individually altered and unaffected pixels will already exist in the keyed image
             keyedImage = currentFrame.get();
 
-            // Loading in the pixel arrays of the keyed image and the girl green screen image
+            // Loading in the pixel arrays of the keyed image
             keyedImage.loadPixels();
 
+            // Looping through each pixel of keyedImage, to check for any green and remove it
             for (int i = 0; i < keyedImage.pixels.length; i++) {
 
                 // Getting the hue, saturation and brightness values of the current pixel
                 float pixelHue = hue(currentFrame.pixels[i]);
 
-                // If the hue of this pixel falls anywhere within the range of green in the colour spectrum
+                // If the hue of this pixel falls anywhere within the range of green in the colour spectrum,
+                // then this pixel may be green
                 if (pixelHue > 60 && pixelHue < 180) {
 
+                    // Since we do not yet know if this is a green pixel, accessing the saturation and brightness
+                    // of it's color so that we can carry out more specific checks on this pixel
                     float pixelSaturation = saturation(currentFrame.pixels[i]);
                     float pixelBrightness = brightness(currentFrame.pixels[i]);
 
                     // If the saturation and brightness are above 30, then this is a green pixel
                     if (pixelSaturation > 30 && pixelBrightness > 20) {
+
                         // Set this pixel in the keyedImage to be transparent (Removing the main areas of the green)
                         keyedImage.pixels[i] = color(0, 0, 0, 0);
+
                     } else {
+
                         // Even though this pixel falls within the green range of the colour spectrum, it's saturation and brightness
                         // are low enough that it is unlikely to be a part of the green screen, but may just be an element of the scene
                         // that is picking up a glow off the green screen. Lowering the hue and saturation to remove the green tinge
@@ -1184,23 +1445,35 @@ public class Sketch extends PApplet {
                 }
             }
 
-            // Updating the pixel arrays of the ketaiCamera and the keyed image
+            // Updating the pixel arrays of the keyed image
             keyedImage.updatePixels();
 
-            // Resetting the color mode to RGB
+            // Resetting the color mode to RGB. Resetting each of the colour channels to 8bits each i.e. true color (24bit)
             colorMode(RGB, 255, 255, 255);
 
+            // Passing the keyed image back to the main thread by setting the currentImage to be equal to the
+            // resulting image of the green screen keying above
             currentImage = keyedImage.get();
 
+            // Resetting the keyedImage and currentFrame to null, as they are no longer needed
             keyedImage = null;
             currentFrame = null;
 
+            // Resetting the readingImage variable to false, so that the next frame can be read in from the device camera
             readingImage = false;
+
             println("Finished removing Green Screen at frame " + frameCount);
+
         } catch (OutOfMemoryError e) {
+
             println("Green screen keying could not be completed - " + e);
+
+            // Resetting the keyedImage and currentFrame to null, as they are no longer needed
             keyedImage = null;
             currentFrame = null;
+
+            // Resetting the readingImage variable to false, so that even if this frame failed to be processing,
+            // the next frame can be read in from the device camera and the thread can attempt the keying again
             this.readingImage = false;
         }
     }
@@ -1208,60 +1481,136 @@ public class Sketch extends PApplet {
     /*-------------------------------------- MergeImages() ---------------------------------------*/
     public void mergeImages() {
         try {
-            PImage overlayImage = loadImage("overlay.png");
+            // Setting imageMerging to true, so that no new frames will be read in while this process
+            // is taking place (as the user has just taken a photo and so does not require any new
+            // frames to be read in)
             imageMerging = true;
 
-            PGraphics mergedImage = createGraphics(googleImageWidth, googleImageHeight, JAVA2D);
+            // Creating a temporary PImage variable to load in the overlay graphic, which will be used to add
+            // our app icon to the merged image.
+            PImage overlayImage = loadImage("overlay.png");
+
+            // Creating a new PGraphic, so that the relevant images can be "drawn" onto it, so that they
+            // can be compiled into one image (for saving and sharing). Up until now, these images
+            // were only displayed on top of one another, so the user could preview the final output.
+            // Initialising this graphic to match the width and height of the Google street view image,
+            // as this will have been determined (in the loadGoogleImage() method) to fill the device's
+            // screen, based on the current orientation of the device.
+            PGraphics mergedImage = createGraphics(googleImageWidth, googleImageHeight);
+
+            // GOOGLE STREET VIEW IMAGE
+            // Setting the imageMode of the merged image to be centered, so that the image can be "drawn" onto
+            // it from a central point. Then adding the currentLocationImage (i.e. the Google Street View Image
+            // of the current location) to the mergedImage graphic, with an x and y position, which is centered
+            // based on half of the width and height of the googleImageWidth and googleImageHeight variables.
             mergedImage.beginDraw();
             mergedImage.imageMode(CENTER);
             mergedImage.image(currentLocationImage, googleImageWidth / 2, googleImageHeight / 2, googleImageWidth, googleImageHeight);
-            mergedImage.endDraw();
 
-            mergedImage.beginDraw();
+            // KEYED IMAGE OF USER
+            // pushMatrix() - Storing the current state of the matrix, as we will be translating, scaling and rotating it in order to
+            // to add the image in the correct position and orientation within the mergedImage PGraphic.
+            // By pushing the matrix, we can revert it back to it's original state once this method has been completed
+            // (by using the .popMatrix() method).
+            // translate() - Translating the matrix of the mergedImage graphic, to be equal to the center of the image, based on half
+            // of the width and height of the googleImageWidth and googleImageHeight variables, so that the image will
+            // be centered within this new graphic, regardless of it's rotation.
+            // scale() - Scaling the currentImage on the X axis, using the cameraScale, which will contain a value of 1 or -1
+            // (based on whether the image should be flipped horizontally i.e. when using the front facing camera, the
+            // x scale should always be -1 to avoid things being viewed in reverse)
+            // rotate() - Calculating the appropriate rotation of the currentImage by multiplying the deviceOrientation, which
+            // will contain a value of -90, 0 or 90, and is updated in the onAccelerometerEvent() when the device is rotated,
+            // by the cameraScale (as described above). Taking the result of this, and subtracting it from the cameraRotation,
+            // which will either be set to 90 or -90 degrees (to ensure that the live stream images from the camera area always
+            // oriented in the right direction, as the Ketai Camera reads them in sideways, depending on which device
+            // camera is being used). Then casting the result of this to be a radian value, so that the image will be
+            // rotated in the right direction.
+            // image() - adding the currentImage (i.e. the keyed image of the user) to the mergedImage graphic, with an x and
+            // y position of 0, as the position of the image within the mergedImage will have been determined by the translate()
+            // method. Setting the width and height of the image to be equal to the device's width and height, as unlike the Google
+            // Street View Image, the currentImage does not change dimensions based on the device's orientation.
+            // popMatrix() - Restoring the matrix of the mergedImage to it's previous state (which was stored when we called the
+            // .pushMatrix() method at the start of this function)
             mergedImage.pushMatrix();
             mergedImage.translate(googleImageWidth / 2, googleImageHeight / 2);
             mergedImage.scale(cameraScale, 1);
             mergedImage.rotate(radians(cameraRotation - (deviceOrientation * cameraScale)));
-            mergedImage.imageMode(CENTER);
             mergedImage.image(currentImage, 0, 0, appHeight, appWidth);
             mergedImage.popMatrix();
+
+            // OVERLAY "WISH I WAS HERE" ICON IMAGE
+            // Adding the overlayImage, which contains our app logo, to the mergedImage. This logo will always appear in the lower
+            // right hand corner of the final image, in both portrait and landscape mode, so determining it's x and y positions
+            // based on the mergedImage width and height, minus a percentage of the device width, to provide a margin around the
+            // edge of the icon
+            mergedImage.image(overlayImage, (float) (mergedImage.width - (appWidth * 0.3)), (float) (mergedImage.height - (appWidth * 0.2)), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
             mergedImage.endDraw();
 
-            mergedImage.beginDraw();
-            mergedImage.imageMode(CENTER);
-            mergedImage.image(overlayImage, (float) (googleImageWidth  - (appWidth * 0.3)), (float) (googleImageHeight - (appWidth * 0.2)), (float) (appWidth * 0.55), (float) (appWidth * 0.3));
-            mergedImage.endDraw();
-
+            // Setting the compiled image to be equal to the image stored in the PImage graphic created above. This contains
+            // the Google Street View image of the background, the keyed image of the user, and the "Wish I Was Here" overlay
+            // image, which can then be saved and/or shared. This image will also be displayed on the ImagePreviewScreen and
+            // the SaveShareScreenA screens.
             compiledImage = mergedImage.get();
+
+            // Resetting the local mergedImage and overlayImage variables to null as they are no longer needed
             mergedImage = null;
             overlayImage = null;
 
+            // Sending the user to the image preview screen, so that they can see their image before choosing to save and/or
+            // share it (in the screens that follow)
             currentScreen = "ImagePreviewScreen";
+
         } catch (OutOfMemoryError e) {
             println("Could not save image - " + e);
-            currentScreen = "ShareSaveUnsuccessfulScreen";
+
+            // Resetting image merging to false, as this image was not able to be merged
+            imageMerging = false;
+
+            // Sending the user back to the camera live view screen, as the device is unable to merge
+            // their current view into an image at this time
+            currentScreen = "CameraLiveViewScreen";
         }
+
+        // Resetting imageMerging and readingImage to false, so that when the user returns to the CameraLiveViewScreen
+        // later on, the camera will immediately being reading in new frames
         imageMerging = false;
         readingImage = false;
     }
 
     /*-------------------------------------- DisgardImage() --------------------------------------*/
     public void disgardImage() {
+
+        // Setting the compiled image variable to null, as the user wishes to dispose of this image,
+        // following an unsuccessful attempt to save and/or share it (in the ShareSaveUnsuccessfulScreen
         compiledImage = null;
+
+        // Returning the user to the CameraLiveViewScreen
         currentScreen = "CameraLiveViewScreen";
     }
 
     /*-------------------------------------- SearchForLocation() ---------------------------------*/
     public void searchForLocation() {
+
+        // Setting the currentScreen to be equal to the SearchingScreen, so that this will be displayed while the
+        // relevant requests are being made to the Google Geocoding API (to source the location data of the address
+        // specified) and then to the loadGoogleImage() method, to request a new Google Street View Image, based
+        // on this location. Calling the switchScreens() method, so that this screen will be displayed immediately
         currentScreen = "SearchingScreen";
         switchScreens();
 
         // Getting the current input value of this text input (i.e. the most recent text input will have been the search box)
         searchAddress = currentTextInputValue;
+
+        // Storing the searchAddress (as defined above) in the format required to add it as a parameter to the request
+        // URL for the Google Geocoding API, which allows us to search for an address and receive an XML response
+        // containing the relevant location details (latitude, longitude etc) so that we can then use these to request
+        // a new image from the Google Street View Image API. Replacing all spaces in the string with +, so it can be
+        // passed to the request URL below
         compiledSearchAddress = searchAddress.replace(" ", "+");
 
         println("Searching for " + searchAddress);
 
+        // Defaulting the latitude, longitude and pitch of the image to 0
         googleImageLatLng = "0,0";
         googleImagePitch = 0;
 
@@ -1269,58 +1618,119 @@ public class Sketch extends PApplet {
         // the location data of the place - https://developers.google.com/maps/documentation/geocoding/intro
         XML locationXML = loadXML("https://maps.googleapis.com/maps/api/geocode/xml?address=" + compiledSearchAddress + "&key=" + googleBrowserApiKey);
 
+        // Checking if a result was found for the location specified by the user
         if (locationXML.getChild("status").getContent().equals("OK")) {
+
+            // Getting the latitude and longitude data from the search result XML file
             String latitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lat").getContent();
             String longitude = locationXML.getChildren("result")[0].getChild("geometry").getChild("location").getChild("lng").getContent();
+
+            // Concatenating the latitude and longitude, seperated by a comma, so that they can be stored in the googleImageLatLng,
+            // to later be passed into the Google Street View Image API request
+            googleImageLatLng = latitude + "," + longitude;
+
+            // Getting the name of the current location from the "long_name" element of teh search result XML file
             currentLocationName = locationXML.getChildren("result")[0].getChildren("address_component")[0].getChild("long_name").getContent();
 
-            googleImageLatLng = latitude + "," + longitude;
             println("Latitude, Longitude = " + googleImageLatLng);
+
+            // Calling the loadGoogleImage() method, to load in the random location's image, with the relevant
+            // properties using the location data from the user's search results, as specified above
             loadGoogleImage();
+
+            // Clearing the input value of the search TextInput on the Search screen, as this is no longer needed
             currentTextInput.clearInputValue();
+
         } else {
+
+            // The search was unsuccessful, so sending the user to the SearchUnsuccessfulScreen
             currentScreen = "SearchUnsuccessfulScreen";
         }
     }
 
     /*-------------------------------------- GetRandomLocation() ---------------------------------*/
     public void getRandomLocation() {
+
+        // Setting the currentScreen to be equal to the SearchingScreen, so that this will be displayed while a
+        // random location is found, and a request is made to the loadGoogleImage() method, to request a new Google
+        // Street View Image, based on this location. Calling the switchScreens() method, so that this screen will
+        // be displayed immediately
         currentScreen = "SearchingScreen";
         switchScreens();
 
         println("Getting a random location");
 
+        // Determing a random index value, based on the amount of locations stored in the randomLocations XML file
         int randomIndex = round(random(randomLocations.length - 1));
 
+        // Setting the google image location variables, based on the relevant values from the random location
+        // we are accessing, using the random index generated above
         googleImageLatLng = randomLocations[randomIndex].getString("latLng");
         googleImageHeading = Float.parseFloat(randomLocations[randomIndex].getString("heading"));
         googleImagePitch = Float.parseFloat(randomLocations[randomIndex].getString("pitch"));
-
         currentLocationName = randomLocations[randomIndex].getString("name");
 
         println("Random location selected: " + currentLocationName);
+
+        // Calling the loadGoogleImage() method, to load in the random location's image, with the relevant
+        // properties using the new values assigned above.
         loadGoogleImage();
     }
 
     /*-------------------------------------- LoadGoogleImage() -----------------------------------*/
     public void loadGoogleImage() {
-        println("Loading in a new image from Google");
-        println("LatLng = " + googleImageLatLng);
-        println("Heading = " + googleImageHeading);
-        println("Pitch = " + googleImagePitch);
 
+        // Using ternary operators to determine the width and height of the google image we are about to load in.
+        // If the device orientation is equal to 0, then the device is standing upright, and the image will need
+        // to be the width of the app, and the height of the app. Conversely, if the device orientation is equal to
+        // anything else (which will only ever be -90 or 90 degrees) then the user is trying to take a landscape
+        // picture, and so the width of the background image will need to be equal to the height of the device,
+        // and the height of the image will be equal to the width of the device, as the background will be rotated
+        // to accomodate the user's change in orientation, and will need to change dimensions in order to fill the
+        // screen
         googleImageWidth = deviceOrientation == 0 ? appWidth : appHeight;
         googleImageHeight = deviceOrientation == 0 ? appHeight : appWidth;
 
+        // Loading in a new Google Street view image, by making a request to the Google Street View Image API, which
+        // includes the location's latitude, longitude, heading (left to right viewpoint), pitch (up and down viewpoint)
+        // our browser API key (so that we have permission to access this API) along with the required width and height
+        // for the resulting image (as defined above, based on the device's current orientation)
         currentLocationImage = loadImage("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + googleBrowserApiKey + "&size=" + googleImageWidth + "x" + googleImageHeight);
-        println("https://maps.googleapis.com/maps/api/streetview?location=" + googleImageLatLng + "&pitch=" + googleImagePitch + "&heading=" + googleImageHeading + "&key=" + googleBrowserApiKey + "&size=" + googleImageWidth + "x" + googleImageHeight);
 
         println("Image successfully loaded");
 
-        checkFavIcon();
+        // Checking if the user is currently on the camera live view screen, and if not, then sending them there,
+        // so they can view themselves in front  of the new background image which was just loaded in
+        if (currentScreen.equals("CameraLiveViewScreen") == false) {
 
-        if (!currentScreen.equals("CameraLiveViewScreen")) {
+            // Calling the checkFavIcon() method to check if this location is stored as a favourite, so that the right
+            // favIcon image can be displayed on the camera live view screen
+            checkFavIcon();
+
+            // Sending the user to the CameraLiveViewScreen
             currentScreen = "CameraLiveViewScreen";
+        }
+    }
+
+    /*-------------------------------------- CheckFavIcon() --------------------------------------*/
+    public void checkFavIcon() {
+
+        // Calling the checkIfFavourite() method, to see if the current location is stored as
+        // a favourite location. This method will return an int, specifying the index position
+        // of the location in the favouriteTabs array int the FavouritesScreen. If the index
+        // position returned is greater than -1, then this location if a favourite
+        if (checkIfFavourite(currentLocationName) > -1) {
+
+            // Since this location is a favourite, changing the image displayed in the favIcon
+            // in the CameraLiveViewScreen to be the solid star (to show the user that this
+            // is currently a favourite location)
+            myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconYesImage.png"));
+        } else {
+
+            // Since this location is not a favourite, changing the image displayed in the favIcon
+            // in the CameraLiveViewScreen to be the empty star (to show the user that this
+            // is a not currently a favourite location)
+            myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconNoImage.png"));
         }
     }
 
@@ -1328,60 +1738,114 @@ public class Sketch extends PApplet {
     public int checkIfFavourite(String currentFavTitle) {
 
         println("FAV - Checking if " + currentFavTitle + " is a favourite location");
+
+        // Creating a local favIndex variable, to store the index of the favourite tab
+        // which contains the location passed into this method, if this location is a
+        // favourite. Defaulting this to -1, as this will be the value returned from
+        // this function, and -1 is not a possible index position. This will then be used
+        // to either determine if this is a favourite location, or to remove this location
+        // from the favouriteTabs array (as well as the user_preferences.xml file)
         int favIndex = -1;
 
+        // Creating a local ArrayList to store the favourite tabs from the Favourites
+        // screen
         ArrayList<FavouriteTab> favouriteTabs = myFavouritesScreen.getFavTabs();
 
+        // Looping through each of the favourite tabs from the Favourites screen
         for (int i = 0; i < favouriteTabs.size(); i++) {
+            // Checking if each tab's location name is equal to the location name which
+            // was passed in to this method
             if (favouriteTabs.get(i).getFavLocationName().equals(currentFavTitle)) {
+                // Since the location name passed in to this method, matches with
+                // this favouriteTab's location name, then this favourite already
+                // exists, so setting the local favIndex variable to be equal to
+                // this tab's index number, so that it can be returned from this method
+                // and will either be used to determine if this is currently a favourite
+                // location, or to remove this location from the favouriteTabs array
+                // (as well as the user_preferences.xml file)
                 favIndex = i;
             }
         }
 
+        // Returing the index value from this method. If the favIndex is greater than
+        // minus 1, then the location passed into this method is a favourite location
         return favIndex;
-    }
-
-    /*-------------------------------------- CheckFavIcon() --------------------------------------*/
-    public void checkFavIcon() {
-        println("FAV - Switching favicon image");
-        if (checkIfFavourite(currentLocationName) > -1) {
-            myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconYesImage.png"));
-        } else {
-            myCameraLiveViewScreen.favIcon.setImage(loadImage("favIconNoImage.png"));
-        }
     }
 
     /*-------------------------------------- CheckTwitterLogin() ---------------------------------*/
     public void checkTwitterLogin() {
         println("Checking if Twitter logged in");
+
+        // Accessing the static twitterLoggedIn variable of the TwitterLoginActivity class, to see if
+        // the user has logged in to the app using their Twitter account
         if (TwitterLoginActivity.twitterLoggedIn) {
-            currentScreen = "SocialMediaLogoutScreen";
+
+            // Logging out the current values of the user's login credentials (for TESTING purposes)
             println("Twitter already logged in");
             println("In SKETCH - Twitter username = " + TwitterLoginActivity.twitterUserUsername);
             println("In SKETCH - Twitter userid = " + TwitterLoginActivity.twitterUserUserId);
             println("In SKETCH - Twitter access token = " + TwitterLoginActivity.twitterUserAccessToken);
             println("In SKETCH - Twitter secret token = " + TwitterLoginActivity.twitterUserSecretToken);
+
+            // Taking the user to the Social Media Logout screen, so that they can log out of their
+            // Twitter account
+            currentScreen = "SocialMediaLogoutScreen";
         }
     }
 
     /*-------------------------------------- LoadUserPreferencesXML() ----------------------------*/
     public void loadUserPreferencesXML() {
+
+        // Creating a new File object, which contains the path to where the user's preferences will
+        // have been stored locally within the app
         File localUserPreferencesPath = new File(sketchPath("user_preferences.xml"));
+
+        // Checking if this path already exists i.e. does the user already have preferences stored within
+        // the app, or is this their first time using the app
         if (localUserPreferencesPath.exists()) {
+            // Since this path already exists, then loading in the user's previously saved preferences
+            // from the app's local files
             userPreferencesXML = loadXML(sketchPath("user_preferences.xml"));
         } else {
+            // Since the user does not already have preferences stored within the app, loading in the
+            // preferences from the original user_preferences.xml file, so that it can be used
+            // to generate the default preferences for this user, and will be the template
+            // for their locally stored preferences within the app
             userPreferencesXML = loadXML("user_preferences.xml");
         }
 
+        // Logging out the current contents of the user preferences XML file (for TESTING purposes)
         println("USER PREFERENCES = " + userPreferencesXML);
+
+        // Setting the global favouriteLocationsData array to store all of the location elements
+        // stored in the user preferences file
         favouriteLocationsData = userPreferencesXML.getChildren("location");
 
+        // Setting the settingsData array to store all of the setting elements stored in the user
+        // preferences file (such as autoSaveMode and learningMode on/off)
         settingsData = userPreferencesXML.getChildren("setting");
+
+        // Looping through all of the settingsData elements from the user preferences XML file
         for (int i = 0; i < settingsData.length; i++) {
+
+            // Finding the relevant elements which contain the value for the autoSaveMode and
+            // learningMode settings, so that their values can be used to initialise (or update)
+            // the current settings in the app
             if (settingsData[i].getString("name").equals("autoSaveMode")) {
+
+                // Parsing in the "on" value of this element as a boolean, and updating the status
+                // of the autoSaveModeOn global variable
                 autoSaveModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
+
+                // Also updating the status of the saveThisImageOn global variable, so that a user can
+                // then toggle this variable on/off to make individual choices about saving or not saving
+                // each image, without effecting their autoSaveModeOn setting
                 saveThisImageOn = autoSaveModeOn;
+
             } else if (settingsData[i].getString("name").equals("learningMode")) {
+
+                // Parsing in the "on" value of this element as a boolean, and updating the status
+                // of the learningModeOn global variable
                 learningModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
             }
         }
@@ -1389,36 +1853,53 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- SaveUserPreferencesXML() ----------------------------*/
     public void saveUserPreferencesXML() {
+
+        // Saving the current userPreferencesXML variable in the app's local user_preferences.xml file
+        // so that the user's settings (and favourite locations) can be persisted between app sessions
         saveXML(userPreferencesXML, sketchPath("user_preferences.xml"));
+
+        // Loading the XML data back in, so that the changes that have just been made to the user_preferences.xml
+        // file will also be reflected in the relevant variable within the app aswell
         loadUserPreferencesXML();
     }
 
     /*-------------------------------------- ShareImageToDeviceApps() ----------------------------*/
     public void shareImageToDeviceApps() {
-        if (this.imageSaved == false) {
+
+        // Checking if the user has already saved the current compiledImage to their photo gallery
+        if (imageSaved == false) {
+
+            // Since the user has not already saved the current compiledImage to their photo gallery,
+            // calling the saveImageToPhotoGallery() method. Ideally, we would prefer to just save the
+            // image to the internal storage of the app temporarily, as we do with the images before
+            // they are sent to Twitter, but the only way that apps outside of this app can access the
+            // image is if it exists in an external storage directory
             saveImageToPhotoGallery();
         }
-        createInstagramIntent(saveToPath);
-    }
 
-    /*-------------------------------------- CreateInstagramIntent() -----------------------------*/
-    public void createInstagramIntent(String imagePath) {
-
-        // Create the new Intent using the 'Send' action.
+        // Create a new sharing intent, using the send action. This will trigger the device's default
+        // "share to" menu, which will offer the user a list of all the apps currently installed on their
+        // device, to which they can share their image
         Intent share = new Intent(Intent.ACTION_SEND);
 
-        // Set the MIME type
+        // Setting the MIME type of this intent to be an image (so the device can display the apps which
+        // are appropriate for this type of media
         share.setType("image/*");
 
-        // Create the URI from the media
-        File media = new File(imagePath);
-        Uri uri = Uri.fromFile(media);
+        // Creating a new File object, passing in the path to the most recently saved image
+        File imageFile = new File(saveToPath);
 
-        // Add the URI to the Intent.
-        share.putExtra(Intent.EXTRA_STREAM, uri);
+        // Creating a URI (uniform resource identifier) to represent the image's location within the device
+        // using the new File object created above
+        Uri imageFileURI = Uri.fromFile(imageFile);
 
-        // Broadcast the Intent.
-        startActivity(Intent.createChooser(share, "Share to"));
+        // Adding the image file's URI to the intent, as an extra stream element
+        share.putExtra(Intent.EXTRA_STREAM, imageFileURI);
+
+        // Broadcasting the intent by starting it as an Activity, passing in the shareable media (as declared
+        // above) along with the title that the sharing menu should display
+        startActivity(Intent.createChooser(share, "Share your Wish I Was Here image to"));
         this.getActivity().finish();
     }
+
 }

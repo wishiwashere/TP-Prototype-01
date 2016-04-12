@@ -112,10 +112,14 @@ public class Rectangle extends Sketch {
     // descendants of this class can access it.
     protected void show() {
 
-        // Storing the current state of the matrix
+        // Storing the current state of the matrix, as we will be translating, scaling and rotating it in order to
+        // to add the rectangle in the correct position and orientation. By pushing the matrix, we can revert it back
+        // to it's original state once this method has been completed (by using the .popMatrix() method).
         sketch.pushMatrix();
 
-        // Translating the position of the matrix to the specified x and y of the object
+        // Translating the position of the matrix be equal to the x and y positions passed into this method. Casting these values
+        // to floats (as this is the datatype expected by the Processing translate method). The values coming in to this method
+        // are being read in as doubles, so by casting them back to floats, we can still implement a Processing method using them.
         sketch.translate(this.rectX, this.rectY);
 
         // Rotating the matrix by the specified rotation value of the object (which has been stored as a radian value,
@@ -241,10 +245,17 @@ public class Rectangle extends Sketch {
     // Declaring a protected method, which can only be accessed by descendants of this class, to add a text box to the screen
     protected void addTextBox(String displayText, double x1, double y1, double x2, double y2, int alignHorz, int alignVert) {
 
+        // Storing the current state of the matrix, as we will be translating, scaling and rotating it in order to
+        // to add the text box in the correct position and orientation. By pushing the matrix, we can revert it back
+        // to it's original state once this method has been completed (by using the .popMatrix() method).
         sketch.pushMatrix();
 
+        // Translating the position of the matrix be equal to 0, 0, so as to ensure the matrix is back at it's
+        // point of origin
         sketch.translate(0, 0);
 
+        // Rotating the matrix by the current rotation value of this object (which has been stored as a radian value, as this is
+        // the value expected by the Processing .rotate() method)
         sketch.rotate(this.getRotation());
 
         // Setting the rectMode (rectangle drawing mode) of the sketch to be determined using Corners, so that the
@@ -255,7 +266,8 @@ public class Rectangle extends Sketch {
         // Setting the fill to black, so that the text will appear black
         sketch.fill(0);
 
-        // Setting the text alignment of this text box to left on the horizontal axis and centered on the vertical axis.
+        // Setting the text alignment of this text box to be equal to the values passed in for the horizontal x axis,
+        // and the vertical y axis, to determine where the text will be displayed within the text box
         sketch.textAlign(alignHorz, alignVert);
 
         // Setting the text size of this text box to be equal to the defaultTextSize, as defined in the main Sketch class.
@@ -269,6 +281,8 @@ public class Rectangle extends Sketch {
         // displayed within this text box. Any text which exceeds the bounds of this box will not be displayed.
         sketch.text(displayText, (float)(x1), (float)(y1), (float)(x2), (float)(y2));
 
+        // Restoring the matrix to it's previous state (which was stored when we called the .pushMatrix() method at the start
+        // of this function)
         sketch.popMatrix();
     }
 
