@@ -367,11 +367,12 @@ public class Sketch extends PApplet {
     public void setup() {
         println("Main Sketch is being reset");
         /*---------------------------------- XML Data --------------------------------------------*/
-        // Initialising the array of random locations based on the random location XML file in the
-        // assets folder. Storing these in a separate XML file to the user preferences, so that
-        // even if a user deletes all of their favourite locations, there will still be random
+        // Initialising the array of random locations based on the random location XML file from our
+        // GitHub.io site, so that we can update the random locations for all apps, without having to
+        // create a new release for the app. Storing these in a separate XML file to the user preferences,
+        // so that even if a user deletes all of their favourite locations, there will still be random
         // locations available to them.
-        randomLocations = loadXML("random_locations.xml").getChildren("location");
+        randomLocations = loadXML("https://wishiwashere.github.io/random_locations.xml").getChildren("location");
 
         // Loading in the user's preferences by calling this class's loadUserPreferencesXML() method, as this
         // process will need to be completed multiple times later on in the app (i.e. to save/delete favourite
@@ -413,7 +414,8 @@ public class Sketch extends PApplet {
         sensor.enableAccelerometer();
 
         // Starting the sensors that have been enabled (i.e. the accelerometer) so that the relevant
-        // events will be triggered e.g. onAccelerometerEvent()
+        // events will be triggered e.g. on
+        // ometerEvent()
         sensor.start();
 
         /*----------------------------------- Twitter --------------------------------------------*/
@@ -1808,10 +1810,12 @@ public class Sketch extends PApplet {
             userPreferencesXML = loadXML(sketchPath("user_preferences.xml"));
         } else {
             // Since the user does not already have preferences stored within the app, loading in the
-            // preferences from the original user_preferences.xml file, so that it can be used
-            // to generate the default preferences for this user, and will be the template
-            // for their locally stored preferences within the app
-            userPreferencesXML = loadXML("user_preferences.xml");
+            // preferences from the default user_preferences.xml file, on our GitHub.io site, so that
+            // we can update the user's default favourite locations remotely. This file will only
+            // be loaded in the first time the user opens the app so that it can be used to generate the
+            // default preferences for this user, and will be the template for their locally stored
+            // preferences within the app
+            userPreferencesXML = loadXML("https://wishiwashere.github.io/user_preferences.xml");
         }
 
         // Logging out the current contents of the user preferences XML file (for TESTING purposes)
