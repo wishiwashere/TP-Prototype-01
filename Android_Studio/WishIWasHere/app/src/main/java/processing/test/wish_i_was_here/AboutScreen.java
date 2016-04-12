@@ -20,7 +20,7 @@ public class AboutScreen extends Screen {
     private Sketch sketch;
 
     // Creating a private string to contain the text we will display to briefly introduce us and our project
-    private String aboutText = "We are 3rd Year Creative Multimedia students in Limerick Institute of Technology, Clonmel. As part of a team project, we decided to design, create and build an application that will transport you to different locations around the world. Our aim is to make the world a little bit smaller, one click at a time. ";
+    private String aboutText = "We are 3rd Year Creative Multimedia students in Limerick Institute of Technology, Clonmel.\r\nWe have decided to design, create and build an application that will allow you to visit different locations around the world.\r\nOur aim is to make the world a little bit smaller, one click at a time. ";
 
     // Creating a private string to contain all of the attribution text we require for this screen. This
     // string will be initialised in the constructor of this screen, using the array declared below, so
@@ -31,15 +31,14 @@ public class AboutScreen extends Screen {
     // from this screen as needed. This array will be used in the constructor of this class, to generate
     // the text which will be displayed on screen as one String.
     private String[] attributionTextLines ={
+            "Laura Pigott, Copyright © 2016, www.pigottlaura.com",
+            "Eiren McLoughlin, Copyright © 2016, eiren.projects.ie",
             "Google Maps Geolocation API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc",
             "Google Street View Image API, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 3.0. It is attributed to Google Inc",
             "Android Studio, Copyright © 2016 , This program is licensed under a Creative Commons Attribution 2.5 Generic. It is attributed to Google Inc and the Open Handset Alliance",
             "Ketai, Copyright © 2015, Licensed by Processing Foundation",
             "Processing, Copyright © 2004, Licensed by Processing Foundation",
-            "Fabric.io, Copyright © 2016, Licensed by Twitter Inc",
-            "ExpressJS, Copyright © 2016 StrongLoop, IBM, and other expressjs.com contributors. By the Node JS Foundation",
-            "Jimp, Copyright © 2016 Licensed by MIT",
-            "Onecolor, Copyright © 2011, Licensed by One.com"
+            "Fabric.io, Copyright © 2016, Licensed by Twitter Inc"
     };
 
     // Creating a private boolean, which will be used to check if this page has be reloaded yet i.e.
