@@ -384,6 +384,7 @@ public class Sketch extends PApplet {
         // width/height of the device, with a frame rate of 24.
         ketaiCamera = new KetaiCamera(this, appWidth, appHeight, 24);
 
+        println("KetaiCamera size is: - " + appWidth + " x " + appHeight);
         // Printing out the list of available cameras i.e. front/rear facing
         println(ketaiCamera.list());
 
@@ -463,8 +464,8 @@ public class Sketch extends PApplet {
         currentImage = createImage(appWidth, appHeight, RGB);
         currentImage.loadPixels();
         for (int i = 0; i < currentImage.pixels.length; i++) {
-            // Setting every pixel of the image to be black
-            currentImage.pixels[i] = color(0);
+            // Setting every pixel of the image to be transparent
+            currentImage.pixels[i] = color(0, 0, 0, 0);
         }
         currentImage.updatePixels();
 
