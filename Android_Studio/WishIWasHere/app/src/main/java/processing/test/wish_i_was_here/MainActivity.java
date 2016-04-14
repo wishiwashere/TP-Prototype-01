@@ -3,11 +3,14 @@ package processing.test.wish_i_was_here;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 
 // This class contains the main activity, which contains the Processing sketch for this app
 public class MainActivity extends Activity {
+
+    final int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
     // Overriding this activity's onCreate() method, so that the Proccesing sketch can
     // be brought in as a fragment, and displayed when this activity is running
@@ -34,6 +37,24 @@ public class MainActivity extends Activity {
         fragmentManager.beginTransaction()
                 .replace(R.id.processingSketch, fragment)
                 .commit();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        Log.d("Main Activity", "Main Activity Permission request result received");
+        switch (requestCode) {
+            case REQUEST_MULTIPLE_PERMISSIONS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("Main Activity", "Main Activity Permission was granted from device");
+                } else {
+                    // Permission denied
+                    // functionality that depends on this permission.
+                    Log.d("Main Activity", "Main Activity Permission was denied from device");
+                }
+                return;
+            }
+        }
     }
 
     // Overriding this activity's onResume() method, so that when the user returns to the app
