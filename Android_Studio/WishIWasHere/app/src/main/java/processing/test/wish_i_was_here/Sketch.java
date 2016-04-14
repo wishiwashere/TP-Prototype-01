@@ -716,7 +716,15 @@ public class Sketch extends PApplet {
             // they can now move their device to "look up and down" within the location they are currently
             // in
             if (shakeMovementOn) {
+                /*
+                float pitchDirection = accelerometerZ;
 
+                if(deviceOrientation == 90){
+                    pitchDirection = accelerometerX;
+                } else if (deviceOrientation == -90){
+                    pitchDirection = -accelerometerX;
+                }
+                */
                 // Setting the image pitch to be equal to the accelerometerZ value, mapped from a range
                 // of 10 to -10, to a larger range of -90 to 90, as these are the maximum allowed values
                 // for the pitch of a Google Street View Image
