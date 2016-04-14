@@ -716,25 +716,32 @@ public class Sketch extends PApplet {
             // they can now move their device to "look up and down" within the location they are currently
             // in
             if (shakeMovementOn) {
-                /*
-                float pitchDirection = accelerometerZ;
 
-                if(deviceOrientation == 90){
-                    pitchDirection = accelerometerX;
-                } else if (deviceOrientation == -90){
-                    pitchDirection = -accelerometerX;
+                // Checking if the device is standing upright, as we can only allow the user to use the shake
+                // movement functionality when the device is standing upright due to restrictions with the
+                // accelerometer
+                if(deviceOrientation == 0) {
+                    // Device is upright
+
+                    // Setting the image pitch to be equal to the accelerometerZ value, mapped from a range
+                    // of 10 to -10, to a larger range of -90 to 90, as these are the maximum allowed values
+                    // for the pitch of a Google Street View
+                    googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
+
+                    // Since the user is using the shake movement functionality, a new image is required,
+                    // as they will be "looking around" the environment they are in, and so by loading in
+                    // new images with the imagePitch values specified above, they will feel like this is
+                    // a smooth transition, as opposed to a series of images
+                    newGoogleImageRequired = true;
+                } else {
+                    if(shakeMovementOn) {
+                        // Turning off shake movement, as this functionality is not possible when the device
+                        // is turned sideways, due to restrictions in the accelerometer's ability to detect
+                        // the difference between the user being turned sideways, and trying to look up and
+                        // down around the image
+                        switchShakeMovement();
+                    }
                 }
-                */
-                // Setting the image pitch to be equal to the accelerometerZ value, mapped from a range
-                // of 10 to -10, to a larger range of -90 to 90, as these are the maximum allowed values
-                // for the pitch of a Google Street View Image
-                googleImagePitch = map(round(accelerometerZ), 10, -10, -90, 90);
-
-                // Since the user is using the shake movement functionality, a new image is required,
-                // as they will be "looking around" the environment they are in, and so by loading in
-                // new images with the imagePitch values specified above, they will feel like this is
-                // a smooth transition, as opposed to a series of images
-                newGoogleImageRequired = true;
             }
 
             // Using modulus to slow down how often the following code is called (i.e. it will currently
@@ -785,9 +792,10 @@ public class Sketch extends PApplet {
             }
 
         } else {
-            // Since we are not currently on the CameraLiveViewScreen, resetting the shakeMovementOn
-            // variable to false
-            shakeMovementOn = false;
+            if(shakeMovementOn) {
+                // Since we are not currently on the CameraLiveViewScreen, resetting shakeMovementOn to false
+                switchShakeMovement();
+            }
         }
     }
 
@@ -1265,17 +1273,28 @@ public class Sketch extends PApplet {
     /*-------------------------------------- SwitchShakeMovement() -------------------------------*/
     public void switchShakeMovement() {
 
-        // Toggling the value of shakeMovementOn between true and false i.e. making it equal to the
-        // opposite of what it currently is.
-        shakeMovementOn = !shakeMovementOn;
+        // Checking if the device is standing upright, as we can only allow the user to use the shake
+        // movement functionality when the device is standing upright due to restrictions with the
+        // accelerometer
+        if(deviceOrientation == 0) {
+            // Toggling the value of shakeMovementOn between true and false i.e. making it equal to the
+            // opposite of what it currently is.
+            shakeMovementOn = !shakeMovementOn;
 
-        // Checking the current status of shakeMovementOc
-        if (shakeMovementOn) {
+            // Checking the current status of shakeMovementOc
+            if (shakeMovementOn) {
 
-            // Since shakeMovementOn is now on, setting the shake icon on CameraLiveViewScreen to on
-            myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOnImage.png"));
+                // Since shakeMovementOn is now on, setting the shake icon on CameraLiveViewScreen to on
+                myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOnImage.png"));
 
+            } else {
+
+                // Since shakeMovementOn is now off, setting the shake icon on CameraLiveViewScreen to off
+                myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOffImage.png"));
+            }
         } else {
+            // Resetting switch movement to false, as the user's device is turned sideways
+            shakeMovementOn = false;
 
             // Since shakeMovementOn is now off, setting the shake icon on CameraLiveViewScreen to off
             myCameraLiveViewScreen.shakeIcon.setImage(loadImage("shakeIconOffImage.png"));

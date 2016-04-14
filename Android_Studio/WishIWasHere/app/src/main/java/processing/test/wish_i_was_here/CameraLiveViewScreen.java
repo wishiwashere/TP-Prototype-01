@@ -105,21 +105,21 @@ public class CameraLiveViewScreen extends Screen {
                     sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledX) > 90 ? 90 : sketch.googleImagePitch + amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
-                    println("Scrolled up. Device is turned left. Pitch is now " + sketch.googleImagePitch);
+                    //println("Scrolled up. Device is turned left. Pitch is now " + sketch.googleImagePitch);
 
                 } else if(sketch.deviceOrientation == -90){
                     // Device is turned right
                     sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledX) < -90 ? -90 : sketch.googleImagePitch - amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
-                    println("Scrolled down. Device is turned right. Pitch is now " + sketch.googleImagePitch);
+                    //println("Scrolled down. Device is turned right. Pitch is now " + sketch.googleImagePitch);
 
                 } else {
                     // Device is standing upright
                     sketch.googleImageHeading = (sketch.googleImageHeading + amountScrolledX) > 359 ? 0 : sketch.googleImageHeading + amountScrolledX;
 
                     // Logging out the current heading of the Google image (for TESTING purposes)
-                    println("Scrolled right. Device is upright. Heading is now " + googleImageHeading);
+                    //println("Scrolled right. Device is upright. Heading is now " + googleImageHeading);
                 }
             } else {
                 // The user has scrolled LEFT
@@ -134,21 +134,21 @@ public class CameraLiveViewScreen extends Screen {
                     sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledX) < -90 ? -90 : sketch.googleImagePitch - amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
-                    println("Scrolled down. Device is turned left. Pitch is now " + sketch.googleImagePitch);
+                    //println("Scrolled down. Device is turned left. Pitch is now " + sketch.googleImagePitch);
 
                 } else if(sketch.deviceOrientation == -90) {
                     // Device is turned right
-                    sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledX) > 90 ? 90 : sketch.googleImagePitch + amountScrolledX;
+                    //sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledX) > 90 ? 90 : sketch.googleImagePitch + amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
-                    println("Scrolled up. Device is turned right. Pitch is now " + sketch.googleImagePitch);
+                    //println("Scrolled up. Device is turned right. Pitch is now " + sketch.googleImagePitch);
 
                 } else {
                     // Device is standing upright
                     sketch.googleImageHeading = (sketch.googleImageHeading - amountScrolledX) < 0 ? 359 : sketch.googleImageHeading - amountScrolledX;
 
                     // Logging out the current heading of the Google image (for TESTING purposes)
-                    println("Scrolled left. Device is upright. Heading is now " + sketch.googleImageHeading);
+                    //println("Scrolled left. Device is upright. Heading is now " + sketch.googleImageHeading);
                 }
             }
 
@@ -156,9 +156,6 @@ public class CameraLiveViewScreen extends Screen {
             // not be controlling the pitch of the Google image by scrolling, but instead by moving their device around
             // to look "up" and "down".
             if(sketch.shakeMovementOn == false) {
-
-                // Logging out the amount the user has scrolled (for TESTING purposes)
-                //println("amountScrolledY = " + amountScrolledY);
 
                 // Determining which direction the user has scrolled, based on the previous and current mouse Y positions
                 // i.e. has the user scrolled up or down which will determine the pitch of the google image
@@ -175,21 +172,21 @@ public class CameraLiveViewScreen extends Screen {
                         sketch.googleImageHeading = (sketch.googleImageHeading + amountScrolledY) > 359 ? 0 : sketch.googleImageHeading + amountScrolledY;
 
                         // Logging out the current heading of the Google image (for TESTING purposes)
-                        println("Scrolled left. Device is turned left. Heading is now " + sketch.googleImageHeading);
+                        //println("Scrolled left. Device is turned left. Heading is now " + sketch.googleImageHeading);
 
                     } else if(sketch.deviceOrientation == -90) {
                         // Device is turned right
                         sketch.googleImageHeading = (sketch.googleImageHeading - amountScrolledY) < 0 ? 359 : sketch.googleImageHeading - amountScrolledY;
 
                         // Logging out the current heading of the Google image (for TESTING purposes)
-                        println("Scrolled right. Device is turned right. Heading is now " + sketch.googleImageHeading);
+                        //println("Scrolled right. Device is turned right. Heading is now " + sketch.googleImageHeading);
 
                     } else {
                         // Device is standing upright
                         sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledY) < -90 ? -90 : sketch.googleImagePitch - amountScrolledY;
 
                         // Logging out the current pitch of the Google image (for TESTING purposes)
-                        println("Scrolled up. Device is upright. Pitch is now " + sketch.googleImagePitch);
+                        //println("Scrolled up. Device is upright. Pitch is now " + sketch.googleImagePitch);
 
                     }
                 } else {
@@ -205,21 +202,21 @@ public class CameraLiveViewScreen extends Screen {
                         sketch.googleImageHeading = (sketch.googleImageHeading - amountScrolledY) < 0 ? 359 : sketch.googleImageHeading - amountScrolledY;
 
                         // Logging out the current heading of the Google image (for TESTING purposes)
-                        println("Scrolled right. Device is turned left. Heading is now " + sketch.googleImageHeading);
+                        //println("Scrolled right. Device is turned left. Heading is now " + sketch.googleImageHeading);
 
                     } else if(sketch.deviceOrientation == -90) {
                         // Device is turned right
                         sketch.googleImageHeading = (sketch.googleImageHeading + amountScrolledY) > 359 ? 0 : sketch.googleImageHeading + amountScrolledY;
 
                         // Logging out the current heading of the Google image (for TESTING purposes)
-                        println("Scrolled left. Device is turned right. Heading is now " + sketch.googleImageHeading);
+                        //println("Scrolled left. Device is turned right. Heading is now " + sketch.googleImageHeading);
 
                     } else {
                         // Device is standing upright
                         sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledY) > 90 ? 90 : sketch.googleImagePitch + amountScrolledY;
 
                         // Logging out the current pitch of the Google image (for TESTING purposes)
-                        println("Scrolled down. Device is upright. Pitch is now " + sketch.googleImagePitch);
+                        //println("Scrolled down. Device is upright. Pitch is now " + sketch.googleImagePitch);
                     }
                 }
 
