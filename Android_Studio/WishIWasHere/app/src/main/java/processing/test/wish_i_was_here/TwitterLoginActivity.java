@@ -1,6 +1,8 @@
 package processing.test.wish_i_was_here;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,11 +21,16 @@ import io.fabric.sdk.android.Fabric;
 // This class contains the login activity for authorising a user's Twitter account using Fabric.io
 public class TwitterLoginActivity extends Activity {
 
+    // Creating variable to store the instance of the TwitterLoginActivity_CheckLogin class,
+    // which will be used to check if the user is already logged in to their Twitter account
+    // i.e. by checking their user_preferences.xml file
+    public TwitterLoginActivity_CheckLogin checkLogin;
+
     // Creating two buttons, one for redirecting the user the the Twitter login page,
     // and one for allowing a user to proceed to the MainActivity without logging in
     // to Twitter
     private TwitterLoginButton loginButton;
-    private Button cancelLoginButton;
+    public Button cancelLoginButton;
 
     // Creating public static variables, to store the data relating to the Twitter login,
     // so that it can be accessed from any class within this app
@@ -44,6 +51,28 @@ public class TwitterLoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Log.d("Main Activity", "TWITTER - About to check if user logged in");
+
+        // Initialising a new instance of the TwitterLoginActivity_CheckLogin class,
+        // passing it an instance of this class so that it can later call the goToMainActivity()
+        // method on it, if the user is already logged in i.e. so they don't have to login again
+        checkLogin = new TwitterLoginActivity_CheckLogin(this);
+
+        // Using the Android fragment manager, which will be used to add the checkLogin Sketch
+        // fragment to this activity below
+        FragmentManager fragmentManager = getFragmentManager();
+
+        // Creating a new fragment, and initialising it to be a equal to the new instance of the
+        // TwitterLoginActivity_CheckLogin Processing Sketch declared above
+        Fragment fragment = checkLogin;
+
+        // Using the fragment manager, created above, to add the checkLogin Processing Sketch fragment
+        // to this activity by replacing the current FrameLayout element (as declared in the
+        // activity_twitter_login.xml layout file) with the fragment declared above.
+        fragmentManager.beginTransaction()
+                .replace(R.id.checkLoginProcessingSketch, fragment)
+                .commit();
 
         // Creating a new authorisation configuration for Twitter, using our app's Twitter
         // key and secret key credentials, as specified above
@@ -90,6 +119,11 @@ public class TwitterLoginActivity extends Activity {
                 // Setting the static twitterLoggedIn boolean of this class to be true, so that all
                 // classes can now check if the user has logged in with Twitter
                 twitterLoggedIn = true;
+
+                // Saving these new login details to the user_preferences.xml file (using the
+                // saveNewTwitterLoginDetails() method of the checkLogin sketch, so that the
+                // next time the user returns to the app, they won't have to log in again.
+                checkLogin.saveNewTwitterLoginDetails();
             }
 
             // Overriding this callback's failure method, passing in the exception which occurred

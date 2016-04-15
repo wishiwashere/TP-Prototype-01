@@ -48,4 +48,9 @@
         android:textAllCaps="false"
         android:text="@string/cancel_login_button_text" />
 
+    <FrameLayout android:id="@+id/checkLoginProcessingSketch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"/>
+
 </RelativeLayout>
