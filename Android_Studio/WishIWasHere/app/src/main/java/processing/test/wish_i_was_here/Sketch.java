@@ -22,6 +22,8 @@ import android.os.Environment;
 import java.io.File;
 import java.util.ArrayList;
 
+import android.content.Intent;
+
 // This class contains the main Sketch for the Processing portion of this app
 public class Sketch extends PApplet {
 
@@ -1821,6 +1823,21 @@ public class Sketch extends PApplet {
             // Taking the user to the Social Media Logout screen, so that they can log out of their
             // Twitter account
             currentScreen = "SocialMediaLogoutScreen";
+        } else {
+            // If we could resolve the OutOfMemory issues, this code would allow the user to go
+            // to the Twitter login screen to log in after they were already in the app
+
+            /*
+            // Creating a new intent, to take the user from this Activity, to the TwitterLoginActivity,
+            // where the user can login to their twitter account
+            Intent intent = new Intent(getActivity(), TwitterLoginActivity.class);
+
+            // Starting the new activity
+            startActivity(intent);
+
+            // Finishing the current activity
+            getActivity().finish();
+            */
         }
     }
 
