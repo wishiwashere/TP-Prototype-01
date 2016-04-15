@@ -1091,7 +1091,7 @@ public class Sketch extends PApplet {
     public void fadeToScreen(String nextScreen) {
         // This method is used by Screen's that do not inherently have any interactions associated with
         // them, so that the next screen can be triggered the next time a mouse click occurs
-        if (frameCount % 60 == 0) {
+        if (frameCount % 60 == 0 || mouseClicked) {
 
             // Setting the instance of the LoadingScreen to null, as this screen can only ever be accessed
             // once in any app session
@@ -1099,6 +1099,9 @@ public class Sketch extends PApplet {
 
             // Setting the global currentScreen method to be equal to the nextScreen (passed into this function)
             currentScreen = nextScreen;
+
+            mouseClicked = false;
+            mousePressed = false;
         }
     }
 
