@@ -40,7 +40,7 @@ public class SocialMediaLogoutScreen extends Screen{
         // name should be displayed on the icon or not. Finally, passing in a linkTo value of the name of the
         // screen or function they will later link to.
         Icon noIcon = new Icon(sketch, sketch.appWidth * 0.3, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "No", true, "Middle", "-returnTo");
-        Icon yesIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Yes", true, "Middle", "-returnTo");
+        Icon yesIcon = new Icon(sketch, sketch.appWidth * 0.7, sketch.iconBottomY, sketch.appWidth * 0.4, sketch.appHeight * 0.08, "Yes", true, "Middle", "_removeTwitterAccount");
 
         // Creating a temporary allIcons array to store the icon created above, so that they can be
         // passed to the super class (Screen) and stored as the icons for this screen.
@@ -70,6 +70,6 @@ public class SocialMediaLogoutScreen extends Screen{
         // Calling the addText() method, which was inherited from the Rectangle class, to add text to the screen
         // which confirms the user's account name (which accessed from a static variable in the TwitterLoginActivity
         // class)
-        this.addText("Are you sure you want \r\n to remove your \r\n@" + TwitterLoginActivity.twitterUserUsername + "\r\n Twitter account from \r\n our app?", sketch.iconCenterX, sketch.appHeight * 0.3);
+        this.addText("Are you sure you want \r\n\r\n to remove your \r\n\n@" + TwitterLoginActivity.twitterUserUsername + "\n\r\n Twitter account from \n\r\n our app?", sketch.iconCenterX, sketch.appHeight * 0.4);
     }
 }

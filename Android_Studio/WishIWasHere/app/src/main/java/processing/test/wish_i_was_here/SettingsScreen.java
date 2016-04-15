@@ -25,6 +25,7 @@ public class SettingsScreen extends Screen {
     // directly accessible when needed.
     public Icon learningModeIcon;
     public Icon autoSaveIcon;
+    public Icon twitterAccountIcon;
 
     // Creating a public constructor for the class so that an instance of it can be declared in the main sketch
     public SettingsScreen(Sketch _sketch) {
@@ -71,7 +72,7 @@ public class SettingsScreen extends Screen {
 
             // Creating the Twitter Account icon, which will take the user to the SocialMediaLogoutScreen
             // so they can remove their account from our app
-            Icon twitterAccountIcon = new Icon(sketch, sketch.iconCenterX, sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("twitterAccountIconOnImage.png"), "Twitter", true, "Below", "SocialMediaLogoutScreen");
+            twitterAccountIcon = new Icon(sketch, sketch.iconLeftX + (sketch.largeIconSize * 0.5), sketch.iconCenterY * 1.2, sketch.largeIconSize, sketch.largeIconSize, sketch.loadImage("twitterAccountIconOnImage.png"), "Twitter", true, "Below", "_checkTwitterLogin");
 
             // Having to declare the allIcons array locally, as it cannot be initialised in this manner
             // unless it is part of the initial declaration

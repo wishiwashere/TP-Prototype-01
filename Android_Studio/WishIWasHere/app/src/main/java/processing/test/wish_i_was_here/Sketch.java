@@ -912,7 +912,9 @@ public class Sketch extends PApplet {
             switchShakeMovement();
         } else if (callFunction.equals("_shareImageToDeviceApps")) {
             shareImageToDeviceApps();
-        } else {
+        } else if(callFunction.equals("_removeTwitterAccount")) {
+            removeTwitterAccount();
+        } else{
             println(callFunction + " - This function does not exist / cannot be triggered by this icon");
         }
 
@@ -1930,4 +1932,32 @@ public class Sketch extends PApplet {
         this.getActivity().finish();
     }
 
+    public void removeTwitterAccount() {
+        for (int i = 0; i < settingsData.length; i++) {
+            // Finding the location whose name matches the current location name
+            if (settingsData[i].getString("name").equals("twitter")) {
+
+                // Removing this XML element from the XML variable, which contains all the twitter login
+                // details for this user
+                userPreferencesXML.removeChild(settingsData[i]);
+
+                sendToTwitterOn = false;
+
+                TwitterLoginActivity.twitterLoggedIn = false;
+                TwitterLoginActivity.twitterUserUsername = "";
+                TwitterLoginActivity.twitterUserSecretToken = "";
+                TwitterLoginActivity.twitterUserAccessToken = "";
+                TwitterLoginActivity.twitterUserUserId = 0;
+
+                // Saving the user_preferences.xml file to the app's internal storage, so the user's updated preferences
+                // can persist between app sessions
+                saveUserPreferencesXML();
+
+                mySettingsScreen.twitterAccountIcon.setImage(loadImage("twitterAccountIconOffImage.png"));
+
+                currentScreen = "SettingsScreen";
+            }
+
+        }
+    }
 }
