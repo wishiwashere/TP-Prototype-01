@@ -18,11 +18,9 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
 
-// Importing the Jave library (to create File objects, and ArrayList arrays)
+// Importing the Java library (to create File objects, and ArrayList arrays)
 import java.io.File;
 import java.util.ArrayList;
-
-import android.content.Intent;
 
 // This class contains the main Sketch for the Processing portion of this app
 public class Sketch extends PApplet {
@@ -691,6 +689,7 @@ public class Sketch extends PApplet {
                 thread("removeGreenScreen");
 
             } catch (OutOfMemoryError e) {
+
                 println("Unable to initiate the removeGreenScreen thread - " + e);
 
                 // Resetting the readingImage variable to false, so that even if this frame was unsuccessful
@@ -736,6 +735,8 @@ public class Sketch extends PApplet {
                     // a smooth transition, as opposed to a series of images
                     newGoogleImageRequired = true;
                 } else {
+                    // Device is in landscape mode
+
                     if(shakeMovementOn) {
                         // Turning off shake movement, as this functionality is not possible when the device
                         // is turned sideways, due to restrictions in the accelerometer's ability to detect
@@ -1092,8 +1093,9 @@ public class Sketch extends PApplet {
     /*-------------------------------------- FadeToScreen() --------------------------------------*/
     public void fadeToScreen(String nextScreen) {
         // This method is used by Screen's that do not inherently have any interactions associated with
-        // them, so that the next screen can be triggered the next time a mouse click occurs
-        if (frameCount % 60 == 0 || mouseClicked) {
+        // them, so that the next screen can be triggered the next time a mouse click occurs or will
+        // otherwise disappear after 50 frames
+        if (frameCount % 50 == 0 || mouseClicked) {
 
             // Setting the instance of the LoadingScreen to null, as this screen can only ever be accessed
             // once in any app session
@@ -1102,6 +1104,8 @@ public class Sketch extends PApplet {
             // Setting the global currentScreen method to be equal to the nextScreen (passed into this function)
             currentScreen = nextScreen;
 
+            // Resetting the mouse clicked and pressed booleans to false, so that no accidental clicks can
+            // occur while the screen is being changed
             mouseClicked = false;
             mousePressed = false;
         }
@@ -1327,12 +1331,19 @@ public class Sketch extends PApplet {
 
             } else {
 
-                // Since sendToTwitterOn is now on, setting the Twitter icon on SaveShareScreenA to on
+                // Since sendToTwitterOn is now off, setting the Twitter icon on SaveShareScreenA to off
                 mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOffImage.png"));
             }
 
         } else {
             println("This user can not turn on Twitter, as they have not previously logged in with Twitter");
+
+            // Resetting sendToTwitterOn to false, so that none of the Twitter funcitonalities of the app
+            // will be available
+            sendToTwitterOn = false;
+
+            // Since sendToTwitterOn is now off, setting the Twitter icon on SaveShareScreenA to off
+            mySaveShareScreenA.twitterIcon.setImage(loadImage("twitterAccountIconOffImage.png"));
         }
     }
 
@@ -1343,9 +1354,9 @@ public class Sketch extends PApplet {
         // be set to true if the user has already logged in with their Twitter account. A user can then
         // toggle this functionality on/off for each image they take in the app (i.e. so not all images
         // have to be shared online
-        if (sendToTwitterOn) {
+        if (TwitterLoginActivity.twitterLoggedIn && sendToTwitterOn) {
 
-            // Setting the currentScreen to be equal to the SharingSCreen, so that this will be displayed while the
+            // Setting the currentScreen to be equal to the SharingScreen, so that this will be displayed while the
             // relevant requests are being made to setup and send this image out to Twitter, using the user's account.
             // Calling the switchScreens() method, so that this screen will be displayed immediately
             currentScreen = "SharingScreen";
@@ -1436,8 +1447,6 @@ public class Sketch extends PApplet {
             // brightness of the pixels. Setting the maximum hue to 360, and the maximum saturation
             // and brightness to 100.
             colorMode(HSB, 360, 100, 100);
-
-            //keyedImage = createImage(currentFrame.width, currentFrame.height, ARGB);
 
             // Defaulting the keyedImage the full currentFrame image, so that only green pixels have to
             // be individually altered and unaffected pixels will already exist in the keyed image
@@ -1952,17 +1961,22 @@ public class Sketch extends PApplet {
         this.getActivity().finish();
     }
 
+    /*-------------------------------------- removeTwitterAccount() ------------------------------*/
     public void removeTwitterAccount() {
+
+        // Looping through all of the settingsData XML elements from the user's preferences XML file
         for (int i = 0; i < settingsData.length; i++) {
-            // Finding the location whose name matches the current location name
+
+            // Finding the Twitter setting element in the XML
             if (settingsData[i].getString("name").equals("twitter")) {
 
+                println("Logging the  @" + TwitterLoginActivity.twitterUserUsername + " Twitter account out of the app");
                 // Removing this XML element from the XML variable, which contains all the twitter login
                 // details for this user
                 userPreferencesXML.removeChild(settingsData[i]);
 
-                sendToTwitterOn = false;
-
+                // Resetting all of the TwitterLoginActivity's static variables, so that the user's Twitter details
+                // will be removed from the app
                 TwitterLoginActivity.twitterLoggedIn = false;
                 TwitterLoginActivity.twitterUserUsername = "";
                 TwitterLoginActivity.twitterUserSecretToken = "";
@@ -1975,6 +1989,12 @@ public class Sketch extends PApplet {
 
                 mySettingsScreen.twitterAccountIcon.setImage(loadImage("twitterAccountIconOffImage.png"));
 
+                // Calling the switchSendToTwitter method, which will ensure that the sending to Twitter functionality
+                // is turned off throughout the app (now that TwitterLoginActivity's static twitterLoggedIn variable
+                // is false)
+                switchSendToTwitter();
+
+                // Returning the user to the settings screen
                 currentScreen = "SettingsScreen";
             }
 

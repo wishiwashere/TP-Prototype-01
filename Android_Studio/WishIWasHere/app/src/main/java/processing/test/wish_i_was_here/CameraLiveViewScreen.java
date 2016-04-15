@@ -89,62 +89,67 @@ public class CameraLiveViewScreen extends Screen {
             float amountScrolledX = dist(0, sketch.pmouseX, 0, sketch.mouseX);
             float amountScrolledY = dist(0, sketch.pmouseY, 0, sketch.mouseY);
 
-            // Checking which direction the user has scrolled on the X axis based on the previous x position of the
-            // mouse, in comparison with the current x position of the mouse. Scrolling on the x axis controls the
-            // heading of the google image i.e. left to right view point
-            if (sketch.pmouseX > sketch.mouseX) {
-                // The user has scrolled RIGHT
+            // GENERAL NOTES ON HOW GOOGLE STREET VIEW IMAGE IS BEING PANNED
+            // Heading refers to the left/right view of the image, between 0 and 360 degrees. Decrementing the googleImageHeading
+            // by the amount scrolled on the relevant axis. Using a ternary operator to check that this will not
+            // result in a value less than 0 or greater than 359 (the min/max values allowed for the heading of a Google
+            // Street View image). If it does, then resetting the heading to the other end of the values, so the
+            // user can continue turn around in that direction, otherwise allowing it to equal to the current heading
+            // value minus/plus the amount scrolled on the relevant axis.
+            // Pitch refers to the up/down view of the image, between -90 and 90 degrees. Incrementing the googleImagePitch
+            // by the amount scrolled on the relevant axis. Using a ternary operator to check that this will not result in a
+            // value less than -90 or greater than 90 (the min/max values allowed for the pitch). If it does, then stopping
+            // the pitch at the min or max i.e. so the user cannot exceed these values, otherwise allowing it to equal to the
+            // current pitch value minus/plus the amount scrolled on the relevant axis.
+            // As the orientation of the device can change, determining which value to effect based on which axis below
 
-                // Decrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
-                // operator to check that this will not result in a value less than 0 (the minimum
-                // value allowed for the heading. If it does, then resetting the heading to 359 i.e. so the
-                // user can continue turn around in that direction, otherwise allowing it to equal to the
-                // current heading value minus the amount scrolled on the
+            // Checking which direction the user has scrolled on the X axis based on the previous x position of the
+            // mouse, in comparison with the current x position of the mouse.
+            if (sketch.pmouseX > sketch.mouseX) {
+                // The previous mouse X was further along than the current mouseX
+
+                // Checking what the current orientation of the device is
                 if(sketch.deviceOrientation == 90){
-                    // Device is turned left
+                    // Device is turned left - so the user wanted to scroll up
                     sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledX) > 90 ? 90 : sketch.googleImagePitch + amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
                     //println("Scrolled up. Device is turned left. Pitch is now " + sketch.googleImagePitch);
 
                 } else if(sketch.deviceOrientation == -90){
-                    // Device is turned right
+                    // Device is turned right - so the user wanted to scroll down
                     sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledX) < -90 ? -90 : sketch.googleImagePitch - amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
                     //println("Scrolled down. Device is turned right. Pitch is now " + sketch.googleImagePitch);
 
                 } else {
-                    // Device is standing upright
+                    // Device is standing upright - so the user wanted to scroll right
                     sketch.googleImageHeading = (sketch.googleImageHeading + amountScrolledX) > 359 ? 0 : sketch.googleImageHeading + amountScrolledX;
 
                     // Logging out the current heading of the Google image (for TESTING purposes)
                     //println("Scrolled right. Device is upright. Heading is now " + googleImageHeading);
                 }
             } else {
-                // The user has scrolled LEFT
+                // The previous mouse X is less than the current mouse X
 
-                // Incrementing the googleImageHeading by the amount scrolled on the x axis. Using a ternary
-                // operator to check that this will not result in a value greater than 359 (the maximum
-                // value allowed for the heading. If it does, then resetting the heading to 0 i.e. so the
-                // user can continue turn around in that direction, otherwise allowing it to equal to the
-                // current heading value plus the amount scrolled on the X
+                // Checking what the current orientation of the device is
                 if(sketch.deviceOrientation == 90) {
-                    // Device is turned left
+                    // Device is turned left - so the user wanted to scroll down
                     sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledX) < -90 ? -90 : sketch.googleImagePitch - amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
                     //println("Scrolled down. Device is turned left. Pitch is now " + sketch.googleImagePitch);
 
                 } else if(sketch.deviceOrientation == -90) {
-                    // Device is turned right
+                    // Device is turned right - so the user wanted to scroll up
                     //sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledX) > 90 ? 90 : sketch.googleImagePitch + amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
                     //println("Scrolled up. Device is turned right. Pitch is now " + sketch.googleImagePitch);
 
                 } else {
-                    // Device is standing upright
+                    // Device is standing upright - so the user wanted to scroll left
                     sketch.googleImageHeading = (sketch.googleImageHeading - amountScrolledX) < 0 ? 359 : sketch.googleImageHeading - amountScrolledX;
 
                     // Logging out the current heading of the Google image (for TESTING purposes)
@@ -157,32 +162,28 @@ public class CameraLiveViewScreen extends Screen {
             // to look "up" and "down".
             if(sketch.shakeMovementOn == false) {
 
-                // Determining which direction the user has scrolled, based on the previous and current mouse Y positions
-                // i.e. has the user scrolled up or down which will determine the pitch of the google image
+                // Checking which direction the user has scrolled on the Y axis based on the previous y position of the
+                // mouse, in comparison with the current y position of the mouse.
                 if (sketch.pmouseY > sketch.mouseY) {
-                    // The user has scrolled UP
+                    // The previous mouse Y was further along than the current mouse Y
 
-                    // Incrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-                    // operator to check that this will not result in a value greater than 90 (the maximum
-                    // value allowed for the pitch). If it does, then stopping the pitch at 90 i.e. so the
-                    // user cannot exceed the maximum value, otherwise allowing it to equal to the current pitch
-                    // value plus the amount scrolled on the Y axis.
+                    // Checking what the current orientation of the device is
                     if(sketch.deviceOrientation == 90) {
-                        // Device is turned left
+                        // Device is turned left - so the user wanted to scroll left
                         sketch.googleImageHeading = (sketch.googleImageHeading + amountScrolledY) > 359 ? 0 : sketch.googleImageHeading + amountScrolledY;
 
                         // Logging out the current heading of the Google image (for TESTING purposes)
                         //println("Scrolled left. Device is turned left. Heading is now " + sketch.googleImageHeading);
 
                     } else if(sketch.deviceOrientation == -90) {
-                        // Device is turned right
+                        // Device is turned right - so the user wanted to scroll right
                         sketch.googleImageHeading = (sketch.googleImageHeading - amountScrolledY) < 0 ? 359 : sketch.googleImageHeading - amountScrolledY;
 
                         // Logging out the current heading of the Google image (for TESTING purposes)
                         //println("Scrolled right. Device is turned right. Heading is now " + sketch.googleImageHeading);
 
                     } else {
-                        // Device is standing upright
+                        // Device is standing upright - so the user wanted to scroll up
                         sketch.googleImagePitch = (sketch.googleImagePitch - amountScrolledY) < -90 ? -90 : sketch.googleImagePitch - amountScrolledY;
 
                         // Logging out the current pitch of the Google image (for TESTING purposes)
@@ -190,29 +191,25 @@ public class CameraLiveViewScreen extends Screen {
 
                     }
                 } else {
-                    // The user has scrolled DOWN
+                    // The previous mouse Y is less than the current mouse Y
 
-                    // Decrementing the googleImagePitch by the amount scrolled on the y axis. Using a ternary
-                    // operator to check that this will not result in a value less than -90 (the minimum
-                    // value allowed for the pitch). If it does, then stopping the pitch at -90 i.e. so the
-                    // user cannot exceed the minimum value, otherwise allowing it to equal to the current pitch
-                    // value minus the amount scrolled on the Y axis.
+                    // Checking what the current orientation of the device is
                     if(sketch.deviceOrientation == 90) {
-                        // Device is turned left
+                        // Device is turned left - so the user wanted to scroll right
                         sketch.googleImageHeading = (sketch.googleImageHeading - amountScrolledY) < 0 ? 359 : sketch.googleImageHeading - amountScrolledY;
 
                         // Logging out the current heading of the Google image (for TESTING purposes)
                         //println("Scrolled right. Device is turned left. Heading is now " + sketch.googleImageHeading);
 
                     } else if(sketch.deviceOrientation == -90) {
-                        // Device is turned right
+                        // Device is turned right - so the user wanted to scroll left
                         sketch.googleImageHeading = (sketch.googleImageHeading + amountScrolledY) > 359 ? 0 : sketch.googleImageHeading + amountScrolledY;
 
                         // Logging out the current heading of the Google image (for TESTING purposes)
                         //println("Scrolled left. Device is turned right. Heading is now " + sketch.googleImageHeading);
 
                     } else {
-                        // Device is standing upright
+                        // Device is standing upright - so the user wanted to scroll down
                         sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledY) > 90 ? 90 : sketch.googleImagePitch + amountScrolledY;
 
                         // Logging out the current pitch of the Google image (for TESTING purposes)

@@ -1,18 +1,32 @@
 package processing.test.wish_i_was_here;
 
-import java.io.File;
-
-import processing.core.PApplet;
+import processing.core.*;
 import processing.data.XML;
 
+import java.io.File;
+
 public class TwitterLoginActivity_CheckLogin extends PApplet {
+
+    // Creating a variable to store the full XML which will be read in from the user_preferences.xml file
     public XML userPreferencesXML;
+
+    // Creating a private variable to store the instance of the TwitterLoginActivity class, which will be passed into
+    // the constructors of this class when it is initialised. The purpose of this, is so that we can access the
+    // methods, such as goToMainActivity(), from within this class, without having to make them static (as some
+    // calls to methods on variables within the activity are not able to be called from static classes i.e.
+    // .perfromClick() to trigger clicks on buttons)
     private TwitterLoginActivity twitterLoginActivity;
 
+    /*-------------------------------------- Constructor() ---------------------------------------*/
+    // Creating a public constructor for this class, which takes in an instance of the TwitterLoginActivity class
     public TwitterLoginActivity_CheckLogin(TwitterLoginActivity _twitterLoginActivity){
+
+        // Storing this instance of the TwitterLoginActivity in a local variable, for reasons described above
         twitterLoginActivity = _twitterLoginActivity;
     }
 
+    /*-------------------------------------- Setup() ---------------------------------------------*/
+    // Overriding the Processing setup() method
     @Override
     public void setup(){
 
@@ -44,13 +58,21 @@ public class TwitterLoginActivity_CheckLogin extends PApplet {
                 if (settingsData[i].getString("name").equals("twitter")) {
                     println("TWITTER - User already has a Twitter login stored");
 
+                    // Setting the TwitterLoginActivity's twitterLoggedIn variable to true, as this user is already
+                    // logged in
                     TwitterLoginActivity.twitterLoggedIn = true;
 
+                    // Setting the TwitterLoginActivity's static variables to be equal to the relevant
+                    // values of the attributes from the twitter settings elelement in the user_preferences.xml
+                    // file
                     TwitterLoginActivity.twitterUserUsername = settingsData[i].getString("username");
                     TwitterLoginActivity.twitterUserAccessToken = settingsData[i].getString("accessToken");
                     TwitterLoginActivity.twitterUserSecretToken = settingsData[i].getString("secretToken");
                     TwitterLoginActivity.twitterUserUserId = Long.parseLong(settingsData[i].getString("userId"));
 
+                    // Calling the goToMainActivity() method of the TwitterLoginActivity class, using the local
+                    // variable which contains the instance of that class (as passed to the constructor of this
+                    // class) so that the user can skip the Twitter login screen (as they are already logged in)
                     twitterLoginActivity.goToMainActivity();
                 }
             }
@@ -74,7 +96,7 @@ public class TwitterLoginActivity_CheckLogin extends PApplet {
         // Creating a new XML location element in the userPreferencesXML variable
         XML newTwitterAccountDetails = userPreferencesXML.addChild("setting");
 
-        // Storing the user's Twitter details in their local user_preferences.xml file
+        // Storing the user's Twitter details in the attributes of this new XML element
         newTwitterAccountDetails.setString("name", "twitter");
         newTwitterAccountDetails.setString("username", TwitterLoginActivity.twitterUserUsername);
         newTwitterAccountDetails.setString("accessToken", TwitterLoginActivity.twitterUserAccessToken);
@@ -82,10 +104,9 @@ public class TwitterLoginActivity_CheckLogin extends PApplet {
         newTwitterAccountDetails.setString("userId", String.valueOf(TwitterLoginActivity.twitterUserUserId));
 
         // Saving the current userPreferencesXML variable in the app's local user_preferences.xml file
-        // so that the user's settings (and favourite locations) can be persisted between app sessions
+        // so that the user's settings can be persisted between app sessions
         if(saveXML(userPreferencesXML, sketchPath("user_preferences.xml"))){
-            println("TWITTER - New Twitter login details saved");
-            println(userPreferencesXML);
+            println("TWITTER - New Twitter login details saved for - " + newTwitterAccountDetails.getString("username"));
         }
     }
 }
