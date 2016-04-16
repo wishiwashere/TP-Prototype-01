@@ -1,10 +1,12 @@
 package processing.test.wish_i_was_here;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 // This class contains the main activity, which contains the Processing sketch for this app
@@ -22,6 +24,8 @@ public class MainActivity extends Activity {
         // so that the sizing and positioning values can be applied, as well as the frame
         // layout for the fragment which will contain the Processing sketch
         setContentView(R.layout.activity_main);
+
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_MULTIPLE_PERMISSIONS);
 
         // Using the Android fragment manager, which will be used to add the Sketch fragment
         // to this activity below
