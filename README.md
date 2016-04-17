@@ -6,27 +6,30 @@ Android application designed and built by Eiren McLoughlin and Laura Pigott, as 
 
 Our aim is to make the world a little bit smaller, one click at a time.
 
-Our personal portfolios can be found at:
-**Eiren McLoughlin:** [eiren.projects.ie](www.eiren.projects.ie)  
-**Laura Pigott:** [pigottlaura.com](www.pigottlaura.com)
+###Personal Portfolios
+_Eiren McLoughlin_: [eiren.projects.ie](www.eiren.projects.ie)  
+_Laura Pigott_: [pigottlaura.com](www.pigottlaura.com)
 
-##Development
+
+###Development
 This application was developed in Android Studio, through the following APIs and libraries
 * [Processing](https://processing.org/)
+	* The majority of the code for this application was creating through the Processing library
 * [Ketai](http://ketai.org/)
-	* Accessing the device Camera
+	* Accessing the device camera
 	* Accessing the accelerometer sensor of the device
 	* Triggering the keyboard of the device (for text input)
-* [Twitter4J](http://twitter4j.org/)
-	* Sending tweets from the app
 * [Fabric](https://fabric.io/)
 	* Handling OAuth Twitter logins
-* [Google Street View Image API](https://developers.google.com/maps/documentation/streetview/)
-	* To request the background images of locations
+* [Twitter4J](http://twitter4j.org/)
+	* Sending tweets from the app
 * [Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/intro)
 	* To lookup the latitude/longitude of a location, based on a user's search terms
+* [Google Street View Image API](https://developers.google.com/maps/documentation/streetview/)
+	* To request the background images of locations
   
-##Application Functionalities
+  
+###Application Functionalities
 * Camera
 	* Reading in camera input
 	* Switching between front and rear cameras on a device
@@ -37,14 +40,13 @@ This application was developed in Android Studio, through the following APIs and
 * Image Orientations
 	* It is possible to take images in both landscape and portrait orientations
 	* Turning the device between landscape/portrait modes will result in the icons turning to reflect this, and the ratio of the Google Street View Image's size being recalculated to fill the screen
-* Saving to devices storage
+* Saving to Device Storage
 	* Creating a Wish I Was Here directory to store images taken in the app
-	* When a user saves an image, it is avaiable in the Wish I Was Here directory of their photo gallery
-	* Saving user preferences to their device
+	* Saving user preferences to the device
 * Travelling to locations
 	* A series of random locations are available within the app
 		* These are sourced from a remote [XML file](https://wishiwashere.github.io/random_locations.xml) and so will be updated frequently to offer new and exciting locations to users
-	* Users can also search for a specific location 
+	* Users can also search for a specific location on the search screen of the app 
 * Interactive Locations
 	* When viewing a location, it is possible to "look around" the environment by swiping the screen
 	* In portrait mode, it is also possible to enable the shake movement functionality, which allows users to look up and down in the environment using the accelerometer of their device
@@ -54,22 +56,26 @@ This application was developed in Android Studio, through the following APIs and
 * Favourites
 	* By default, users are provided with a series of "favourite" locations
 	* Locations can be added, removed and visited within the app
-	* All favourites are stored locally on the user's device  
+	* All favourites are stored locally on the user's device 
+* Managing the new Marshmallow (Android 6.0) Permission Requests
+	* On device's running the new Marshmallow Android version, users will be prompted to allow the application to access the device camera and storage
+	* Device's running older Android versions will not receive this request, as the permissions will be given to the application once the user accepts them when downloading the app from the [Google Play Store](https://play.google.com/store/apps/details?id=processing.test.wish_i_was_here&ah=vSa3i6qQw1bEdd0nt5kwAgY1DjA)
   
-##Deployment
+###Deployment
 Since the beginning of the project, weekly releases have been made to the [Google Play Store](https://play.google.com/store/apps/details?id=processing.test.wish_i_was_here&ah=vSa3i6qQw1bEdd0nt5kwAgY1DjA), as per our release schedule. In total, 21 releases have been made to date. Details of these can be found on our [release](https://github.com/wishiwashere/TeamProject-2016/releases) page
 * 2 Production Releases
 * 4 Beta Releases
 * 15 Alpha Releases
 
 	
-##Creating an App Interface through Processing
-As this application was originally developed using Processing 3.0, all 
+###Creating an App Interface through Processing
+As this application was originally developed using Processing 3.0, the entire app interface was custom created to imitate the following functionalities:
 * Text Inputs
 	* Triggering the device keyboard
 	* Accepting input from keypresses on a soft keyboard
 	* Restricting the maximum allowed characters when necessary (i.e. when writing a tweet)
 	* Constraining the text to appear as though it were in a text box (i.e. to make the text wrap as opposed to going off screen)
+	* Hiding password input (which is no longer a part of the app, as logins are now handled using OAuth redirects)
 * Icons which
 	* Trigger functions
 	* Link to other screens in the app
@@ -80,6 +86,7 @@ As this application was originally developed using Processing 3.0, all
 * Toggling Buttons 
 	* For displaying whether a functionality is turned off/on	
 	
-_Class Structure API_
+	
+###Class Structure API
 The following is a visual representation of the class structure of the Wish I Was Here application, which demonstrates the methods and inheritance upon which it is built
 ![Wish I Was Here Class Structure API](https://github.com/wishiwashere/TeamProject-2016/blob/master/Android_Studio/WishIWasHere_ClassStructure.png "Wish I Was Here Class Structure API")
