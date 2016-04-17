@@ -1,37 +1,35 @@
-#Wish I Was Here App
+#Wish I Was Here
 
-Android App designed and built by Eiren McLoughlin and Laura Pigott, as part of the Team Project module of the Creative Multimedia B.Sc (Hons) degree course in Limerick Institute of Technology, Clonmel, Co. Tipperary.
+Android application designed and built by Eiren McLoughlin and Laura Pigott, as part of the Team Project module of the Creative Multimedia B.Sc (Hons) degree course in Limerick Institute of Technology, Clonmel, Co. Tipperary.
 
-'Wish I Was Here' is the no pay holiday application, which allows users to take pictures of themselves in different locations around the world.
+'Wish I Was Here' is the no pay holiday application, which allows users to take pictures of themselves in different locations around the world. This application is now available for download on the [Google Play Store](https://play.google.com/store/apps/details?id=processing.test.wish_i_was_here&ah=vSa3i6qQw1bEdd0nt5kwAgY1DjA)
 
 Our aim is to make the world a little bit smaller, one click at a time.
 
-Our personal portfolios can be seen at:
-
+Our personal portfolios can be found at:
 **Eiren McLoughlin:** [eiren.projects.ie](www.eiren.projects.ie)  
 **Laura Pigott:** [pigottlaura.com](www.pigottlaura.com)
 
-This application is available for download on the [Google Play Store](https://play.google.com/store/apps/details?id=processing.test.wish_i_was_here&ah=vSa3i6qQw1bEdd0nt5kwAgY1DjA)
-
+##Development
 This application was developed in Android Studio, through the following APIs and libraries
-	* [Processing](https://processing.org/)
-	* [Ketai](http://ketai.org/)
-		* Accessing the device Camera
-		* Accessing the accelerometer sensor of the device
-		* Triggering the keyboard of the device (for text input)
-	* [Twitter4J](http://twitter4j.org/)
-		* Sending tweets from the app
-	* [Fabric](https://fabric.io/)
-		* Handling OAuth Twitter logins
-	* [Google Street View Image API](https://developers.google.com/maps/documentation/streetview/)
-		* To request the background images of locations
-	* [Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/intro)
-		* To lookup the latitude/longitude of a location, based on a user's search terms
+* [Processing](https://processing.org/)
+* [Ketai](http://ketai.org/)
+	* Accessing the device Camera
+	* Accessing the accelerometer sensor of the device
+	* Triggering the keyboard of the device (for text input)
+* [Twitter4J](http://twitter4j.org/)
+	* Sending tweets from the app
+* [Fabric](https://fabric.io/)
+	* Handling OAuth Twitter logins
+* [Google Street View Image API](https://developers.google.com/maps/documentation/streetview/)
+	* To request the background images of locations
+* [Google Maps Geocoding API](https://developers.google.com/maps/documentation/geocoding/intro)
+	* To lookup the latitude/longitude of a location, based on a user's search terms
   
-_Application Functionalities_
+##Application Functionalities
 * Camera
 	* Reading in camera input
-	* Switching between front and rear cameras on a devices
+	* Switching between front and rear cameras on a device
 * Green Screen Keying
 	* If a user stands in front of a green background (such as a green screen, or grass) the background will be removed from the image, so that they appear as though they are standing in front of the Google Street View image environment instead
 	* All of the code for green screen keying was custom created for this app
@@ -58,14 +56,14 @@ _Application Functionalities_
 	* Locations can be added, removed and visited within the app
 	* All favourites are stored locally on the user's device  
   
-_Deployment_
+##Deployment
 Since the beginning of the project, weekly releases have been made to the [Google Play Store](https://play.google.com/store/apps/details?id=processing.test.wish_i_was_here&ah=vSa3i6qQw1bEdd0nt5kwAgY1DjA), as per our release schedule. In total, 21 releases have been made to date. Details of these can be found on our [release](https://github.com/wishiwashere/TeamProject-2016/releases) page
 * 2 Production Releases
 * 4 Beta Releases
 * 15 Alpha Releases
 
 	
-_Creating an App Interface through Processing_
+##Creating an App Interface through Processing
 As this application was originally developed using Processing 3.0, all 
 * Text Inputs
 	* Triggering the device keyboard
