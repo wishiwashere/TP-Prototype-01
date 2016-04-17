@@ -42,10 +42,10 @@ This application was developed in Android Studio, through the following APIs and
 	* Turning the device between landscape/portrait modes will result in the icons turning to reflect this, and the ratio of the Google Street View Image's size being recalculated to fill the screen
 * Saving to Device Storage
 	* Creating a Wish I Was Here directory to store images taken in the app
-	* Saving user preferences to the device
+	* Saving user preferences to the device. The defaults for these user preferences are generated from our [remote resources](https://github.com/wishiwashere/wishiwashere.github.io)
 * Travelling to locations
 	* A series of random locations are available within the app
-		* These are sourced from a remote [XML file](https://wishiwashere.github.io/random_locations.xml) and so will be updated frequently to offer new and exciting locations to users
+		* These are sourced from a our [remote resources](https://github.com/wishiwashere/wishiwashere.github.io) and so will be updated frequently to offer new and exciting locations to users
 	* Users can also search for a specific location on the search screen of the app 
 * Interactive Locations
 	* When viewing a location, it is possible to "look around" the environment by swiping the screen
