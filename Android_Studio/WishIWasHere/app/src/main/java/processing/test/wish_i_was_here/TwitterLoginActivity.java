@@ -59,7 +59,7 @@ public class TwitterLoginActivity extends Activity {
 
         Log.d("Main Activity", "TWITTER - About to check if user logged in");
 
-        internetWarning = Toast.makeText(getBaseContext(), "Please connect to the\r\n internet and \r\ntry again", Toast.LENGTH_LONG);
+        internetWarning = Toast.makeText(getBaseContext(), "Please connect to the internet and try again", Toast.LENGTH_LONG);
         internetWarning.setGravity(Gravity.CENTER, 0, 0);
 
         // Initialising a new instance of the TwitterLoginActivity_CheckLogin class,
