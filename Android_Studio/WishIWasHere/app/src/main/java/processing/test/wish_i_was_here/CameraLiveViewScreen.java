@@ -143,7 +143,7 @@ public class CameraLiveViewScreen extends Screen {
 
                 } else if(sketch.deviceOrientation == -90) {
                     // Device is turned right - so the user wanted to scroll up
-                    //sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledX) > 90 ? 90 : sketch.googleImagePitch + amountScrolledX;
+                    sketch.googleImagePitch = (sketch.googleImagePitch + amountScrolledX) > 90 ? 90 : sketch.googleImagePitch + amountScrolledX;
 
                     // Logging out the current pitch of the Google image (for TESTING purposes)
                     //println("Scrolled up. Device is turned right. Pitch is now " + sketch.googleImagePitch);
