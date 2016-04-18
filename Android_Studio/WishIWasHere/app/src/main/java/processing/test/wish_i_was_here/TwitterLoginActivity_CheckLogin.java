@@ -18,6 +18,11 @@ public class TwitterLoginActivity_CheckLogin extends PApplet {
     private TwitterLoginActivity twitterLoginActivity;
 
     /*-------------------------------------- Constructor() ---------------------------------------*/
+    // Creating a public constructor for this class, which takes no parameters, as is required to reload
+    // the sketch upon an additional Twitter login
+    public TwitterLoginActivity_CheckLogin(){
+    }
+
     // Creating a public constructor for this class, which takes in an instance of the TwitterLoginActivity class
     public TwitterLoginActivity_CheckLogin(TwitterLoginActivity _twitterLoginActivity){
 
