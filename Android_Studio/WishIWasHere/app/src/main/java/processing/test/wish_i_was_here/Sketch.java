@@ -620,41 +620,51 @@ public class Sketch extends PApplet {
     // Overriding the Processing keyPressed() method
     @Override
     public void keyPressed() {
+        if(currentTextInput != null) {
 
-        // Getting the current input value of this text input (i.e. so that if a user clicks between different
-        // text fields, they can resume their input instead of the TextInput becoming empty)
-        currentTextInputValue = currentTextInput.getInputValue();
+            // Getting the current input value of this text input (i.e. so that if a user clicks between different
+            // text fields, they can resume their input instead of the TextInput becoming empty)
+            currentTextInputValue = currentTextInput.getInputValue();
 
-        // Checking if the key pressed is a coded value i.e. backspace etc
-        if (key == CODED) {
-            //println(key);
-            // Checking if the key pressed was the backspace key
-            if (keyCode == 67) {
-                // Checking that the length of the current currentTextInputValue string is greater than 0 (i.e.
-                // if the string is empty, don't try to delete anything)
-                if (currentTextInputValue.length() > 0) {
-                    //println("BACKSPACE");
-                    // Removing the last character from currentTextInputValue string, by creating a substring
-                    // of currentTextInputValue, that is one shorter than the current currentTextInputValue string
-                    currentTextInputValue = currentTextInputValue.substring(0, currentTextInputValue.length() - 1);
+            // Checking if the key pressed is a coded value i.e. backspace etc
+            if (key == CODED) {
+                //println(key);
+                // Checking if the key pressed was the backspace key
+                if (keyCode == 67) {
+                    // Checking that the length of the current currentTextInputValue string is greater than 0 (i.e.
+                    // if the string is empty, don't try to delete anything)
+                    if (currentTextInputValue.length() > 0) {
+                        //println("BACKSPACE");
+                        // Removing the last character from currentTextInputValue string, by creating a substring
+                        // of currentTextInputValue, that is one shorter than the current currentTextInputValue string
+                        currentTextInputValue = currentTextInputValue.substring(0, currentTextInputValue.length() - 1);
+                    }
                 }
-            }
-        } else {
-            // This is a character key
-            // Checking if the current length of the text in this TextInput exceeds it's maximum character length,
-            // i.e. if this is the TextInput for adding a message to a tweet, then the maximum length will be set
-            // to ensure that a user cannot exceed this
-            if (currentTextInputValue.length() < currentTextInput.getMaxTextLength() - 1) {
-                // Adding the character to currentTextInputValue string
-                currentTextInputValue += key;
             } else {
-                println("This text is too long");
+                // This is a character key
+                // Checking if the current length of the text in this TextInput exceeds it's maximum character length,
+                // i.e. if this is the TextInput for adding a message to a tweet, then the maximum length will be set
+                // to ensure that a user cannot exceed this
+                if (currentTextInputValue.length() < currentTextInput.getMaxTextLength() - 1) {
+                    // Adding the character to currentTextInputValue string
+                    currentTextInputValue += key;
+                } else {
+                    println("This text is too long");
+                }
+
             }
 
+            // Passing the currentTextInputValue string into the setInputValue of the currentTextInput field
+            currentTextInput.setInputValue(currentTextInputValue);
         }
+    }
 
-        // Passing the currentTextInputValue string into the setInputValue of the currentTextInput field
-        currentTextInput.setInputValue(currentTextInputValue);
+    // Overriding the Processing onStop() method
+    @Override
+    public void onStop() {
+        super.onStop();
+        ketaiCamera.stop();
+        println("STOP - Sketch Stopped");
     }
 
     /*-------------------------------------- Ketai Camera ----------------------------------------*/
