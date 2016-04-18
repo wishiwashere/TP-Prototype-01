@@ -604,10 +604,15 @@ public class Sketch extends PApplet {
         // Checking if the user is currently on the CameraLiveViewScreen and if learningModeOn is being displayed
         if (currentScreen.equals("CameraLiveViewScreen") && learningModeOn) {
 
+            println("LRN - turning learning mode off");
             // Temporarily turning off learning mode, so that the overlay will no longer be displayed during this
             // app session. If a user wants to turn learning mode off for all sessions, they can change their user
             // preferences from within the Settings screen
             learningModeOn = false;
+
+            saveUserPreferencesXML();
+
+            println("LRN - learning mode is now - " + learningModeOn);
         }
     }
 
@@ -1182,26 +1187,13 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- SwitchLearningMode() --------------------------------*/
     public void switchLearningMode() {
-
         // Toggling the value of learningModeOn between true and false i.e. making it equal to the
         // opposite of what it currently is
         learningModeOn = !learningModeOn;
 
-        // Looping through all of the settings data of the app
-        for (int i = 0; i < settingsData.length; i++) {
-
-            // Finding the relevant elements which contain the value for the learningMode setting, so that
-            // it's value can be updated to reflect the current setting in the app
-            if (settingsData[i].getString("name").equals("learningMode")) {
-
-                // Storing the current "on" value of this element an attribute on the learningMode element
-                settingsData[i].setString("on", learningModeOn.toString());
-
-                // Saving the user_preferences.xml file to the app's internal storage, so the user's updated preferences
-                // can persist between app sessions
-                saveUserPreferencesXML();
-            }
-        }
+        // Saving the user_preferences.xml file to the app's internal storage, so the user's updated preferences
+        // can persist between app sessions
+        saveUserPreferencesXML();
 
         // Checking what the current status of learningModeOn is
         if (learningModeOn) {
@@ -1212,7 +1204,7 @@ public class Sketch extends PApplet {
             mySettingsScreen.learningModeIcon.setImage(loadImage("toggleSwitchOffIconImage.png"));
         }
 
-        println("Learning mode is now: " + learningModeOn);
+        println("LRN - Learning mode is now: " + learningModeOn);
     }
 
     /*-------------------------------------- SwitchAutoSaveMode() --------------------------------*/
@@ -1224,21 +1216,7 @@ public class Sketch extends PApplet {
         autoSaveModeOn = !autoSaveModeOn;
         saveThisImageOn = autoSaveModeOn;
 
-        // Looping through all of the settings data of the app
-        for (int i = 0; i < settingsData.length; i++) {
-
-            // Finding the relevant elements which contain the value for the autoSaveMode setting, so that
-            // it's value can be updated to reflect the current setting in the app
-            if (settingsData[i].getString("name").equals("autoSaveMode")) {
-
-                // Storing the current "on" value of this element an attribute on the learningMode element
-                settingsData[i].setString("on", autoSaveModeOn.toString());
-
-                // Saving the user_preferences.xml file to the app's internal storage, so the user's updated preferences
-                // can persist between app sessions
-                saveUserPreferencesXML();
-            }
-        }
+        saveUserPreferencesXML();
 
         // Checking what the current status of autoSaveModeOn is
         if (autoSaveModeOn) {
@@ -1908,10 +1886,33 @@ public class Sketch extends PApplet {
                 learningModeOn = Boolean.parseBoolean(settingsData[i].getString("on"));
             }
         }
+        println("LRN - Loaded user preferences - learningMode = " + learningModeOn);
     }
 
     /*-------------------------------------- SaveUserPreferencesXML() ----------------------------*/
     public void saveUserPreferencesXML() {
+
+        // Looping through all of the settings data of the app
+        for (int i = 0; i < userPreferencesXML.getChildren("setting").length; i++) {
+
+            // Finding the relevant elements which contain the value for the autoSaveMode and learningMode settings,
+            // so that it's value can be updated to reflect the current setting in the app. Looping through all of
+            // the settings data of the app (from within the userPreferences XML file
+            if (userPreferencesXML.getChildren("setting")[i].getString("name").equals("autoSaveMode")) {
+
+                // Storing the current "on" value of this element an attribute on the autoSaveModeOn element
+                userPreferencesXML.getChildren("setting")[i].setString("on", autoSaveModeOn.toString());
+
+                println("LRN - Settings updated - autoSaveMode = " + userPreferencesXML.getChildren("setting")[i]);
+
+            } else if (userPreferencesXML.getChildren("setting")[i].getString("name").equals("learningMode")) {
+
+                // Storing the current "on" value of this element an attribute on the learningModeOn element
+                userPreferencesXML.getChildren("setting")[i].setString("on", learningModeOn.toString());
+
+                println("LRN - Settings updated - learningMode = " + userPreferencesXML.getChildren("setting")[i]);
+            }
+        }
 
         // Saving the current userPreferencesXML variable in the app's local user_preferences.xml file
         // so that the user's settings (and favourite locations) can be persisted between app sessions
