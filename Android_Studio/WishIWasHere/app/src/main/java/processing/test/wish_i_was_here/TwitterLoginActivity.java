@@ -5,12 +5,14 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Looper;
+import android.os.StrictMode;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import java.net.InetAddress;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -24,6 +26,9 @@ import io.fabric.sdk.android.Fabric;
 // This class contains the login activity for authorising a user's Twitter account using Fabric.io
 public class TwitterLoginActivity extends Activity {
 
+    // Creating a Toast object, which will be used to generate a pop up to display to the user if they
+    // try to access the main app without an active internet connection (as many of the setup functions
+    // of the main Sketch class will fail if they are attempted without internet access
     Toast internetWarning;
 
     // Creating variable to store the instance of the TwitterLoginActivity_CheckLogin class,
@@ -57,9 +62,20 @@ public class TwitterLoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Changing the thread policy of this thread, so that network connections can be made on
+        // the main thread i.e. to check if internet is available
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
         Log.d("Main Activity", "TWITTER - About to check if user logged in");
 
-        internetWarning = Toast.makeText(getBaseContext(), "Please connect to the internet and try again", Toast.LENGTH_LONG);
+        // Initialising the internet warning Toast popup to contain the relevant text, and last for the
+        // longer length of time. This pop up will appear if the user tries to open the main app without
+        // internet access (as this is required in order to carry alot of the functionalities of the main
+        // app (loading of random locations, accessing Google Street View images, searching for locations etc)
+        internetWarning = Toast.makeText(getBaseContext(), "Internet Connection Required", Toast.LENGTH_LONG);
+
+        // Setting the positioning of the internet warning popup to be centered on screen
         internetWarning.setGravity(Gravity.CENTER, 0, 0);
 
         // Initialising a new instance of the TwitterLoginActivity_CheckLogin class,
@@ -155,7 +171,6 @@ public class TwitterLoginActivity extends Activity {
         cancelLoginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Calling this class's goToMainActivity() method, to switch to the main Processing app
                 goToMainActivity();
             }
         });
@@ -188,22 +203,52 @@ public class TwitterLoginActivity extends Activity {
     }
 
     protected void goToMainActivity(){
-        // Creating a new intent, to take the user from this Activity, to the MainActivity,
-        // where the main Processing Sketch is running
-        Intent intent = new Intent(this, MainActivity.class);
 
-        // Starting the new activity
-        startActivity(intent);
+        // Checking if internet is available, using this class's checkInternetAvailability() method
+        // as users can only proceed to the main app if they have an active internet connection
+        if(checkInternetAvailablility()){
 
-        // Finishing the current activity
-        finish();
+            // Creating a new intent, to take the user from this Activity, to the MainActivity,
+            // where the main Processing Sketch is running
+            Intent intent = new Intent(this, MainActivity.class);
+
+            // Starting the new activity
+            startActivity(intent);
+
+            // Finishing the current activity
+            finish();
+        } else {
+            // Displaying a warning to the user that internet is required in order to access the
+            // main app
+            internetWarning.show();
+        }
     }
 
-    public void noInternetAvailable() {
-        Log.d("Main Activity", "About to show WARNING");
-        internetWarning.show();
-        //cancelLoginButton.setClickable(false);
-        //loginButton.setClickable(false);
-    }
+    protected boolean checkInternetAvailablility() {
 
+        // Creating a local boolean, which will be returned from this method to indicate
+        // whether internet is available on this device or not
+        Boolean internetAvailable = false;
+        try {
+            // Creating a temporary variable to store the ip address of the requested
+            // site (in this case, google.ie)
+            InetAddress ipAddress = InetAddress.getByName("www.google.ie");
+
+            // If the ipAddress variable now contains value, then the request to resolve the
+            // google.ie to an ip address was successful, and so internet is available on the users
+            // device
+            if (ipAddress.toString().length() > 0) {
+
+                // Setting the return boolean of this method to true, as internet is available
+                internetAvailable = true;
+                Log.d("Main Activity", "INTERNET - Internet available - " + ipAddress);
+            }
+        } catch (Exception e) {
+            Log.d("Main Activity", "INTERNET - Error checking for internet connection - " + e);
+        }
+
+        // Returning the internetAvailable boolean from this method, to represent
+        // whether an internet connection is available on the users device
+        return internetAvailable;
+    }
 }

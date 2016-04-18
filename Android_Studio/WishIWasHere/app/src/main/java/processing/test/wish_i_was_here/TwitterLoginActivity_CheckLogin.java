@@ -35,12 +35,6 @@ public class TwitterLoginActivity_CheckLogin extends PApplet {
     // Overriding the Processing setup() method
     @Override
     public void setup(){
-        XML testInternetConnection = loadXML("https://wishiwashere.github.io/user_preferences.xml");
-        if(testInternetConnection == null){
-            println("INTERNET - No internet available ");
-            twitterLoginActivity.noInternetAvailable();
-        }
-
         println("TWITTER - Checking if user is already logged into Twitter");
 
         // Creating a new File object, which contains the path to where the user's preferences will
