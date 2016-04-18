@@ -4,6 +4,7 @@ import processing.core.*;
 import processing.data.XML;
 
 import java.io.File;
+import java.net.UnknownHostException;
 
 public class TwitterLoginActivity_CheckLogin extends PApplet {
 
@@ -34,6 +35,11 @@ public class TwitterLoginActivity_CheckLogin extends PApplet {
     // Overriding the Processing setup() method
     @Override
     public void setup(){
+        XML testInternetConnection = loadXML("https://wishiwashere.github.io/user_preferences.xml");
+        if(testInternetConnection == null){
+            println("INTERNET - No internet available ");
+            twitterLoginActivity.noInternetAvailable();
+        }
 
         println("TWITTER - Checking if user is already logged into Twitter");
 

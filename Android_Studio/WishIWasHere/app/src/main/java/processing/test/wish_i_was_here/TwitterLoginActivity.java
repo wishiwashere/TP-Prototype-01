@@ -5,9 +5,12 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -20,6 +23,8 @@ import io.fabric.sdk.android.Fabric;
 
 // This class contains the login activity for authorising a user's Twitter account using Fabric.io
 public class TwitterLoginActivity extends Activity {
+
+    Toast internetWarning;
 
     // Creating variable to store the instance of the TwitterLoginActivity_CheckLogin class,
     // which will be used to check if the user is already logged in to their Twitter account
@@ -53,6 +58,9 @@ public class TwitterLoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         Log.d("Main Activity", "TWITTER - About to check if user logged in");
+
+        internetWarning = Toast.makeText(getBaseContext(), "Please connect to the\r\n internet and \r\ntry again", Toast.LENGTH_LONG);
+        internetWarning.setGravity(Gravity.CENTER, 0, 0);
 
         // Initialising a new instance of the TwitterLoginActivity_CheckLogin class,
         // passing it an instance of this class so that it can later call the goToMainActivity()
@@ -189,6 +197,13 @@ public class TwitterLoginActivity extends Activity {
 
         // Finishing the current activity
         finish();
+    }
+
+    public void noInternetAvailable() {
+        Log.d("Main Activity", "About to show WARNING");
+        internetWarning.show();
+        //cancelLoginButton.setClickable(false);
+        //loginButton.setClickable(false);
     }
 
 }
