@@ -288,7 +288,7 @@ public class Sketch extends PApplet {
     private SearchingScreen mySearchingScreen;
     private SocialMediaLogoutScreen mySocialMediaLogoutScreen;
     private LoadingScreen myLoadingScreen;
-    private LearningScreen myLearningScreen;
+
 
     /*-------------------------------------- Saving ------------------------------------------------*/
     // Creating a string that will hold the directory path of where the images will be saved to on the
@@ -523,7 +523,6 @@ public class Sketch extends PApplet {
         mySearchingScreen = new SearchingScreen(this);
         mySocialMediaLogoutScreen = new SocialMediaLogoutScreen(this);
         myLoadingScreen = new LoadingScreen(this);
-        myLearningScreen = new LearningScreen(this);
 
         /*---------------------------------- Saving ----------------------------------------------*/
         // Storing a string that tells the app where to store the images externally on the users device.
@@ -607,20 +606,6 @@ public class Sketch extends PApplet {
         // Resetting keyboardRequired to false, so that the device's keyboard will be hidden (so that
         // users can click anywhere on the screen to hide the keyboard
         keyboardRequired = false;
-
-        // Checking if the user is currently on the CameraLiveViewScreen and if learningModeOn is being displayed
-        if (currentScreen.equals("CameraLiveViewScreen") && learningModeOn) {
-
-            println("LRN - turning learning mode off");
-            // Temporarily turning off learning mode, so that the overlay will no longer be displayed during this
-            // app session. If a user wants to turn learning mode off for all sessions, they can change their user
-            // preferences from within the Settings screen
-            learningModeOn = false;
-
-            saveUserPreferencesXML();
-
-            println("LRN - learning mode is now - " + learningModeOn);
-        }
     }
 
     /*-------------------------------------- keyPressed() ----------------------------------------*/
@@ -851,12 +836,6 @@ public class Sketch extends PApplet {
             imageShared = false;
             compiledImage = null;
             myCameraLiveViewScreen.showScreen();
-
-            // If learning mode is on, then display the LearningScreen as an overlay over
-            // the CameraLiveViewScreen
-            if (learningModeOn) {
-                myLearningScreen.showScreen();
-            }
         } else if (currentScreen.equals("FavouritesScreen")) {
             myFavouritesScreen.showScreen();
         } else if (currentScreen.equals("SettingsScreen")) {
@@ -1487,7 +1466,9 @@ public class Sketch extends PApplet {
                         keyedImage.pixels[i] = color((int) (pixelHue * 0.6), (int) (pixelSaturation * 0.3), (int) (pixelBrightness));
                     }
 
-                    greenPixels++;
+                    if(learningModeOn) {
+                        greenPixels++;
+                    }
                 }
             }
 
@@ -1508,12 +1489,16 @@ public class Sketch extends PApplet {
             // Resetting the readingImage variable to false, so that the next frame can be read in from the device camera
             readingImage = false;
 
-            if(greenPixels < (appWidth * appHeight) * 0.10){
+            if((greenPixels < (appWidth * appHeight * 0.10)) && learningModeOn){
                 // Triggering the Toast pop up (declared in the main activity) to encourage the user to reframe the
                 // image as it currently has less that 10% green in it
                 MainActivity.greenScreenWarning.show();
 
                 println("Not enough green in the image");
+                println("Threshold = " + (appWidth * appHeight * 0.10) + "; greenPixels = " + greenPixels);
+            } else {
+                println("Plenty of green in the image");
+                println("Threshold = " + (appWidth * appHeight * 0.10) + "; greenPixels = " + greenPixels);
             }
 
             println("Finished removing Green Screen at frame " + frameCount);
