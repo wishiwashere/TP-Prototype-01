@@ -18,6 +18,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
+import android.view.Gravity;
 
 // Importing the Java library (to create File objects, and ArrayList arrays)
 import java.io.File;
@@ -582,6 +583,11 @@ public class Sketch extends PApplet {
                 ketaiCamera.start();
                 println("Starting Ketai Camera");
             }
+        } else {
+            if(ketaiCamera.isStarted()){
+                ketaiCamera.stop();
+                MainActivity.greenScreenWarning.cancel();
+            }
         }
 
         // Forcing the onCameraPreviewEvent() to be called, as ketaiCamera does not seem to be
@@ -778,6 +784,8 @@ public class Sketch extends PApplet {
                         // Since the device's orientation has changed, a new image is needed from Google,
                         // so that it's aspect ratio will match that of the user's viewpoint
                         newGoogleImageRequired = true;
+                        //MainActivity.greenScreenWarning.getView().setRotation(deviceOrientation);
+                        MainActivity.greenScreenWarning.getView().setAlpha(0);
                     }
                 } else if (accelerometerX < -7) {
                     // The device is being turned to the right
@@ -788,6 +796,8 @@ public class Sketch extends PApplet {
                         // Since the device's orientation has changed, a new image is needed from Google,
                         // so that it's aspect ratio will match that of the user's viewpoint
                         newGoogleImageRequired = true;
+                        //MainActivity.greenScreenWarning.getView().setRotation(deviceOrientation);
+                        MainActivity.greenScreenWarning.getView().setAlpha(0);
                     }
                 } else {
                     // The device is standing straight up
@@ -798,6 +808,8 @@ public class Sketch extends PApplet {
                         // Since the device's orientation has changed, a new image is needed from Google,
                         // so that it's aspect ratio will match that of the user's viewpoint
                         newGoogleImageRequired = true;
+                        //MainActivity.greenScreenWarning.getView().setRotation(deviceOrientation);
+                        MainActivity.greenScreenWarning.getView().setAlpha(1);
                     }
                 }
 
@@ -1501,7 +1513,7 @@ public class Sketch extends PApplet {
                 // image as it currently has less that 10% green in it
                 MainActivity.greenScreenWarning.show();
 
-                println("Not enough greeen in the image");
+                println("Not enough green in the image");
             }
 
             println("Finished removing Green Screen at frame " + frameCount);
