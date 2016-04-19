@@ -8,9 +8,15 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 // This class contains the main activity, which contains the Processing sketch for this app
 public class MainActivity extends Activity {
+    // Creating a Toast object, which will be used to generate a pop up to display to the user if there is no
+    // green detected in the image i.e. if the user is not standing in front of a green background, to prompt
+    // them to reframe their image
+    public static Toast greenScreenWarning;
 
     final int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
@@ -41,6 +47,15 @@ public class MainActivity extends Activity {
         fragmentManager.beginTransaction()
                 .replace(R.id.processingSketch, fragment)
                 .commit();
+
+        // Initialising the green screen warning Toast popup to contain the relevant text, and last for the
+        // longer length of time. This pop up will appear if there is not enough green detected in the
+        // camera live view screen
+        greenScreenWarning = Toast.makeText(getBaseContext(), "To see yourself in this location please stand in front of a green background", Toast.LENGTH_LONG);
+
+        // Setting the positioning of the green screen warning popup to be centered on screen
+        greenScreenWarning.setGravity(Gravity.CENTER, 0, 0);
+
     }
 
     @Override

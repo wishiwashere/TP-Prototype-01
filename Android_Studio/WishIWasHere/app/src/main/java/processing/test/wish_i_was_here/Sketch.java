@@ -14,6 +14,7 @@ import twitter4j.*;
 import twitter4j.conf.*;
 
 // Importing the Android library (to switch between Activities using Intents, generate URI's and access the device Environment)
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Environment;
@@ -1423,6 +1424,7 @@ public class Sketch extends PApplet {
 
     /*-------------------------------------- RemoveGreenScreen() ---------------------------------*/
     public void removeGreenScreen() {
+        int greenPixels = 0;
 
         // Creating a local keyedImage variable, within which the image of the user, minus the green
         // screen background, will be created below
@@ -1472,6 +1474,8 @@ public class Sketch extends PApplet {
                         // from this pixel.
                         keyedImage.pixels[i] = color((int) (pixelHue * 0.6), (int) (pixelSaturation * 0.3), (int) (pixelBrightness));
                     }
+
+                    greenPixels++;
                 }
             }
 
@@ -1491,6 +1495,14 @@ public class Sketch extends PApplet {
 
             // Resetting the readingImage variable to false, so that the next frame can be read in from the device camera
             readingImage = false;
+
+            if(greenPixels < (appWidth * appHeight) * 0.10){
+                // Triggering the Toast pop up (declared in the main activity) to encourage the user to reframe the
+                // image as it currently has less that 10% green in it
+                MainActivity.greenScreenWarning.show();
+
+                println("Not enough greeen in the image");
+            }
 
             println("Finished removing Green Screen at frame " + frameCount);
 
