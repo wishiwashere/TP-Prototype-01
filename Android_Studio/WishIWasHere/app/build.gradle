@@ -22,8 +22,8 @@ android {
         applicationId "processing.test.wish_i_was_here"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 23
-        versionName '13.2'
+        versionCode 24
+        versionName '14.0'
     }
     buildTypes {
         release {
