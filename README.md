@@ -62,8 +62,8 @@ This application was developed in Android Studio, through the following APIs and
 	* Device's running older Android versions will not receive this request, as the permissions will be given to the application once the user accepts them when downloading the app from the [Google Play Store](https://play.google.com/store/apps/details?id=processing.test.wish_i_was_here&ah=vSa3i6qQw1bEdd0nt5kwAgY1DjA)
   
 ###Deployment
-Since the beginning of the project, weekly releases have been made to the [Google Play Store](https://play.google.com/store/apps/details?id=processing.test.wish_i_was_here&ah=vSa3i6qQw1bEdd0nt5kwAgY1DjA), as per our release schedule. In total, 22 releases have been made to date. Details of these can be found on our [release](https://github.com/wishiwashere/TeamProject-2016/releases) page
-* 3 Production Releases
+Since the beginning of the project, weekly releases have been made to the [Google Play Store](https://play.google.com/store/apps/details?id=processing.test.wish_i_was_here&ah=vSa3i6qQw1bEdd0nt5kwAgY1DjA), as per our release schedule. In total, 28 releases have been made to date. Details of these can be found on our [release](https://github.com/wishiwashere/TeamProject-2016/releases) page
+* 9 Production Releases
 * 4 Beta Releases
 * 15 Alpha Releases
 
