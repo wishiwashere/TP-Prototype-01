@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="processing.test.wish_i_was_here"
-    android:versionCode="26"
-    android:versionName="14.2">
+    android:versionCode="27"
+    android:versionName="14.3">
     <uses-sdk
         android:minSdkVersion="15"
         android:targetSdkVersion="23" />

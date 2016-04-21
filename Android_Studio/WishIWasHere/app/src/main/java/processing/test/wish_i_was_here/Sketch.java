@@ -1038,11 +1038,18 @@ public class Sketch extends PApplet {
         // Checking if it will be possible to write to external storage, by calling the isExternalStorageWritable()
         // method, which returns a boolean value
         if (isExternalStorageWritable()) {
+            // Creating temporary strings, to store the current date and time values, with a zero preceeding them
+            // if they are less then 10 (for naming consistency)
+            String currentDay = day() < 10 ? "0" + day() : "" + day();
+            String currentMonth = month() < 10 ? "0" + month() : "" + month();
+            String currentHour = hour() < 10 ? "0" + hour() : "" + hour();
+            String currentMinute = minute() < 10 ? "0" + minute() : "" + minute();
+            String currentSecond = second() < 10 ? "0" + second() : "" + second();
 
             // Generating a new filename for this image, based on the current time. Storing this path in the saveToPath
             // variable, so that this can be used to save the image, and also used to pass to the share intent, should
             // the user choose to share this image with another app on their device
-            saveToPath = directory + "WishIWasHere-" + day() + month() + year() + "-" + hour() + minute() + second() + ".jpg";
+            saveToPath = directory + "WishIWasHere-" + currentDay + currentMonth + year() + "-" + currentHour + currentMinute + currentSecond + ".jpg";
 
             // Saving the compiledImage to the path specified above
             if (compiledImage.save(saveToPath)) {
