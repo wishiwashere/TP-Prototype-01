@@ -19,7 +19,6 @@ public class MainActivity extends Activity {
     // them to reframe their image
     public static Toast greenScreenWarning;
 
-    // Creating an static constant int, which will be used to request permissions
     final int REQUEST_MULTIPLE_PERMISSIONS = 124;
 
     // Overriding this activity's onCreate() method, so that the Proccesing sketch can
@@ -33,10 +32,6 @@ public class MainActivity extends Activity {
         // layout for the fragment which will contain the Processing sketch
         setContentView(R.layout.activity_main);
 
-        // requests permissions that are needed for the application. It outines that a camera
-        // and writing to external storage permissions are needed. These permission are stored in
-        // a string object so they can be passed into the on onRequestPermissionsResult method to
-        // see what whether the user has given permission
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_MULTIPLE_PERMISSIONS);
 
         // Using the Android fragment manager, which will be used to add the Sketch fragment
@@ -64,23 +59,17 @@ public class MainActivity extends Activity {
 
     }
 
-    // A method that is called once the user has responded to the permissions pop-up. It accesses the
-    // REQUEST_MULTIPLE_PERMISSIONS and reads does the specified permissions the application is looking for
-    // and whether or not the user has granted or denied the requesting permissions. This is necessary for
-    // Android 6.0 and marshmallow devices
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         Log.d("Main Activity", "Main Activity Permission request result received");
         switch (requestCode) {
             case REQUEST_MULTIPLE_PERMISSIONS: {
+                // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission has been granted and the application can move forward and use the necessary
-                    //functionality
                     Log.d("Main Activity", "Main Activity Permission was granted from device");
                 } else {
-                    // Permission has been denied, the user is not allowing the application the access
-                    // the camera or write to storage
+                    // Permission denied
+                    // functionality that depends on this permission.
                     Log.d("Main Activity", "Main Activity Permission was denied from device");
                 }
                 return;
