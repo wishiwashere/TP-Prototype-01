@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">Wish I Was Here</string>
-    <string name="twitter_login_screen_text">Welcome to the Wish I Was Here App. If you would like to tweet images from your adventures, please login with twitter</string>
-    <string name="cancel_login_button_text">Continue without Twitter</string>
-    <string name="general_app_instruction">Internet access is required in order for the functionaries of this app to be enabled.\r\n\r\nTo see yourself in a location, please stand in front of a green background.\r\n\r\nSafe travels! :)</string>
-</resources>
